@@ -10,7 +10,6 @@ export class AchievementsService {
   }
 
   async createAchievement(dto: CreateAchievementDto): Promise<Achievement> {
-    // Additional business logic can be added here.
     return await this.achievementsRepository.create(dto);
   }
 
