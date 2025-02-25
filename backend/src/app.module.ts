@@ -4,6 +4,8 @@ import { ActivityLogsModule } from './activity-logs.module';
 import { RatingsModule } from './ratings.module';
 import { ActivityLogs } from './entities';
 import { Rating } from './entities/ratings.entity';
+import { SkillsModule } from './skills.module';
+import { Skill } from './entities/skills.entity';
 import { UserAchievement } from './entities/user-achievements.entity';
 import { UserAchievementsModule } from './user-achievements.module';
 import { CategoryModule } from './category.module';
@@ -22,10 +24,10 @@ import { Category } from './entities/categories.entity';
       username: 'admin',
       password: 'admin',
       database: 'offerhub',
-      entities: [ActivityLogs, Rating, UserAchievement, Category],
+      entities: [ActivityLogs, Rating, UserAchievement, Category, Skill],
       synchronize: true,
     }),
-    ActivityLogsModule, RatingsModule,UserAchievementsModule, CategoryModule
+    ActivityLogsModule, RatingsModule,UserAchievementsModule, CategoryModule, SkillsModule
   ],
 })
 export class AppModule { }
