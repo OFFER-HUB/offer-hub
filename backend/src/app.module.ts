@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from 'dotenv';
+import { BullModule } from '@nestjs/bull';
 
 config(); // Load .env file
 
@@ -85,6 +86,12 @@ import { ServiceCategoriesModule } from './modules/service-categories/module';
       ],
       synchronize: true,
       autoLoadEntities: true,
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST || (process.env.DOCKER_ENV ? 'offer_hub_redis' : 'localhost'),
+        port: parseInt(process.env.REDIS_PORT || '6379', 10),
+      },
     }),
     ActivityLogsModule,
     AuthLogsModule,

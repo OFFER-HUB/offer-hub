@@ -14,6 +14,10 @@ export class CreateNotificationDto {
   content: string;
 
   @IsOptional()
+  @IsBoolean()
+  read?: boolean;
+
+  @IsOptional()
   @IsString()
   action_url?: string;
 }

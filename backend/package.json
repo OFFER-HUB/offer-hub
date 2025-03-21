@@ -12,19 +12,28 @@
     "docker:down": "docker-compose down"
   },
   "dependencies": {
+    "@nestjs/bull": "^11.0.2",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/platform-socket.io": "^11.0.12",
     "@nestjs/typeorm": "^11.0.0",
+    "@nestjs/websockets": "^11.0.12",
+    "@types/uuid": "^10.0.0",
+    "bull": "^4.16.5",
     "chalk": "^5.4.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
     "figlet": "^1.8.0",
     "gradient-string": "^3.0.0",
+    "ioredis": "^5.6.0",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.20"
+    "socket.io": "^4.8.1",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",

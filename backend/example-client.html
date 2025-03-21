@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications Client Example</title>
+  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .notification {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+    }
+    .notification.unread {
+      border-left: 4px solid #0066cc;
+      background-color: #f0f7ff;
+    }
+    .notification-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .notification-content {
+      margin-bottom: 10px;
+    }
+    .notification-time {
+      font-size: 0.8em;
+      color: #666;
+    }
+    .notification-action {
+      text-decoration: none;
+      color: #0066cc;
+      font-weight: bold;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #0055aa;
+    }
+    .test-actions {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-time Notifications Demo</h1>
+  
+  <div class="connection-controls">
+    <input type="text" id="userId" placeholder="Enter User ID" value="user-123">
+    <button id="connectBtn">Connect</button>
+    <button id="disconnectBtn" disabled>Disconnect</button>
+    <p id="connectionStatus">Not connected</p>
+  </div>
+
+  <div class="test-actions">
+    <h3>Test Notifications</h3>
+    <p>Use these buttons to simulate different types of notifications</p>
+    <button id="testServiceBtn">Test Service Booked</button>
+    <button id="testPaymentBtn">Test Payment Confirmed</button>
+    <button id="testDisputeBtn">Test Dispute Updated</button>
+  </div>
+  
+  <h2>Notifications</h2>
+  <div id="notifications"></div>
+
+  <script>
+    let socket;
+    const connectBtn = document.getElementById('connectBtn');
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const connectionStatus = document.getElementById('connectionStatus');
+    const notificationsContainer = document.getElementById('notifications');
+    
+    // Connect to WebSocket server
+    connectBtn.addEventListener('click', () => {
+      const userId = document.getElementById('userId').value;
+      if (!userId) {
+        alert('Please enter a User ID');
+        return;
+      }
+      
+      // Connect to the socket server with the user ID
+      socket = io('http://localhost:3002', {
+        query: { userId },
+        transports: ['websocket', 'polling'],
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 20000
+      });
+      
+      // Connection events
+      socket.on('connect', () => {
+        connectionStatus.textContent = `Connected as ${userId}`;
+        connectBtn.disabled = true;
+        disconnectBtn.disabled = false;
+        console.log('Connected to notification server');
+      });
+      
+      socket.on('disconnect', () => {
+        connectionStatus.textContent = 'Disconnected';
+        connectBtn.disabled = false;
+        disconnectBtn.disabled = true;
+        console.log('Disconnected from notification server');
+      });
+      
+      socket.on('connect_error', (error) => {
+        connectionStatus.textContent = `Connection error: ${error.message}`;
+        console.error('Connection error:', error);
+      });
+      
+      // Listen for notifications
+      socket.on('notification', (notification) => {
+        console.log('Received notification:', notification);
+        addNotification(notification);
+      });
+    });
+    
+    // Disconnect from WebSocket server
+    disconnectBtn.addEventListener('click', () => {
+      if (socket) {
+        socket.disconnect();
+        socket = null;
+      }
+    });
+    
+    // Test notification buttons
+    document.getElementById('testServiceBtn').addEventListener('click', () => {
+      if (!socket || !socket.connected) {
+        alert('Please connect to the WebSocket server first!');
+        return;
+      }
+      
+      // Use socket instead of fetch to avoid CORS issues
+      socket.emit('test-service-booked', {
+        userId: document.getElementById('userId').value,
+        serviceTitle: 'Professional Web Development',
+        freelancerId: 'freelancer-456'
+      });
+      
+      console.log('Service booked test notification sent');
+    });
+    
+    document.getElementById('testPaymentBtn').addEventListener('click', () => {
+      if (!socket || !socket.connected) {
+        alert('Please connect to the WebSocket server first!');
+        return;
+      }
+      
+      // Use socket instead of fetch to avoid CORS issues
+      socket.emit('test-payment-confirmed', {
+        userId: document.getElementById('userId').value,
+        amount: 149.99,
+        serviceTitle: 'Logo Design Package'
+      });
+      
+      console.log('Payment confirmed test notification sent');
+    });
+    
+    document.getElementById('testDisputeBtn').addEventListener('click', () => {
+      if (!socket || !socket.connected) {
+        alert('Please connect to the WebSocket server first!');
+        return;
+      }
+      
+      // Use socket instead of fetch to avoid CORS issues
+      socket.emit('test-dispute-updated', {
+        userIds: [document.getElementById('userId').value],
+        disputeId: 'dispute-789',
+        status: 'under review'
+      });
+      
+      console.log('Dispute updated test notification sent');
+    });
+    
+    // Add a notification to the UI
+    function addNotification(notification) {
+      const notificationElement = document.createElement('div');
+      notificationElement.className = 'notification unread';
+      notificationElement.id = `notification-${notification.id}`;
+      
+      const title = document.createElement('div');
+      title.className = 'notification-title';
+      title.textContent = notification.title;
+      
+      const content = document.createElement('div');
+      content.className = 'notification-content';
+      content.textContent = notification.content;
+      
+      const time = document.createElement('div');
+      time.className = 'notification-time';
+      time.textContent = new Date(notification.createdAt).toLocaleString();
+      
+      notificationElement.appendChild(title);
+      notificationElement.appendChild(content);
+      notificationElement.appendChild(time);
+      
+      if (notification.actionUrl) {
+        const action = document.createElement('a');
+        action.className = 'notification-action';
+        action.href = notification.actionUrl;
+        action.textContent = 'View Details';
+        notificationElement.appendChild(action);
+      }
+      
+      // Add mark as read button
+      const readBtn = document.createElement('button');
+      readBtn.textContent = 'Mark as Read';
+      readBtn.style.marginLeft = '10px';
+      readBtn.onclick = () => {
+        if (socket) {
+          socket.emit('markAsRead', notification.id);
+          notificationElement.classList.remove('unread');
+          readBtn.disabled = true;
+        }
+      };
+      notificationElement.appendChild(readBtn);
+      
+      notificationsContainer.prepend(notificationElement);
+    }
+  </script>
+</body>
+</html> 

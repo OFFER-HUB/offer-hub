@@ -37,10 +37,23 @@ services:
       DATABASE_USER: offerhub_admin
       DATABASE_PASSWORD: offerhub_pass
       DATABASE_NAME: offer_hub_database
+      REDIS_HOST: offer_hub_redis
+      REDIS_PORT: 6379
     depends_on:
       - offer_hub_database
+      - offer_hub_redis
     ports:
       - "3001:3001"  
 
+  offer_hub_redis:
+    image: redis:6
+    container_name: offer_hub_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - offer_hub_redis_data:/data
+
 volumes:
   offer_hub_db_data: {}
+  offer_hub_redis_data: {}
