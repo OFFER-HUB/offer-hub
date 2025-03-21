@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   offer_hub_database:
     image: postgres:15
@@ -35,12 +34,19 @@ services:
       DATABASE_HOST: offer_hub_database
       DATABASE_PORT: 5432
       DATABASE_USER: offerhub_admin
-      DATABASE_PASSWORD: offerhub_pass
+      DATABASE_PASSWORD: BN
       DATABASE_NAME: offer_hub_database
     depends_on:
       - offer_hub_database
     ports:
-      - "3001:3001"  
+      - "3001:3001" 
+
+  redis:
+    image: redis:6
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    restart: always
 
 volumes:
   offer_hub_db_data: {}
