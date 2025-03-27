@@ -22,6 +22,7 @@
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/swagger": "^11.0.7",
     "@nestjs/typeorm": "^11.0.0",
+    "@willsoto/nestjs-prometheus": "^6.0.2",
     "chalk": "^5.4.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -31,6 +32,8 @@
     "minio": "^8.0.5",
     "pdfkit": "^0.16.0",
     "pg": "^8.10.0",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
     "puppeteer": "^24.4.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.21"
