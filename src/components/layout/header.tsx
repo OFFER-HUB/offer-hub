@@ -31,12 +31,9 @@ export default function Header() {
             >
               Find workers
             </Link>
-            <Link
-              href="/my-chats"
-              className="text-[#002333] hover:text-[#15949C] transition-colors"
-            >
-              My Chats
-            </Link>
+            <Link href="/messages" className="text-gray-700 hover:text-gray-900">
+                My Chats
+              </Link>
             <Link
               href="/my-account"
               className="text-[#002333] hover:text-[#15949C] transition-colors"

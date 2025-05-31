@@ -36,7 +36,7 @@ export default function StepsController() {
   
   return (
     <section className='flex flex-col min-h-svh'>
-      <Header /
+      <Header />
       
       <div className='flex-1 flex'>
         {StepComponent ? (
