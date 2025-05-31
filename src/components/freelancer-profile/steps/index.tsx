@@ -11,11 +11,12 @@ import UserSetHourlyRateActiveState from './user-set-hourly-rate-active-state';
 import UserAddLanguagesActiveState from './user-add-languages-active-state';
 import UserAddBioActiveState from './user-add-bio-active-state';
 import UserProfilePreviewActiveState from './user-profile-preview-active-state';
+import UserSelectInterestedCategory from './user-select-interested-category';
 
 const steps = [
   { key: 'user-choose-role', component: <UserChooseRole /> },
   { key: 'user-select-job-type', component: <UserSelectJobType /> },
-  { key: 'user-select-interested-category', component: null }, // to be implemented
+  { key: 'user-select-interested-category', component: <UserSelectInterestedCategory /> },
   { key: 'user-add-work-experience', component: <UserAddWorkExperience /> },
   { key: 'user-add-work-experience-active-state', component: null }, // to be implemented
   { key: 'user-add-work-experience-active-state-not-in-focus', component: null }, // to be implemented
@@ -33,11 +34,11 @@ const steps = [
 export default function StepsController() {
   const { currentStep, nextStep, prevStep } = useFreelancerSteps();
   const StepComponent = steps[currentStep]?.component;
-  
+
   return (
     <section className='flex flex-col min-h-svh'>
-      <Header /
-      
+      <Header />
+
       <div className='flex-1 flex'>
         {StepComponent ? (
           StepComponent
