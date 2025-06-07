@@ -1,6 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AccountManagementTable from "@/components/user-management/account-management";
 import UserVerificationTable from "@/components/user-management/UserVerificationTable";
 import UserAnalyticsTable from "@/components/user-management/UserAnalyticsTable";
 
@@ -38,13 +39,8 @@ export default function UserVerificationPage() {
               <UserVerificationTable />
             </TabsContent>
 
-            <TabsContent value="account" className="m-0 p-2 md:p-6">
-              <div className="py-6 md:py-10 text-center">
-                <h3 className="text-lg font-medium">Account Management</h3>
-                <p className="text-sm text-muted-foreground">
-                  This tab is not implemented yet
-                </p>
-              </div>
+            <TabsContent value="account" className="m-0">
+              <AccountManagementTable />
             </TabsContent>
 
             <TabsContent value="analytics" className="m-0 p-2 md:p-6">
