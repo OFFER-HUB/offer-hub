@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState } from "react";
 
 const LoginForm = () => {
@@ -95,9 +96,12 @@ const LoginForm = () => {
             </button>
 
             <div className="text-center">
-              <a href="#" className="text-[#FF2000] text-sm font-normal">
+              <Link
+                href="/onboarding/password-recovery"
+                className="text-[#FF2000] text-sm font-normal"
+              >
                 Forgot password?
-              </a>
+              </Link>
             </div>
           </div>
         </form>

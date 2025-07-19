@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import React from "react";
 import { useState } from "react";
 
@@ -8,6 +9,7 @@ const PasswordRecoveryForm = () => {
     e.preventDefault();
     console.log("Continue with email:", email);
     confirm(`Continue with email: ${email}`);
+    redirect("/onboarding/check-email");
   };
 
   return (

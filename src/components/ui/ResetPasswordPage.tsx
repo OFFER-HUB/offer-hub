@@ -4,8 +4,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Circle, CircleCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const ResetPasswordPage: React.FC = () => {
+  const router = useRouter();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +44,10 @@ const ResetPasswordPage: React.FC = () => {
     if (strength >= 1) return "Medium";
     return "Weak";
   };
+
+  function handlePasswordChange() {
+    router.replace("/onboarding/login");
+  }
 
   return (
     <div className="flex justify-center items-center bg-gray-100 min-h-[calc(100vh-4rem)] px-4 sm:px-6 lg:px-8">
@@ -78,7 +85,10 @@ const ResetPasswordPage: React.FC = () => {
             </div>
             <div className="mt-2">
               <p className="text-sm font-medium text-neutral-600">
-                Strength: <span className="text-gray-500 font-light">{getStrength()}</span>
+                Strength:{" "}
+                <span className="text-gray-500 font-light">
+                  {getStrength()}
+                </span>
               </p>
               <ul className="text-xs sm:text-sm mt-1 space-y-1">
                 <li
@@ -123,7 +133,9 @@ const ResetPasswordPage: React.FC = () => {
                       <Circle className="h-4 w-4 sm:h-5 sm:w-5 text-gray-300" />
                     )}
                   </span>
-                  <span>At least one uppercase, lowercase characters or numbers.</span>
+                  <span>
+                    At least one uppercase, lowercase characters or numbers.
+                  </span>
                 </li>
                 <li
                   className={`flex items-center text-xs sm:text-xs ${
@@ -184,7 +196,9 @@ const ResetPasswordPage: React.FC = () => {
               </button>
             </div>
             {!passwordsMatch && confirmPassword && (
-              <p className="text-red-500 text-xs sm:text-sm mt-1">Password mis-match.</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">
+                Password mis-match.
+              </p>
             )}
           </div>
           <Button
@@ -194,6 +208,7 @@ const ResetPasswordPage: React.FC = () => {
                 ? "bg-[#002333] disabled:bg-[#002333] disabled:opacity-100 text-white"
                 : "bg-blue-900 text-white"
             } py-2 rounded-3xl text-sm sm:text-base`}
+            onClick={handlePasswordChange}
           >
             Change password
           </Button>
