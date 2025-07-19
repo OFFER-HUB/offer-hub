@@ -1,11 +1,6 @@
-'use client';
+"use client";
 
-import {
-  ArrowUpIcon,
-  BarChart3Icon,
-  BoxIcon,
-  UsersIcon,
-} from "lucide-react";
+import { ArrowUpIcon, BarChart3Icon, BoxIcon, UsersIcon } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import NavItem from "../components/NavItems";
@@ -33,6 +28,11 @@ const navItems = [
     path: "/admin/dispute-resolution",
     icon: <LuFolderPen className="h-5 w-5" />,
     label: "Dispute resolution",
+  },
+  {
+    path: "/admin/profile",
+    icon: <UsersIcon className="h-5 w-5" />, // Puedes cambiar el icono si tienes uno más adecuado
+    label: "Profile",
   },
 ];
 
