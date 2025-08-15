@@ -12,10 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { X, Plus, AlertCircle, Check } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ProjectDraft } from "@/types/project.types"
 
 interface ProjectRequirementsProps {
   projectData: any
-  updateProjectData: (data: any) => void
+  updateProjectData: (data: keyof ProjectDraft, value: any) => void
 }
 
 export default function ProjectRequirements({ projectData, updateProjectData }: ProjectRequirementsProps) {
@@ -35,13 +36,13 @@ export default function ProjectRequirements({ projectData, updateProjectData }: 
 
   const addSkill = () => {
     if (skillInput.trim() && !projectData.skills.includes(skillInput.trim())) {
-      updateProjectData({ skills: [...projectData.skills, skillInput.trim()] })
+      updateProjectData("skills", [...projectData.skills, skillInput.trim()] )
       setSkillInput("")
     }
   }
 
   const removeSkill = (skill: string) => {
-    updateProjectData({ skills: projectData.skills.filter((s: string) => s !== skill) })
+    updateProjectData("skills", projectData.skills.filter((s: string) => s !== skill))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -53,7 +54,7 @@ export default function ProjectRequirements({ projectData, updateProjectData }: 
 
   const addSuggestedSkill = (skill: string) => {
     if (!projectData.skills.includes(skill)) {
-      updateProjectData({ skills: [...projectData.skills, skill] })
+      updateProjectData("skills", [...projectData.skills, skill])
     }
   }
 
@@ -144,7 +145,7 @@ export default function ProjectRequirements({ projectData, updateProjectData }: 
               <Label htmlFor="experience-level">Experience Level</Label>
               <Select
                 value={projectData.experienceLevel}
-                onValueChange={(value) => updateProjectData({ experienceLevel: value })}
+                onValueChange={(value) => updateProjectData("experienceLevel", value)}
               >
                 <SelectTrigger id="experience-level">
                   <SelectValue placeholder="Select required experience level" />

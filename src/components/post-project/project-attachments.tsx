@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -10,10 +12,11 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { FileUp, X, File, Image, FileText, AlertCircle } from "lucide-react"
+import { ProjectDraft } from "@/types/project.types"
 
 interface ProjectAttachmentsProps {
-  projectData: any
-  updateProjectData: (data: any) => void
+  projectData: ProjectDraft
+  updateProjectData: (data: keyof ProjectDraft, value: any) => void
 }
 
 export default function ProjectAttachments({ projectData, updateProjectData }: ProjectAttachmentsProps) {
@@ -42,9 +45,10 @@ export default function ProjectAttachments({ projectData, updateProjectData }: P
         type: file.type,
       }))
 
-      updateProjectData({
-        attachments: [...projectData.attachments, ...newFiles],
-      })
+      updateProjectData(
+        "attachments",
+        [...projectData.attachments, ...newFiles],
+      )
     }
   }
 
@@ -57,16 +61,18 @@ export default function ProjectAttachments({ projectData, updateProjectData }: P
         type: file.type,
       }))
 
-      updateProjectData({
-        attachments: [...projectData.attachments, ...newFiles],
-      })
+      updateProjectData(
+        "attachments",
+        [...projectData.attachments, ...newFiles],
+      )
     }
   }
 
   const removeAttachment = (id: number | string) => {
-    updateProjectData({
-      attachments: projectData.attachments.filter((file: any) => file.id !== id),
-    })
+    updateProjectData(
+      "attachments",
+      projectData.attachments.filter((file: any) => file.id !== id),
+    )
   }
 
   const getFileIcon = (type: string) => {

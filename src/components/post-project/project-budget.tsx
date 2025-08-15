@@ -11,10 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator"
 import { DollarSign, Plus, Trash2, AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ProjectDraft } from "@/types/project.types"
 
 interface ProjectBudgetProps {
   projectData: any
-  updateProjectData: (data: any) => void
+  updateProjectData: (data: keyof ProjectDraft, value: any) => void
 }
 
 export default function ProjectBudget({ projectData, updateProjectData }: ProjectBudgetProps) {
@@ -31,8 +32,9 @@ export default function ProjectBudget({ projectData, updateProjectData }: Projec
 
   const addMilestone = () => {
     if (newMilestone.title.trim() && newMilestone.amount) {
-      updateProjectData({
-        milestones: [
+      updateProjectData(
+        "milestones",
+        [
           ...projectData.milestones,
           {
             id: Date.now(),
@@ -40,15 +42,16 @@ export default function ProjectBudget({ projectData, updateProjectData }: Projec
             amount: Number.parseFloat(newMilestone.amount),
           },
         ],
-      })
+      )
       setNewMilestone({ title: "", amount: "" })
     }
   }
 
   const removeMilestone = (id: number) => {
-    updateProjectData({
-      milestones: projectData.milestones.filter((m: any) => m.id !== id),
-    })
+    updateProjectData(
+      "milestones",
+      projectData.milestones.filter((m: any) => m.id !== id),
+    )
   }
 
   const calculateTotalMilestones = () => {
@@ -83,7 +86,7 @@ export default function ProjectBudget({ projectData, updateProjectData }: Projec
               <Label>Budget Type</Label>
               <RadioGroup
                 value={projectData.budgetType}
-                onValueChange={(value) => updateProjectData({ budgetType: value })}
+                onValueChange={(value) => updateProjectData("budgetType", value )}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-50">
@@ -115,7 +118,7 @@ export default function ProjectBudget({ projectData, updateProjectData }: Projec
                       placeholder="Enter your budget"
                       className="pl-10"
                       value={projectData.budgetAmount || ""}
-                      onChange={(e) => updateProjectData({ budgetAmount: Number.parseFloat(e.target.value) || 0 })}
+                      onChange={(e) => updateProjectData("budgetAmount", Number.parseFloat(e.target.value) || 0 )}
                     />
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -196,7 +199,7 @@ export default function ProjectBudget({ projectData, updateProjectData }: Projec
                     placeholder="Enter hourly rate"
                     className="pl-10"
                     value={projectData.budgetAmount || ""}
-                    onChange={(e) => updateProjectData({ budgetAmount: Number.parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => updateProjectData("budgetAmount", Number.parseFloat(e.target.value) || 0 )}
                   />
                 </div>
                 <p className="text-sm text-muted-foreground">The hourly rate you're willing to pay for this project</p>
@@ -207,7 +210,7 @@ export default function ProjectBudget({ projectData, updateProjectData }: Projec
 
             <div className="space-y-2">
               <Label htmlFor="duration">Project Duration</Label>
-              <Select value={projectData.duration} onValueChange={(value) => updateProjectData({ duration: value })}>
+              <Select value={projectData.duration} onValueChange={(value) => updateProjectData("duration", value )}>
                 <SelectTrigger id="duration">
                   <SelectValue placeholder="Select estimated duration" />
                 </SelectTrigger>

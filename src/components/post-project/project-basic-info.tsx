@@ -7,11 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/text-area"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { InfoIcon } from "lucide-react"
+import { Info } from "lucide-react"
+import { ProjectDraft } from "@/types/project.types"
 
 interface ProjectBasicInfoProps {
-  projectData: any
-  updateProjectData: (data: any) => void
+  projectData: ProjectDraft
+  updateProjectData: (data: keyof ProjectDraft, value: any) => void
 }
 
 export default function ProjectBasicInfo({ projectData, updateProjectData }: ProjectBasicInfoProps) {
@@ -82,7 +83,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
                 id="project-title"
                 placeholder="e.g. Professional Website Design for Small Business"
                 value={projectData.title}
-                onChange={(e) => updateProjectData({ title: e.target.value })}
+                onChange={(e) => updateProjectData("title", e.target.value )}
               />
               <p className="text-sm text-muted-foreground">
                 A clear title helps attract the right freelancers (50-80 characters recommended)
@@ -94,7 +95,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
                 <Label htmlFor="category">Category</Label>
                 <Select
                   value={projectData.category}
-                  onValueChange={(value) => updateProjectData({ category: value, subcategory: "" })}
+                  onValueChange={(value) => updateProjectData("category", value)}
                 >
                   <SelectTrigger id="category">
                     <SelectValue placeholder="Select a category" />
@@ -113,7 +114,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
                 <Label htmlFor="subcategory">Subcategory</Label>
                 <Select
                   value={projectData.subcategory}
-                  onValueChange={(value) => updateProjectData({ subcategory: value })}
+                  onValueChange={(value) => updateProjectData("subcategory", value)}
                   disabled={!projectData.category || !subcategories[projectData.category]}
                 >
                   <SelectTrigger id="subcategory">
@@ -138,7 +139,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
                 placeholder="Describe your project in detail..."
                 className="min-h-[200px]"
                 value={projectData.description}
-                onChange={(e) => updateProjectData({ description: e.target.value })}
+                onChange={(e) => updateProjectData("description", e.target.value)}
               />
               <p className="text-sm text-muted-foreground">
                 Include all details about your project requirements, goals, and expectations
@@ -149,7 +150,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
               <Label>Project Type</Label>
               <RadioGroup
                 value={projectData.projectType}
-                onValueChange={(value) => updateProjectData({ projectType: value })}
+                onValueChange={(value) => updateProjectData("projectType", value)}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-50">
@@ -173,7 +174,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
               <Label>Project Visibility</Label>
               <RadioGroup
                 value={projectData.visibility}
-                onValueChange={(value) => updateProjectData({ visibility: value })}
+                onValueChange={(value) => updateProjectData("visibility", value)}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-50">
@@ -198,7 +199,7 @@ export default function ProjectBasicInfo({ projectData, updateProjectData }: Pro
             </div>
 
             <Alert className="bg-[#DEEFE7]/30 border-[#15949C]">
-              <InfoIcon className="h-4 w-4 text-[#15949C]" />
+              <Info className="h-4 w-4 text-[#15949C]" />
               <AlertDescription className="text-[#002333]/70">
                 Projects with clear, detailed descriptions receive 3x more quality proposals from freelancers.
               </AlertDescription>
