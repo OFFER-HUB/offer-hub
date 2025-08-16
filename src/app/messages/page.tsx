@@ -1,11 +1,12 @@
-"use client"
+'use client'
+import { useMessages } from "@/hooks/useMessages";
+import { useState } from "react";
+import { Header } from "@/components/account-settings/header";
+import { Sidebar } from "@/components/account-settings/sidebar";
+import { MessagesSidebar } from "@/components/messages/messages-sidebar";
+import { MessagesMain } from "@/components/messages/messages-main";
 
-import { useState } from "react"
-import { Header } from "@/components/account-settings/header"
-import { Sidebar } from "@/components/account-settings/sidebar"
-import { MessagesSidebar } from "@/components/messages/messages-sidebar"
-import { MessagesMain } from "@/components/messages/messages-main"
-import { useMessages } from "@/hooks/useMessages"
+const currentUserId = 'user-1';
 
 export default function MessagesPage() {
   const {
@@ -15,10 +16,16 @@ export default function MessagesPage() {
     activeConversation,
     messages,
     handleSendMessage,
-  } = useMessages()
+    loadingConversations,
+    loadingMessages,
+    errorConversations,
+    errorMessages,
+    sendingMessage,
+    errorSend,
+  } = useMessages(currentUserId);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const [isUserActive, setIsUserActive] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isUserActive, setIsUserActive] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -36,15 +43,19 @@ export default function MessagesPage() {
               conversations={conversations}
               activeConversationId={activeConversationId}
               onConversationSelect={setActiveConversationId}
+              loading={loadingConversations}
+              error={errorConversations}
             />
             <MessagesMain
               activeConversation={activeConversation}
               messages={messages}
               onSendMessage={handleSendMessage}
+              loading={loadingMessages || sendingMessage}
+              error={errorMessages || errorSend}
             />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

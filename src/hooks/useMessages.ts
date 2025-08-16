@@ -1,140 +1,187 @@
-import { useState } from "react"
 
-export interface Message {
-  id: number
-  content: string
-  timestamp: string
-  isOutgoing: boolean
-  type: "text" | "file"
-  fileData?: {
-    name: string
-    size: string
-    uploadDate: string
-    status: string
-  }
+import { useState, useEffect, useCallback } from 'react';
+import type { Conversation, Message, CreateMessageDTO } from '@/types/messages.types';
+import {
+  getUserConversations,
+  getConversationMessages,
+  sendMessage,
+  markAsRead,
+} from '@/services/api/messages.service';
+
+interface UseMessagesResult {
+  conversations: Conversation[];
+  activeConversationId: string | null;
+  setActiveConversationId: (id: string) => void;
+  activeConversation: Conversation | null;
+  messages: Message[];
+  handleSendMessage: (content: string, file?: File) => Promise<void>;
+  loadingConversations: boolean;
+  loadingMessages: boolean;
+  sendingMessage: boolean;
+  errorConversations: string | null;
+  errorMessages: string | null;
+  errorSend: string | null;
 }
 
-export interface Conversation {
-  id: number
-  name: string
-  avatar: string
-  lastMessage: string
-  timestamp: string
-  isOnline: boolean
-  unreadCount?: number
-}
+export function useMessages(userId?: string): UseMessagesResult {
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+  const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loadingConversations, setLoadingConversations] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [errorConversations, setErrorConversations] = useState<string | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string | null>(null);
+  const [errorSend, setErrorSend] = useState<string | null>(null);
 
-const initialConversations: Conversation[] = [
-  {
-    id: 1,
-    name: "John Doe",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "Looking forward to the proposal.",
-    timestamp: "2 min ago",
-    isOnline: true,
-    unreadCount: 2,
-  },
-  {
-    id: 2,
-    name: "Olivia Rhye",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "Looking forward to the proposal.",
-    timestamp: "5 min ago",
-    isOnline: true,
-  },
-  {
-    id: 3,
-    name: "Olivia Rhye",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "Looking forward to the proposal.",
-    timestamp: "1 hour ago",
-    isOnline: true,
-  },
-]
 
-export function useMessages() {
-  const [activeConversationId, setActiveConversationId] = useState(1)
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      content: "The main text of the message sent out",
-      timestamp: "09:21 am",
-      isOutgoing: true,
-      type: "text",
-    },
-    {
-      id: 2,
-      content: "The main text of the message sent out",
-      timestamp: "09:21 am",
-      isOutgoing: true,
-      type: "text",
-    },
-    {
-      id: 3,
-      content: "User Layout. PDF",
-      timestamp: "09:21 am",
-      isOutgoing: true,
-      type: "file",
-      fileData: {
-        name: "PDF_2022-04-20-20 19.30...",
-        size: "2.3mb",
-        uploadDate: "uploaded Mar 22",
-        status: "Under review (5 days) • 2 days remaining",
-      },
-    },
-    {
-      id: 4,
-      content: "The main text of the message sent out",
-      timestamp: "09:23 am",
-      isOutgoing: false,
-      type: "text",
-    },
-  ])
+  useEffect(() => {
+    if (!userId) return;
+    setLoadingConversations(true);
+    getUserConversations(userId)
+      .then((res) => {
+        if (res.error) setErrorConversations(res.error);
+        else setConversations(res.data || []);
+      })
+      .catch((e) => setErrorConversations(e.message))
+      .finally(() => setLoadingConversations(false));
+  }, [userId]);
 
-  const handleSendMessage = (content: string, file?: File) => {
-    const newMessage: Message = file
-      ? {
-          id: messages.length + 1,
-          content,
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          }),
-          isOutgoing: true,
-          type: "file",
-          fileData: {
-            name: file.name,
-            size: `${(file.size / (1024 * 1024)).toFixed(1)}mb`,
-            uploadDate: `uploaded ${new Date().toLocaleDateString()}`,
-            status: "Uploaded successfully",
-          },
+
+  useEffect(() => {
+    if (!activeConversationId) {
+      setActiveConversation(null);
+      setMessages([]);
+      return;
+    }
+    const conv = conversations.find((c) => c.id === activeConversationId) || null;
+    setActiveConversation(conv);
+  }, [activeConversationId, conversations]);
+
+
+  useEffect(() => {
+    if (!activeConversationId) return;
+    setLoadingMessages(true);
+    getConversationMessages(activeConversationId)
+      .then(async (res) => {
+        if (res.error) {
+          setErrorMessages(res.error);
+        } else {
+          const msgs = res.data || [];
+          setMessages(msgs);
+
+          if (userId) {
+            const readRes = await markAsRead(activeConversationId, userId);
+            if (!readRes.success && readRes.error) {
+
+              setErrorMessages((prev) => prev ?? readRes.error);
+            } else {
+              // Optimistically update unread_count and message read flags for incoming messages
+              setConversations((prev) =>
+                prev.map((c) =>
+                  c.id === activeConversationId
+                    ? { ...c, unread_count: 0, last_message: c.last_message ? { ...c.last_message, is_read: true } : c.last_message }
+                    : c
+                )
+              );
+              setMessages((prev) => prev.map((m) => (m.sender_id !== userId ? { ...m, is_read: true } : m)));
+            }
+          }
         }
-      : {
-          id: messages.length + 1,
+      })
+      .catch((e) => setErrorMessages(e.message))
+      .finally(() => setLoadingMessages(false));
+  }, [activeConversationId, userId]);
+
+  // Simple polling for new messages and conversation updates
+  // NB: (we can always change it, if we move to Socket or SSE)
+
+  useEffect(() => {
+    if (!userId) return;
+    const interval = setInterval(() => {
+
+      getUserConversations(userId).then((res) => {
+        if (!res.error && res.data) setConversations(res.data);
+      });
+
+      if (activeConversationId) {
+        getConversationMessages(activeConversationId).then((res) => {
+          if (!res.error && res.data) setMessages(res.data);
+        });
+      }
+    }, 20000);
+    return () => clearInterval(interval);
+  }, [userId, activeConversationId]);
+
+  const handleSendMessage = useCallback(
+    async (content: string, file?: File) => {
+      if (!activeConversationId || !userId) return;
+      setSendingMessage(true);
+      setErrorSend(null);
+      let fileUrl, fileName, fileSize;
+      if (file) {
+       
+        fileUrl = URL.createObjectURL(file);
+        fileName = file.name;
+        fileSize = file.size;
+      }
+      const optimisticMsg: Message = {
+        id: 'optimistic-' + Date.now(),
+        conversation_id: activeConversationId,
+        sender_id: userId,
+        content,
+        message_type: file ? 'file' : 'text',
+        file_url: fileUrl,
+        file_name: fileName,
+        file_size: fileSize,
+        is_read: false,
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, optimisticMsg]);
+      try {
+        const dto: CreateMessageDTO = {
+          conversation_id: activeConversationId,
+          sender_id: userId,
           content,
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          }),
-          isOutgoing: true,
-          type: "text",
+          message_type: file ? 'file' : 'text',
+          file_url: fileUrl,
+          file_name: fileName,
+          file_size: fileSize,
+        };
+        const res = await sendMessage(dto);
+        if (res.error || !res.data) {
+          setErrorSend(res.error || 'Failed to send message');
+          
+          setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
+        } else {
+          
+          setMessages((prev) =>
+            prev.map((m) => (m.id === optimisticMsg.id ? res.data! : m))
+          );
         }
-
-    setMessages((prev) => [...prev, newMessage])
-  }
-
-  const activeConversation = initialConversations.find(
-    (conv) => conv.id === activeConversationId
-  )
+      } catch (e: any) {
+        setErrorSend(e.message);
+        setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
+      } finally {
+        setSendingMessage(false);
+      }
+    },
+    [activeConversationId, userId]
+  );
 
   return {
-    conversations: initialConversations,
+    conversations,
     activeConversationId,
     setActiveConversationId,
     activeConversation,
     messages,
     handleSendMessage,
-  }
+    loadingConversations,
+    loadingMessages,
+    sendingMessage,
+    errorConversations,
+    errorMessages,
+    errorSend,
+  };
 }
