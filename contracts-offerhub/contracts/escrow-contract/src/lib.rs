@@ -1,5 +1,5 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, Address, Env, Symbol};
+use soroban_sdk::{contract, contractimpl, Address, Env, String, Symbol, Vec};
 
 mod contract;
 mod error;
@@ -63,6 +63,26 @@ impl EscrowContract {
 
     pub fn get_escrow_data(env: Env) -> types::EscrowData {
         contract::get_escrow_data(&env)
+    }
+
+    pub fn add_milestone(env: Env, client: Address, desc: String, amount: i128) -> u32 {
+        contract::add_milestone(&env, client, desc, amount)
+    }
+
+    pub fn approve_milestone(env: Env, client: Address, milestone_id: u32) {
+        contract::approve_milestone(&env, client, milestone_id);
+    }
+
+    pub fn release_milestone(env: Env, freelancer: Address, milestone_id: u32) {
+        contract::release_milestone(&env, freelancer, milestone_id);
+    }
+
+    pub fn get_milestones(env: Env) -> Vec<types::Milestone> {
+        contract::get_milestones(&env)
+    }
+
+    pub fn get_milestone_history(env: Env) -> Vec<types::MilestoneHistory> {
+        contract::get_milestone_history(&env)
     }
     pub fn test_set_dispute_result(env: Env, result: u32) {
         let mut data = contract::get_escrow_data(&env);
