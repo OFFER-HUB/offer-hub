@@ -1,5 +1,5 @@
 use crate::TokenId;
-use soroban_sdk::{Address, Env, Symbol};
+use soroban_sdk::{Address, Env, Symbol, Vec};
 
 pub fn emit_minted(env: &Env, to: &Address, token_id: &TokenId) {
     let topic = Symbol::new(env, "MINTED");
@@ -33,4 +33,14 @@ pub fn emit_minter_removed(env: &Env, admin: &Address, minter: &Address) {
 pub fn emit_achievement_minted(env: &Env, to: &Address, nft_type: &Symbol, token_id: &TokenId) {
     let topic = Symbol::new(env, "ACHIEVEMENT_MINTED");
     env.events().publish((topic,), (to.clone(), nft_type.clone(), token_id));
+}
+
+pub fn emit_burned(env: &Env, token_id: &TokenId, owner: &Address) {
+    let topic = Symbol::new(env, "BURNED");
+    env.events().publish((topic,), (owner.clone(), token_id));
+}
+
+pub fn emit_batch_minted(env: &Env, owners: Vec<Address>, token_ids: Vec<TokenId>) {
+    let topic = Symbol::new(env, "BATCH_MINTED");
+    env.events().publish((topic,), (owners, token_ids));
 }

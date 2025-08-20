@@ -2,13 +2,17 @@ use crate::access::{
     add_minter as add_minter_impl, check_minter, check_owner, remove_minter as remove_minter_impl,
     transfer_admin as transfer_admin_impl,
 };
-use crate::events::{emit_minted, emit_transferred, emit_achievement_minted};
+use crate::events::{emit_minted, emit_transferred, emit_achievement_minted, emit_burned};
 use crate::metadata::{get_metadata as get_token_metadata, store_metadata};
+use crate::types::AchievementType;
+use soroban_sdk::{Address, Env, Map, String, Symbol, Vec};
 use crate::storage::{
     get_admin, get_token_owner, is_minter, save_admin, save_token_owner, token_exists, next_token_id,
+    index_user_achievement, get_user_achievements, remove_user_achievement_index, burn_token,
+    update_achievement_stats, update_leaderboard, get_achievement_stats, get_leaderboard, get_user_rank,
 };
 use crate::{Error, Metadata, TokenId};
-use soroban_sdk::{Address, Env, String, Symbol, Vec, symbol_short};
+use soroban_sdk::{symbol_short};
 
 pub struct ReputationNFTContract;
 
@@ -31,9 +35,12 @@ impl ReputationNFTContract {
         if token_exists(&env, &token_id) {
             return Err(Error::TokenAlreadyExists);
         }
-        save_token_owner(&env, &token_id, &to);
-        store_metadata(&env, &token_id, name, description, uri)?;
-        emit_minted(&env, &to, &token_id);
+    save_token_owner(&env, &token_id, &to);
+    store_metadata(&env, &token_id, name, description, uri, Some(AchievementType::Standard))?;
+    // index achievement for user if this is an achievement token
+    index_user_achievement(&env, &to, &token_id);
+    update_achievement_stats(&env, &AchievementType::Standard);
+    emit_minted(&env, &to, &token_id);
         Ok(())
     }
 
@@ -63,7 +70,9 @@ impl ReputationNFTContract {
             ),
         };
         save_token_owner(&env, &token_id, &to);
-        store_metadata(&env, &token_id, name, description, uri)?;
+        store_metadata(&env, &token_id, name, description, uri, Some(AchievementType::ProjectMilestone))?;
+        index_user_achievement(&env, &to, &token_id);
+        update_achievement_stats(&env, &AchievementType::ProjectMilestone);
         emit_achievement_minted(&env, &to, &nft_type, &token_id);
         Ok(())
     }
@@ -80,8 +89,26 @@ impl ReputationNFTContract {
         // Check authorization from the owner
         check_owner(&env, &from)?;
 
-        // Update ownership
+        // Check if token is transferable based on achievement type
+        let metadata = get_token_metadata(&env, &token_id)?;
+        match metadata.achievement_type {
+            AchievementType::Standard | AchievementType::CustomAchievement => {
+                // These types can be transferred
+            }
+            _ => {
+                // Other achievement types are non-transferable
+                return Err(Error::NonTransferableToken);
+            }
+        }
+
+        // Update ownership and achievements
         save_token_owner(&env, &token_id, &to);
+        remove_user_achievement_index(&env, &from, &token_id);
+        index_user_achievement(&env, &to, &token_id);
+        
+        // Update leaderboard for both users
+        update_leaderboard(&env, &from);
+        update_leaderboard(&env, &to);
 
         // Emit transferred event
         emit_transferred(&env, &from, &to, &token_id);
@@ -168,19 +195,60 @@ impl ReputationNFTContract {
         };
         
         save_token_owner(&env, &token_id, &to);
-        store_metadata(&env, &token_id, name, description, uri)?;
+        store_metadata(&env, &token_id, name, description, uri, Some(AchievementType::RatingMilestone))?;
         
-        // Index by user for easy retrieval
-        Self::index_user_achievement(&env, &to, &token_id);
+        // Index by user for easy retrieval and update statistics
+        index_user_achievement(&env, &to, &token_id);
+        update_achievement_stats(&env, &AchievementType::RatingMilestone);
         
         emit_achievement_minted(&env, &to, &Symbol::new(&env, "achievement"), &token_id);
         Ok(())
     }
 
     pub fn get_user_achievements(env: Env, _user: Address) -> Result<Vec<TokenId>, Error> {
-        // In production, this would retrieve all achievements for a user
-        // For now, return empty vector - would need proper indexing implementation
-        Ok(Vec::new(&env))
+        Ok(get_user_achievements(&env, &_user))
+    }
+
+    pub fn burn(env: Env, caller: Address, token_id: TokenId) -> Result<(), Error> {
+        // Only admin or minter can burn
+        check_minter(&env, &caller)?;
+        // get owner to remove index
+        let owner = get_token_owner(&env, &token_id)?;
+        remove_user_achievement_index(&env, &owner, &token_id);
+        burn_token(&env, &token_id);
+    emit_burned(&env, &token_id, &owner);
+        Ok(())
+    }
+
+    pub fn batch_mint(
+        env: Env,
+        caller: Address,
+        tos: Vec<Address>,
+        names: Vec<String>,
+        descriptions: Vec<String>,
+        uris: Vec<String>,
+    ) -> Result<(), Error> {
+        check_minter(&env, &caller)?;
+        let len = tos.len();
+        if names.len() != len || descriptions.len() != len || uris.len() != len {
+            return Err(Error::Unauthorized);
+        }
+        let mut i = 0u32;
+        while i < len {
+            let to = tos.get(i).ok_or(Error::TokenDoesNotExist)?;
+            let name = names.get(i).ok_or(Error::TokenDoesNotExist)?;
+            let description = descriptions.get(i).ok_or(Error::TokenDoesNotExist)?;
+            let uri = uris.get(i).ok_or(Error::TokenDoesNotExist)?;
+            let token_id = next_token_id(&env);
+            save_token_owner(&env, &token_id, &to);
+            store_metadata(&env, &token_id, name, description, uri, Some(AchievementType::Standard))?;
+            index_user_achievement(&env, &to, &token_id);
+            update_achievement_stats(&env, &AchievementType::Standard);
+            emit_minted(&env, &to, &token_id);
+            i += 1;
+        }
+    // Optionally emit a batch event - build simple owners/token_ids lists is expensive, skip for now
+    Ok(())
     }
 
     pub fn update_reputation_score(
@@ -198,14 +266,27 @@ impl ReputationNFTContract {
         // Check for new achievements based on updated scores
         Self::check_rating_achievements(&env, &user, rating_average, total_ratings)?;
         
+        // Update leaderboard
+        update_leaderboard(&env, &user);
+        
         Ok(())
     }
 
-    // Helper functions
-    fn index_user_achievement(_env: &Env, _user: &Address, _token_id: &TokenId) {
-        // In production, maintain an index of user achievements
-        // This would use a storage pattern like (USER_ACHIEVEMENTS, user, token_id) -> true
+    // Achievement statistics and leaderboard functions
+    pub fn get_achievement_statistics(env: Env) -> Map<AchievementType, u32> {
+        get_achievement_stats(&env)
     }
+
+    pub fn get_achievement_leaderboard(env: Env) -> Map<Address, u32> {
+        get_leaderboard(&env)
+    }
+
+    pub fn get_user_achievement_rank(env: Env, user: Address) -> u32 {
+        get_user_rank(&env, &user)
+    }
+
+    // Helper functions
+    // index_user_achievement is provided by storage helpers
 
     fn store_reputation_score(env: &Env, user: &Address, rating_average: u32, total_ratings: u32) {
         // Store the user's current reputation score
@@ -268,7 +349,10 @@ impl ReputationNFTContract {
         };
         
         save_token_owner(env, token_id, user);
-        store_metadata(env, token_id, name, description, uri)?;
+        store_metadata(env, token_id, name, description, uri, Some(AchievementType::RatingMilestone))?;
+        // Index the achievement and update statistics
+        index_user_achievement(env, user, token_id);
+        update_achievement_stats(env, &AchievementType::RatingMilestone);
         emit_minted(env, user, token_id);
         
         Ok(())

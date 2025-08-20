@@ -680,3 +680,148 @@ fn test_mint_for_achievement() {
     let metadata = client.get_metadata(1).unwrap();
     assert_eq!(metadata.name, String::from_str(&env, "10 Completed Contracts"));
 }
+
+#[test]
+fn test_batch_mint_via_contract_call() {
+    let (env, admin, contract_id) = setup();
+    let user1 = Address::generate(&env);
+    let user2 = Address::generate(&env);
+    let user3 = Address::generate(&env);
+
+    // Initialize contract and give admin minting rights for the test
+    env.as_contract(&contract_id, || {
+        ReputationNFTContract::init(env.clone(), admin.clone()).unwrap();
+        // Allow actions in this test context
+        env.mock_all_auths();
+        // Add admin as minter
+        storage::add_minter(&env, &admin);
+    });
+
+    // Prepare vectors for batch_mint (explicit types to satisfy compiler)
+    let tos = soroban_sdk::Vec::<Address>::from_array(&env, [user1.clone(), user2.clone(), user3.clone()]);
+    let names = soroban_sdk::Vec::<String>::from_array(&env, [
+        String::from_str(&env, "Token 1"),
+        String::from_str(&env, "Token 2"),
+        String::from_str(&env, "Token 3"),
+    ]);
+    let descriptions = soroban_sdk::Vec::<String>::from_array(&env, [
+        String::from_str(&env, "Desc 1"),
+        String::from_str(&env, "Desc 2"),
+        String::from_str(&env, "Desc 3"),
+    ]);
+    let uris = soroban_sdk::Vec::<String>::from_array(&env, [
+        String::from_str(&env, "ipfs://t1"),
+        String::from_str(&env, "ipfs://t2"),
+        String::from_str(&env, "ipfs://t3"),
+    ]);
+
+    // Call contract entrypoint for batch_mint using exact symbol name
+    let res: Result<(), Error> = env.invoke_contract(&contract_id, &soroban_sdk::Symbol::new(&env, "batch_mint"), vec![&env, admin.clone().into_val(&env), tos.into_val(&env), names.into_val(&env), descriptions.into_val(&env), uris.into_val(&env)]);
+    assert!(res.is_ok());
+
+    // Verify tokens 1..3 were minted to the expected owners
+    env.as_contract(&contract_id, || {
+        let o1 = ReputationNFTContract::get_owner(env.clone(), 1).unwrap();
+        let o2 = ReputationNFTContract::get_owner(env.clone(), 2).unwrap();
+        let o3 = ReputationNFTContract::get_owner(env.clone(), 3).unwrap();
+
+        assert_eq!(o1, user1);
+        assert_eq!(o2, user2);
+        assert_eq!(o3, user3);
+    });
+}
+
+#[test]
+fn test_burn_removes_user_index() {
+    let (env, admin, contract_id) = setup();
+    let user = Address::generate(&env);
+    // Initialize contract
+    env.as_contract(&contract_id, || {
+        ReputationNFTContract::init(env.clone(), admin.clone()).unwrap();
+    });
+
+    // Prepare auth and roles
+    env.mock_all_auths();
+    // storage functions must be called within a contract frame
+    env.as_contract(&contract_id, || {
+        storage::add_minter(&env, &admin);
+    });
+
+    // Mint a token to the user via contract invocation
+    let name = String::from_str(&env, "Burnable");
+    let desc = String::from_str(&env, "To be burned");
+    let uri = String::from_str(&env, "ipfs://burn");
+    let mint_res: Result<(), Error> = env.invoke_contract(
+        &contract_id,
+        &soroban_sdk::Symbol::new(&env, "mint"),
+        vec![&env, admin.clone().into_val(&env), user.clone().into_val(&env), 1u64.into_val(&env), name.into_val(&env), desc.into_val(&env), uri.into_val(&env)],
+    );
+    assert!(mint_res.is_ok());
+
+    // Verify indexing inside contract frame
+    env.as_contract(&contract_id, || {
+        let achievements = ReputationNFTContract::get_user_achievements(env.clone(), user.clone()).unwrap();
+        assert_eq!(achievements.len(), 1);
+        assert_eq!(achievements.get(0).unwrap(), 1);
+    });
+
+    // Burn the token via contract invocation (outside contract frame)
+    let burn_res: Result<(), Error> = env.invoke_contract(&contract_id, &soroban_sdk::Symbol::new(&env, "burn"), vec![&env, admin.clone().into_val(&env), 1u64.into_val(&env)]);
+    assert!(burn_res.is_ok());
+
+    // Verify index cleared inside contract frame
+    env.as_contract(&contract_id, || {
+        let after = ReputationNFTContract::get_user_achievements(env.clone(), user.clone()).unwrap();
+        assert_eq!(after.len(), 0);
+    });
+}
+
+#[test]
+fn test_update_reputation_auto_awards_milestone() {
+    let (env, admin, contract_id) = setup();
+    let user = Address::generate(&env);
+    // Initialize contract
+    env.as_contract(&contract_id, || {
+        ReputationNFTContract::init(env.clone(), admin.clone()).unwrap();
+    });
+
+    // Prepare auth and roles
+    env.mock_all_auths();
+    // add minter inside contract frame
+    env.as_contract(&contract_id, || {
+        storage::add_minter(&env, &admin);
+    });
+
+    // First verify no achievements exist yet
+    env.as_contract(&contract_id, || {
+        let before = ReputationNFTContract::get_user_achievements(env.clone(), user.clone()).unwrap();
+        assert_eq!(before.len(), 0, "User should have no achievements initially");
+    });
+
+    // Call update_reputation_score to trigger the 10-ratings milestone
+    let upd_res: Result<(), Error> = env.invoke_contract(
+        &contract_id,
+        &soroban_sdk::Symbol::new(&env, "update_reputation_score"),
+        vec![&env, admin.clone().into_val(&env), user.clone().into_val(&env), 400u32.into_val(&env), 10u32.into_val(&env)],
+    );
+    assert!(upd_res.is_ok(), "update_reputation_score failed");
+
+    // Verify both the score update and achievement
+    env.as_contract(&contract_id, || {
+        // First check if token 1 exists and is owned by user
+        let owner_result = ReputationNFTContract::get_owner(env.clone(), 1);
+        assert!(owner_result.is_ok(), "Token 1 should exist");
+        let owner = owner_result.unwrap();
+        assert_eq!(owner, user, "Token 1 should belong to user");
+
+        // Then verify achievement indexing
+        let achievements = ReputationNFTContract::get_user_achievements(env.clone(), user.clone()).unwrap();
+        assert_eq!(achievements.len(), 1, "User should have exactly 1 achievement");
+        assert_eq!(achievements.get(0).unwrap(), 1, "Achievement should be token ID 1");
+
+        // Verify it's the correct achievement type
+        let metadata = ReputationNFTContract::get_metadata(env.clone(), 1).unwrap();
+        assert_eq!(metadata.name, String::from_str(&env, "Excellence Milestone"), 
+                  "Achievement should be the Excellence Milestone for 10+ excellent ratings");
+    });
+}

@@ -1,5 +1,6 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, Address, Env, String, Symbol, Vec};
+use soroban_sdk::{contract, contractimpl, Address, Env, Map, String, Symbol, Vec};
+use crate::types::AchievementType;
 
 mod access;
 mod events;
@@ -108,6 +109,21 @@ impl Contract {
         ReputationNFTContract::get_user_achievements(env, user)
     }
 
+    pub fn burn(env: Env, caller: Address, token_id: TokenId) -> Result<(), Error> {
+        ReputationNFTContract::burn(env, caller, token_id)
+    }
+
+    pub fn batch_mint(
+        env: Env,
+        caller: Address,
+        tos: Vec<Address>,
+        names: Vec<String>,
+        descriptions: Vec<String>,
+        uris: Vec<String>,
+    ) -> Result<(), Error> {
+        ReputationNFTContract::batch_mint(env, caller, tos, names, descriptions, uris)
+    }
+
     pub fn update_reputation_score(
         env: Env,
         caller: Address,
@@ -116,5 +132,18 @@ impl Contract {
         total_ratings: u32,
     ) -> Result<(), Error> {
         ReputationNFTContract::update_reputation_score(env, caller, user, rating_average, total_ratings)
+    }
+
+    // Achievement statistics and leaderboard functions
+    pub fn get_achievement_statistics(env: Env) -> Map<AchievementType, u32> {
+        ReputationNFTContract::get_achievement_statistics(env)
+    }
+
+    pub fn get_achievement_leaderboard(env: Env) -> Map<Address, u32> {
+        ReputationNFTContract::get_achievement_leaderboard(env)
+    }
+
+    pub fn get_user_achievement_rank(env: Env, user: Address) -> u32 {
+        ReputationNFTContract::get_user_achievement_rank(env, user)
     }
 }

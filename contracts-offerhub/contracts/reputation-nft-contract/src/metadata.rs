@@ -1,5 +1,5 @@
 use crate::storage::{get_token_metadata, save_token_metadata};
-use crate::{Error, Metadata, TokenId};
+use crate::types::{Error, Metadata, TokenId, AchievementType};
 use soroban_sdk::{Env, String};
 
 pub fn store_metadata(
@@ -8,11 +8,13 @@ pub fn store_metadata(
     name: String,
     description: String,
     uri: String,
+    achievement_type: Option<AchievementType>,
 ) -> Result<(), Error> {
     let metadata = Metadata {
         name,
         description,
         uri,
+        achievement_type: achievement_type.unwrap_or(AchievementType::Standard),
     };
     save_token_metadata(env, token_id, &metadata);
     Ok(())
