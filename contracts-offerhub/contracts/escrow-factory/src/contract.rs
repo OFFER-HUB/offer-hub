@@ -5,7 +5,7 @@ use crate::types::{
 };
 
 use crate::{error::Error, types::DisputeParams};
-use soroban_sdk::BytesN;
+use soroban_sdk::{BytesN, Symbol};
 use soroban_sdk::{Address, Env, Vec};
 
 const MAX_BATCH_SIZE: u32 = 100;
@@ -51,6 +51,8 @@ pub fn deploy_new_escrow(env: Env, create_params: EscrowCreateParams) -> Address
     storage::store_escrow(&env, &next_escrow_id, &escrow_address);
     storage::set_next_escrow_id(&env, next_escrow_id + 1);
 
+    env.events().publish((Symbol::new(&env ,"deployed_new_escrow") ,escrow_address.clone()), env.ledger().timestamp());
+
     escrow_address
 }
 
@@ -65,6 +67,8 @@ pub fn batch_deploy(env: Env, params: Vec<EscrowCreateParams>) -> Vec<Address> {
         let escrow_address = deploy_new_escrow(env.clone(), create_params);
         deployed_escrows.push_back(escrow_address);
     }
+
+    env.events().publish((Symbol::new(&env , "batch_depolyed") ,deployed_escrows.clone()), env.ledger().timestamp());
 
     deployed_escrows
 }

@@ -6,10 +6,12 @@ use crate::{
         check_rate_limit, set_total_disputes, ARBITRATOR, DISPUTES, DISPUTE_TIMEOUT,
         ESCROW_CONTRACT, FEE_MANAGER,
     },
+
     types::{
         AllDisputeDataExport, DisputeData, DisputeDataExport, DisputeLevel, DisputeOutcome,
         DisputeStatus, DisputeSummary, Error, Evidence,
     },
+
     validation::{
         validate_add_evidence, validate_address, validate_open_dispute, validate_timeout_duration,
     },
@@ -509,6 +511,13 @@ fn increment_dispute_count(env: &Env) -> u64 {
     let current = get_total_disputes(env);
     let new_dispute_count = current + 1;
     set_total_disputes(env, new_dispute_count);
+    env.events().publish(
+        (
+            Symbol::new(env, "Increment_dispute_count"),
+            new_dispute_count.clone(),
+        ),
+        env.ledger().timestamp(),
+    );
     new_dispute_count
 }
 pub fn reset_dispute_count(env: &Env, admin: Address) -> Result<(), Error> {

@@ -183,17 +183,18 @@ impl EmergencyContract {
         let request_id = recovery_requests.len() as u32 + 1;
         let recovery_request = RecoveryRequest {
             request_id,
-            user_address,
+            user_address : user_address.clone(),
             amount,
-            reason,
+            reason : reason.clone(),
             status: STATUS_PENDING,
             timestamp: env.ledger().timestamp(),
         };
 
         recovery_requests.push_back(recovery_request);
-        env.storage()
-            .instance()
-            .set(&symbol_short!("REQUESTS"), &recovery_requests);
+
+        env.storage().instance().set(&symbol_short!("REQUESTS"), &recovery_requests);
+        
+        env.events().publish((Symbol::new(env, "created_recovery_req") , request_id.clone()), (user_address ,amount , reason ,env.ledger().timestamp()));
 
         request_id
     }
@@ -217,9 +218,10 @@ impl EmergencyContract {
             }
         }
 
-        env.storage()
-            .instance()
-            .set(&symbol_short!("REQUESTS"), &recovery_requests);
+        
+        env.storage().instance().set(&symbol_short!("REQUESTS"), &recovery_requests);
+        env.events().publish((Symbol::new(env , "approve_recovery_request") , request_id), env.ledger().timestamp());
+
     }
 
     // Emergency fund withdrawal
@@ -242,7 +244,14 @@ impl EmergencyContract {
             .set(&symbol_short!("STATE"), &state);
 
         // Log emergency action
-        Self::log_emergency_action(env, EMERGENCY_WITHDRAWAL, symbol_short!("WITHDRAW"));
+
+        Self::log_emergency_action(
+            env,
+            EMERGENCY_WITHDRAWAL,
+            symbol_short!("WITHDRAW")
+        );
+        env.events().publish((Symbol::new(env , "emegency_fund_withdrawal"), ), (_recipient , amount , env.ledger().timestamp()));
+
     }
 
     // Add emergency contact
@@ -255,10 +264,11 @@ impl EmergencyContract {
             .get(&symbol_short!("STATE"))
             .unwrap_or_else(|| env.panic_with_error(EmergencyError::InvalidEmergencyAction));
 
-        state.emergency_contacts.push_back(contact);
-        env.storage()
-            .instance()
-            .set(&symbol_short!("STATE"), &state);
+        
+        state.emergency_contacts.push_back(contact.clone());
+        env.storage().instance().set(&symbol_short!("STATE"), &state);
+        env.events().publish((Symbol::new(env ,"added_emergency_contract"), contact ), env.ledger().timestamp());
+
     }
 
     // Get emergency state

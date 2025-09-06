@@ -114,7 +114,7 @@ pub fn init_contract(
 
     let escrow_data = EscrowData {
         client,
-        freelancer,
+        freelancer :  freelancer.clone(),
         arbitrator: None,
         token: None,
         amount,
@@ -129,13 +129,14 @@ pub fn init_contract(
         milestones: Vec::new(env),
         milestone_history: Vec::new(env),
         released_amount: 0,
-        fee_manager: fee_manager,
+        fee_manager: fee_manager.clone(),
         fee_collected: 0,
         net_amount: amount,
     };
 
     env.storage().instance().set(&ESCROW_DATA, &escrow_data);
     env.storage().instance().set(&INITIALIZED, &true);
+    env.events().publish((Symbol::new(env  , "initiated_contract") ,caller ), (freelancer , amount , fee_manager , env.ledger().timestamp()));
 }
 
 pub fn deposit_funds(env: &Env, client: Address) {
@@ -461,6 +462,8 @@ pub fn set_rate_limit_bypass(env: &Env, caller: Address, user: Address, bypass: 
         handle_error(env, Error::Unauthorized);
     }
     set_rate_limit_bypass_flag(env, &user, bypass);
+
+    env.events().publish((Symbol::new(env , "set_rate_limit_bypass") , caller), (user , bypass , env.ledger().timestamp()));
 }
 
 pub fn reset_rate_limit(env: &Env, caller: Address, user: Address, limit_type: String) {
@@ -470,6 +473,7 @@ pub fn reset_rate_limit(env: &Env, caller: Address, user: Address, limit_type: S
         handle_error(env, Error::Unauthorized);
     }
     rl_reset(env, &user, &limit_type);
+     env.events().publish((Symbol::new(env , "reset_rate_limit") , caller), (user , limit_type, env.ledger().timestamp()));
 }
 
 // CORREGIDO: usar índice correcto (milestone_id - 1)

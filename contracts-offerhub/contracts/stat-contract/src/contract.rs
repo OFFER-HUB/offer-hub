@@ -1,36 +1,25 @@
-use crate::storage::ContractStats;
+
+use soroban_sdk::{Address, Env, Symbol};
+use crate::storage::{ContractStats};
 use crate::types::{DataKey, Error};
 use escrow_contract;
+
 use rating_contract;
-use soroban_sdk::{Address, Env};
+
 use user_registry_contract;
 
 pub struct StatContract;
 
 impl StatContract {
-    pub fn initialize(
-        env: Env,
-        user_registry_id: Address,
-        rating_contract_id: Address,
-        escrow_id: Address,
-        dispute_id: Address,
-        fee_manager_id: Address,
-    ) {
-        env.storage()
-            .instance()
-            .set(&DataKey::UserRegistryContract, &user_registry_id);
-        env.storage()
-            .instance()
-            .set(&DataKey::RatingContract, &rating_contract_id);
-        env.storage()
-            .instance()
-            .set(&DataKey::EscrowContract, &escrow_id);
-        env.storage()
-            .instance()
-            .set(&DataKey::DisputeContract, &dispute_id);
-        env.storage()
-            .instance()
-            .set(&DataKey::FeeManagerContract, &fee_manager_id);
+
+    pub fn initialize(env: Env, user_registry_id: Address, rating_contract_id: Address, escrow_id: Address, dispute_id: Address, fee_manager_id: Address) {
+        env.storage().instance().set(&DataKey::UserRegistryContract, &user_registry_id);
+        env.storage().instance().set(&DataKey::RatingContract, &rating_contract_id);
+        env.storage().instance().set(&DataKey::EscrowContract, &escrow_id);
+        env.storage().instance().set(&DataKey::DisputeContract, &dispute_id);
+        env.storage().instance().set(&DataKey::FeeManagerContract, &fee_manager_id);
+        env.events().publish((Symbol::new(&env , "stat_contract_initialized"), ), (user_registry_id, rating_contract_id , escrow_id, dispute_id , fee_manager_id , env.ledger().timestamp()));
+
     }
 
     pub fn get_contract_stats(env: Env) -> Result<ContractStats, Error> {
