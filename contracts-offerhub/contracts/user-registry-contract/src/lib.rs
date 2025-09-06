@@ -10,7 +10,7 @@ pub mod types;
 mod validation;
 
 use crate::contract::UserRegistryContract;
-use crate::types::{Error, UserProfile, UserStatus, VerificationLevel};
+use crate::types::{Error, UserProfile,UserProfileSummary,  UserStatus, VerificationLevel};
 use soroban_sdk::{contract, contractimpl, Address, Env, String, Vec};
 
 #[contract]
@@ -130,6 +130,12 @@ impl Contract {
     pub fn get_user_profile(env: Env, user: Address) -> Option<UserProfile> {
         UserRegistryContract::get_user_profile_data(env, user)
     }
+
+    /// Get  user profile formatted data
+    pub fn get_user_profile_formatted(env: Env, user: Address) -> Result<UserProfileSummary, Error> {
+        UserRegistryContract::get_user_profile(env, user)
+    }
+
 
     /// Check verification level
     pub fn get_verification_level(env: Env, user: Address) -> Option<VerificationLevel> {

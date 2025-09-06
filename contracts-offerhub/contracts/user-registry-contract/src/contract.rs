@@ -3,7 +3,7 @@ use crate::events::*;
 use crate::storage::*;
 use crate::types::{
     require_auth, AllUsersExport, ContractExportResult, Error, PlatformDataExport,
-    PublicationStatus, UserDataExport, UserProfile, UserStatus, VerificationLevel,
+    PublicationStatus, UserDataExport, UserProfile, UserStatus, VerificationLevel, UserProfileSummary,
 };
 use crate::validation::{
     validate_bulk_verification, validate_metadata_update, validate_user_verification,
@@ -795,5 +795,42 @@ impl UserRegistryContract {
         let new_count = current_count + 1;
         Self::set_total_users(env, new_count)?;
         Ok(new_count)
+    }
+
+    pub fn get_user_profile(env: Env, user: Address) -> Result<UserProfileSummary, Error> {
+        // Fetch user profile from storage
+        let profile = get_user_profile(&env, &user).ok_or(Error::UserNotFound)?;
+
+        // Format verification level
+        let verification_level = match profile.verification_level {
+            VerificationLevel::Basic => String::from_str(&env, "Basic"),
+            VerificationLevel::Premium => String::from_str(&env, "Premium"),
+            VerificationLevel::Enterprise => String::from_str(&env, "Enterprise"),
+        };
+
+        let is_expired = Self::is_verification_expired(&env, &profile);
+        
+
+        // Format publication status
+        let publication_status = match profile.publication_status {
+            PublicationStatus::Private => String::from_str(&env, "Private"),
+            PublicationStatus::Published => String::from_str(&env, "Published"),
+            PublicationStatus::Verified => String::from_str(&env, "Verified"),
+        };
+
+        // Construct formatted summary
+        let summary = UserProfileSummary {
+            user_address: user,
+            verification_level,
+            verified_at: profile.verified_at,
+            expires_at: profile.expires_at,
+            metadata: profile.metadata,
+            is_blacklisted: profile.is_blacklisted,
+            publication_status,
+            is_expired,
+            timestamp: env.ledger().timestamp(),
+        };
+
+        Ok(summary)
     }
 }

@@ -121,3 +121,26 @@ pub struct AllDisputeDataExport {
     pub export_version: String,
     pub data_size_limit_reached: bool,
 }
+
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DisputeInfo {
+    pub dispute_id: u32,
+    pub initiator: Address,
+    pub reason: String,
+    pub timestamp: u64,
+    pub resolved: bool,
+    pub outcome: String,
+    pub status: String,
+    pub level: String,
+    pub fee_manager: Address,
+    pub dispute_amount: i128,
+    pub fee_collected: i128,
+    pub escrow_contract: Option<Address>, // Direct escrow integration
+    pub timeout_timestamp: Option<u64>,   // Automatic resolution timeout
+    pub evidence: Vec<(Address, String, u64, Option<String>)>,
+    pub mediator: Option<Address>,
+    pub arbitrator: Option<Address>,
+    pub resolution_timestamp: Option<u64>,
+}

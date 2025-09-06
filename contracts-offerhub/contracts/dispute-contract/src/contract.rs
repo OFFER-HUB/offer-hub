@@ -8,7 +8,7 @@ use crate::{
     },
     types::{
         AllDisputeDataExport, DisputeData, DisputeDataExport, DisputeLevel, DisputeOutcome,
-        DisputeStatus, DisputeSummary, Error, Evidence,
+        DisputeStatus, DisputeSummary, Error, Evidence, DisputeInfo
     },
     validation::{
         validate_add_evidence, validate_address, validate_open_dispute, validate_timeout_duration,
@@ -641,4 +641,74 @@ pub fn export_all_dispute_data(env: &Env, admin: Address, limit: u32) -> AllDisp
     );
 
     export_data
+}
+
+// Same as get_dispute
+pub fn get_dispute_info(env: &Env,  dispute_id: u32) -> Result<DisputeInfo, Error> {
+    if !env.storage().instance().has(&ARBITRATOR) {
+        panic_with_error!(env, Error::NotInitialized);
+    }
+
+    let disputes: Map<u32, DisputeData> = env.storage().instance().get(&DISPUTES).unwrap();
+    let dispute = disputes
+        .get(dispute_id)
+        .unwrap_or_else(|| panic_with_error!(env, Error::DisputeNotFound));
+
+    // Format disoute outcome
+    let dispute_outcome = match dispute.outcome {
+        DisputeOutcome::None => String::from_str(&env, "None"),
+        DisputeOutcome::FavorFreelancer => String::from_str(&env, "FavorFreelancer"),
+        DisputeOutcome::FavorClient => String::from_str(&env, "FavorClient"),
+        DisputeOutcome::Split => String::from_str(&env, "Split"),
+    };
+
+    // Format dispute status
+    let dispute_status = match dispute.status {
+        DisputeStatus::Open => String::from_str(&env, "Open"),
+        DisputeStatus::UnderMediation => String::from_str(&env, "UnderMediation"),
+        DisputeStatus::UnderArbitration => String::from_str(&env, "UnderArbitration"),
+        DisputeStatus::Resolved => String::from_str(&env, "Resolved"),
+        DisputeStatus::Timeout => String::from_str(&env, "Timeout"),
+    };
+
+    // Format dispute level
+    let dispute_level = match dispute.level {
+        DisputeLevel::Mediation => String::from_str(&env, "Mediation"),
+        DisputeLevel::Arbitration => String::from_str(&env, "Arbitration"),
+    };
+
+    // Format evidences as Vec<(Address, String, u64, Option<String>)> // 
+    let mut evidences = Vec::new(&env);
+    for evidence in dispute.evidence.iter() {
+        let evidencetuple  = (
+            evidence.submitter,
+            evidence.description,
+            evidence.timestamp,
+            evidence.attachment_hash,
+        );
+        evidences.push_back(evidencetuple);
+    }
+
+
+    let dispute_info = DisputeInfo {
+        dispute_id,
+        initiator: dispute.initiator,
+        reason: dispute.reason,
+        timestamp: dispute.timestamp,
+        resolved: dispute.resolved,
+        outcome: dispute_outcome,
+        status: dispute_status,
+        level: dispute_level,
+        fee_manager: dispute.fee_manager,
+        dispute_amount: dispute.dispute_amount,
+        fee_collected: dispute.fee_collected,
+        escrow_contract: dispute.escrow_contract,
+        timeout_timestamp: dispute.timeout_timestamp,
+        evidence: evidences,
+        mediator: dispute.mediator,
+        arbitrator: dispute.arbitrator,
+        resolution_timestamp: dispute.resolution_timestamp,
+    };
+
+    Ok(dispute_info)
 }

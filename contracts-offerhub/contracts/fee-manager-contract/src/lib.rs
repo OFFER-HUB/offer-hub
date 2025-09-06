@@ -92,4 +92,8 @@ impl FeeManagerContract {
     pub fn reset_total_fees_collected(env: &Env, admin: Address) -> Result<(), Error> {
         contract::reset_total_fees_collected(&env, admin)
     }
+
+    pub fn get_platform_stats(env: &Env) -> Result<types::PlatformStats, Error> {
+        contract::get_platform_stats(&env)
+    }
 }

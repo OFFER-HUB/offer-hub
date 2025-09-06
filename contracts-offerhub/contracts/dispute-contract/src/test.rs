@@ -5,8 +5,7 @@ use crate::{
     DisputeResolutionContract, DisputeResolutionContractClient,
 };
 use soroban_sdk::{
-    testutils::{Address as _, Ledger},
-    Address, Env, String,
+    log, testutils::{Address as _, Ledger}, Address, Env, String
 };
 
 fn setup_env() -> Env {
@@ -562,4 +561,45 @@ fn test_reset_total_disputes_fail() {
 
     let count_after_reset = client.get_total_disputes();
     assert_eq!(count_after_reset, 0);
+}
+
+
+#[test]
+fn test_get_dispute_info() {
+    let env = setup_env();
+    env.mock_all_auths();
+
+    let (client, admin, _, _) = create_contract(&env);
+    let initiator = Address::generate(&env);
+    let mediator = Address::generate(&env);
+    let arbitrator = Address::generate(&env);
+    let job_id = 1;
+    let reason = String::from_str(&env, "Job not completed");
+    let dispute_amount = 1000000;
+    let escrow_contract = Some(Address::generate(&env));
+
+    // Add mediator and arbitrator to the system
+    client.add_mediator_access(&admin, &mediator);
+    client.add_arbitrator(&admin, &arbitrator, &String::from_str(&env, "Jane Smith"));
+
+    // Open dispute and assign mediator
+    client.open_dispute(
+        &job_id,
+        &initiator,
+        &reason,
+        &escrow_contract,
+        &dispute_amount,
+    );
+    client.assign_mediator(&job_id, &admin, &mediator);
+
+    // Escalate to arbitration
+    client.escalate_to_arbitration(&job_id, &mediator, &arbitrator);
+
+    let dispute = client.get_dispute_info(&job_id);
+    assert_eq!(dispute.dispute_id, 1);
+    assert_eq!(dispute.fee_collected, 0);
+    assert_eq!(dispute.resolved, false);
+    assert_eq!(dispute.reason, String::from_str(&env, "Job not completed"));
+    assert_eq!(dispute.status, String::from_str(&env, "UnderArbitration"));
+    assert_eq!(dispute.level,String::from_str(&env, "Arbitration"));
 }

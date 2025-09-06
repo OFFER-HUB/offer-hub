@@ -62,6 +62,24 @@ pub struct RatingStats {
 
 #[contracttype]
 #[derive(Clone, Debug, PartialEq)]
+pub struct UserRatingSummary {
+    pub user: Address,
+    pub total_ratings: u32,
+    pub average_rating: u32, // Multiplied by 100 for precision (e.g., 450 = 4.50)
+    pub five_star_count: u32,
+    pub four_star_count: u32,
+    pub three_star_count: u32,
+    pub two_star_count: u32,
+    pub one_star_count: u32,
+    pub last_updated: u64,
+    pub recent_ratings:  Vec<(String, Address, Address, String, u32, u64, String)>,
+    pub rating_trend: i32, // Positive for improving, negative for declining
+    pub achievement_eligible: Vec<String>,
+    pub restriction_status: String, // "none", "warning", "restricted"
+}
+
+#[contracttype]
+#[derive(Clone, Debug, PartialEq)]
 pub struct UserRatingData {
     pub stats: RatingStats,
     pub recent_ratings: Vec<Rating>,

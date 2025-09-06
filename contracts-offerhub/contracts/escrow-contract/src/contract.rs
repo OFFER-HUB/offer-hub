@@ -1,5 +1,3 @@
-use core::ops::Add;
-
 use soroban_sdk::{Address, Env, IntoVal, String, Symbol, Vec};
 
 use crate::storage::{
@@ -11,7 +9,7 @@ use crate::{
     storage::{add_call_log, CallLog, ESCROW_DATA, INITIALIZED},
     types::{
         DisputeResult, Error, EscrowData, EscrowDataExport, EscrowStatus, Milestone,
-        MilestoneHistory,
+        MilestoneHistory, EscrowSummary
     },
     validation::{
         validate_add_milestone, validate_address, validate_init_contract,
@@ -757,4 +755,38 @@ pub fn export_escrow_data(env: &Env, caller: Address, contract_id: String) -> Es
     );
 
     export_data
+}
+
+pub fn get_contract_status(env: &Env, contract_id: Address) -> EscrowSummary {
+    if !env.storage().instance().has(&INITIALIZED) {
+        handle_error(env, Error::NotInitialized);
+    }
+
+    let escrow_data: EscrowData = env.storage().instance().get(&ESCROW_DATA).unwrap();
+
+    // Format Escrow Status
+    let escrow_data_status = match escrow_data.status {
+        EscrowStatus::Initialized => String::from_str(&env, "Initialized"),
+        EscrowStatus::Funded => String::from_str(&env, "Funded"),
+        EscrowStatus::Released => String::from_str(&env, "Released"),
+        EscrowStatus::Disputed => String::from_str(&env, "Disputed"),
+        EscrowStatus::Resolved => String::from_str(&env, "Resolved"),
+    };
+
+    let summary = EscrowSummary {
+        client: escrow_data.client,
+        freelancer: escrow_data.freelancer,
+        amount: escrow_data.amount,
+        status: escrow_data_status,
+        created_at: escrow_data.created_at,
+        milestone_count: escrow_data.milestones.len() as u32,
+    };
+
+    // Emit event for status retrieval
+    env.events().publish(
+        (Symbol::new(env, "contract_status_retrieved"),),
+        (contract_id, env.ledger().timestamp(), summary.clone())
+    );
+
+    summary
 }

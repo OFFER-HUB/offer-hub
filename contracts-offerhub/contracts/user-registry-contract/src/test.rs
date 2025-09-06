@@ -5,7 +5,7 @@ use crate::{
     types::{Error, VerificationLevel},
     Contract,
 };
-use soroban_sdk::{testutils::Address as _, Address, Env, String, Vec};
+use soroban_sdk::{log, testutils::Address as _, Address, Env, String, Vec};
 
 // ==================== LEGACY TESTS ====================
 
@@ -964,5 +964,53 @@ fn test_export_platform_data() {
         assert_eq!(platform_data.export_version, String::from_str(&env, "1.0"));
         assert_eq!(platform_data.user_registry_summary.total_users, 2);
         assert!(platform_data.platform_statistics.len() > 0);
+    });
+}
+
+#[test]
+fn test_get_user_profile_formatted() {
+    let env = Env::default();
+    let contract_id = env.register(Contract, ());
+    let admin = Address::generate(&env);
+    let user = Address::generate(&env);
+
+    // Initialize admin
+    env.mock_all_auths();
+    env.as_contract(&contract_id, || {
+        Contract::initialize_admin(env.clone(), admin.clone()).unwrap();
+    });
+
+    // Verify user with premium level
+    env.mock_all_auths();
+    env.as_contract(&contract_id, || {
+        let metadata = String::from_str(&env, "Test user metadata");
+        let expires_at = env.ledger().timestamp() + 365 * 24 * 60 * 60; // 1 year
+
+        let result = Contract::verify_user(
+            env.clone(),
+            admin.clone(),
+            user.clone(),
+            VerificationLevel::Premium,
+            expires_at,
+            metadata.clone(),
+        );
+        assert!(result.is_ok());
+
+        // Check user status
+        let status = Contract::get_user_status(env.clone(), user.clone());
+        assert!(status.is_verified);
+        assert_eq!(status.verification_level, VerificationLevel::Premium);
+        assert!(!status.is_blacklisted);
+        assert_eq!(status.verification_expires_at, expires_at);
+        assert!(!status.is_expired);
+
+        // Check user profile
+        let profile = Contract::get_user_profile_formatted(env.clone(), user.clone());
+        assert!(profile.is_ok());
+        let profile = profile.unwrap();
+        assert_eq!(profile.verification_level, String::from_str(&env, "Premium"));
+        assert_eq!(profile.publication_status, String::from_str(&env, "Private"));
+        assert_eq!(profile.metadata, metadata);
+        assert!(!profile.is_blacklisted);
     });
 }

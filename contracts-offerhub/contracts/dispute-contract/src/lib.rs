@@ -10,7 +10,7 @@ mod validation;
 // #[cfg(test)]
 // mod validation_test;
 
-use crate::types::{ArbitratorData, DisputeData, DisputeOutcome, Error, Evidence};
+use crate::types::{ArbitratorData, DisputeData, DisputeOutcome, Error, Evidence, DisputeInfo};
 use soroban_sdk::{contract, contractimpl, Address, Env, String, Vec};
 
 #[contract]
@@ -180,5 +180,9 @@ impl DisputeResolutionContract {
 
     pub fn reset_dispute_count(env: &Env, admin: Address) -> Result<(), Error> {
         contract::reset_dispute_count(&env, admin)
+    }
+
+     pub fn get_dispute_info(env: &Env, dispute_id: u32) -> Result<DisputeInfo, Error> {
+        contract::get_dispute_info(&env, dispute_id)
     }
 }

@@ -21,7 +21,7 @@ use crate::storage::{
 };
 use crate::types::{
     require_auth, AllRatingDataExport, Error, Feedback, HealthCheckResult, Rating,
-    RatingDataExport, RatingStats, RatingThreshold, UserRatingData,
+    RatingDataExport, RatingStats, RatingThreshold, UserRatingData, UserRatingSummary
 };
 use crate::validation::{validate_report_feedback, validate_submit_rating};
 use soroban_sdk::{Address, Env, IntoVal, String, Symbol, Vec};
@@ -202,6 +202,50 @@ impl RatingContract {
     pub fn get_user_rating_data(env: Env, user: Address) -> Result<UserRatingData, Error> {
         generate_user_rating_data(&env, &user)
     }
+
+    pub fn get_user_rating_summary(env: &Env, user: Address) -> Result<UserRatingSummary, Error> {
+    // Fetch rating stats and data
+    let rating_stats = get_user_rating_stats(&env, &user)?;
+    let rating_data = generate_user_rating_data(&env, &user)?;
+    let recent_rating = get_user_rating_history(&env, &user, 5u32, 0u32); //get last 5 recent ratings
+
+
+    // Format recent ratings as Vec<Vec<String>>
+    let mut recent_ratings = Vec::new(&env);
+    
+    for rating in recent_rating.iter() {
+        let rating_tuple  = (
+            rating.id.clone(),
+            rating.rater,
+            rating.rated_user,
+            rating.contract_id.clone(),
+            rating.rating,
+            rating.timestamp,
+            rating.work_category.clone(),
+        );
+
+        recent_ratings.push_back(rating_tuple);
+    }
+
+    // Construct formatted summary
+    let summary = UserRatingSummary {
+        user: rating_stats.user,
+        total_ratings: rating_stats.total_ratings,
+        average_rating: rating_stats.average_rating, 
+        five_star_count: rating_stats.five_star_count,
+        four_star_count: rating_stats.four_star_count,
+        three_star_count: rating_stats.three_star_count,
+        two_star_count: rating_stats.two_star_count,
+        one_star_count: rating_stats.two_star_count,
+        last_updated: rating_stats.last_updated,
+        recent_ratings: recent_ratings,
+        rating_trend: rating_data.rating_trend,
+        achievement_eligible: rating_data.achievement_eligible,
+        restriction_status: rating_data.restriction_status,
+    };
+
+    Ok(summary)
+}
 
     pub fn get_user_rating_history(
         env: Env,

@@ -100,7 +100,7 @@ pub struct EscrowSummary {
     pub client: Address,
     pub freelancer: Address,
     pub amount: i128,
-    pub status: EscrowStatus,
+    pub status: String,
     pub created_at: u64,
     pub milestone_count: u32,
 }

@@ -71,6 +71,21 @@ pub struct UserStatus {
     pub validation_count: u32,
 }
 
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct UserProfileSummary {
+    pub user_address: Address,              // User's address
+    pub verification_level: String,         // Human-readable verification level (e.g., "Basic", "Premium", "Enterprise")
+    pub verified_at: u64,                   // Timestamp of verification
+    pub expires_at: u64,                // Formatted expiration status (e.g., "No expiration", "Expired", or timestamp)
+    pub metadata: String,                   // User metadata
+    pub is_blacklisted: bool,              // Blacklist status
+    pub publication_status: String,         // Human-readable publication status (e.g., "Private", "Published", "Verified")
+    pub is_expired: bool,                  // Whether verification has expired
+    pub timestamp: u64,                    // Current ledger timestamp for reference
+}
+
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct UserDataExport {
@@ -117,6 +132,8 @@ pub struct PlatformDataExport {
     pub export_version: String,
     pub platform_statistics: Vec<(String, String)>,
 }
+
+
 
 pub fn require_auth(_env: &Env, address: &Address) -> Result<(), Error> {
     address.require_auth();

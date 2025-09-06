@@ -8,7 +8,7 @@ use crate::{
         PREMIUM_USERS, TOTAL_FESS_COLLECTED,
     },
     types::{
-        FeeCalculation, FeeConfig, FeeRecord, FeeStats, PremiumUser, FEE_TYPE_DISPUTE,
+        FeeCalculation, FeeConfig, FeeRecord, FeeStats, PlatformStats, PremiumUser, FEE_TYPE_DISPUTE,
         FEE_TYPE_ESCROW,
     },
     validation::{
@@ -412,6 +412,47 @@ pub fn reset_total_fees_collected(env: &Env, admin: Address) -> Result<(), Error
         env.ledger().timestamp(),
     );
     Ok(())
+}
+
+pub fn get_platform_stats(env: &Env) -> Result<PlatformStats, Error> {
+    if !env.storage().instance().has(&FEE_CONFIG) {
+        handle_error(env, Error::NotInitialized);
+    }
+
+    // Fetch fee stats
+    let fee_stats = env.storage().instance().get(&FEE_STATS).unwrap_or(FeeStats {
+        total_fees_collected: 0,
+        total_escrow_fees: 0,
+        total_dispute_fees: 0,
+        total_premium_exemptions: 0,
+        total_transactions: 0,
+    });
+
+    // Fetch platform balance
+    let platform_balance = env.storage().instance().get(&PLATFORM_BALANCE).unwrap_or(0);
+
+    // Fetch premium user count
+    let premium_users: Vec<PremiumUser> = env.storage().instance().get(&PREMIUM_USERS).unwrap_or(Vec::new(env));
+    let premium_user_count = premium_users.len();
+
+    // Fetch fee configuration
+    let fee_config: FeeConfig = env.storage().instance().get(&FEE_CONFIG).unwrap();
+
+    // Construct PlatformStats
+    let stats = PlatformStats {
+        total_fees_collected: fee_stats.total_fees_collected,
+        total_escrow_fees: fee_stats.total_escrow_fees,
+        total_dispute_fees: fee_stats.total_dispute_fees,
+        total_premium_exemptions: fee_stats.total_premium_exemptions,
+        total_transactions: fee_stats.total_transactions,
+        platform_balance,
+        premium_user_count,
+        escrow_fee_percentage: fee_config.escrow_fee_percentage,
+        dispute_fee_percentage: fee_config.dispute_fee_percentage,
+        arbitrator_fee_percentage: fee_config.arbitrator_fee_percentage,
+        timestamp: env.ledger().timestamp(),
+    };
+    Ok(stats)
 }
 
 // Helper function to calculate fee amount with precision

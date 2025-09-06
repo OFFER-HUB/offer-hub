@@ -1,5 +1,5 @@
 #![no_std]
-use crate::types::Error;
+use crate::types::{Error, EscrowSummary};
 use soroban_sdk::{contract, contractimpl, Address, Env, String, Symbol, Vec};
 
 mod contract;
@@ -111,6 +111,12 @@ impl EscrowContract {
     pub fn reset_rate_limit(env: Env, caller: Address, user: Address, limit_type: String) {
         contract::reset_rate_limit(&env, caller, user, limit_type);
     }
+
+    pub fn get_contract_status(env: &Env, contract_id: Address) -> EscrowSummary {
+        contract::get_contract_status(&env, contract_id)
+
+    }
+
 }
 
 #[cfg(test)]

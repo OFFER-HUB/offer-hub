@@ -60,3 +60,20 @@ pub struct FeeStats {
     pub total_premium_exemptions: i128, // Total fees exempted for premium users
     pub total_transactions: u32,        // Total number of fee transactions
 }
+
+
+#[contracttype]
+#[derive(Clone)]
+pub struct PlatformStats {
+    pub total_fees_collected: i128,     // Total fees collected
+    pub total_escrow_fees: i128,        // Total escrow fees
+    pub total_dispute_fees: i128,       // Total dispute fees
+    pub total_premium_exemptions: i128, // Total fees exempted for premium users
+    pub total_transactions: u32,            
+    pub platform_balance: i128,           // Current platform balance
+    pub premium_user_count: u32,          // Number of premium users
+    pub escrow_fee_percentage: i128,      // Current escrow fee rate
+    pub dispute_fee_percentage: i128,     // Current dispute fee rate
+    pub arbitrator_fee_percentage: i128,  // Current arbitrator fee rate
+    pub timestamp: u64,                   // Timestamp of the stats snapshot
+}

@@ -16,6 +16,7 @@ mod types;
 mod validation;
 
 pub use crate::contract::RatingContract;
+use crate::types::UserRatingSummary;
 pub use types::{
     Error, Feedback, HealthCheckResult, HealthStatus, Rating, RatingStats, UserRatingData,
 };
@@ -214,6 +215,10 @@ impl Contract {
 
     pub fn increment_rating_count(env: &Env) -> u64 {
         RatingContract::increment_rating_count(&env)
+    }
+    
+    pub fn get_user_rating_summary(env: &Env, user: Address) -> Result<UserRatingSummary, Error> {
+        RatingContract::get_user_rating_summary(&env, user)
     }
 }
 

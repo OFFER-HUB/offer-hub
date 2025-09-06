@@ -1,5 +1,5 @@
 use crate::types::{
-    Error, Feedback, FeedbackReport, IncentiveRecord, RateLimitEntry, Rating, RatingStats,
+    Error, Feedback, FeedbackReport, IncentiveRecord, RateLimitEntry, Rating, RatingStats, UserRatingSummary,
     RatingThreshold, ADMIN, FEEDBACK, FEEDBACK_REPORTS, INCENTIVE_RECORDS, MODERATOR,
     PLATFORM_STATS, RATE_LIMITS, RATE_LIMIT_BYPASS, RATING, RATING_THRESHOLDS, REPUTATION_CONTRACT,
     TOTAL_RATING_COUNT, USER_RATING_STATS, USER_RESTRICTIONS,
