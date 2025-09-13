@@ -1,121 +1,36 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useRef, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { MapPin, Star, MessageSquare, Heart, Check, Maximize2, Minimize2, Filter, Users } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 import { LocationData } from "@/types/location.types"
-import { calculateDistance } from "@/utils/geographic-calculations"
+import { FreelancerDisplay } from "@/types/service.types"
+import { calculateDistance } from "@/utils/geographic-calculations" 
 
-// Updated freelancer data with coordinates and timezone
-const freelancers = [
-  {
-    id: "f1",
-    name: "Alex Johnson",
-    title: "Full Stack Developer",
-    avatar: "",
-    rating: 4.9,
-    reviewCount: 127,
-    hourlyRate: 65,
-    skills: ["React", "Node.js", "TypeScript"],
-    location: "San Francisco, USA",
-    coordinates: { lat: 37.7749, lng: -122.4194 },
-    timezone: "America/Los_Angeles",
-    isTopRated: true,
-  },
-  {
-    id: "f2",
-    name: "Sarah Williams",
-    title: "UI/UX Designer",
-    avatar: "",
-    rating: 4.8,
-    reviewCount: 93,
-    hourlyRate: 55,
-    skills: ["Figma", "Adobe XD", "UI Design"],
-    location: "London, UK",
-    coordinates: { lat: 51.5074, lng: -0.1278 },
-    timezone: "Europe/London",
-    isTopRated: false,
-  },
-  {
-    id: "f3",
-    name: "Michael Chen",
-    title: "Mobile App Developer",
-    avatar: "",
-    rating: 4.7,
-    reviewCount: 78,
-    hourlyRate: 60,
-    skills: ["React Native", "Swift", "Kotlin"],
-    location: "Toronto, Canada",
-    coordinates: { lat: 43.6532, lng: -79.3832 },
-    timezone: "America/Toronto",
-    isTopRated: false,
-  },
-  {
-    id: "f4",
-    name: "Emily Rodriguez",
-    title: "Content Writer & SEO Specialist",
-    avatar: "",
-    rating: 4.9,
-    reviewCount: 112,
-    hourlyRate: 45,
-    skills: ["Content Writing", "SEO", "Copywriting"],
-    location: "Madrid, Spain",
-    coordinates: { lat: 40.4168, lng: -3.7038 },
-    timezone: "Europe/Madrid",
-    isTopRated: true,
-  },
-  {
-    id: "f5",
-    name: "David Kim",
-    title: "DevOps Engineer",
-    avatar: "",
-    rating: 4.6,
-    reviewCount: 64,
-    hourlyRate: 70,
-    skills: ["Docker", "Kubernetes", "AWS"],
-    location: "Seoul, South Korea",
-    coordinates: { lat: 37.5665, lng: 126.978 },
-    timezone: "Asia/Seoul",
-    isTopRated: false,
-  },
-  {
-    id: "f6",
-    name: "Olivia Patel",
-    title: "Graphic Designer",
-    avatar: "",
-    rating: 4.8,
-    reviewCount: 89,
-    hourlyRate: 50,
-    skills: ["Photoshop", "Illustrator", "Branding"],
-    location: "Mumbai, India",
-    coordinates: { lat: 19.076, lng: 72.8777 },
-    timezone: "Asia/Kolkata",
-    isTopRated: true,
-  },
-]
-
-interface TalentMapViewProps {
-  selectedFreelancers: string[]
-  toggleFreelancerSelection: (id: string) => void
-  openFreelancerDetail: (freelancer: any) => void
+interface LocationMapViewProps {
+  freelancers: FreelancerDisplay[]
   selectedLocation?: LocationData | null
   searchRadius?: number
+  selectedFreelancers: string[]
+  onFreelancerSelect?: (freelancerId: string) => void
+  onFreelancerView?: (freelancer: FreelancerDisplay) => void
   className?: string
 }
 
-export default function TalentMapView({
-  selectedFreelancers,
-  toggleFreelancerSelection,
-  openFreelancerDetail,
+export default function LocationMapView({
+  freelancers,
   selectedLocation,
   searchRadius = 50,
+  selectedFreelancers,
+  onFreelancerSelect,
+  onFreelancerView,
   className = ""
-}: TalentMapViewProps) {
+}: LocationMapViewProps) {
   const [selectedMarker, setSelectedMarker] = useState<string | null>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
@@ -135,6 +50,50 @@ export default function TalentMapView({
         return distance <= searchRadius
       })
     : freelancers
+
+  // Cluster nearby freelancers for better visualization
+  const clusterFreelancers = (freelancers: FreelancerDisplay[]) => {
+    if (!clusteredView) return freelancers.map(f => ({ ...f, cluster: false, clusterCount: 1 }))
+    
+    const clusters: Array<FreelancerDisplay & { cluster: boolean; clusterCount: number }> = []
+    const processed = new Set<string>()
+    
+    freelancers.forEach(freelancer => {
+      if (processed.has(freelancer.id) || !freelancer.coordinates) return
+      
+      const nearby = freelancers.filter(other => {
+        if (other.id === freelancer.id || processed.has(other.id) || !other.coordinates) return false
+        const distance = calculateDistance(
+          freelancer.coordinates!.lat,
+          freelancer.coordinates!.lng,
+          other.coordinates.lat,
+          other.coordinates.lng
+        )
+        return distance <= 10 // Cluster within 10km
+      })
+      
+      if (nearby.length > 0) {
+        clusters.push({
+          ...freelancer,
+          cluster: true,
+          clusterCount: nearby.length + 1
+        })
+        processed.add(freelancer.id)
+        nearby.forEach(f => processed.add(f.id))
+      } else {
+        clusters.push({
+          ...freelancer,
+          cluster: false,
+          clusterCount: 1
+        })
+        processed.add(freelancer.id)
+      }
+    })
+    
+    return clusters
+  }
+
+  const clusteredFreelancers = clusterFreelancers(filteredFreelancers)
 
   const renderStars = (rating: number) => {
     return Array(5)
@@ -215,16 +174,6 @@ export default function TalentMapView({
 
           {/* Map Container */}
           <div ref={mapRef} className="relative w-full h-full bg-gradient-to-br from-blue-50 to-green-50">
-            {/* Map Background Info */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center opacity-30">
-                <p className="text-[#002333]/70 mb-2">Interactive Map Visualization</p>
-                <p className="text-sm text-[#002333]/50">
-                  Freelancers positioned based on their locations
-                </p>
-              </div>
-            </div>
-
             {/* Selected Location Center */}
             {selectedLocation && (
               <div
@@ -251,8 +200,8 @@ export default function TalentMapView({
             )}
 
             {/* Freelancer Markers */}
-            {filteredFreelancers.map((freelancer, index) => {
-              const position = generateMapPosition(index, filteredFreelancers.length)
+            {clusteredFreelancers.map((freelancer, index) => {
+              const position = generateMapPosition(index, clusteredFreelancers.length)
               const isSelected = selectedMarker === freelancer.id
               const isChosenFreelancer = selectedFreelancers.includes(freelancer.id)
 
@@ -265,15 +214,24 @@ export default function TalentMapView({
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedMarker(isSelected ? null : freelancer.id)}
                   >
-                    <div className="relative">
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-medium shadow-lg transition-all
-                        ${isSelected ? 'bg-[#15949C] scale-110' : 'bg-[#15949C]/80 hover:bg-[#15949C]'}
-                        ${isChosenFreelancer ? 'ring-2 ring-yellow-400' : ''}
-                      `}>
-                        ${freelancer.hourlyRate}
-                      </div>
+                    <div className={`relative`}>
+                      {freelancer.cluster ? (
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg transition-all
+                          ${isSelected ? 'bg-[#15949C] scale-110' : 'bg-[#15949C]/80 hover:bg-[#15949C]'}
+                          ${isChosenFreelancer ? 'ring-2 ring-yellow-400' : ''}
+                        `}>
+                          {freelancer.clusterCount}
+                        </div>
+                      ) : (
+                        <div className={`h-8 w-8 rounded-full flex items-center justify-center text-white text-sm font-medium shadow-lg transition-all
+                          ${isSelected ? 'bg-[#15949C] scale-110' : 'bg-[#15949C]/80 hover:bg-[#15949C]'}
+                          ${isChosenFreelancer ? 'ring-2 ring-yellow-400' : ''}
+                        `}>
+                          ${freelancer.hourlyRate}
+                        </div>
+                      )}
                       
-                      {freelancer.rating >= 4.5 && (
+                      {freelancer.isTopRated && (
                         <div className="absolute -top-1 -right-1">
                           <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
                         </div>
@@ -299,7 +257,7 @@ export default function TalentMapView({
                           <CardContent className="p-4">
                             <div className="flex items-start gap-3">
                               <Avatar className="h-12 w-12 border-2 border-[#15949C]/20">
-                                <AvatarImage src={freelancer.avatar} alt={freelancer.name} />
+                                <AvatarImage src="" alt={freelancer.name} />
                                 <AvatarFallback className="bg-[#15949C]/20 text-[#15949C]">
                                   {freelancer.name
                                     .split(" ")
@@ -335,7 +293,7 @@ export default function TalentMapView({
                                   <span className="truncate">{freelancer.location}</span>
                                   {freelancer.timezone && (
                                     <Badge variant="outline" className="ml-2 text-xs">
-                                      {freelancer.timezone.split('/')[1]?.replace('_', ' ')}
+                                      {freelancer.timezone}
                                     </Badge>
                                   )}
                                 </div>
@@ -361,7 +319,7 @@ export default function TalentMapView({
                                   <Button
                                     size="sm"
                                     className="flex-1 h-8 text-xs bg-[#15949C] hover:bg-[#15949C]/90"
-                                    onClick={() => openFreelancerDetail(freelancer)}
+                                    onClick={() => onFreelancerView?.(freelancer)}
                                   >
                                     View Profile
                                   </Button>
@@ -369,7 +327,7 @@ export default function TalentMapView({
                                     size="sm"
                                     variant="outline"
                                     className="h-8 px-2"
-                                    onClick={() => toggleFreelancerSelection(freelancer.id)}
+                                    onClick={() => onFreelancerSelect?.(freelancer.id)}
                                   >
                                     {isChosenFreelancer ? (
                                       <Check className="h-3 w-3" />
