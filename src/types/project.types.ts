@@ -48,9 +48,9 @@ export interface ProjectDraft{
     subcategory: string;
     skills: string[];
     experienceLevel: string;
-    projectType: "on-time" | "ongoing";
-    visibility: "public" | "private";
-    budgetType: "fixed" | "hourly";
+    projectType: 'on-time' | 'ongoing';
+    visibility: 'public' | 'private';
+    budgetType: 'fixed' | 'hourly';
     duration: string;
     attachments: ProjectAttachment[];
     milestones: ProjectMilestone[];

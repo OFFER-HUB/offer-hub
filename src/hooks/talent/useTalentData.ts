@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { type TalentProfile, talentProfileData } from "@/lib/mockData/talent-mock-data"
+import { useState, useEffect } from 'react'
+import { type TalentProfile, talentProfileData } from '@/lib/mockData/talent-mock-data'
 
 export const useTalentData = () => {
   const [talents, setTalents] = useState<TalentProfile[]>([])

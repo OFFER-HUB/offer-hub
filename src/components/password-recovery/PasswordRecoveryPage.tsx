@@ -1,6 +1,6 @@
-import React from "react";
-import PasswordRecoveryHeader from "./PasswordRecoveryHeader";
-import PasswordRecoveryForm from "./PasswordRecoveryForm";
+import React from 'react';
+import PasswordRecoveryHeader from './PasswordRecoveryHeader';
+import PasswordRecoveryForm from './PasswordRecoveryForm';
 
 const PasswordRecoveryPage = () => {
   return (

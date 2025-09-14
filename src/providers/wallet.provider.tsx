@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import React, { createContext, useContext, useState, useEffect } from "react"
-import { toast } from "sonner"
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { toast } from 'sonner'
 
 interface WalletContextType {
   walletAddress: string | null
@@ -25,8 +25,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize wallet connection from local storage if available
   useEffect(() => {
-    const savedAddress = localStorage.getItem("walletAddress")
-    const savedWalletType = localStorage.getItem("walletType")
+    const savedAddress = localStorage.getItem('walletAddress')
+    const savedWalletType = localStorage.getItem('walletType')
     
     if (savedAddress && savedWalletType) {
       setWalletAddress(savedAddress)
@@ -34,15 +34,15 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const connect = async (preferredWalletType: string = "freighter") => {
+  const connect = async (preferredWalletType: string = 'freighter') => {
     setIsConnecting(true)
     
     try {
       let address: string | null = null
 
-      if (preferredWalletType === "freighter") {
+      if (preferredWalletType === 'freighter') {
         // Freighter wallet connection
-        if (typeof window !== "undefined" && (window as any).freighter) {
+        if (typeof window !== 'undefined' && (window as any).freighter) {
           const freighter = (window as any).freighter
           
           // Check if Freighter is available
@@ -55,28 +55,28 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
           const publicKey = await freighter.getPublicKey()
           address = publicKey
         } else {
-          throw new Error("Freighter wallet not found. Please install Freighter extension.")
+          throw new Error('Freighter wallet not found. Please install Freighter extension.')
         }
       } else {
         throw new Error(`Unsupported wallet type: ${preferredWalletType}`)
       }
 
       if (!address) {
-        throw new Error("Failed to get wallet address")
+        throw new Error('Failed to get wallet address')
       }
 
       setWalletAddress(address)
       setWalletType(preferredWalletType)
       
       // Save to localStorage
-      localStorage.setItem("walletAddress", address)
-      localStorage.setItem("walletType", preferredWalletType)
+      localStorage.setItem('walletAddress', address)
+      localStorage.setItem('walletType', preferredWalletType)
       
-      toast.success("Wallet connected successfully")
+      toast.success('Wallet connected successfully')
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to connect wallet"
-      console.error("Wallet connection error:", error)
-      toast.error("Failed to connect wallet", {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to connect wallet'
+      console.error('Wallet connection error:', error)
+      toast.error('Failed to connect wallet', {
         description: errorMessage,
       })
       throw error
@@ -90,10 +90,10 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     setWalletType(null)
     
     // Clear localStorage
-    localStorage.removeItem("walletAddress")
-    localStorage.removeItem("walletType")
+    localStorage.removeItem('walletAddress')
+    localStorage.removeItem('walletType')
     
-    toast.success("Wallet disconnected")
+    toast.success('Wallet disconnected')
   }
 
   const getPublicKey = () => {
@@ -121,7 +121,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 export function useWalletContext() {
   const context = useContext(WalletContext)
   if (context === undefined) {
-    throw new Error("useWalletContext must be used within a WalletProvider")
+    throw new Error('useWalletContext must be used within a WalletProvider')
   }
   return context
 }

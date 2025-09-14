@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -82,21 +82,21 @@ const WalletConnectPage: React.FC = () => {
 
   if (isConnected && walletAddress) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-md text-center">
-          <div className="bg-white p-8 rounded-2xl shadow-lg">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      <div className='min-h-screen bg-gray-50 flex items-center justify-center p-4'>
+        <div className='w-full max-w-md text-center'>
+          <div className='bg-white p-8 rounded-2xl shadow-lg'>
+            <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4'>
+              <svg className='w-8 h-8 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Wallet Connected!</h2>
-            <p className="text-gray-600 mb-4">
+            <h2 className='text-2xl font-bold text-gray-900 mb-2'>Wallet Connected!</h2>
+            <p className='text-gray-600 mb-4'>
               {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
             </p>
             <button
               onClick={() => window.history.back()}
-              className="bg-[#15949C] text-white px-6 py-3 rounded-full font-medium hover:bg-[#15949C]/90 transition-colors"
+              className='bg-[#15949C] text-white px-6 py-3 rounded-full font-medium hover:bg-[#15949C]/90 transition-colors'
             >
               Continue
             </button>
@@ -107,37 +107,37 @@ const WalletConnectPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative">
+    <div className='min-h-screen bg-gray-50 flex items-center justify-center p-4 relative'>
       {/* Back Button - Upper Left */}
       <Link 
-        href="/"
-        className="absolute top-4 left-4 text-gray-600 hover:text-gray-800 flex items-center gap-1 p-2 rounded-full hover:bg-gray-100 transition-colors"
+        href='/'
+        className='absolute top-4 left-4 text-gray-600 hover:text-gray-800 flex items-center gap-1 p-2 rounded-full hover:bg-gray-100 transition-colors'
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
         </svg>
         <span>Back</span>
       </Link>
       
-      <div className="w-full max-w-md">
+      <div className='w-full max-w-md'>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+        <div className='text-center mb-8'>
+          <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-2'>
             Connect wallet
           </h1>
-          <p className="text-gray-600 text-sm sm:text-base">
+          <p className='text-gray-600 text-sm sm:text-base'>
             Connect wallet to continue
           </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center justify-between">
-              <p className="text-red-600 text-sm">{error}</p>
+          <div className='mb-6 p-4 bg-red-50 border border-red-200 rounded-lg'>
+            <div className='flex items-center justify-between'>
+              <p className='text-red-600 text-sm'>{error}</p>
               <button
                 onClick={() => setConnectingWalletId(null)}
-                className="text-red-600 hover:text-red-800 text-sm underline"
+                className='text-red-600 hover:text-red-800 text-sm underline'
               >
                 Try again
               </button>
@@ -146,7 +146,7 @@ const WalletConnectPage: React.FC = () => {
         )}
 
         {/* Wallet Options */}
-        <div className="space-y-3">
+        <div className='space-y-3'>
           {walletOptions.map((wallet, index) => {
             const isThisWalletConnecting = connectingWalletId === wallet.id && isConnecting;
             const isDisabled = isConnecting && connectingWalletId !== wallet.id;
@@ -168,7 +168,7 @@ const WalletConnectPage: React.FC = () => {
                   group
                 `}
               >
-                <div className="flex items-center justify-center space-x-4">
+                <div className='flex items-center justify-center space-x-4'>
                   {/* Icon */}
                   <div className={`
                     w-10 h-10 sm:w-12 sm:h-12 
@@ -178,7 +178,7 @@ const WalletConnectPage: React.FC = () => {
                     ${!isDisabled ? 'group-hover:scale-110 transition-transform duration-200' : ''}
                   `}>
                     {isThisWalletConnecting ? (
-                      <div className="animate-spin w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full"></div>
+                      <div className='animate-spin w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full'></div>
                     ) : (
                       wallet.icon
                     )}
@@ -192,7 +192,7 @@ const WalletConnectPage: React.FC = () => {
                   `}>
                     {wallet.name}
                     {isThisWalletConnecting && (
-                      <span className="text-gray-500 text-sm block">Connecting...</span>
+                      <span className='text-gray-500 text-sm block'>Connecting...</span>
                     )}
                   </span>
                   
@@ -202,16 +202,16 @@ const WalletConnectPage: React.FC = () => {
                     ${!isDisabled ? 'group-hover:text-gray-600 transition-colors duration-200' : ''}
                   `}>
                     <svg 
-                      className="w-5 h-5" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
+                      className='w-5 h-5' 
+                      fill='none' 
+                      stroke='currentColor' 
+                      viewBox='0 0 24 24'
                     >
                       <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
+                        strokeLinecap='round' 
+                        strokeLinejoin='round' 
                         strokeWidth={2} 
-                        d="M9 5l7 7-7 7" 
+                        d='M9 5l7 7-7 7' 
                       />
                     </svg>
                   </div>
@@ -223,34 +223,34 @@ const WalletConnectPage: React.FC = () => {
 
         {/* Loading State */}
         {isConnecting && connectingWalletId && (
-          <div className="mt-6 text-center">
-            <p className="text-gray-600 text-sm">
+          <div className='mt-6 text-center'>
+            <p className='text-gray-600 text-sm'>
               Connecting to {walletOptions.find(w => w.id === connectingWalletId)?.name}...
             </p>
-            <p className="text-gray-500 text-xs mt-1">
+            <p className='text-gray-500 text-xs mt-1'>
               Check your wallet extension for connection prompt
             </p>
           </div>
         )}
 
         {/* Footer Info */}
-        <div className="mt-8 text-center">
-          <p className="text-xs sm:text-sm text-gray-500">
+        <div className='mt-8 text-center'>
+          <p className='text-xs sm:text-sm text-gray-500'>
             By connecting your wallet, you agree to our{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-800 underline">
+            <a href='#' className='text-blue-600 hover:text-blue-800 underline'>
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-800 underline">
+            <a href='#' className='text-blue-600 hover:text-blue-800 underline'>
               Privacy Policy
             </a>
           </p>
           
           {/* Exit Button */}
-          <div className="mt-6">
+          <div className='mt-6'>
             <Link 
-              href="/"
-              className="inline-block text-gray-600 hover:text-gray-800 text-sm border border-gray-300 rounded-full px-5 py-2 transition-colors hover:bg-gray-100"
+              href='/'
+              className='inline-block text-gray-600 hover:text-gray-800 text-sm border border-gray-300 rounded-full px-5 py-2 transition-colors hover:bg-gray-100'
             >
               Skip wallet connection
             </Link>

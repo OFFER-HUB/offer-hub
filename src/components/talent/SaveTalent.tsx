@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Button } from '@/components/ui/button';
 import { Heart } from 'lucide-react';
@@ -64,7 +64,7 @@ const SaveTalent: React.FC<SaveTalentProps> = ({
 
   return (
     <Button
-      variant="ghost"
+      variant='ghost'
       size={size}
       onClick={toggleSave}
       disabled={isLoading}

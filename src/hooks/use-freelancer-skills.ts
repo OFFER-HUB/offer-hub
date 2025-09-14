@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState, useEffect } from "react"
-import { VALIDATION_LIMITS } from "@/constants/magic-numbers"
-import type { ProfileStepProps } from "@/app/types/freelancer-profile"
+import { useState, useEffect } from 'react'
+import { VALIDATION_LIMITS } from '@/constants/magic-numbers'
+import type { ProfileStepProps } from '@/app/types/freelancer-profile'
 
 export function useFreelancerSkills({ userData, updateUserData }: ProfileStepProps) {
   const [skills, setSkills] = useState<string[]>(userData?.skills || [])
-  const [searchInput, setSearchInput] = useState("")
+  const [searchInput, setSearchInput] = useState('')
 
   useEffect(() => {
     updateUserData({ skills })
@@ -29,7 +29,7 @@ export function useFreelancerSkills({ userData, updateUserData }: ProfileStepPro
     e.preventDefault()
     if (searchInput.trim() && !skills.includes(searchInput.trim())) {
       handleAddSkill(searchInput.trim())
-      setSearchInput("")
+      setSearchInput('')
     }
   }
 

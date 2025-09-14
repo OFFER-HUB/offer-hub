@@ -1,11 +1,11 @@
-import { JSX, ReactNode } from "react"
+import { JSX, ReactNode } from 'react'
 
 export interface Message {
   id: number
   content: string
   timestamp: string
   isOutgoing: boolean
-  type: "text" | "file"
+  type: 'text' | 'file'
   fileData?: {
     name: string
     size: string
@@ -92,7 +92,7 @@ export interface Milestone {
   id: string;
   name: string;
   amount: string;
-  status: "paid" | "in-escrow" | "pending";
+  status: 'paid' | 'in-escrow' | 'pending';
   icon: ReactNode;
 }
 

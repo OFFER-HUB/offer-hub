@@ -25,8 +25,8 @@ const DisputeTable = <T,>({
 }: DisputeTableProps<T>) => {
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#149A9B]"></div>
+      <div className='flex items-center justify-center h-32'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-[#149A9B]'></div>
       </div>
     );
   }
@@ -37,15 +37,15 @@ const DisputeTable = <T,>({
         isLoading || isFiltering ? 'overflow-x-hidden' : 'overflow-x-auto'
       }
     >
-      <div className="relative bg-white shadow-sm">
+      <div className='relative bg-white shadow-sm'>
         {isLoading || isFiltering ? (
-          <Progress indeterminate={isLoading || isFiltering} className="!h-2" />
+          <Progress indeterminate={isLoading || isFiltering} className='!h-2' />
         ) : (
           ''
         )}
-        <table className="min-w-full">
+        <table className='min-w-full'>
           <thead>
-            <tr className="text-left text-sm border-b border-gray-200 bg-[#F9FAFB]">
+            <tr className='text-left text-sm border-b border-gray-200 bg-[#F9FAFB]'>
               {columns.map((col) => (
                 <th
                   key={col.key}
@@ -58,19 +58,19 @@ const DisputeTable = <T,>({
               ))}
             </tr>
           </thead>
-          <tbody className="text-sm text-gray-700">
+          <tbody className='text-sm text-gray-700'>
             {data.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-6 py-8 text-center text-gray-500"
+                  className='px-6 py-8 text-center text-gray-500'
                 >
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               data.map((row, idx) => (
-                <tr key={idx} className="transition-colors hover:bg-gray-50">
+                <tr key={idx} className='transition-colors hover:bg-gray-50'>
                   {columns.map((col) => (
                     <td
                       key={col.key}

@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
-import { TIMEOUTS } from "@/constants/magic-numbers"
+import type React from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import { TIMEOUTS } from '@/constants/magic-numbers'
 
 interface Message {
   id: string
@@ -37,22 +37,22 @@ const MessageContext = createContext<MessageContextType | undefined>(undefined)
 // Mock data for conversations
 const mockConversations: Conversation[] = [
   {
-    id: "1",
+    id: '1',
     talentId: 1,
     messages: [
       {
-        id: "1",
-        text: "Hi! I saw your project posting and I'm very interested in working with you.",
-        timestamp: "09:21 am",
+        id: '1',
+        text: 'Hi! I saw your project posting and I\'m very interested in working with you.',
+        timestamp: '09:21 am',
         isOutgoing: false,
         talentId: 1,
         senderId: 1,
         receiverId: 2,
       },
       {
-        id: "2",
-        text: "Great! I'd love to discuss the project details with you.",
-        timestamp: "09:23 am",
+        id: '2',
+        text: 'Great! I\'d love to discuss the project details with you.',
+        timestamp: '09:23 am',
         isOutgoing: true,
         talentId: 1,
         senderId: 2,
@@ -62,13 +62,13 @@ const mockConversations: Conversation[] = [
     unreadCount: 0,
   },
   {
-    id: "2",
+    id: '2',
     talentId: 2,
     messages: [
       {
-        id: "3",
-        text: "Thank you for considering me for your project!",
-        timestamp: "10:15 am",
+        id: '3',
+        text: 'Thank you for considering me for your project!',
+        timestamp: '10:15 am',
         isOutgoing: false,
         talentId: 2,
         senderId: 2,
@@ -93,7 +93,7 @@ export function MessageProvider({ children }: { children: React.ReactNode }) {
         await new Promise((resolve) => setTimeout(resolve, TIMEOUTS.API_DELAY_LONG))
         setConversations(mockConversations)
       } catch (err) {
-        setError("Failed to load conversations")
+        setError('Failed to load conversations')
       } finally {
         setLoading(false)
       }
@@ -115,8 +115,8 @@ export function MessageProvider({ children }: { children: React.ReactNode }) {
         id: Date.now().toString(),
         text,
         timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
+          hour: '2-digit',
+          minute: '2-digit',
         }),
         isOutgoing: true,
         talentId,
@@ -149,7 +149,7 @@ export function MessageProvider({ children }: { children: React.ReactNode }) {
         }
       })
     } catch (err) {
-      setError("Failed to send message")
+      setError('Failed to send message')
       throw err
     }
   }
@@ -178,7 +178,7 @@ export function MessageProvider({ children }: { children: React.ReactNode }) {
 export const useMessages = () => {
   const context = useContext(MessageContext)
   if (context === undefined) {
-    throw new Error("useMessages must be used within a MessageProvider")
+    throw new Error('useMessages must be used within a MessageProvider')
   }
   return context
 }

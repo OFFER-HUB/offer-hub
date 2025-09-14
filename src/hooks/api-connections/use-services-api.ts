@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
@@ -17,13 +17,13 @@ function mapServiceToFreelancerDisplay(service: ServiceWithFreelancer): Freelanc
   // Extract skills from description or use default skills based on category
   const getSkillsFromCategory = (category: string): string[] => {
     const skillMap: Record<string, string[]> = {
-      'development': ['JavaScript', 'React', 'Node.js', 'TypeScript', 'Web Development'],
-      'design': ['UI/UX Design', 'Figma', 'Adobe XD', 'Prototyping', 'Visual Design'],
-      'marketing': ['SEO', 'SEM', 'Content Marketing', 'Social Media', 'Google Analytics'],
-      'business': ['Financial Analysis', 'Business Planning', 'Strategy', 'Consulting'],
-      'data': ['Machine Learning', 'Python', 'Data Analysis', 'Statistics', 'NLP'],
-      'security': ['Cryptography', 'Blockchain', 'Security Analysis', 'Rust', 'C++'],
-      'blockchain': ['Solidity', 'Cairo', 'Soroban', 'DeFi', 'Smart Contracts'],
+      development: ['JavaScript', 'React', 'Node.js', 'TypeScript', 'Web Development'],
+      design: ['UI/UX Design', 'Figma', 'Adobe XD', 'Prototyping', 'Visual Design'],
+      marketing: ['SEO', 'SEM', 'Content Marketing', 'Social Media', 'Google Analytics'],
+      business: ['Financial Analysis', 'Business Planning', 'Strategy', 'Consulting'],
+      data: ['Machine Learning', 'Python', 'Data Analysis', 'Statistics', 'NLP'],
+      security: ['Cryptography', 'Blockchain', 'Security Analysis', 'Rust', 'C++'],
+      blockchain: ['Solidity', 'Cairo', 'Soroban', 'DeFi', 'Smart Contracts'],
     };
     
     return skillMap[category.toLowerCase()] || ['General Skills'];

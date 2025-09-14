@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import React from "react";
+import React from 'react';
 import {
   LineChart as RechartsLineChart,
   Line,
@@ -25,12 +25,12 @@ import {
   PolarRadiusAxis,
   Radar,
   ComposedChart,
-} from "recharts";
+} from 'recharts';
 
 // Common colors for charts
 const CHART_COLORS = [
-  "#15949C", "#002333", "#4F46E5", "#059669", "#DC2626", "#D97706", 
-  "#7C3AED", "#DB2777", "#2563EB", "#0891B2", "#65A30D", "#CA8A04"
+  '#15949C', '#002333', '#4F46E5', '#059669', '#DC2626', '#D97706', 
+  '#7C3AED', '#DB2777', '#2563EB', '#0891B2', '#65A30D', '#CA8A04'
 ];
 
 export interface ChartData {
@@ -56,45 +56,45 @@ interface LineChartProps extends BaseChartProps {
 
 export function LineChart({
   data,
-  dataKeys = ["value"],
+  dataKeys = ['value'],
   height = 300,
   strokeWidth = 2,
   showDots = true,
   showGrid = true,
   showLegend = false,
-  className = "",
+  className = '',
 }: LineChartProps) {
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <RechartsLineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
+          {showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#E5E7EB' />}
           <XAxis 
-            dataKey="name" 
-            stroke="#6B7280"
+            dataKey='name' 
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis 
-            stroke="#6B7280"
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <Tooltip 
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
           {dataKeys.map((key, index) => (
             <Line
               key={key}
-              type="monotone"
+              type='monotone'
               dataKey={key}
               stroke={CHART_COLORS[index % CHART_COLORS.length]}
               strokeWidth={strokeWidth}
@@ -112,49 +112,49 @@ interface BarChartProps extends BaseChartProps {
   dataKey?: string;
   showGrid?: boolean;
   showLegend?: boolean;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export function BarChart({
   data,
-  dataKey = "value",
+  dataKey = 'value',
   height = 300,
   showGrid = true,
   showLegend = false,
-  orientation = "vertical",
-  className = "",
+  orientation = 'vertical',
+  className = '',
 }: BarChartProps) {
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <RechartsBarChart 
           data={data} 
-          layout={orientation === "horizontal" ? "horizontal" : "vertical"}
+          layout={orientation === 'horizontal' ? 'horizontal' : 'vertical'}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
+          {showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#E5E7EB' />}
           <XAxis 
-            type={orientation === "horizontal" ? "number" : "category"}
-            dataKey={orientation === "horizontal" ? undefined : "name"}
-            stroke="#6B7280"
+            type={orientation === 'horizontal' ? 'number' : 'category'}
+            dataKey={orientation === 'horizontal' ? undefined : 'name'}
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis 
-            type={orientation === "horizontal" ? "category" : "number"}
-            dataKey={orientation === "horizontal" ? "name" : undefined}
-            stroke="#6B7280"
+            type={orientation === 'horizontal' ? 'category' : 'number'}
+            dataKey={orientation === 'horizontal' ? 'name' : undefined}
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <Tooltip 
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
@@ -178,46 +178,46 @@ interface AreaChartProps extends BaseChartProps {
 
 export function AreaChart({
   data,
-  dataKeys = ["value"],
+  dataKeys = ['value'],
   height = 300,
   showGrid = true,
   showLegend = false,
   stacked = false,
-  className = "",
+  className = '',
 }: AreaChartProps) {
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <RechartsAreaChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
+          {showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#E5E7EB' />}
           <XAxis 
-            dataKey="name" 
-            stroke="#6B7280"
+            dataKey='name' 
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis 
-            stroke="#6B7280"
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <Tooltip 
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
           {dataKeys.map((key, index) => (
             <Area
               key={key}
-              type="monotone"
+              type='monotone'
               dataKey={key}
-              stackId={stacked ? "1" : undefined}
+              stackId={stacked ? '1' : undefined}
               stroke={CHART_COLORS[index % CHART_COLORS.length]}
               fill={CHART_COLORS[index % CHART_COLORS.length]}
               fillOpacity={0.6}
@@ -239,29 +239,29 @@ interface PieChartProps extends BaseChartProps {
 
 export function PieChart({
   data,
-  dataKey = "value",
+  dataKey = 'value',
   height = 300,
   showLegend = true,
   showLabels = false,
   innerRadius = 0,
   outerRadius,
-  className = "",
+  className = '',
 }: PieChartProps) {
   const radius = outerRadius || Math.min(height * 0.4, 120);
   
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <RechartsPieChart margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <Pie
             data={data}
-            cx="50%"
-            cy="50%"
+            cx='50%'
+            cy='50%'
             labelLine={false}
             label={showLabels ? ({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%` : false}
             outerRadius={radius}
             innerRadius={innerRadius}
-            fill="#8884d8"
+            fill='#8884d8'
             dataKey={dataKey}
           >
             {data.map((entry, index) => (
@@ -270,10 +270,10 @@ export function PieChart({
           </Pie>
           <Tooltip 
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
@@ -292,30 +292,30 @@ interface ScatterChartProps extends BaseChartProps {
 
 export function ScatterChart({
   data,
-  xDataKey = "x",
-  yDataKey = "y",
+  xDataKey = 'x',
+  yDataKey = 'y',
   height = 300,
   showGrid = true,
   showLegend = false,
-  className = "",
+  className = '',
 }: ScatterChartProps) {
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <RechartsScatterChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
+          {showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#E5E7EB' />}
           <XAxis 
-            type="number" 
+            type='number' 
             dataKey={xDataKey}
-            stroke="#6B7280"
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis 
-            type="number" 
+            type='number' 
             dataKey={yDataKey}
-            stroke="#6B7280"
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
@@ -323,10 +323,10 @@ export function ScatterChart({
           <Tooltip 
             cursor={{ strokeDasharray: '3 3' }}
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
@@ -345,25 +345,25 @@ interface RadarChartProps extends BaseChartProps {
 
 export function RadarChart({
   data,
-  dataKeys = ["value"],
+  dataKeys = ['value'],
   height = 300,
   showGrid = true,
   showLegend = false,
-  className = "",
+  className = '',
 }: RadarChartProps) {
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <RechartsRadarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           {showGrid && <PolarGrid />}
-          <PolarAngleAxis dataKey="name" />
+          <PolarAngleAxis dataKey='name' />
           <PolarRadiusAxis />
           <Tooltip 
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
@@ -399,39 +399,39 @@ export function MetricsComposedChart({
   height = 300,
   showGrid = true,
   showLegend = true,
-  className = "",
+  className = '',
 }: ComposedChartProps) {
   return (
     <div className={`w-full ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width='100%' height='100%'>
         <ComposedChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
+          {showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#E5E7EB' />}
           <XAxis 
-            dataKey="name" 
-            stroke="#6B7280"
+            dataKey='name' 
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis 
-            stroke="#6B7280"
+            stroke='#6B7280'
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <Tooltip 
             contentStyle={{
-              backgroundColor: "white",
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
             }}
           />
           {showLegend && <Legend />}
           {areaDataKeys.map((key, index) => (
             <Area
               key={key}
-              type="monotone"
+              type='monotone'
               dataKey={key}
               fill={CHART_COLORS[index % CHART_COLORS.length]}
               fillOpacity={0.3}
@@ -447,7 +447,7 @@ export function MetricsComposedChart({
           {lineDataKeys.map((key, index) => (
             <Line
               key={key}
-              type="monotone"
+              type='monotone'
               dataKey={key}
               stroke={CHART_COLORS[(index + areaDataKeys.length + barDataKeys.length) % CHART_COLORS.length]}
               strokeWidth={2}

@@ -112,37 +112,37 @@ export interface ResponseQualityAssessment {
 // API Response Types
 export type ReviewResponseCreateResponse = {
   success: true;
-  message: "Review response created successfully";
+  message: 'Review response created successfully';
   data: ReviewResponse;
 };
 
 export type ReviewResponseUpdateResponse = {
   success: true;
-  message: "Review response updated successfully";
+  message: 'Review response updated successfully';
   data: ReviewResponse;
 };
 
 export type ReviewResponseDeleteResponse = {
   success: true;
-  message: "Review response deleted successfully";
+  message: 'Review response deleted successfully';
 };
 
 export type ReviewResponseFetchResponse = {
   success: true;
-  message: "Review responses fetched successfully";
+  message: 'Review responses fetched successfully';
   data: ReviewResponseWithDetails[];
   count: number;
 };
 
 export type ReviewResponseModerateResponse = {
   success: true;
-  message: "Review response moderated successfully";
+  message: 'Review response moderated successfully';
   data: ReviewResponse;
 };
 
 export type ResponseVoteResponse = {
   success: true;
-  message: "Vote recorded successfully";
+  message: 'Vote recorded successfully';
   data: {
     response_id: string;
     vote_type: 'helpful' | 'unhelpful';
@@ -153,7 +153,7 @@ export type ResponseVoteResponse = {
 
 export type ResponseAnalyticsResponse = {
   success: true;
-  message: "Response analytics fetched successfully";
+  message: 'Response analytics fetched successfully';
   data: {
     total_responses: number;
     response_rate: number;
@@ -208,14 +208,14 @@ export const MODERATION_CRITERIA: ModerationCriteria = {
 
 // Response guidelines for users
 export const RESPONSE_GUIDELINES = {
-  professional_tone: "Use professional and constructive language",
-  specificity: "Address specific points mentioned in the review",
-  gratitude: "Thank the reviewer for their feedback",
-  action_items: "Mention any improvements or clarifications",
-  length_guidelines: "Keep responses between 50-500 characters for optimal impact",
+  professional_tone: 'Use professional and constructive language',
+  specificity: 'Address specific points mentioned in the review',
+  gratitude: 'Thank the reviewer for their feedback',
+  action_items: 'Mention any improvements or clarifications',
+  length_guidelines: 'Keep responses between 50-500 characters for optimal impact',
   examples: {
-    good: "Thank you for your feedback! I appreciate your honest review and will work on improving the communication aspect for future projects.",
-    bad: "This review is unfair and doesn't reflect my work quality."
+    good: 'Thank you for your feedback! I appreciate your honest review and will work on improving the communication aspect for future projects.',
+    bad: 'This review is unfair and doesn\'t reflect my work quality.'
   }
 };
 

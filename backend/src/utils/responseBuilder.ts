@@ -1,4 +1,4 @@
-import { CreateResponse, ListResponse, ApiResponse } from "../types/api.type";
+import { CreateResponse, ListResponse, ApiResponse } from '../types/api.type';
 
 export const buildSuccessResponse = <T>(
   data: T,

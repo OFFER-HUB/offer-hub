@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import JobPostingTabs from "@/components/client-dashboard/JobPostingTabs";
+import JobPostingTabs from '@/components/client-dashboard/JobPostingTabs';
 
 export default function DashboardPage() {
   return (

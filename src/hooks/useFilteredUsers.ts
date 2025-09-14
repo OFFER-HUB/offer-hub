@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
-import { User, AdminUser, mapAdminUserToLegacy } from "@/interfaces/user.interface";
-import { useAdminUsersApi } from "@/hooks/api-connections/use-admin-users-api";
-import { UserFilters as ApiUserFilters } from "@/types/admin.types";
+import { useState, useEffect, useCallback } from 'react';
+import { User, AdminUser, mapAdminUserToLegacy } from '@/interfaces/user.interface';
+import { useAdminUsersApi } from '@/hooks/api-connections/use-admin-users-api';
+import { UserFilters as ApiUserFilters } from '@/types/admin.types';
 
 export function useFilteredUsers() {
-  const [userType, setUserType] = useState<"Freelancer" | "Customer">("Freelancer");
-  const [roleFilter, setRoleFilter] = useState("All");
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [userType, setUserType] = useState<'Freelancer' | 'Customer'>('Freelancer');
+  const [roleFilter, setRoleFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [date, setDate] = useState<Date | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -33,10 +33,10 @@ export function useFilteredUsers() {
       filters.search = searchQuery.trim();
     }
 
-    if (roleFilter !== "All") {
-      if (roleFilter.toLowerCase() === "freelancer") {
+    if (roleFilter !== 'All') {
+      if (roleFilter.toLowerCase() === 'freelancer') {
         filters.is_freelancer = true;
-      } else if (roleFilter.toLowerCase() === "customer" || roleFilter.toLowerCase() === "client") {
+      } else if (roleFilter.toLowerCase() === 'customer' || roleFilter.toLowerCase() === 'client') {
         filters.is_freelancer = false;
       }
     }
@@ -55,20 +55,20 @@ export function useFilteredUsers() {
   }, [fetchUsersData]);
 
   const getUserRole = (user: User): string => {
-    if (user.role === "Freelancer") return "Freelancer";
-    if (user.role === "Customer" || user.role === "Client") return "Customer";
-    return "Unknown";
+    if (user.role === 'Freelancer') return 'Freelancer';
+    if (user.role === 'Customer' || user.role === 'Client') return 'Customer';
+    return 'Unknown';
   };
   const filteredData = userData.filter((user) => {
     const matchesStatus =
-      statusFilter === "All" ||
+      statusFilter === 'All' ||
       user.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesStatus;
   });
 
   const handleExport = () => {
-    console.log("Exporting report...");
-    alert("Report export initiated. This feature is currently stubbed.");
+    console.log('Exporting report...');
+    alert('Report export initiated. This feature is currently stubbed.');
   };
 
   const handleViewFile = (userId: number) => {
@@ -83,10 +83,10 @@ export function useFilteredUsers() {
   const handleOverflowAction = (action: string, userId: number) => {
     const user = userData.find((u: User) => u.id === userId);
     if (!user) return;
-    if (action === "modify") {
+    if (action === 'modify') {
       setUserToEdit(user);
       setIsEditModalOpen(true);
-    } else if (action === "view") {
+    } else if (action === 'view') {
       setSelectedUser(user);
       setIsViewModalOpen(true);
     } else {

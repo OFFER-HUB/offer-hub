@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface WalletContextType {
 	address: string | null;
@@ -41,7 +41,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 export function useWalletContext() {
 	const context = useContext(WalletContext);
 	if (context === undefined) {
-		throw new Error("useWalletContext must be used within a WalletProvider");
+		throw new Error('useWalletContext must be used within a WalletProvider');
 	}
 	return context;
 }

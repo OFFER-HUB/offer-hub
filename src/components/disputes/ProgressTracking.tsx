@@ -185,18 +185,18 @@ export function ProgressTracking({
   if (compact) {
     return (
       <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium">Progress</span>
+        <CardContent className='p-4'>
+          <div className='flex items-center justify-between mb-3'>
+            <div className='flex items-center space-x-2'>
+              <TrendingUp className='h-4 w-4 text-gray-500' />
+              <span className='text-sm font-medium'>Progress</span>
             </div>
-            <Badge variant="secondary">
+            <Badge variant='secondary'>
               {calculateOverallProgress()}% Complete
             </Badge>
           </div>
-          <Progress value={calculateOverallProgress()} className="h-2" />
-          <div className="mt-2 text-xs text-gray-500">
+          <Progress value={calculateOverallProgress()} className='h-2' />
+          <div className='mt-2 text-xs text-gray-500'>
             {progressData.length} milestones • Last updated {getRelativeTime(progressData[0]?.updatedAt || new Date())}
           </div>
         </CardContent>
@@ -205,34 +205,34 @@ export function ProgressTracking({
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Overall Progress Summary */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <BarChart3 className="h-5 w-5" />
+          <CardTitle className='flex items-center justify-between'>
+            <div className='flex items-center space-x-2'>
+              <BarChart3 className='h-5 w-5' />
               <span>Overall Progress</span>
             </div>
-            <Badge variant="secondary" className="text-lg">
+            <Badge variant='secondary' className='text-lg'>
               {calculateOverallProgress()}%
             </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <Progress value={calculateOverallProgress()} className="h-3" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+          <div className='space-y-4'>
+            <Progress value={calculateOverallProgress()} className='h-3' />
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 text-sm'>
+              <div className='flex items-center space-x-2'>
+                <CheckCircle className='h-4 w-4 text-green-500' />
                 <span>Completed: {progressData.filter(p => p.progressPercentage === 100).length}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-blue-500" />
+              <div className='flex items-center space-x-2'>
+                <Clock className='h-4 w-4 text-blue-500' />
                 <span>In Progress: {progressData.filter(p => p.progressPercentage > 0 && p.progressPercentage < 100).length}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Target className="h-4 w-4 text-gray-500" />
+              <div className='flex items-center space-x-2'>
+                <Target className='h-4 w-4 text-gray-500' />
                 <span>Total Milestones: {progressData.length}</span>
               </div>
             </div>
@@ -241,40 +241,40 @@ export function ProgressTracking({
       </Card>
 
       {/* Progress Details */}
-      <Tabs defaultValue="milestones" className="space-y-4">
+      <Tabs defaultValue='milestones' className='space-y-4'>
         <TabsList>
-          <TabsTrigger value="milestones">Milestones</TabsTrigger>
-          <TabsTrigger value="timeline">Timeline</TabsTrigger>
-          <TabsTrigger value="notes">Notes</TabsTrigger>
+          <TabsTrigger value='milestones'>Milestones</TabsTrigger>
+          <TabsTrigger value='timeline'>Timeline</TabsTrigger>
+          <TabsTrigger value='notes'>Notes</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="milestones" className="space-y-4">
+        <TabsContent value='milestones' className='space-y-4'>
           {/* Add New Milestone */}
           {allowUpdates && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Plus className="h-5 w-5" />
+                <CardTitle className='flex items-center space-x-2'>
+                  <Plus className='h-5 w-5' />
                   <span>Add Milestone</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Milestone</label>
+              <CardContent className='space-y-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Milestone</label>
                     <Input
-                      placeholder="Enter milestone description"
+                      placeholder='Enter milestone description'
                       value={newMilestone}
                       onChange={(e) => setNewMilestone(e.target.value)}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Progress %</label>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Progress %</label>
                     <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      placeholder="0"
+                      type='number'
+                      min='0'
+                      max='100'
+                      placeholder='0'
                       value={newProgress}
                       onChange={(e) => setNewProgress(parseInt(e.target.value) || 0)}
                     />
@@ -282,10 +282,10 @@ export function ProgressTracking({
                 </div>
                 
                 {showNotes && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Notes (Optional)</label>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Notes (Optional)</label>
                     <Textarea
-                      placeholder="Add any additional notes"
+                      placeholder='Add any additional notes'
                       value={newNote}
                       onChange={(e) => setNewNote(e.target.value)}
                       rows={3}
@@ -294,7 +294,7 @@ export function ProgressTracking({
                 )}
                 
                 <Button onClick={handleAddMilestone} disabled={!newMilestone.trim()}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className='h-4 w-4 mr-2' />
                   Add Milestone
                 </Button>
               </CardContent>
@@ -302,7 +302,7 @@ export function ProgressTracking({
           )}
 
           {/* Milestones List */}
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {progressData.map((progress, index) => (
               <motion.div
                 key={progress.id}
@@ -311,18 +311,18 @@ export function ProgressTracking({
                 transition={{ delay: index * 0.1 }}
               >
                 <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 space-y-3">
-                        <div className="flex items-center space-x-3">
+                  <CardContent className='p-6'>
+                    <div className='flex items-start justify-between'>
+                      <div className='flex-1 space-y-3'>
+                        <div className='flex items-center space-x-3'>
                           <div className={`p-2 rounded-full ${getProgressColor(progress.progressPercentage)} text-white`}>
-                            <Target className="h-4 w-4" />
+                            <Target className='h-4 w-4' />
                           </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900">
+                          <div className='flex-1'>
+                            <h3 className='font-semibold text-gray-900'>
                               {progress.milestone}
                             </h3>
-                            <div className="flex items-center space-x-4 text-sm text-gray-600">
+                            <div className='flex items-center space-x-4 text-sm text-gray-600'>
                               <span>{progress.progressPercentage}% Complete</span>
                               <span>•</span>
                               <span>{getRelativeTime(progress.updatedAt)}</span>
@@ -330,24 +330,24 @@ export function ProgressTracking({
                           </div>
                         </div>
                         
-                        <Progress value={progress.progressPercentage} className="h-2" />
+                        <Progress value={progress.progressPercentage} className='h-2' />
                         
                         {showNotes && progress.notes && (
-                          <div className="bg-gray-50 p-3 rounded-lg">
-                            <div className="flex items-start space-x-2">
-                              <MessageSquare className="h-4 w-4 text-gray-500 mt-0.5" />
-                              <p className="text-sm text-gray-700">{progress.notes}</p>
+                          <div className='bg-gray-50 p-3 rounded-lg'>
+                            <div className='flex items-start space-x-2'>
+                              <MessageSquare className='h-4 w-4 text-gray-500 mt-0.5' />
+                              <p className='text-sm text-gray-700'>{progress.notes}</p>
                             </div>
                           </div>
                         )}
                         
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <div className="flex items-center space-x-2">
-                            <Calendar className="h-3 w-3" />
+                        <div className='flex items-center justify-between text-xs text-gray-500'>
+                          <div className='flex items-center space-x-2'>
+                            <Calendar className='h-3 w-3' />
                             <span>Updated: {formatDate(progress.updatedAt)}</span>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <User className="h-3 w-3" />
+                          <div className='flex items-center space-x-2'>
+                            <User className='h-3 w-3' />
                             <span>By: {progress.updatedBy}</span>
                           </div>
                         </div>
@@ -355,11 +355,11 @@ export function ProgressTracking({
                       
                       {allowUpdates && (
                         <Button
-                          variant="ghost"
-                          size="sm"
+                          variant='ghost'
+                          size='sm'
                           onClick={() => handleEditProgress(progress)}
                         >
-                          <Edit3 className="h-4 w-4" />
+                          <Edit3 className='h-4 w-4' />
                         </Button>
                       )}
                     </div>
@@ -370,31 +370,31 @@ export function ProgressTracking({
           </div>
         </TabsContent>
 
-        <TabsContent value="timeline">
+        <TabsContent value='timeline'>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Clock className="h-5 w-5" />
+              <CardTitle className='flex items-center space-x-2'>
+                <Clock className='h-5 w-5' />
                 <span>Progress Timeline</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 {progressData
                   .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
                   .map((progress, index) => (
-                    <div key={progress.id} className="flex items-start space-x-4">
+                    <div key={progress.id} className='flex items-start space-x-4'>
                       <div className={`w-3 h-3 rounded-full mt-2 ${getProgressColor(progress.progressPercentage)}`} />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium">{progress.milestone}</h4>
-                          <span className="text-sm text-gray-500">{formatDate(progress.updatedAt)}</span>
+                      <div className='flex-1'>
+                        <div className='flex items-center justify-between'>
+                          <h4 className='font-medium'>{progress.milestone}</h4>
+                          <span className='text-sm text-gray-500'>{formatDate(progress.updatedAt)}</span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className='text-sm text-gray-600 mt-1'>
                           {progress.progressPercentage}% complete
                         </p>
                         {progress.notes && (
-                          <p className="text-sm text-gray-500 mt-1">{progress.notes}</p>
+                          <p className='text-sm text-gray-500 mt-1'>{progress.notes}</p>
                         )}
                       </div>
                     </div>
@@ -404,31 +404,31 @@ export function ProgressTracking({
           </Card>
         </TabsContent>
 
-        <TabsContent value="notes">
+        <TabsContent value='notes'>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <MessageSquare className="h-5 w-5" />
+              <CardTitle className='flex items-center space-x-2'>
+                <MessageSquare className='h-5 w-5' />
                 <span>All Notes</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className='space-y-4'>
                 {progressData
                   .filter(p => p.notes)
                   .map((progress) => (
-                    <div key={progress.id} className="border-l-4 border-blue-500 pl-4 py-2">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium">{progress.milestone}</h4>
-                        <span className="text-sm text-gray-500">{getRelativeTime(progress.updatedAt)}</span>
+                    <div key={progress.id} className='border-l-4 border-blue-500 pl-4 py-2'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='font-medium'>{progress.milestone}</h4>
+                        <span className='text-sm text-gray-500'>{getRelativeTime(progress.updatedAt)}</span>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">{progress.notes}</p>
+                      <p className='text-sm text-gray-600 mt-1'>{progress.notes}</p>
                     </div>
                   ))}
                 
                 {progressData.filter(p => p.notes).length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <div className='text-center py-8 text-gray-500'>
+                    <MessageSquare className='h-12 w-12 mx-auto mb-4 opacity-50' />
                     <p>No notes available</p>
                   </div>
                 )}
@@ -444,28 +444,28 @@ export function ProgressTracking({
           <DialogHeader>
             <DialogTitle>Edit Progress</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Milestone</label>
+          <div className='space-y-4'>
+            <div className='space-y-2'>
+              <label className='text-sm font-medium'>Milestone</label>
               <Input
                 value={newMilestone}
                 onChange={(e) => setNewMilestone(e.target.value)}
               />
             </div>
             
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Progress %</label>
+            <div className='space-y-2'>
+              <label className='text-sm font-medium'>Progress %</label>
               <Input
-                type="number"
-                min="0"
-                max="100"
+                type='number'
+                min='0'
+                max='100'
                 value={newProgress}
                 onChange={(e) => setNewProgress(parseInt(e.target.value) || 0)}
               />
             </div>
             
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Notes</label>
+            <div className='space-y-2'>
+              <label className='text-sm font-medium'>Notes</label>
               <Textarea
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
@@ -473,13 +473,13 @@ export function ProgressTracking({
               />
             </div>
             
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsEditing(false)}>
-                <X className="h-4 w-4 mr-2" />
+            <div className='flex justify-end space-x-2'>
+              <Button variant='outline' onClick={() => setIsEditing(false)}>
+                <X className='h-4 w-4 mr-2' />
                 Cancel
               </Button>
               <Button onClick={handleSaveEdit}>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className='h-4 w-4 mr-2' />
                 Save Changes
               </Button>
             </div>

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import PasswordRecoveryPage from "@/components/password-recovery/PasswordRecoveryPage";
-import React from "react";
+import PasswordRecoveryPage from '@/components/password-recovery/PasswordRecoveryPage';
+import React from 'react';
 
 const page = () => {
   return (

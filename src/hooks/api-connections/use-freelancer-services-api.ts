@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useEffect } from "react";
-import { Service } from "@/types/service.types";
+import { useState, useCallback, useEffect } from 'react';
+import { Service } from '@/types/service.types';
 
 // Frontend service interface for the form
 export interface FrontendService {
@@ -70,7 +70,7 @@ export interface UseFreelancerServicesApiReturn {
   clearError: () => void;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 // Helper function to convert backend service to frontend format
 const mapBackendToFrontend = (backendService: Service): FrontendService => {
@@ -82,7 +82,7 @@ const mapBackendToFrontend = (backendService: Service): FrontendService => {
     min_price: backendService.min_price,
     max_price: backendService.max_price,
     user_id: backendService.user_id,
-    currency: "XLM", // Default currency, can be customized
+    currency: 'XLM', // Default currency, can be customized
   };
 };
 
@@ -115,7 +115,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
 
   const fetchUserServices = useCallback(async (userId: string) => {
     if (!userId) {
-      setError("User ID is required");
+      setError('User ID is required');
       return;
     }
 
@@ -126,9 +126,9 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
       const response = await fetch(
         `${API_BASE_URL}/services?user_id=${userId}`,
         {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -143,14 +143,14 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
       const data: ServicesListApiResponse = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message || "Failed to fetch services");
+        throw new Error(data.message || 'Failed to fetch services');
       }
 
       const mappedServices = (data.data || []).map(mapBackendToFrontend);
       setServices(mappedServices);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch services";
+        err instanceof Error ? err.message : 'Failed to fetch services';
       setError(errorMessage);
       setServices([]);
     } finally {
@@ -164,7 +164,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
       userId: string
     ): Promise<boolean> => {
       if (!userId) {
-        setError("User ID is required");
+        setError('User ID is required');
         return false;
       }
 
@@ -174,7 +174,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         !serviceData.description ||
         !serviceData.category
       ) {
-        setError("Title, description, and category are required");
+        setError('Title, description, and category are required');
         return false;
       }
 
@@ -185,7 +185,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         serviceData.min_price > serviceData.max_price
       ) {
         setError(
-          "Invalid price range. Min price must be less than or equal to max price, and both must be positive."
+          'Invalid price range. Min price must be less than or equal to max price, and both must be positive.'
         );
         return false;
       }
@@ -197,9 +197,9 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         const backendData = mapFrontendToBackend(serviceData, userId);
 
         const response = await fetch(`${API_BASE_URL}/services`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(backendData),
         });
@@ -209,13 +209,13 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
 
           // Handle specific error cases
           if (response.status === 403) {
-            throw new Error("Only freelancers can create services");
+            throw new Error('Only freelancers can create services');
           }
           if (response.status === 404) {
-            throw new Error("User not found");
+            throw new Error('User not found');
           }
           if (response.status === 400) {
-            throw new Error(errorData.message || "Invalid service data");
+            throw new Error(errorData.message || 'Invalid service data');
           }
 
           throw new Error(
@@ -227,7 +227,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         const data: ServiceApiResponse = await response.json();
 
         if (!data.success) {
-          throw new Error(data.message || "Failed to create service");
+          throw new Error(data.message || 'Failed to create service');
         }
 
         // Add the new service to the list
@@ -239,7 +239,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         return true;
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to create service";
+          err instanceof Error ? err.message : 'Failed to create service';
         setError(errorMessage);
         return false;
       } finally {
@@ -256,7 +256,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
       userId: string
     ): Promise<boolean> => {
       if (!userId || !serviceId) {
-        setError("User ID and service ID are required");
+        setError('User ID and service ID are required');
         return false;
       }
 
@@ -271,7 +271,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
           serviceData.min_price > serviceData.max_price
         ) {
           setError(
-            "Invalid price range. Min price must be less than or equal to max price, and both must be positive."
+            'Invalid price range. Min price must be less than or equal to max price, and both must be positive.'
           );
           return false;
         }
@@ -295,9 +295,9 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
           updateData.max_price = serviceData.max_price;
 
         const response = await fetch(`${API_BASE_URL}/services/${serviceId}`, {
-          method: "PATCH",
+          method: 'PATCH',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(updateData),
         });
@@ -307,13 +307,13 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
 
           // Handle specific error cases
           if (response.status === 403) {
-            throw new Error("You can only update your own services");
+            throw new Error('You can only update your own services');
           }
           if (response.status === 404) {
-            throw new Error("Service not found");
+            throw new Error('Service not found');
           }
           if (response.status === 400) {
-            throw new Error(errorData.message || "Invalid service data");
+            throw new Error(errorData.message || 'Invalid service data');
           }
 
           throw new Error(
@@ -325,7 +325,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         const data: ServiceApiResponse = await response.json();
 
         if (!data.success) {
-          throw new Error(data.message || "Failed to update service");
+          throw new Error(data.message || 'Failed to update service');
         }
 
         // Update the service in the list
@@ -341,7 +341,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         return true;
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to update service";
+          err instanceof Error ? err.message : 'Failed to update service';
         setError(errorMessage);
         return false;
       } finally {
@@ -354,7 +354,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
   const deleteService = useCallback(
     async (serviceId: string, userId: string): Promise<boolean> => {
       if (!userId || !serviceId) {
-        setError("User ID and service ID are required");
+        setError('User ID and service ID are required');
         return false;
       }
 
@@ -363,9 +363,9 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
 
       try {
         const response = await fetch(`${API_BASE_URL}/services/${serviceId}`, {
-          method: "DELETE",
+          method: 'DELETE',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
 
@@ -374,10 +374,10 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
 
           // Handle specific error cases
           if (response.status === 403) {
-            throw new Error("You can only delete your own services");
+            throw new Error('You can only delete your own services');
           }
           if (response.status === 404) {
-            throw new Error("Service not found");
+            throw new Error('Service not found');
           }
 
           throw new Error(
@@ -389,7 +389,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         const data: ServiceApiResponse = await response.json();
 
         if (!data.success) {
-          throw new Error(data.message || "Failed to delete service");
+          throw new Error(data.message || 'Failed to delete service');
         }
 
         // Remove the service from the list
@@ -400,7 +400,7 @@ export function useFreelancerServicesApi(): UseFreelancerServicesApiReturn {
         return true;
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to delete service";
+          err instanceof Error ? err.message : 'Failed to delete service';
         setError(errorMessage);
         return false;
       } finally {

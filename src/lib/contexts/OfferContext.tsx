@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { createContext, useContext, useReducer } from "react"
-import { TIMEOUTS } from "@/constants/magic-numbers"
+import type React from 'react'
+import { createContext, useContext, useReducer } from 'react'
+import { TIMEOUTS } from '@/constants/magic-numbers'
 
 // Types
 interface Offer {
@@ -11,11 +11,11 @@ interface Offer {
   talentName: string
   projectTitle: string
   projectDescription: string
-  projectType: "fixed" | "hourly"
+  projectType: 'fixed' | 'hourly'
   budget: number
   timeline: string
   skills: string[]
-  status: "draft" | "sent" | "accepted" | "rejected" | "completed"
+  status: 'draft' | 'sent' | 'accepted' | 'rejected' | 'completed'
   createdAt: string
   updatedAt: string
   messages: OfferMessage[]
@@ -27,7 +27,7 @@ interface OfferMessage {
   senderName: string
   message: string
   timestamp: string
-  type: "message" | "system"
+  type: 'message' | 'system'
 }
 
 interface OfferDraft {
@@ -35,7 +35,7 @@ interface OfferDraft {
   talentName: string
   projectTitle: string
   projectDescription: string
-  projectType: "fixed" | "hourly"
+  projectType: 'fixed' | 'hourly'
   budget: number
   timeline: string
   skills: string[]
@@ -50,15 +50,15 @@ interface OfferState {
 }
 
 type OfferAction =
-  | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SET_ERROR"; payload: string | null }
-  | { type: "SET_OFFERS"; payload: Offer[] }
-  | { type: "ADD_OFFER"; payload: Offer }
-  | { type: "UPDATE_OFFER"; payload: Offer }
-  | { type: "SET_CURRENT_DRAFT"; payload: OfferDraft | null }
-  | { type: "UPDATE_DRAFT"; payload: Partial<OfferDraft> }
-  | { type: "SET_SELECTED_OFFER"; payload: Offer | null }
-  | { type: "ADD_MESSAGE"; payload: { offerId: string; message: OfferMessage } }
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'SET_OFFERS'; payload: Offer[] }
+  | { type: 'ADD_OFFER'; payload: Offer }
+  | { type: 'UPDATE_OFFER'; payload: Offer }
+  | { type: 'SET_CURRENT_DRAFT'; payload: OfferDraft | null }
+  | { type: 'UPDATE_DRAFT'; payload: Partial<OfferDraft> }
+  | { type: 'SET_SELECTED_OFFER'; payload: Offer | null }
+  | { type: 'ADD_MESSAGE'; payload: { offerId: string; message: OfferMessage } }
 
 const initialState: OfferState = {
   offers: [],
@@ -70,29 +70,29 @@ const initialState: OfferState = {
 
 function offerReducer(state: OfferState, action: OfferAction): OfferState {
   switch (action.type) {
-    case "SET_LOADING":
+    case 'SET_LOADING':
       return { ...state, loading: action.payload }
-    case "SET_ERROR":
+    case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false }
-    case "SET_OFFERS":
+    case 'SET_OFFERS':
       return { ...state, offers: action.payload }
-    case "ADD_OFFER":
+    case 'ADD_OFFER':
       return { ...state, offers: [...state.offers, action.payload] }
-    case "UPDATE_OFFER":
+    case 'UPDATE_OFFER':
       return {
         ...state,
         offers: state.offers.map((offer) => (offer.id === action.payload.id ? action.payload : offer)),
       }
-    case "SET_CURRENT_DRAFT":
+    case 'SET_CURRENT_DRAFT':
       return { ...state, currentDraft: action.payload }
-    case "UPDATE_DRAFT":
+    case 'UPDATE_DRAFT':
       return {
         ...state,
         currentDraft: state.currentDraft ? { ...state.currentDraft, ...action.payload } : null,
       }
-    case "SET_SELECTED_OFFER":
+    case 'SET_SELECTED_OFFER':
       return { ...state, selectedOffer: action.payload }
-    case "ADD_MESSAGE":
+    case 'ADD_MESSAGE':
       return {
         ...state,
         offers: state.offers.map((offer) =>
@@ -119,7 +119,7 @@ const OfferContext = createContext<{
     sendOffer: () => Promise<string>
     fetchOffers: () => Promise<void>
     fetchOfferById: (id: string) => Promise<void>
-    updateOfferStatus: (id: string, status: Offer["status"]) => Promise<void>
+    updateOfferStatus: (id: string, status: Offer['status']) => Promise<void>
     sendMessage: (offerId: string, message: string) => Promise<void>
     clearDraft: () => void
   }
@@ -132,92 +132,92 @@ export function OfferProvider({ children }: { children: React.ReactNode }) {
     const draft: OfferDraft = {
       talentId,
       talentName,
-      projectTitle: "",
-      projectDescription: "",
-      projectType: "fixed",
+      projectTitle: '',
+      projectDescription: '',
+      projectType: 'fixed',
       budget: 0,
-      timeline: "",
+      timeline: '',
       skills: [],
     }
-    dispatch({ type: "SET_CURRENT_DRAFT", payload: draft })
+    dispatch({ type: 'SET_CURRENT_DRAFT', payload: draft })
   }
 
   const updateDraft = (updates: Partial<OfferDraft>) => {
-    dispatch({ type: "UPDATE_DRAFT", payload: updates })
+    dispatch({ type: 'UPDATE_DRAFT', payload: updates })
   }
 
   const sendOffer = async (): Promise<string> => {
-    if (!state.currentDraft) throw new Error("No draft to send")
+    if (!state.currentDraft) throw new Error('No draft to send')
 
-    dispatch({ type: "SET_LOADING", payload: true })
+    dispatch({ type: 'SET_LOADING', payload: true })
     try {
       await new Promise((resolve) => setTimeout(resolve, TIMEOUTS.API_DELAY_VERY_LONG))
 
       const newOffer: Offer = {
         id: `offer-${Date.now()}`,
         ...state.currentDraft,
-        status: "sent",
+        status: 'sent',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         messages: [],
       }
 
-      dispatch({ type: "ADD_OFFER", payload: newOffer })
-      dispatch({ type: "SET_CURRENT_DRAFT", payload: null })
-      dispatch({ type: "SET_ERROR", payload: null })
+      dispatch({ type: 'ADD_OFFER', payload: newOffer })
+      dispatch({ type: 'SET_CURRENT_DRAFT', payload: null })
+      dispatch({ type: 'SET_ERROR', payload: null })
 
       return newOffer.id
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: "Failed to send offer" })
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to send offer' })
       throw error
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false })
+      dispatch({ type: 'SET_LOADING', payload: false })
     }
   }
 
   const fetchOffers = async () => {
-    dispatch({ type: "SET_LOADING", payload: true })
+    dispatch({ type: 'SET_LOADING', payload: true })
     try {
       await new Promise((resolve) => setTimeout(resolve, TIMEOUTS.API_DELAY_LONG))
       // Mock offers data
       const mockOffers: Offer[] = []
-      dispatch({ type: "SET_OFFERS", payload: mockOffers })
-      dispatch({ type: "SET_ERROR", payload: null })
+      dispatch({ type: 'SET_OFFERS', payload: mockOffers })
+      dispatch({ type: 'SET_ERROR', payload: null })
     } catch {
-      dispatch({ type: "SET_ERROR", payload: "Failed to fetch offers" })
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to fetch offers' })
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false })
+      dispatch({ type: 'SET_LOADING', payload: false })
     }
   }
 
   const fetchOfferById = async (id: string) => {
-    dispatch({ type: "SET_LOADING", payload: true })
+    dispatch({ type: 'SET_LOADING', payload: true })
     try {
       await new Promise((resolve) => setTimeout(resolve, TIMEOUTS.API_DELAY_MEDIUM))
       const offer = state.offers.find((o) => o.id === id)
       if (offer) {
-        dispatch({ type: "SET_SELECTED_OFFER", payload: offer })
-        dispatch({ type: "SET_ERROR", payload: null })
+        dispatch({ type: 'SET_SELECTED_OFFER', payload: offer })
+        dispatch({ type: 'SET_ERROR', payload: null })
       } else {
-        dispatch({ type: "SET_ERROR", payload: "Offer not found" })
+        dispatch({ type: 'SET_ERROR', payload: 'Offer not found' })
       }
     } catch {
-      dispatch({ type: "SET_ERROR", payload: "Failed to fetch offer details" })
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to fetch offer details' })
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false })
+      dispatch({ type: 'SET_LOADING', payload: false })
     }
   }
 
-  const updateOfferStatus = async (id: string, status: Offer["status"]) => {
+  const updateOfferStatus = async (id: string, status: Offer['status']) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, TIMEOUTS.API_DELAY_MEDIUM))
       const updatedOffer = state.offers.find((o) => o.id === id)
       if (updatedOffer) {
         const updated = { ...updatedOffer, status, updatedAt: new Date().toISOString() }
-        dispatch({ type: "UPDATE_OFFER", payload: updated })
+        dispatch({ type: 'UPDATE_OFFER', payload: updated })
       }
     } catch {
-      dispatch({ type: "SET_ERROR", payload: "Failed to update offer status" })
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to update offer status' })
     }
   }
 
@@ -226,20 +226,20 @@ export function OfferProvider({ children }: { children: React.ReactNode }) {
       await new Promise((resolve) => setTimeout(resolve, TIMEOUTS.API_DELAY_SHORT))
       const newMessage: OfferMessage = {
         id: `msg-${Date.now()}`,
-        senderId: "current-user",
-        senderName: "You",
+        senderId: 'current-user',
+        senderName: 'You',
         message,
         timestamp: new Date().toISOString(),
-        type: "message",
+        type: 'message',
       }
-      dispatch({ type: "ADD_MESSAGE", payload: { offerId, message: newMessage } })
+      dispatch({ type: 'ADD_MESSAGE', payload: { offerId, message: newMessage } })
     } catch {
-      dispatch({ type: "SET_ERROR", payload: "Failed to send message" })
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to send message' })
     }
   }
 
   const clearDraft = () => {
-    dispatch({ type: "SET_CURRENT_DRAFT", payload: null })
+    dispatch({ type: 'SET_CURRENT_DRAFT', payload: null })
   }
 
   const actions = {
@@ -259,7 +259,7 @@ export function OfferProvider({ children }: { children: React.ReactNode }) {
 export function useOffer() {
   const context = useContext(OfferContext)
   if (!context) {
-    throw new Error("useOffer must be used within an OfferProvider")
+    throw new Error('useOffer must be used within an OfferProvider')
   }
   return context
 }

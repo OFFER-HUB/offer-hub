@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { UserRole, AuthUser } from "./auth.types";
+import { Request, Response, NextFunction } from 'express';
+import { UserRole, AuthUser } from './auth.types';
 
 /**
  * Extended Request interface with authentication and security context

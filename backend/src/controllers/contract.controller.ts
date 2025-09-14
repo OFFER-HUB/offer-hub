@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { contractService } from "@/services/contract.service";
-import { CreateContractDTO, UpdateContractDTO } from "@/types/contract.types";
+import { Request, Response, NextFunction } from 'express';
+import { contractService } from '@/services/contract.service';
+import { CreateContractDTO, UpdateContractDTO } from '@/types/contract.types';
 import {
   UUID_REGEX,
   CONTRACT_TYPES,
@@ -12,20 +12,20 @@ import {
   validateEnum,
   validateMonetaryAmount,
   validateStringLength
-} from "@/utils/validation";
-import { HTTP_STATUS } from "../types/api.type";
+} from '@/utils/validation';
+import { HTTP_STATUS } from '../types/api.type';
 import {
   buildSuccessResponse,
   buildListResponse,
   buildErrorResponse,
-} from "../utils/responseBuilder";
+} from '../utils/responseBuilder';
 import {
   ValidationError,
   BusinessLogicError,
   NotFoundError,
   BadRequestError,
   mapSupabaseError
-} from "@/utils/AppError";
+} from '@/utils/AppError';
 
 /**
  * Creates a new contract between a freelancer and client
@@ -66,22 +66,22 @@ export const createContractHandler = async (
     const validationResult = validateObject(contractData, CONTRACT_CREATION_SCHEMA);
     
     if (!validationResult.isValid) {
-      throw new ValidationError("Contract validation failed", validationResult.errors);
+      throw new ValidationError('Contract validation failed', validationResult.errors);
     }
 
     const newContract = await contractService.createContract(contractData);
 
     res
       .status(HTTP_STATUS.CREATED)
-      .json(buildSuccessResponse(newContract, "Contract created successfully"));
+      .json(buildSuccessResponse(newContract, 'Contract created successfully'));
   } catch (error: any) {
     // Handle specific business logic errors
-    if (error.message === "Freelancer or client not found") {
-      throw new BusinessLogicError("Freelancer or client not found", "USER_NOT_FOUND");
+    if (error.message === 'Freelancer or client not found') {
+      throw new BusinessLogicError('Freelancer or client not found', 'USER_NOT_FOUND');
     }
 
-    if (error.message === "Freelancer and client cannot be the same user") {
-      throw new BusinessLogicError("Freelancer and client cannot be the same user", "SAME_USER_OPERATION");
+    if (error.message === 'Freelancer and client cannot be the same user') {
+      throw new BusinessLogicError('Freelancer and client cannot be the same user', 'SAME_USER_OPERATION');
     }
 
     // Handle Supabase errors
@@ -90,11 +90,11 @@ export const createContractHandler = async (
     }
 
     // Handle validation errors from service layer
-    if (error.message.includes("is required for")) {
+    if (error.message.includes('is required for')) {
       throw new ValidationError(error.message);
     }
 
-    if (error.message.includes("Invalid")) {
+    if (error.message.includes('Invalid')) {
       throw new BadRequestError(error.message);
     }
 
@@ -139,18 +139,18 @@ export const getContractByIdHandler = async (
 
     // Use standardized UUID validation
     if (!validateUUID(id)) {
-      throw new BadRequestError("Invalid contract ID format", "INVALID_UUID");
+      throw new BadRequestError('Invalid contract ID format', 'INVALID_UUID');
     }
 
     const contract = await contractService.getContractById(id);
 
     if (!contract) {
-      throw new NotFoundError("Contract not found", "CONTRACT_NOT_FOUND");
+      throw new NotFoundError('Contract not found', 'CONTRACT_NOT_FOUND');
     }
 
     res
       .status(HTTP_STATUS.OK)
-      .json(buildSuccessResponse(contract, "Contract retrieved successfully"));
+      .json(buildSuccessResponse(contract, 'Contract retrieved successfully'));
   } catch (error: any) {
     // Handle Supabase errors
     if (error.code && error.message) {
@@ -206,21 +206,21 @@ export const updateContractStatusHandler = async (
 
     // Use standardized UUID validation
     if (!validateUUID(id)) {
-      throw new BadRequestError("Invalid contract ID format", "INVALID_UUID");
+      throw new BadRequestError('Invalid contract ID format', 'INVALID_UUID');
     }
 
     // Validate required fields
     const { escrow_status } = updateData;
 
     if (!escrow_status) {
-      throw new ValidationError("escrow_status is required");
+      throw new ValidationError('escrow_status is required');
     }
 
     // Use standardized enum validation
     if (!validateEnum(escrow_status, ACTIVE_ESCROW_STATUSES)) {
       throw new BadRequestError(
-        "escrow_status must be 'funded', 'released', or 'disputed'",
-        "INVALID_ENUM_VALUE"
+        'escrow_status must be \'funded\', \'released\', or \'disputed\'',
+        'INVALID_ENUM_VALUE'
       );
     }
 
@@ -231,7 +231,7 @@ export const updateContractStatusHandler = async (
     );
 
     if (!updatedContract) {
-      throw new NotFoundError("Contract not found", "CONTRACT_NOT_FOUND");
+      throw new NotFoundError('Contract not found', 'CONTRACT_NOT_FOUND');
     }
 
     res
@@ -239,7 +239,7 @@ export const updateContractStatusHandler = async (
       .json(
         buildSuccessResponse(
           updatedContract,
-          "Contract status updated successfully"
+          'Contract status updated successfully'
         )
       );
   } catch (error: any) {
@@ -296,7 +296,7 @@ export const getContractsByUserHandler = async (
 
     // Use standardized UUID validation
     if (!validateUUID(userId)) {
-      throw new BadRequestError("Invalid user ID format", "INVALID_UUID");
+      throw new BadRequestError('Invalid user ID format', 'INVALID_UUID');
     }
 
     const contracts = await contractService.getContractsByUser(userId);
@@ -304,7 +304,7 @@ export const getContractsByUserHandler = async (
     res
       .status(HTTP_STATUS.OK)
       .json(
-        buildListResponse(contracts, "User contracts retrieved successfully")
+        buildListResponse(contracts, 'User contracts retrieved successfully')
       );
   } catch (error: any) {
     // Handle Supabase errors
@@ -356,8 +356,8 @@ export const getContractsByStatusHandler = async (
 
     if (!status || !validateEnum(status, ESCROW_STATUSES)) {
       throw new BadRequestError(
-        "Valid status is required: pending, funded, released, or disputed",
-        "INVALID_ENUM_VALUE"
+        'Valid status is required: pending, funded, released, or disputed',
+        'INVALID_ENUM_VALUE'
       );
     }
 
@@ -368,7 +368,7 @@ export const getContractsByStatusHandler = async (
       .json(
         buildListResponse(
           contracts,
-          "Contracts by status retrieved successfully"
+          'Contracts by status retrieved successfully'
         )
       );
   } catch (error: any) {

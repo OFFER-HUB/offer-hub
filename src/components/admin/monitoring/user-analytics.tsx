@@ -81,9 +81,9 @@ function AnalyticMetric({
   const getTrendIcon = () => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="h-4 w-4" />;
+        return <TrendingUp className='h-4 w-4' />;
       case 'down':
-        return <TrendingDown className="h-4 w-4" />;
+        return <TrendingDown className='h-4 w-4' />;
       default:
         return null;
     }
@@ -91,24 +91,24 @@ function AnalyticMetric({
 
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <div className="text-blue-600">{icon}</div>
+      <CardContent className='p-6'>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center space-x-3'>
+            <div className='p-2 bg-blue-50 rounded-lg'>
+              <div className='text-blue-600'>{icon}</div>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">{title}</p>
-              <p className="text-2xl font-bold text-gray-900">{value}</p>
+              <p className='text-sm font-medium text-gray-600'>{title}</p>
+              <p className='text-2xl font-bold text-gray-900'>{value}</p>
               {subtitle && (
-                <p className="text-xs text-gray-500">{subtitle}</p>
+                <p className='text-xs text-gray-500'>{subtitle}</p>
               )}
             </div>
           </div>
           {change !== undefined && (
             <div className={cn('flex items-center space-x-1', getTrendColor())}>
               {getTrendIcon()}
-              <span className="text-sm font-medium">
+              <span className='text-sm font-medium'>
                 {Math.abs(change).toFixed(1)}%
               </span>
             </div>
@@ -137,41 +137,41 @@ function UserFlowVisualization({ data }: UserFlowProps) {
         <CardTitle>Conversion Funnel</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className='space-y-4'>
           {data.map((step, index) => (
-            <div key={step.step} className="relative">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">{step.step}</span>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">
+            <div key={step.step} className='relative'>
+              <div className='flex items-center justify-between mb-2'>
+                <span className='text-sm font-medium'>{step.step}</span>
+                <div className='flex items-center space-x-2'>
+                  <span className='text-sm text-gray-600'>
                     {step.users.toLocaleString()} users
                   </span>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant='outline' className='text-xs'>
                     {step.conversionRate.toFixed(1)}%
                   </Badge>
                 </div>
               </div>
               
-              <div className="relative">
+              <div className='relative'>
                 <div
-                  className="bg-blue-200 h-8 rounded-lg flex items-center px-3"
+                  className='bg-blue-200 h-8 rounded-lg flex items-center px-3'
                   style={{ width: `${(step.users / maxUsers) * 100}%` }}
                 >
                   <div
-                    className="bg-blue-500 h-6 rounded"
+                    className='bg-blue-500 h-6 rounded'
                     style={{ width: `${step.conversionRate}%` }}
                   />
                 </div>
                 {step.dropoffRate > 0 && (
-                  <div className="text-xs text-red-600 mt-1">
+                  <div className='text-xs text-red-600 mt-1'>
                     {step.dropoffRate.toFixed(1)}% drop-off
                   </div>
                 )}
               </div>
               
               {index < data.length - 1 && (
-                <div className="flex justify-center my-2">
-                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                <div className='flex justify-center my-2'>
+                  <ArrowRight className='h-4 w-4 text-gray-400' />
                 </div>
               )}
             </div>
@@ -210,25 +210,25 @@ function ActivityHeatmap({ data }: HeatmapProps) {
     <Card>
       <CardHeader>
         <CardTitle>User Activity Heatmap</CardTitle>
-        <p className="text-sm text-gray-600">Activity by day and hour</p>
+        <p className='text-sm text-gray-600'>Activity by day and hour</p>
       </CardHeader>
       <CardContent>
-        <div className="space-y-1">
-          <div className="flex space-x-1 text-xs text-gray-500 mb-2">
-            <div className="w-12" /> {/* Day label space */}
+        <div className='space-y-1'>
+          <div className='flex space-x-1 text-xs text-gray-500 mb-2'>
+            <div className='w-12' /> {/* Day label space */}
             {hours.filter(h => h % 4 === 0).map(hour => (
-              <div key={hour} className="w-4 text-center">
+              <div key={hour} className='w-4 text-center'>
                 {hour}
               </div>
             ))}
           </div>
           
           {days.map(day => (
-            <div key={day} className="flex items-center space-x-1">
-              <div className="w-12 text-xs text-gray-600 font-medium">
+            <div key={day} className='flex items-center space-x-1'>
+              <div className='w-12 text-xs text-gray-600 font-medium'>
                 {day}
               </div>
-              <div className="flex space-x-1">
+              <div className='flex space-x-1'>
                 {hours.map(hour => (
                   <div
                     key={hour}
@@ -244,15 +244,15 @@ function ActivityHeatmap({ data }: HeatmapProps) {
           ))}
         </div>
         
-        <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+        <div className='flex items-center justify-between mt-4 text-xs text-gray-500'>
           <span>Less</span>
-          <div className="flex space-x-1">
-            <div className="w-3 h-3 rounded-sm bg-gray-100" />
-            <div className="w-3 h-3 rounded-sm bg-blue-100" />
-            <div className="w-3 h-3 rounded-sm bg-blue-300" />
-            <div className="w-3 h-3 rounded-sm bg-blue-500" />
-            <div className="w-3 h-3 rounded-sm bg-blue-700" />
-            <div className="w-3 h-3 rounded-sm bg-blue-900" />
+          <div className='flex space-x-1'>
+            <div className='w-3 h-3 rounded-sm bg-gray-100' />
+            <div className='w-3 h-3 rounded-sm bg-blue-100' />
+            <div className='w-3 h-3 rounded-sm bg-blue-300' />
+            <div className='w-3 h-3 rounded-sm bg-blue-500' />
+            <div className='w-3 h-3 rounded-sm bg-blue-700' />
+            <div className='w-3 h-3 rounded-sm bg-blue-900' />
           </div>
           <span>More</span>
         </div>
@@ -359,15 +359,15 @@ export default function UserAnalytics() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <Users className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <div className='flex items-center justify-center h-64'>
+        <div className='text-center'>
+          <Users className='h-12 w-12 text-red-500 mx-auto mb-4' />
+          <h3 className='text-lg font-semibold text-gray-900 mb-2'>
             Error Loading Analytics
           </h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className='text-gray-600 mb-4'>{error}</p>
           <Button onClick={() => loadUserAnalytics(selectedTimeRange)}>
-            <RefreshCw className="h-4 w-4 mr-2" />
+            <RefreshCw className='h-4 w-4 mr-2' />
             Try Again
           </Button>
         </div>
@@ -376,92 +376,92 @@ export default function UserAnalytics() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">User Analytics</h2>
-          <p className="text-gray-600">
+          <h2 className='text-2xl font-bold text-gray-900'>User Analytics</h2>
+          <p className='text-gray-600'>
             Comprehensive insights into user behavior and engagement
           </p>
         </div>
         
-        <div className="flex items-center space-x-4">
-          <Select onValueChange={handleTimeRangeChange} defaultValue="7d">
-            <SelectTrigger className="w-32">
+        <div className='flex items-center space-x-4'>
+          <Select onValueChange={handleTimeRangeChange} defaultValue='7d'>
+            <SelectTrigger className='w-32'>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="24h">Last 24h</SelectItem>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="90d">Last 90 days</SelectItem>
+              <SelectItem value='24h'>Last 24h</SelectItem>
+              <SelectItem value='7d'>Last 7 days</SelectItem>
+              <SelectItem value='30d'>Last 30 days</SelectItem>
+              <SelectItem value='90d'>Last 90 days</SelectItem>
             </SelectContent>
           </Select>
           
-          <Button variant="outline">
-            <Download className="h-4 w-4 mr-2" />
+          <Button variant='outline'>
+            <Download className='h-4 w-4 mr-2' />
             Export
           </Button>
           
-          <Button variant="outline">
-            <Filter className="h-4 w-4 mr-2" />
+          <Button variant='outline'>
+            <Filter className='h-4 w-4 mr-2' />
             Filters
           </Button>
         </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
         <AnalyticMetric
-          title="Total Users"
+          title='Total Users'
           value={analyticsData?.sessionData.totalSessions.toLocaleString() || '12,450'}
           change={8.2}
-          trend="up"
-          icon={<Users className="h-6 w-6" />}
-          subtitle="Active users this period"
+          trend='up'
+          icon={<Users className='h-6 w-6' />}
+          subtitle='Active users this period'
         />
         
         <AnalyticMetric
-          title="Avg Session Duration"
+          title='Avg Session Duration'
           value={analyticsData ? `${Math.round(analyticsData.sessionData.averageSessionDuration / 60)}m` : '8m 42s'}
           change={-2.1}
-          trend="down"
-          icon={<Clock className="h-6 w-6" />}
-          subtitle="Time spent per session"
+          trend='down'
+          icon={<Clock className='h-6 w-6' />}
+          subtitle='Time spent per session'
         />
         
         <AnalyticMetric
-          title="Bounce Rate"
+          title='Bounce Rate'
           value={analyticsData ? `${analyticsData.sessionData.bounceRate.toFixed(1)}%` : '23.5%'}
           change={-5.3}
-          trend="up"
-          icon={<Eye className="h-6 w-6" />}
-          subtitle="Single page visits"
+          trend='up'
+          icon={<Eye className='h-6 w-6' />}
+          subtitle='Single page visits'
         />
         
         <AnalyticMetric
-          title="Pages per Session"
+          title='Pages per Session'
           value={analyticsData?.sessionData.pagesPerSession.toFixed(1) || '4.2'}
           change={12.1}
-          trend="up"
-          icon={<MousePointer className="h-6 w-6" />}
-          subtitle="Page views per session"
+          trend='up'
+          icon={<MousePointer className='h-6 w-6' />}
+          subtitle='Page views per session'
         />
       </div>
 
       {/* Analytics Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="behavior">Behavior</TabsTrigger>
-          <TabsTrigger value="demographics">Demographics</TabsTrigger>
-          <TabsTrigger value="retention">Retention</TabsTrigger>
-          <TabsTrigger value="conversion">Conversion</TabsTrigger>
+        <TabsList className='grid w-full grid-cols-5'>
+          <TabsTrigger value='overview'>Overview</TabsTrigger>
+          <TabsTrigger value='behavior'>Behavior</TabsTrigger>
+          <TabsTrigger value='demographics'>Demographics</TabsTrigger>
+          <TabsTrigger value='retention'>Retention</TabsTrigger>
+          <TabsTrigger value='conversion'>Conversion</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TabsContent value='overview' className='space-y-6'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <Card>
               <CardHeader>
                 <CardTitle>User Engagement Trends</CardTitle>
@@ -493,8 +493,8 @@ export default function UserAnalytics() {
           <ActivityHeatmap data={mockHeatmapData} />
         </TabsContent>
 
-        <TabsContent value="behavior" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TabsContent value='behavior' className='space-y-6'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <Card>
               <CardHeader>
                 <CardTitle>Top Entry Pages</CardTitle>
@@ -534,21 +534,21 @@ export default function UserAnalytics() {
                 <CardTitle>User Flow</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                    <span className="text-sm font-medium">Home Page</span>
-                    <ArrowRight className="h-4 w-4 text-gray-400" />
+                <div className='space-y-4'>
+                  <div className='flex items-center justify-between p-3 bg-blue-50 rounded-lg'>
+                    <span className='text-sm font-medium'>Home Page</span>
+                    <ArrowRight className='h-4 w-4 text-gray-400' />
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                    <span className="text-sm font-medium">Browse Projects</span>
-                    <ArrowRight className="h-4 w-4 text-gray-400" />
+                  <div className='flex items-center justify-between p-3 bg-green-50 rounded-lg'>
+                    <span className='text-sm font-medium'>Browse Projects</span>
+                    <ArrowRight className='h-4 w-4 text-gray-400' />
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                    <span className="text-sm font-medium">Project Details</span>
-                    <ArrowRight className="h-4 w-4 text-gray-400" />
+                  <div className='flex items-center justify-between p-3 bg-yellow-50 rounded-lg'>
+                    <span className='text-sm font-medium'>Project Details</span>
+                    <ArrowRight className='h-4 w-4 text-gray-400' />
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                    <span className="text-sm font-medium">Apply/Contact</span>
+                  <div className='flex items-center justify-between p-3 bg-purple-50 rounded-lg'>
+                    <span className='text-sm font-medium'>Apply/Contact</span>
                   </div>
                 </div>
               </CardContent>
@@ -556,8 +556,8 @@ export default function UserAnalytics() {
           </div>
         </TabsContent>
 
-        <TabsContent value="demographics" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TabsContent value='demographics' className='space-y-6'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <Card>
               <CardHeader>
                 <CardTitle>Device Distribution</CardTitle>
@@ -601,7 +601,7 @@ export default function UserAnalytics() {
                 <TableBody>
                   {mockLocationData.map((location) => (
                     <TableRow key={location.name}>
-                      <TableCell className="font-medium">{location.name}</TableCell>
+                      <TableCell className='font-medium'>{location.name}</TableCell>
                       <TableCell>{location.users.toLocaleString()}</TableCell>
                       <TableCell>{location.sessions.toLocaleString()}</TableCell>
                       <TableCell>{Math.floor(Math.random() * 300 + 180)}s</TableCell>
@@ -613,11 +613,11 @@ export default function UserAnalytics() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="retention" className="space-y-6">
+        <TabsContent value='retention' className='space-y-6'>
           <Card>
             <CardHeader>
               <CardTitle>User Retention Cohort</CardTitle>
-              <p className="text-sm text-gray-600">
+              <p className='text-sm text-gray-600'>
                 Percentage of users who return after their first visit
               </p>
             </CardHeader>
@@ -630,24 +630,24 @@ export default function UserAnalytics() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <Card>
               <CardHeader>
                 <CardTitle>Retention by Period</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   {['Day 1', 'Day 7', 'Day 30'].map((period, index) => (
-                    <div key={period} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{period}</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div key={period} className='flex items-center justify-between'>
+                      <span className='text-sm font-medium'>{period}</span>
+                      <div className='flex items-center space-x-2'>
+                        <div className='w-32 bg-gray-200 rounded-full h-2'>
                           <div
-                            className="bg-blue-500 h-2 rounded-full"
+                            className='bg-blue-500 h-2 rounded-full'
                             style={{ width: `${[65, 45, 32][index]}%` }}
                           />
                         </div>
-                        <span className="text-sm text-gray-600 w-12">
+                        <span className='text-sm text-gray-600 w-12'>
                           {[65, 45, 32][index]}%
                         </span>
                       </div>
@@ -662,18 +662,18 @@ export default function UserAnalytics() {
                 <CardTitle>Churn Analysis</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Weekly Churn Rate</span>
-                    <span className="text-lg font-bold text-red-600">12.5%</span>
+                <div className='space-y-4'>
+                  <div className='flex items-center justify-between'>
+                    <span className='text-sm font-medium'>Weekly Churn Rate</span>
+                    <span className='text-lg font-bold text-red-600'>12.5%</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Monthly Churn Rate</span>
-                    <span className="text-lg font-bold text-red-600">35.2%</span>
+                  <div className='flex items-center justify-between'>
+                    <span className='text-sm font-medium'>Monthly Churn Rate</span>
+                    <span className='text-lg font-bold text-red-600'>35.2%</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">At-Risk Users</span>
-                    <span className="text-lg font-bold text-yellow-600">1,250</span>
+                  <div className='flex items-center justify-between'>
+                    <span className='text-sm font-medium'>At-Risk Users</span>
+                    <span className='text-lg font-bold text-yellow-600'>1,250</span>
                   </div>
                 </div>
               </CardContent>
@@ -681,10 +681,10 @@ export default function UserAnalytics() {
           </div>
         </TabsContent>
 
-        <TabsContent value="conversion" className="space-y-6">
+        <TabsContent value='conversion' className='space-y-6'>
           <UserFlowVisualization data={mockFunnelData} />
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <Card>
               <CardHeader>
                 <CardTitle>Conversion by Source</CardTitle>
@@ -728,20 +728,20 @@ export default function UserAnalytics() {
                 <CardTitle>Goal Completions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   {[
                     { goal: 'Newsletter Signup', rate: 25.4, count: 1240 },
                     { goal: 'Project Inquiry', rate: 12.8, count: 620 },
                     { goal: 'Account Creation', rate: 8.9, count: 430 },
                     { goal: 'First Purchase', rate: 3.2, count: 155 },
                   ].map((goal) => (
-                    <div key={goal.goal} className="flex items-center justify-between">
+                    <div key={goal.goal} className='flex items-center justify-between'>
                       <div>
-                        <p className="text-sm font-medium">{goal.goal}</p>
-                        <p className="text-xs text-gray-600">{goal.count} completions</p>
+                        <p className='text-sm font-medium'>{goal.goal}</p>
+                        <p className='text-xs text-gray-600'>{goal.count} completions</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-bold">{goal.rate}%</p>
+                      <div className='text-right'>
+                        <p className='text-lg font-bold'>{goal.rate}%</p>
                       </div>
                     </div>
                   ))}

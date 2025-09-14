@@ -41,21 +41,21 @@ export function DisputeConversation({ disputeId }: DisputeConversationProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className='flex items-center justify-center h-full'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className='flex flex-col h-full bg-white'>
       {/* Messages Display Area */}
-      <div className="flex-1 overflow-hidden px-6 py-4">
+      <div className='flex-1 overflow-hidden px-6 py-4'>
         <DisputeMessageDisplay messages={messages} />
       </div>
 
       {/* Message Input Area */}
-      <div className="px-6">
+      <div className='px-6'>
         <DisputeMessageInput onSendMessage={handleSendMessage} />
       </div>
     </div>

@@ -38,21 +38,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { toast } from 'react-hot-toast';
 
 const notificationIcons: Record<NotificationType, React.ReactNode> = {
-  stage_transition: <CheckCircle className="h-4 w-4" />,
-  deadline_alert: <AlertCircle className="h-4 w-4" />,
-  action_required: <Clock className="h-4 w-4" />,
-  resolution_update: <CheckCircle className="h-4 w-4" />,
-  system_alert: <AlertCircle className="h-4 w-4" />,
-  evidence_request: <MessageSquare className="h-4 w-4" />,
-  mediator_assignment: <MessageSquare className="h-4 w-4" />,
-  arbitration_escalation: <AlertCircle className="h-4 w-4" />,
+  stage_transition: <CheckCircle className='h-4 w-4' />,
+  deadline_alert: <AlertCircle className='h-4 w-4' />,
+  action_required: <Clock className='h-4 w-4' />,
+  resolution_update: <CheckCircle className='h-4 w-4' />,
+  system_alert: <AlertCircle className='h-4 w-4' />,
+  evidence_request: <MessageSquare className='h-4 w-4' />,
+  mediator_assignment: <MessageSquare className='h-4 w-4' />,
+  arbitration_escalation: <AlertCircle className='h-4 w-4' />,
 };
 
 const deliveryMethodIcons: Record<DeliveryMethod, React.ReactNode> = {
-  in_app: <Bell className="h-4 w-4" />,
-  email: <Mail className="h-4 w-4" />,
-  sms: <Smartphone className="h-4 w-4" />,
-  push: <Smartphone className="h-4 w-4" />,
+  in_app: <Bell className='h-4 w-4' />,
+  email: <Mail className='h-4 w-4' />,
+  sms: <Smartphone className='h-4 w-4' />,
+  push: <Smartphone className='h-4 w-4' />,
 };
 
 const notificationTypeLabels: Record<NotificationType, string> = {
@@ -286,20 +286,20 @@ export function NotificationCenter({
   if (compact) {
     return (
       <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-2">
-              <Bell className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium">Notifications</span>
+        <CardContent className='p-4'>
+          <div className='flex items-center justify-between mb-3'>
+            <div className='flex items-center space-x-2'>
+              <Bell className='h-4 w-4 text-gray-500' />
+              <span className='text-sm font-medium'>Notifications</span>
               {getUnreadCount() > 0 && (
-                <Badge variant="destructive" className="text-xs">
+                <Badge variant='destructive' className='text-xs'>
                   {getUnreadCount()}
                 </Badge>
               )}
             </div>
           </div>
           
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+          <div className='space-y-2 max-h-48 overflow-y-auto'>
             {filteredNotifications.slice(0, 3).map((notification) => (
               <div
                 key={notification.id}
@@ -307,16 +307,16 @@ export function NotificationCenter({
                   notification.readAt ? 'bg-gray-50' : 'bg-white shadow-sm'
                 }`}
               >
-                <div className="flex items-start space-x-2">
-                  <div className="flex-shrink-0 mt-0.5">
+                <div className='flex items-start space-x-2'>
+                  <div className='flex-shrink-0 mt-0.5'>
                     {notificationIcons[notification.notificationType]}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{notification.title}</p>
-                    <p className="text-xs text-gray-500">{formatDate(notification.sentAt)}</p>
+                  <div className='flex-1 min-w-0'>
+                    <p className='text-sm font-medium truncate'>{notification.title}</p>
+                    <p className='text-xs text-gray-500'>{formatDate(notification.sentAt)}</p>
                   </div>
                   {!notification.readAt && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1" />
+                    <div className='w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1' />
                   )}
                 </div>
               </div>
@@ -324,8 +324,8 @@ export function NotificationCenter({
           </div>
           
           {filteredNotifications.length > 3 && (
-            <div className="mt-2 text-center">
-              <Button variant="ghost" size="sm" className="text-xs">
+            <div className='mt-2 text-center'>
+              <Button variant='ghost' size='sm' className='text-xs'>
                 View all {filteredNotifications.length} notifications
               </Button>
             </div>
@@ -336,23 +336,23 @@ export function NotificationCenter({
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <Bell className="h-6 w-6 text-gray-500" />
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center space-x-3'>
+          <Bell className='h-6 w-6 text-gray-500' />
           <div>
-            <h2 className="text-xl font-semibold">Notifications</h2>
-            <p className="text-sm text-gray-600">
+            <h2 className='text-xl font-semibold'>Notifications</h2>
+            <p className='text-sm text-gray-600'>
               {getUnreadCount()} unread of {notifications.length} total
             </p>
           </div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           {allowMarkAsRead && getUnreadCount() > 0 && (
-            <Button variant="outline" size="sm" onClick={handleMarkAllAsRead}>
-              <Check className="h-4 w-4 mr-2" />
+            <Button variant='outline' size='sm' onClick={handleMarkAllAsRead}>
+              <Check className='h-4 w-4 mr-2' />
               Mark All Read
             </Button>
           )}
@@ -360,8 +360,8 @@ export function NotificationCenter({
           {allowSendNotification && (
             <Dialog open={isComposing} onOpenChange={setIsComposing}>
               <DialogTrigger asChild>
-                <Button size="sm">
-                  <Send className="h-4 w-4 mr-2" />
+                <Button size='sm'>
+                  <Send className='h-4 w-4 mr-2' />
                   Send Notification
                 </Button>
               </DialogTrigger>
@@ -369,9 +369,9 @@ export function NotificationCenter({
                 <DialogHeader>
                   <DialogTitle>Send Notification</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Type</label>
+                <div className='space-y-4'>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Type</label>
                     <Select
                       value={newNotification.type}
                       onValueChange={(value: NotificationType) => 
@@ -391,28 +391,28 @@ export function NotificationCenter({
                     </Select>
                   </div>
                   
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Title</label>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Title</label>
                     <Input
-                      placeholder="Enter notification title"
+                      placeholder='Enter notification title'
                       value={newNotification.title}
                       onChange={(e) => setNewNotification(prev => ({ ...prev, title: e.target.value }))}
                     />
                   </div>
                   
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Message</label>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Message</label>
                     <textarea
-                      className="w-full p-2 border rounded-md"
-                      placeholder="Enter notification message"
+                      className='w-full p-2 border rounded-md'
+                      placeholder='Enter notification message'
                       value={newNotification.message}
                       onChange={(e) => setNewNotification(prev => ({ ...prev, message: e.target.value }))}
                       rows={3}
                     />
                   </div>
                   
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Delivery Method</label>
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium'>Delivery Method</label>
                     <Select
                       value={newNotification.deliveryMethod}
                       onValueChange={(value: DeliveryMethod) => 
@@ -425,7 +425,7 @@ export function NotificationCenter({
                       <SelectContent>
                         {Object.entries(deliveryMethodLabels).map(([method, label]) => (
                           <SelectItem key={method} value={method}>
-                            <div className="flex items-center space-x-2">
+                            <div className='flex items-center space-x-2'>
                               {deliveryMethodIcons[method as DeliveryMethod]}
                               <span>{label}</span>
                             </div>
@@ -435,12 +435,12 @@ export function NotificationCenter({
                     </Select>
                   </div>
                   
-                  <div className="flex justify-end space-x-2">
-                    <Button variant="outline" onClick={() => setIsComposing(false)}>
+                  <div className='flex justify-end space-x-2'>
+                    <Button variant='outline' onClick={() => setIsComposing(false)}>
                       Cancel
                     </Button>
                     <Button onClick={handleSendNotification}>
-                      <Send className="h-4 w-4 mr-2" />
+                      <Send className='h-4 w-4 mr-2' />
                       Send
                     </Button>
                   </div>
@@ -453,26 +453,26 @@ export function NotificationCenter({
 
       {/* Filters */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center space-x-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <CardContent className='p-4'>
+          <div className='flex items-center space-x-4'>
+            <div className='flex-1'>
+              <div className='relative'>
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
                 <Input
-                  placeholder="Search notifications..."
+                  placeholder='Search notifications...'
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className='pl-10'
                 />
               </div>
             </div>
             
             <Select value={filterType} onValueChange={(value: NotificationType | 'all') => setFilterType(value)}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Filter by type" />
+              <SelectTrigger className='w-48'>
+                <SelectValue placeholder='Filter by type' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value='all'>All Types</SelectItem>
                 {Object.entries(notificationTypeLabels).map(([type, label]) => (
                   <SelectItem key={type} value={type}>
                     {label}
@@ -482,13 +482,13 @@ export function NotificationCenter({
             </Select>
             
             <Select value={filterRead} onValueChange={(value: 'all' | 'read' | 'unread') => setFilterRead(value)}>
-              <SelectTrigger className="w-32">
+              <SelectTrigger className='w-32'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="unread">Unread</SelectItem>
-                <SelectItem value="read">Read</SelectItem>
+                <SelectItem value='all'>All</SelectItem>
+                <SelectItem value='unread'>Unread</SelectItem>
+                <SelectItem value='read'>Read</SelectItem>
               </SelectContent>
             </Select>
             
@@ -501,7 +501,7 @@ export function NotificationCenter({
       </Card>
 
       {/* Notifications List */}
-      <div className="space-y-3">
+      <div className='space-y-3'>
         <AnimatePresence>
           {filteredNotifications.map((notification, index) => (
             <motion.div
@@ -514,8 +514,8 @@ export function NotificationCenter({
               <Card className={`transition-all duration-200 ${
                 notification.readAt ? 'opacity-75' : 'shadow-sm'
               }`}>
-                <CardContent className="p-4">
-                  <div className="flex items-start space-x-3">
+                <CardContent className='p-4'>
+                  <div className='flex items-start space-x-3'>
                     <Checkbox
                       checked={selectedNotifications.includes(notification.id)}
                       onCheckedChange={() => handleSelectNotification(notification.id)}
@@ -527,30 +527,30 @@ export function NotificationCenter({
                       {notificationIcons[notification.notificationType]}
                     </div>
                     
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">{notification.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                    <div className='flex-1 space-y-2'>
+                      <div className='flex items-start justify-between'>
+                        <div className='flex-1'>
+                          <h3 className='font-semibold text-gray-900'>{notification.title}</h3>
+                          <p className='text-sm text-gray-600 mt-1'>{notification.message}</p>
                         </div>
                         
-                        <div className="flex items-center space-x-2 ml-4">
-                          <Badge variant="outline" className="text-xs">
-                            <div className="flex items-center space-x-1">
+                        <div className='flex items-center space-x-2 ml-4'>
+                          <Badge variant='outline' className='text-xs'>
+                            <div className='flex items-center space-x-1'>
                               {deliveryMethodIcons[notification.deliveryMethod]}
                               <span>{deliveryMethodLabels[notification.deliveryMethod]}</span>
                             </div>
                           </Badge>
                           
                           {!notification.readAt && (
-                            <Badge variant="destructive" className="text-xs">
+                            <Badge variant='destructive' className='text-xs'>
                               Unread
                             </Badge>
                           )}
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className='flex items-center justify-between text-xs text-gray-500'>
                         <span>Sent {formatDate(notification.sentAt)}</span>
                         {notification.readAt && (
                           <span>Read {formatDate(notification.readAt)}</span>
@@ -560,11 +560,11 @@ export function NotificationCenter({
                     
                     {allowMarkAsRead && !notification.readAt && (
                       <Button
-                        variant="ghost"
-                        size="sm"
+                        variant='ghost'
+                        size='sm'
                         onClick={() => handleMarkAsRead(notification.id)}
                       >
-                        <Eye className="h-4 w-4" />
+                        <Eye className='h-4 w-4' />
                       </Button>
                     )}
                   </div>
@@ -576,10 +576,10 @@ export function NotificationCenter({
         
         {filteredNotifications.length === 0 && (
           <Card>
-            <CardContent className="p-8 text-center">
-              <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No notifications found</h3>
-              <p className="text-gray-600">
+            <CardContent className='p-8 text-center'>
+              <Bell className='h-12 w-12 text-gray-400 mx-auto mb-4' />
+              <h3 className='text-lg font-semibold mb-2'>No notifications found</h3>
+              <p className='text-gray-600'>
                 {searchTerm || filterType !== 'all' || filterRead !== 'all'
                   ? 'Try adjusting your filters'
                   : 'You\'re all caught up!'}
@@ -591,21 +591,21 @@ export function NotificationCenter({
 
       {/* Bulk Actions */}
       {selectedNotifications.length > 0 && (
-        <Card className="bg-blue-50 border-blue-200">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">
+        <Card className='bg-blue-50 border-blue-200'>
+          <CardContent className='p-4'>
+            <div className='flex items-center justify-between'>
+              <span className='text-sm font-medium'>
                 {selectedNotifications.length} notification{selectedNotifications.length > 1 ? 's' : ''} selected
               </span>
-              <div className="flex items-center space-x-2">
+              <div className='flex items-center space-x-2'>
                 {allowMarkAsRead && (
-                  <Button size="sm" variant="outline">
-                    <Check className="h-4 w-4 mr-2" />
+                  <Button size='sm' variant='outline'>
+                    <Check className='h-4 w-4 mr-2' />
                     Mark as Read
                   </Button>
                 )}
-                <Button size="sm" variant="outline">
-                  <Trash2 className="h-4 w-4 mr-2" />
+                <Button size='sm' variant='outline'>
+                  <Trash2 className='h-4 w-4 mr-2' />
                   Delete
                 </Button>
               </div>

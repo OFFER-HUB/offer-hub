@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import TalentLayout from "@/components/talent/TalentLayout";
-import { OfferSuccess } from "@/components/send-offer/OfferSuccess";
-import { getFreelancerProfile } from "@/lib/mockData/freelancer-profile-mock";
-import { FreelancerProfile } from "@/lib/mockData/freelancer-profile-mock";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import TalentLayout from '@/components/talent/TalentLayout';
+import { OfferSuccess } from '@/components/send-offer/OfferSuccess';
+import { getFreelancerProfile } from '@/lib/mockData/freelancer-profile-mock';
+import { FreelancerProfile } from '@/lib/mockData/freelancer-profile-mock';
 
 interface SuccessPageClientProps {
   id: string;
@@ -25,18 +25,18 @@ export default function SuccessPageClient({ id }: SuccessPageClientProps) {
   }, [id]);
 
   const handleViewOffer = () => {
-    router.push("/dashboard/manage-project");
+    router.push('/dashboard/manage-project');
   };
 
   const handleSendAnother = () => {
-    router.push("/onboarding/dashboard/talent");
+    router.push('/onboarding/dashboard/talent');
   };
 
   if (loading) {
     return (
       <TalentLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+        <div className='min-h-screen flex items-center justify-center'>
+          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600'></div>
         </div>
       </TalentLayout>
     );
@@ -45,12 +45,12 @@ export default function SuccessPageClient({ id }: SuccessPageClientProps) {
   if (!freelancer) {
     return (
       <TalentLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Freelancer Not Found</h1>
+        <div className='min-h-screen flex items-center justify-center'>
+          <div className='text-center'>
+            <h1 className='text-2xl font-bold text-gray-900 mb-2'>Freelancer Not Found</h1>
             <button
               onClick={() => router.back()}
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+              className='px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700'
             >
               Go Back
             </button>
@@ -62,7 +62,7 @@ export default function SuccessPageClient({ id }: SuccessPageClientProps) {
 
   return (
     <TalentLayout>
-      <div className="min-h-screen bg-gray-50">
+      <div className='min-h-screen bg-gray-50'>
         <OfferSuccess 
           freelancer={freelancer}
           onViewOffer={handleViewOffer}

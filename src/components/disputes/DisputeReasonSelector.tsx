@@ -21,15 +21,15 @@ export function DisputeReasonSelector({ value, onChange, error }: DisputeReasonS
   };
 
   return (
-    <div className="relative">
+    <div className='relative'>
       <button
-        type="button"
+        type='button'
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full px-3 py-2 text-left bg-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
           error ? 'border-red-500' : 'border-gray-300'
         }`}
       >
-        <div className="flex items-center justify-between">
+        <div className='flex items-center justify-between'>
           <span className={selectedReason ? 'text-gray-900' : 'text-gray-500'}>
             {selectedReason ? selectedReason.label : 'What is the reason for dispute'}
           </span>
@@ -42,21 +42,21 @@ export function DisputeReasonSelector({ value, onChange, error }: DisputeReasonS
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-          <div className="py-1 max-h-60 overflow-auto">
+        <div className='absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg'>
+          <div className='py-1 max-h-60 overflow-auto'>
             {disputeReasons.map((reason) => (
               <button
                 key={reason.id}
-                type="button"
+                type='button'
                 onClick={() => handleSelect(reason.id)}
                 className={`w-full px-3 py-2 text-left hover:bg-gray-100 focus:outline-none focus:bg-gray-100 ${
                   value === reason.id ? 'bg-blue-50 text-blue-700' : 'text-gray-900'
                 }`}
               >
                 <div>
-                  <div className="font-medium">{reason.label}</div>
+                  <div className='font-medium'>{reason.label}</div>
                   {reason.description && (
-                    <div className="text-sm text-gray-500 mt-1">{reason.description}</div>
+                    <div className='text-sm text-gray-500 mt-1'>{reason.description}</div>
                   )}
                 </div>
               </button>
@@ -66,7 +66,7 @@ export function DisputeReasonSelector({ value, onChange, error }: DisputeReasonS
       )}
 
       {error && (
-        <p className="mt-1 text-sm text-red-500">{error}</p>
+        <p className='mt-1 text-sm text-red-500'>{error}</p>
       )}
     </div>
   );

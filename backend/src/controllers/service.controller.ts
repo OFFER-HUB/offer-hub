@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import { serviceService } from "@/services/service.service";
+import { Request, Response, NextFunction } from 'express';
+import { serviceService } from '@/services/service.service';
 import {
   CreateServiceDTO,
   UpdateServiceDTO,
   ServiceFilters,
-} from "@/types/service.types";
+} from '@/types/service.types';
 import { buildSuccessResponse, buildErrorResponse, buildPaginatedResponse, buildSuccessResponseWithoutData } from '../utils/responseBuilder';
 
 export const createServiceHandler = async (
@@ -27,7 +27,7 @@ export const createServiceHandler = async (
       max_price === undefined
     ) {
       res.status(400).json(
-        buildErrorResponse("Missing required fields: user_id, title, description, category, min_price, max_price")
+        buildErrorResponse('Missing required fields: user_id, title, description, category, min_price, max_price')
       );
       return;
     }
@@ -35,7 +35,7 @@ export const createServiceHandler = async (
     // Validate price range
     if (min_price < 0 || max_price < 0 || min_price > max_price) {
       res.status(400).json(
-        buildErrorResponse("Invalid price range. min_price and max_price must be positive, and min_price must be less than or equal to max_price")
+        buildErrorResponse('Invalid price range. min_price and max_price must be positive, and min_price must be less than or equal to max_price')
       );
       return;
     }
@@ -43,7 +43,7 @@ export const createServiceHandler = async (
     const newService = await serviceService.createService(serviceData);
 
     res.status(201).json(
-      buildSuccessResponse(newService, "Service created successfully")
+      buildSuccessResponse(newService, 'Service created successfully')
     );
   
 };
@@ -70,14 +70,14 @@ export const getAllServicesHandler = async (
     // Validate pagination parameters
     if (filters.page && filters.page < 1) {
       res.status(400).json(
-        buildErrorResponse("Page number must be greater than 0")
+        buildErrorResponse('Page number must be greater than 0')
       );
       return;
     }
 
     if (filters.limit && (filters.limit < 1 || filters.limit > 50)) {
       res.status(400).json(
-        buildErrorResponse("Limit must be between 1 and 50")
+        buildErrorResponse('Limit must be between 1 and 50')
       );
       return;
     }
@@ -87,7 +87,7 @@ export const getAllServicesHandler = async (
     res.status(200).json(
       buildPaginatedResponse(
         result.services,
-        "Services retrieved successfully",
+        'Services retrieved successfully',
         {
           current_page: filters.page || 1,
           total_pages: Math.ceil(result.total / (filters.limit || 10)),
@@ -112,7 +112,7 @@ export const getServiceByIdHandler = async (
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(id)) {
       res.status(400).json(
-        buildErrorResponse("Invalid service ID format")
+        buildErrorResponse('Invalid service ID format')
       );
       return;
     }
@@ -121,13 +121,13 @@ export const getServiceByIdHandler = async (
 
     if (!service) {
       res.status(404).json(
-        buildErrorResponse("Service not found")
+        buildErrorResponse('Service not found')
       );
       return;
     }
 
     res.status(200).json(
-      buildSuccessResponse(service, "Service retrieved successfully")
+      buildSuccessResponse(service, 'Service retrieved successfully')
     );
  
 };
@@ -146,7 +146,7 @@ export const updateServiceHandler = async (
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(id)) {
       res.status(400).json(
-        buildErrorResponse("Invalid service ID format")
+        buildErrorResponse('Invalid service ID format')
       );
       return;
     }
@@ -162,7 +162,7 @@ export const updateServiceHandler = async (
         updateData.min_price > updateData.max_price
       ) {
         res.status(400).json(
-          buildErrorResponse("Invalid price range. Prices must be positive, and min_price must be less than or equal to max_price")
+          buildErrorResponse('Invalid price range. Prices must be positive, and min_price must be less than or equal to max_price')
         );
         return;
       }
@@ -172,13 +172,13 @@ export const updateServiceHandler = async (
 
     if (!updatedService) {
       res.status(404).json(
-        buildErrorResponse("Service not found")
+        buildErrorResponse('Service not found')
       );
       return;
     }
 
     res.status(200).json(
-      buildSuccessResponse(updatedService, "Service updated successfully")
+      buildSuccessResponse(updatedService, 'Service updated successfully')
     );
   
 };
@@ -197,7 +197,7 @@ export const deleteServiceHandler = async (
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(id)) {
       res.status(400).json(
-        buildErrorResponse("Invalid service ID format")
+        buildErrorResponse('Invalid service ID format')
       );
       return;
     }
@@ -206,13 +206,13 @@ export const deleteServiceHandler = async (
 
     if (!deleted) {
       res.status(404).json(
-        buildErrorResponse("Service not found")
+        buildErrorResponse('Service not found')
       );
       return;
     }
 
     res.status(200).json(
-      buildSuccessResponseWithoutData("Service deleted successfully")
+      buildSuccessResponseWithoutData('Service deleted successfully')
     );
  
 };

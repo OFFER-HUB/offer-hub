@@ -13,7 +13,7 @@ try {
   fs.mkdirSync(path.resolve(LOG_DIR), { recursive: true });
 } catch (e) {
   // Último recurso: no abortar arranque por logging
-  // eslint-disable-next-line no-console
+   
   console.error('Failed to ensure log dir:', e);
 }
 

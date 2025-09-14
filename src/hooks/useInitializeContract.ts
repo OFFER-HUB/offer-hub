@@ -12,8 +12,8 @@
 import {
   useInitializeEscrow,
   useSendTransaction,
-} from "@trustless-work/escrow";
-import { InitializeContractPayload } from "../types/escrow.types";
+} from '@trustless-work/escrow';
+import { InitializeContractPayload } from '../types/escrow.types';
 
 /**
  * When you want to create a contract between client and freelancer, you need to deploy an escrow contract by using this hook. You just need to pass the payload.

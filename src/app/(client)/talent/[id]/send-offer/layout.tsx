@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { OfferFormProvider } from "@/components/send-offer/OfferFormContext";
+import { OfferFormProvider } from '@/components/send-offer/OfferFormContext';
 
 export default function SendOfferLayout({
   children,

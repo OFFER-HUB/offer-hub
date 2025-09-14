@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -36,8 +36,8 @@ const ContractCompletionActions: React.FC<ContractCompletionActionsProps> = ({
   // Prevent duplicate reviews (in a real implementation, this would check the backend)
   if (hasSubmittedReview) {
     return (
-      <div className="flex items-center space-x-2 text-sm text-gray-500">
-        <Star className="h-4 w-4 text-yellow-400" />
+      <div className='flex items-center space-x-2 text-sm text-gray-500'>
+        <Star className='h-4 w-4 text-yellow-400' />
         <span>Review submitted</span>
       </div>
     );
@@ -80,23 +80,23 @@ const ContractCompletionActions: React.FC<ContractCompletionActionsProps> = ({
   const { buttonText, description } = getRoleSpecificText();
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-      <div className="flex items-start justify-between">
+    <div className='border border-gray-200 rounded-lg p-4 bg-gray-50'>
+      <div className='flex items-start justify-between'>
         <div>
-          <h3 className="text-sm font-medium text-gray-900 mb-1">
+          <h3 className='text-sm font-medium text-gray-900 mb-1'>
             Contract Completed
           </h3>
-          <p className="text-xs text-gray-600 mb-3">
+          <p className='text-xs text-gray-600 mb-3'>
             {description}
           </p>
         </div>
-        <div className="flex space-x-2">
+        <div className='flex space-x-2'>
           <Button
             onClick={handleOpenReviewModal}
-            size="sm"
-            className="flex items-center space-x-1"
+            size='sm'
+            className='flex items-center space-x-1'
           >
-            <Star className="h-4 w-4" />
+            <Star className='h-4 w-4' />
             <span>{buttonText}</span>
           </Button>
         </div>

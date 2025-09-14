@@ -1,4 +1,4 @@
-import WalletConnectPage from "../../components/onboarding/ConnectWalletPage";
+import WalletConnectPage from '../../components/onboarding/ConnectWalletPage';
 
 export default function WalletPage() {
    return <WalletConnectPage />;

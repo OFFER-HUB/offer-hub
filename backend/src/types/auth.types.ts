@@ -1,6 +1,6 @@
-import { User } from "./user.types";
+import { User } from './user.types';
 
-export type UserRole = "freelancer" | "client" | "admin" | "moderator";
+export type UserRole = 'freelancer' | 'client' | 'admin' | 'moderator';
 
 export interface JWTPayload {
   user_id: string;

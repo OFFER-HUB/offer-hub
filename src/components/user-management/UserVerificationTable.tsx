@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useFilteredUsers } from "@/hooks/useFilteredUsers";
-import NotificationModal from "./notify";
-import { EditUserModal, UserCards, UserFilters, UserTable, ViewUserModal } from "./components";
+import { useFilteredUsers } from '@/hooks/useFilteredUsers';
+import NotificationModal from './notify';
+import { EditUserModal, UserCards, UserFilters, UserTable, ViewUserModal } from './components';
 
 export default function UserVerificationTable() {
   const {
@@ -33,7 +33,7 @@ export default function UserVerificationTable() {
   } = useFilteredUsers();
 
   return (
-    <div className="space-y-4 md:space-y-6 mb-3">
+    <div className='space-y-4 md:space-y-6 mb-3'>
       <UserFilters
         roleFilter={roleFilter}
         setRoleFilter={setRoleFilter}

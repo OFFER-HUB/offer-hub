@@ -1,15 +1,15 @@
-"use client"
-import { useState, useRef } from "react"
-import type React from "react"
+'use client'
+import { useState, useRef } from 'react'
+import type React from 'react'
 
 export function useMessages(onSendMessage: (content: string, file?: File) => void) {
-  const [newMessage, setNewMessage] = useState("")
+  const [newMessage, setNewMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
       onSendMessage(newMessage)
-      setNewMessage("")
+      setNewMessage('')
     }
   }
 
@@ -21,7 +21,7 @@ export function useMessages(onSendMessage: (content: string, file?: File) => voi
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
     }

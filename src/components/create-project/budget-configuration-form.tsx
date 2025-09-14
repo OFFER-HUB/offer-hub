@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface BudgetConfigurationFormProps {
   onNext: () => void;
@@ -21,7 +21,7 @@ export function BudgetConfigurationForm({ onNext, onBack }: BudgetConfigurationF
 
   const handleNext = () => {
     if (budget <= 0) {
-      alert("Please set a valid budget amount");
+      alert('Please set a valid budget amount');
       return;
     }
     onNext();
@@ -30,41 +30,41 @@ export function BudgetConfigurationForm({ onNext, onBack }: BudgetConfigurationF
   const canProceed = budget > 0;
 
   return (
-    <Card className="w-full max-w-2xl min-h-[500px]">
-      <CardHeader className="text-center py-8">
-        <CardTitle className="text-2xl font-semibold text-gray-900">
+    <Card className='w-full max-w-2xl min-h-[500px]'>
+      <CardHeader className='text-center py-8'>
+        <CardTitle className='text-2xl font-semibold text-gray-900'>
           Budget
         </CardTitle>
-        <p className="text-sm text-gray-600">
+        <p className='text-sm text-gray-600'>
           Set your preferred budget for this project
         </p>
       </CardHeader>
-      <CardContent className="space-y-8 flex flex-col justify-center flex-1">
-        <div className="space-y-4">
-          <Label htmlFor="budget" className="text-sm font-medium text-gray-700">
+      <CardContent className='space-y-8 flex flex-col justify-center flex-1'>
+        <div className='space-y-4'>
+          <Label htmlFor='budget' className='text-sm font-medium text-gray-700'>
             What is your estimate for this project
           </Label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+          <div className='relative'>
+            <span className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium'>
               $
             </span>
             <Input
-              id="budget"
-              type="number"
-              value={budget || ""}
+              id='budget'
+              type='number'
+              value={budget || ''}
               onChange={handleBudgetChange}
-              placeholder="0"
-              className="pl-8 text-lg font-semibold"
-              min="0"
-              step="0.01"
+              placeholder='0'
+              className='pl-8 text-lg font-semibold'
+              min='0'
+              step='0.01'
             />
           </div>
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex flex-col gap-4 pt-8 items-center">
+        <div className='flex flex-col gap-4 pt-8 items-center'>
           <Button 
-            className="bg-gray-800 hover:bg-gray-900 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className='bg-gray-800 hover:bg-gray-900 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed'
             style={{
               width: '361px',
               height: '44px',
@@ -80,7 +80,7 @@ export function BudgetConfigurationForm({ onNext, onBack }: BudgetConfigurationF
           </Button>
           
           <Button 
-            className="text-white font-medium hover:bg-opacity-90"
+            className='text-white font-medium hover:bg-opacity-90'
             style={{
               width: '361px',
               height: '44px',

@@ -88,30 +88,30 @@ export default function ResponseCreation({
   const qualityScore = calculateQualityScore();
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <MessageSquare className="w-5 h-5" />
+    <Card className='w-full'>
+      <CardHeader className='pb-3'>
+        <div className='flex items-center justify-between'>
+          <CardTitle className='text-lg font-semibold flex items-center gap-2'>
+            <MessageSquare className='w-5 h-5' />
             Write Response
           </CardTitle>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             onClick={onCancel}
             disabled={isLoading}
           >
-            <X className="w-4 h-4" />
+            <X className='w-4 h-4' />
           </Button>
         </div>
       </CardHeader>
       
-      <CardContent className="space-y-4">
+      <CardContent className='space-y-4'>
         {/* Guidelines Summary */}
         {guidelines && (
           <Alert>
-            <Lightbulb className="h-4 w-4" />
-            <AlertDescription className="text-sm">
+            <Lightbulb className='h-4 w-4' />
+            <AlertDescription className='text-sm'>
               <strong>Quick Tips:</strong> {guidelines.professional_tone}. 
               Keep responses between {guidelines.validation_rules.min_length}-{guidelines.validation_rules.max_length} characters.
             </AlertDescription>
@@ -119,24 +119,24 @@ export default function ResponseCreation({
         )}
 
         {/* Response Textarea */}
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Share your perspective on this review. Be professional, constructive, and specific..."
-            className="min-h-[120px] resize-none"
+            placeholder='Share your perspective on this review. Be professional, constructive, and specific...'
+            className='min-h-[120px] resize-none'
             disabled={isLoading}
           />
           
           {/* Character Count and Quality Score */}
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
+          <div className='flex items-center justify-between text-sm'>
+            <div className='flex items-center gap-4'>
               <span className={getCharacterCountColor()}>
                 {content.length}/{RESPONSE_VALIDATION.MAX_LENGTH}
               </span>
               {content.trim() && (
-                <div className="flex items-center gap-1">
-                  <span className="text-gray-500">Quality:</span>
+                <div className='flex items-center gap-1'>
+                  <span className='text-gray-500'>Quality:</span>
                   <span className={getQualityColor(qualityScore)}>
                     {qualityScore}%
                   </span>
@@ -145,8 +145,8 @@ export default function ResponseCreation({
             </div>
             
             {content.trim() && (
-              <div className="flex items-center gap-1 text-gray-500">
-                <Clock className="w-4 h-4" />
+              <div className='flex items-center gap-1 text-gray-500'>
+                <Clock className='w-4 h-4' />
                 <span>
                   {content.length < RESPONSE_VALIDATION.OPTIMAL_MIN_LENGTH 
                     ? 'Too short' 
@@ -163,17 +163,17 @@ export default function ResponseCreation({
           {content.trim() && (
             <Progress 
               value={qualityScore} 
-              className="h-2"
+              className='h-2'
             />
           )}
         </div>
 
         {/* Validation Errors */}
         {errors.length > 0 && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
+          <Alert variant='destructive'>
+            <AlertCircle className='h-4 w-4' />
             <AlertDescription>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className='list-disc list-inside space-y-1'>
                 {errors.map((error, index) => (
                   <li key={index}>{error}</li>
                 ))}
@@ -185,11 +185,11 @@ export default function ResponseCreation({
         {/* Quality Suggestions */}
         {showSuggestions && content.trim() && (
           <Alert>
-            <Lightbulb className="h-4 w-4" />
+            <Lightbulb className='h-4 w-4' />
             <AlertDescription>
-              <div className="space-y-2">
-                <p className="font-medium">Suggestions to improve your response:</p>
-                <ul className="list-disc list-inside space-y-1 text-sm">
+              <div className='space-y-2'>
+                <p className='font-medium'>Suggestions to improve your response:</p>
+                <ul className='list-disc list-inside space-y-1 text-sm'>
                   {content.length < RESPONSE_VALIDATION.OPTIMAL_MIN_LENGTH && (
                     <li>Add more detail to make your response more helpful</li>
                   )}
@@ -210,26 +210,26 @@ export default function ResponseCreation({
 
         {/* Example Responses */}
         {guidelines && !content.trim() && (
-          <div className="space-y-3">
-            <h4 className="font-medium text-sm text-gray-700">Example responses:</h4>
+          <div className='space-y-3'>
+            <h4 className='font-medium text-sm text-gray-700'>Example responses:</h4>
             
-            <div className="space-y-2">
-              <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+            <div className='space-y-2'>
+              <div className='p-3 bg-green-50 border border-green-200 rounded-lg'>
+                <div className='flex items-start gap-2'>
+                  <CheckCircle className='w-4 h-4 text-green-600 mt-0.5' />
                   <div>
-                    <p className="text-sm font-medium text-green-800">Good example:</p>
-                    <p className="text-sm text-green-700 italic">"{guidelines.examples.good}"</p>
+                    <p className='text-sm font-medium text-green-800'>Good example:</p>
+                    <p className='text-sm text-green-700 italic'>"{guidelines.examples.good}"</p>
                   </div>
                 </div>
               </div>
               
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-red-600 mt-0.5" />
+              <div className='p-3 bg-red-50 border border-red-200 rounded-lg'>
+                <div className='flex items-start gap-2'>
+                  <AlertCircle className='w-4 h-4 text-red-600 mt-0.5' />
                   <div>
-                    <p className="text-sm font-medium text-red-800">Avoid this:</p>
-                    <p className="text-sm text-red-700 italic">"{guidelines.examples.bad}"</p>
+                    <p className='text-sm font-medium text-red-800'>Avoid this:</p>
+                    <p className='text-sm text-red-700 italic'>"{guidelines.examples.bad}"</p>
                   </div>
                 </div>
               </div>
@@ -238,11 +238,11 @@ export default function ResponseCreation({
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-4">
-          <div className="flex items-center gap-2">
+        <div className='flex items-center justify-between pt-4'>
+          <div className='flex items-center gap-2'>
             {content.trim() && (
               <Badge 
-                variant="outline" 
+                variant='outline' 
                 className={`text-xs ${
                   qualityScore >= 80 ? 'border-green-500 text-green-700' :
                   qualityScore >= 60 ? 'border-yellow-500 text-yellow-700' :
@@ -256,9 +256,9 @@ export default function ResponseCreation({
             )}
           </div>
           
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={onCancel}
               disabled={isLoading}
             >
@@ -267,16 +267,16 @@ export default function ResponseCreation({
             <Button
               onClick={handleSubmit}
               disabled={isLoading || errors.length > 0 || !content.trim()}
-              className="bg-blue-600 hover:bg-blue-700"
+              className='bg-blue-600 hover:bg-blue-700'
             >
               {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className='flex items-center gap-2'>
+                  <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
                   Submitting...
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Send className="w-4 h-4" />
+                <div className='flex items-center gap-2'>
+                  <Send className='w-4 h-4' />
                   Submit Response
                 </div>
               )}

@@ -34,6 +34,9 @@ module.exports = [
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': 'off',
       'no-undef': 'off',
+      // Quote consistency rules
+      'quotes': ['error', 'single'],
+      'quote-props': ['error', 'as-needed']
     },
   },
   {

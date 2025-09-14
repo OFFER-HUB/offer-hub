@@ -1,31 +1,31 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   createServiceRequestHandler,
   getRequestsForFreelancerHandler,
   updateRequestStatusHandler,
-} from "@/controllers/service-request.controller";
-import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+} from '@/controllers/service-request.controller';
+import { authorizeRoles, verifyToken } from '@/middlewares/auth.middleware';
 
 const router = Router();
 
 router.post(
-  "/",
+  '/',
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles('client', 'admin'),
   createServiceRequestHandler
 );
 
 router.get(
-  "/:freelancerId",
+  '/:freelancerId',
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles('freelancer', 'admin'),
   getRequestsForFreelancerHandler
 );
 
 router.patch(
-  "/:id",
+  '/:id',
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles('freelancer', 'admin'),
   updateRequestStatusHandler
 );
 

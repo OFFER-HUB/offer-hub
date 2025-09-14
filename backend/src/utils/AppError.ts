@@ -1,6 +1,6 @@
-import express from "express";
-import { Request, Response, NextFunction } from "express";
-import { ValidationError as ValidationErrorType } from "./validation";
+import express from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { ValidationError as ValidationErrorType } from './validation';
 
 // Base AppError class
 export class AppError extends Error {
@@ -145,7 +145,7 @@ export function ErrorHandler(
 	_next: NextFunction
 ) {
 	let statusCode = 500;
-	let message = "Internal server error";
+	let message = 'Internal server error';
 	let errorCode = 'INTERNAL_SERVER_ERROR';
 	let details: any = undefined;
 

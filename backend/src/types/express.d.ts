@@ -1,4 +1,4 @@
-import { AuthUser, RefreshTokenRecord } from "./auth.types";
+import { AuthUser, RefreshTokenRecord } from './auth.types';
 
 declare global {
   namespace Express {

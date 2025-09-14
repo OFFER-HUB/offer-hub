@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import OnboardingHeader from '@/components/layout/OnboardingHeader';
 import { TIMEOUTS } from '@/constants/magic-numbers';
@@ -111,12 +111,12 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onWalletConnected }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f6f6]">
+    <div className='min-h-screen bg-[#f6f6f6]'>
       <OnboardingHeader />
 
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-8">
+      <div className='flex items-center justify-center min-h-[calc(100vh-80px)] p-8'>
         <div 
-          className="bg-white"
+          className='bg-white'
           style={{
             width: '600px',
             height: '700px',
@@ -129,9 +129,9 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onWalletConnected }) => {
             justifyContent: 'center'
           }}
         >
-          <div className="text-center w-full">
+          <div className='text-center w-full'>
             <h1 
-              className="mb-2"
+              className='mb-2'
               style={{
                 fontWeight: 700,
                 fontSize: '24px',
@@ -157,8 +157,8 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onWalletConnected }) => {
             </p>
           </div>
 
-          <div className="w-full flex flex-col items-center">
-            <div className="space-y-3 w-full flex flex-col items-center">
+          <div className='w-full flex flex-col items-center'>
+            <div className='space-y-3 w-full flex flex-col items-center'>
               {walletOptions.map((wallet) => {
                 const getBorderColor = (walletId: string) => {
                   switch (walletId) {
@@ -179,7 +179,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onWalletConnected }) => {
                     key={wallet.id}
                     onClick={() => handleWalletConnect(wallet.id)}
                     disabled={isConnecting !== null}
-                    className="transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative"
+                    className='transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative'
                     style={{
                       width: '100%',
                       maxWidth: '372px',
@@ -193,7 +193,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onWalletConnected }) => {
                       backgroundColor: 'white'
                     }}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className='flex items-center space-x-3'>
                       <img 
                         src={wallet.icon} 
                         alt={wallet.name} 
@@ -205,17 +205,17 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onWalletConnected }) => {
                       />
                     </div>
                     
-                    <div className="flex-1 flex justify-center">
-                      <div className="font-semibold text-gray-900">
+                    <div className='flex-1 flex justify-center'>
+                      <div className='font-semibold text-gray-900'>
                         {wallet.name}
                       </div>
                     </div>
                     
                     {isConnecting === wallet.id && (
-                      <div className="flex items-center">
-                        <svg className="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <div className='flex items-center'>
+                        <svg className='animate-spin h-5 w-5 text-gray-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+                          <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                          <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path>
                         </svg>
                       </div>
                     )}

@@ -1,21 +1,21 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Star, ChevronDown, ChevronUp, X, RefreshCw, Clock, DollarSign, Globe, Award, Briefcase } from "lucide-react"
-import { ServiceFilters } from "@/types/service.types"
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { Card, CardContent } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
+import { Switch } from '@/components/ui/switch'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Star, ChevronDown, ChevronUp, X, RefreshCw, Clock, DollarSign, Globe, Award, Briefcase } from 'lucide-react'
+import { ServiceFilters } from '@/types/service.types'
 
 interface TalentFiltersProps {
   onFiltersChange?: (filters: ServiceFilters) => void;
@@ -28,7 +28,7 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
   const [availability, setAvailability] = useState<string[]>([])
   const [languages, setLanguages] = useState<string[]>([])
   const [skills, setSkills] = useState<string[]>([])
-  const [skillInput, setSkillInput] = useState("")
+  const [skillInput, setSkillInput] = useState('')
   const [isOnlineNow, setIsOnlineNow] = useState(false)
   const [hasVerifiedId, setHasVerifiedId] = useState(false)
   const [topRatedOnly, setTopRatedOnly] = useState(false)
@@ -57,9 +57,9 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
       // Map category back to experience level if present
       if (currentFilters.category) {
         const categoryMap: Record<string, string> = {
-          'development': 'entry',
-          'design': 'intermediate',
-          'business': 'expert'
+          development: 'entry',
+          design: 'intermediate',
+          business: 'expert'
         }
         const experience = categoryMap[currentFilters.category]
         if (experience) {
@@ -90,9 +90,9 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
       if (experienceLevel.length > 0) {
         // Map experience levels to categories (this is a simplified mapping)
         const categoryMap: Record<string, string> = {
-          'entry': 'development',
-          'intermediate': 'design',
-          'expert': 'business'
+          entry: 'development',
+          intermediate: 'design',
+          expert: 'business'
         };
         
         // Use the first selected experience level to determine category
@@ -153,7 +153,7 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
   const addSkill = () => {
     if (skillInput.trim() && !skills.includes(skillInput.trim())) {
       setSkills([...skills, skillInput.trim()])
-      setSkillInput("")
+      setSkillInput('')
     }
   }
 
@@ -162,7 +162,7 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault()
       addSkill()
     }
@@ -205,51 +205,51 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
   }, [debouncedNotifyParent])
 
   const SectionHeader = ({ title, section, icon }: { title: string; section: string; icon: React.ReactNode }) => (
-    <div className="flex items-center justify-between cursor-pointer py-2" onClick={() => toggleSection(section)}>
-      <div className="flex items-center">
+    <div className='flex items-center justify-between cursor-pointer py-2' onClick={() => toggleSection(section)}>
+      <div className='flex items-center'>
         {icon}
-        <h3 className="font-medium text-[#002333] ml-2">{title}</h3>
+        <h3 className='font-medium text-[#002333] ml-2'>{title}</h3>
       </div>
       {collapsedSections[section] ? (
-        <ChevronUp className="h-4 w-4 text-[#002333]/70" />
+        <ChevronUp className='h-4 w-4 text-[#002333]/70' />
       ) : (
-        <ChevronDown className="h-4 w-4 text-[#002333]/70" />
+        <ChevronDown className='h-4 w-4 text-[#002333]/70' />
       )}
     </div>
   )
 
   return (
-    <Card className="h-full">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-[#002333]">Filters</h2>
-          <Button variant="ghost" size="sm" onClick={resetFilters} className="h-8 text-[#15949C]">
-            <RefreshCw className="h-3 w-3 mr-2" />
+    <Card className='h-full'>
+      <CardContent className='p-6'>
+        <div className='flex items-center justify-between mb-6'>
+          <h2 className='text-lg font-bold text-[#002333]'>Filters</h2>
+          <Button variant='ghost' size='sm' onClick={resetFilters} className='h-8 text-[#15949C]'>
+            <RefreshCw className='h-3 w-3 mr-2' />
             Reset
           </Button>
         </div>
 
-        <ScrollArea className="h-[calc(100vh-250px)]">
-          <div className="space-y-6 pr-4">
+        <ScrollArea className='h-[calc(100vh-250px)]'>
+          <div className='space-y-6 pr-4'>
             {/* Price Range */}
-            <div className="space-y-4">
+            <div className='space-y-4'>
               <SectionHeader
-                title="Hourly Rate"
-                section="price"
-                icon={<DollarSign className="h-4 w-4 text-[#15949C]" />}
+                title='Hourly Rate'
+                section='price'
+                icon={<DollarSign className='h-4 w-4 text-[#15949C]' />}
               />
 
               {!collapsedSections.price && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="mt-4 px-2">
-                    <div className="flex justify-between mb-2">
-                      <span className="text-sm text-[#002333]/70">${priceRange[0]}</span>
-                      <span className="text-sm text-[#002333]/70">${priceRange[1]}+</span>
+                  <div className='mt-4 px-2'>
+                    <div className='flex justify-between mb-2'>
+                      <span className='text-sm text-[#002333]/70'>${priceRange[0]}</span>
+                      <span className='text-sm text-[#002333]/70'>${priceRange[1]}+</span>
                     </div>
                     <Slider
                       value={priceRange}
@@ -257,26 +257,26 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
                       max={150}
                       step={5}
                       onValueChange={handlePriceRangeChange}
-                      className="my-4"
+                      className='my-4'
                     />
-                    <div className="flex justify-between items-center gap-4">
-                      <div className="relative flex-1">
-                        <DollarSign className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#002333]/50" />
+                    <div className='flex justify-between items-center gap-4'>
+                      <div className='relative flex-1'>
+                        <DollarSign className='absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#002333]/50' />
                         <Input
-                          type="number"
+                          type='number'
                           value={priceRange[0]}
                           onChange={(e) => handlePriceRangeChange([Number.parseInt(e.target.value) || 5, priceRange[1]])}
-                          className="pl-8"
+                          className='pl-8'
                         />
                       </div>
-                      <span className="text-[#002333]/50">to</span>
-                      <div className="relative flex-1">
-                        <DollarSign className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#002333]/50" />
+                      <span className='text-[#002333]/50'>to</span>
+                      <div className='relative flex-1'>
+                        <DollarSign className='absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#002333]/50' />
                         <Input
-                          type="number"
+                          type='number'
                           value={priceRange[1]}
                           onChange={(e) => handlePriceRangeChange([priceRange[0], Number.parseInt(e.target.value) || 150])}
-                          className="pl-8"
+                          className='pl-8'
                         />
                       </div>
                     </div>
@@ -288,48 +288,48 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
             <Separator />
 
             {/* Experience Level */}
-            <div className="space-y-4">
+            <div className='space-y-4'>
               <SectionHeader
-                title="Experience Level"
-                section="experience"
-                icon={<Briefcase className="h-4 w-4 text-[#15949C]" />}
+                title='Experience Level'
+                section='experience'
+                icon={<Briefcase className='h-4 w-4 text-[#15949C]' />}
               />
 
               {!collapsedSections.experience && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="space-y-3 mt-2">
-                    <div className="flex items-center space-x-2">
+                  <div className='space-y-3 mt-2'>
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="entry"
-                        checked={experienceLevel.includes("entry")}
-                        onCheckedChange={() => toggleExperienceLevel("entry")}
+                        id='entry'
+                        checked={experienceLevel.includes('entry')}
+                        onCheckedChange={() => toggleExperienceLevel('entry')}
                       />
-                      <Label htmlFor="entry" className="cursor-pointer">
+                      <Label htmlFor='entry' className='cursor-pointer'>
                         Entry Level
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="intermediate"
-                        checked={experienceLevel.includes("intermediate")}
-                        onCheckedChange={() => toggleExperienceLevel("intermediate")}
+                        id='intermediate'
+                        checked={experienceLevel.includes('intermediate')}
+                        onCheckedChange={() => toggleExperienceLevel('intermediate')}
                       />
-                      <Label htmlFor="intermediate" className="cursor-pointer">
+                      <Label htmlFor='intermediate' className='cursor-pointer'>
                         Intermediate
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="expert"
-                        checked={experienceLevel.includes("expert")}
-                        onCheckedChange={() => toggleExperienceLevel("expert")}
+                        id='expert'
+                        checked={experienceLevel.includes('expert')}
+                        onCheckedChange={() => toggleExperienceLevel('expert')}
                       />
-                      <Label htmlFor="expert" className="cursor-pointer">
+                      <Label htmlFor='expert' className='cursor-pointer'>
                         Expert
                       </Label>
                     </div>
@@ -341,48 +341,48 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
             <Separator />
 
             {/* Availability */}
-            <div className="space-y-4">
+            <div className='space-y-4'>
               <SectionHeader
-                title="Availability"
-                section="availability"
-                icon={<Clock className="h-4 w-4 text-[#15949C]" />}
+                title='Availability'
+                section='availability'
+                icon={<Clock className='h-4 w-4 text-[#15949C]' />}
               />
 
               {!collapsedSections.availability && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="space-y-3 mt-2">
-                    <div className="flex items-center space-x-2">
+                  <div className='space-y-3 mt-2'>
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="hourly"
-                        checked={availability.includes("hourly")}
-                        onCheckedChange={() => toggleAvailability("hourly")}
+                        id='hourly'
+                        checked={availability.includes('hourly')}
+                        onCheckedChange={() => toggleAvailability('hourly')}
                       />
-                      <Label htmlFor="hourly" className="cursor-pointer">
+                      <Label htmlFor='hourly' className='cursor-pointer'>
                         Hourly
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="part-time"
-                        checked={availability.includes("part-time")}
-                        onCheckedChange={() => toggleAvailability("part-time")}
+                        id='part-time'
+                        checked={availability.includes('part-time')}
+                        onCheckedChange={() => toggleAvailability('part-time')}
                       />
-                      <Label htmlFor="part-time" className="cursor-pointer">
+                      <Label htmlFor='part-time' className='cursor-pointer'>
                         Part-time (20hrs/week)
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="full-time"
-                        checked={availability.includes("full-time")}
-                        onCheckedChange={() => toggleAvailability("full-time")}
+                        id='full-time'
+                        checked={availability.includes('full-time')}
+                        onCheckedChange={() => toggleAvailability('full-time')}
                       />
-                      <Label htmlFor="full-time" className="cursor-pointer">
+                      <Label htmlFor='full-time' className='cursor-pointer'>
                         Full-time (40hrs/week)
                       </Label>
                     </div>
@@ -394,68 +394,68 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
             <Separator />
 
             {/* Languages */}
-            <div className="space-y-4">
+            <div className='space-y-4'>
               <SectionHeader
-                title="Languages"
-                section="languages"
-                icon={<Globe className="h-4 w-4 text-[#15949C]" />}
+                title='Languages'
+                section='languages'
+                icon={<Globe className='h-4 w-4 text-[#15949C]' />}
               />
 
               {!collapsedSections.languages && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="space-y-3 mt-2">
-                    <div className="flex items-center space-x-2">
+                  <div className='space-y-3 mt-2'>
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="english"
-                        checked={languages.includes("english")}
-                        onCheckedChange={() => toggleLanguage("english")}
+                        id='english'
+                        checked={languages.includes('english')}
+                        onCheckedChange={() => toggleLanguage('english')}
                       />
-                      <Label htmlFor="english" className="cursor-pointer">
+                      <Label htmlFor='english' className='cursor-pointer'>
                         English
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="spanish"
-                        checked={languages.includes("spanish")}
-                        onCheckedChange={() => toggleLanguage("spanish")}
+                        id='spanish'
+                        checked={languages.includes('spanish')}
+                        onCheckedChange={() => toggleLanguage('spanish')}
                       />
-                      <Label htmlFor="spanish" className="cursor-pointer">
+                      <Label htmlFor='spanish' className='cursor-pointer'>
                         Spanish
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="french"
-                        checked={languages.includes("french")}
-                        onCheckedChange={() => toggleLanguage("french")}
+                        id='french'
+                        checked={languages.includes('french')}
+                        onCheckedChange={() => toggleLanguage('french')}
                       />
-                      <Label htmlFor="french" className="cursor-pointer">
+                      <Label htmlFor='french' className='cursor-pointer'>
                         French
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="german"
-                        checked={languages.includes("german")}
-                        onCheckedChange={() => toggleLanguage("german")}
+                        id='german'
+                        checked={languages.includes('german')}
+                        onCheckedChange={() => toggleLanguage('german')}
                       />
-                      <Label htmlFor="german" className="cursor-pointer">
+                      <Label htmlFor='german' className='cursor-pointer'>
                         German
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className='flex items-center space-x-2'>
                       <Checkbox
-                        id="chinese"
-                        checked={languages.includes("chinese")}
-                        onCheckedChange={() => toggleLanguage("chinese")}
+                        id='chinese'
+                        checked={languages.includes('chinese')}
+                        onCheckedChange={() => toggleLanguage('chinese')}
                       />
-                      <Label htmlFor="chinese" className="cursor-pointer">
+                      <Label htmlFor='chinese' className='cursor-pointer'>
                         Chinese
                       </Label>
                     </div>
@@ -467,84 +467,84 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
             <Separator />
 
             {/* Skills */}
-            <div className="space-y-4">
-              <SectionHeader title="Skills" section="skills" icon={<Award className="h-4 w-4 text-[#15949C]" />} />
+            <div className='space-y-4'>
+              <SectionHeader title='Skills' section='skills' icon={<Award className='h-4 w-4 text-[#15949C]' />} />
 
               {!collapsedSections.skills && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="mt-2">
-                    <div className="flex gap-2 mb-3">
+                  <div className='mt-2'>
+                    <div className='flex gap-2 mb-3'>
                       <Input
-                        placeholder="Add a skill..."
+                        placeholder='Add a skill...'
                         value={skillInput}
                         onChange={(e) => setSkillInput(e.target.value)}
                         onKeyDown={handleKeyDown}
                       />
-                      <Button size="sm" onClick={addSkill} className="bg-[#15949C] hover:bg-[#15949C]/90">
+                      <Button size='sm' onClick={addSkill} className='bg-[#15949C] hover:bg-[#15949C]/90'>
                         Add
                       </Button>
                     </div>
 
                     {skills.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-2">
+                      <div className='flex flex-wrap gap-2 mt-2'>
                         {skills.map((skill) => (
-                          <Badge key={skill} className="bg-[#DEEFE7] text-[#002333] hover:bg-[#DEEFE7]/80">
+                          <Badge key={skill} className='bg-[#DEEFE7] text-[#002333] hover:bg-[#DEEFE7]/80'>
                             {skill}
                             <button
-                              type="button"
+                              type='button'
                               onClick={() => removeSkill(skill)}
-                              className="ml-1 rounded-full hover:bg-[#15949C]/10"
+                              className='ml-1 rounded-full hover:bg-[#15949C]/10'
                             >
-                              <X className="h-3 w-3" />
+                              <X className='h-3 w-3' />
                             </button>
                           </Badge>
                         ))}
                       </div>
                     )}
 
-                    <div className="mt-4">
-                      <p className="text-sm text-[#002333]/70 mb-2">Popular skills:</p>
-                      <div className="flex flex-wrap gap-2">
+                    <div className='mt-4'>
+                      <p className='text-sm text-[#002333]/70 mb-2'>Popular skills:</p>
+                      <div className='flex flex-wrap gap-2'>
                         <Badge
-                          className="bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer"
+                          className='bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer'
                           onClick={() => {
-                            if (!skills.includes("React")) {
-                              setSkills([...skills, "React"])
+                            if (!skills.includes('React')) {
+                              setSkills([...skills, 'React'])
                             }
                           }}
                         >
                           React
                         </Badge>
                         <Badge
-                          className="bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer"
+                          className='bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer'
                           onClick={() => {
-                            if (!skills.includes("JavaScript")) {
-                              setSkills([...skills, "JavaScript"])
+                            if (!skills.includes('JavaScript')) {
+                              setSkills([...skills, 'JavaScript'])
                             }
                           }}
                         >
                           JavaScript
                         </Badge>
                         <Badge
-                          className="bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer"
+                          className='bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer'
                           onClick={() => {
-                            if (!skills.includes("UI/UX Design")) {
-                              setSkills([...skills, "UI/UX Design"])
+                            if (!skills.includes('UI/UX Design')) {
+                              setSkills([...skills, 'UI/UX Design'])
                             }
                           }}
                         >
                           UI/UX Design
                         </Badge>
                         <Badge
-                          className="bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer"
+                          className='bg-gray-100 text-[#002333] hover:bg-gray-200 cursor-pointer'
                           onClick={() => {
-                            if (!skills.includes("Python")) {
-                              setSkills([...skills, "Python"])
+                            if (!skills.includes('Python')) {
+                              setSkills([...skills, 'Python'])
                             }
                           }}
                         >
@@ -560,36 +560,36 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
             <Separator />
 
             {/* Other Filters */}
-            <div className="space-y-4">
-              <SectionHeader title="Other Filters" section="other" icon={<Star className="h-4 w-4 text-[#15949C]" />} />
+            <div className='space-y-4'>
+              <SectionHeader title='Other Filters' section='other' icon={<Star className='h-4 w-4 text-[#15949C]' />} />
 
               {!collapsedSections.other && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="space-y-4 mt-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="online-now" className="cursor-pointer">
+                  <div className='space-y-4 mt-2'>
+                    <div className='flex items-center justify-between'>
+                      <Label htmlFor='online-now' className='cursor-pointer'>
                         Online now
                       </Label>
-                      <Switch id="online-now" checked={isOnlineNow} onCheckedChange={setIsOnlineNow} />
+                      <Switch id='online-now' checked={isOnlineNow} onCheckedChange={setIsOnlineNow} />
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="verified-id" className="cursor-pointer">
+                    <div className='flex items-center justify-between'>
+                      <Label htmlFor='verified-id' className='cursor-pointer'>
                         Verified ID
                       </Label>
-                      <Switch id="verified-id" checked={hasVerifiedId} onCheckedChange={setHasVerifiedId} />
+                      <Switch id='verified-id' checked={hasVerifiedId} onCheckedChange={setHasVerifiedId} />
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="top-rated" className="cursor-pointer">
+                    <div className='flex items-center justify-between'>
+                      <Label htmlFor='top-rated' className='cursor-pointer'>
                         Top Rated Only
                       </Label>
-                      <Switch id="top-rated" checked={topRatedOnly} onCheckedChange={setTopRatedOnly} />
+                      <Switch id='top-rated' checked={topRatedOnly} onCheckedChange={setTopRatedOnly} />
                     </div>
                   </div>
                 </motion.div>
@@ -598,8 +598,8 @@ export default function TalentFilters({ onFiltersChange, currentFilters }: Talen
           </div>
         </ScrollArea>
 
-        <div className="mt-6 pt-4 border-t">
-          <Button className="w-full bg-[#15949C] hover:bg-[#15949C]/90">Apply Filters</Button>
+        <div className='mt-6 pt-4 border-t'>
+          <Button className='w-full bg-[#15949C] hover:bg-[#15949C]/90'>Apply Filters</Button>
         </div>
       </CardContent>
     </Card>

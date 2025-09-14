@@ -125,14 +125,14 @@ export default function TestBackendPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+    <div className='min-h-screen bg-gray-50 py-8'>
+      <div className='max-w-4xl mx-auto px-4'>
+        <div className='bg-white rounded-lg shadow-lg p-6'>
+          <h1 className='text-3xl font-bold text-gray-900 mb-6'>
             🧪 Backend API Testing
           </h1>
           
-          <div className="mb-6">
+          <div className='mb-6'>
             <button
               onClick={runTests}
               disabled={isRunning}
@@ -146,11 +146,11 @@ export default function TestBackendPage() {
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {results.map((result, index) => (
-              <div key={index} className="border rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
+              <div key={index} className='border rounded-lg p-4'>
+                <div className='flex items-center justify-between mb-2'>
+                  <h3 className='text-lg font-semibold flex items-center gap-2'>
                     <span>{getStatusIcon(result.status)}</span>
                     {result.endpoint}
                   </h3>
@@ -160,30 +160,30 @@ export default function TestBackendPage() {
                 </div>
 
                 {result.responseTime && (
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className='text-sm text-gray-600 mb-2'>
                     Response time: {result.responseTime}ms
                   </p>
                 )}
 
                 {result.error && (
-                  <div className="bg-red-50 border border-red-200 rounded p-3 mb-2">
-                    <p className="text-red-800 font-medium">Error:</p>
-                    <p className="text-red-700">{result.error}</p>
+                  <div className='bg-red-50 border border-red-200 rounded p-3 mb-2'>
+                    <p className='text-red-800 font-medium'>Error:</p>
+                    <p className='text-red-700'>{result.error}</p>
                   </div>
                 )}
 
                 {result.data && (
-                  <div className="bg-green-50 border border-green-200 rounded p-3">
-                    <p className="text-green-800 font-medium mb-2">Response:</p>
-                    <pre className="text-green-700 text-sm overflow-auto">
+                  <div className='bg-green-50 border border-green-200 rounded p-3'>
+                    <p className='text-green-800 font-medium mb-2'>Response:</p>
+                    <pre className='text-green-700 text-sm overflow-auto'>
                       {JSON.stringify(result.data, null, 2)}
                     </pre>
                   </div>
                 )}
 
                 {result.status === 'loading' && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
-                    <p className="text-yellow-800">Testing endpoint...</p>
+                  <div className='bg-yellow-50 border border-yellow-200 rounded p-3'>
+                    <p className='text-yellow-800'>Testing endpoint...</p>
                   </div>
                 )}
               </div>
@@ -191,21 +191,21 @@ export default function TestBackendPage() {
           </div>
 
           {results.length === 0 && !isRunning && (
-            <div className="text-center py-8 text-gray-500">
+            <div className='text-center py-8 text-gray-500'>
               <p>Click "Run Tests" to test all backend endpoints</p>
             </div>
           )}
 
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2">📋 Test Endpoints:</h3>
-            <ul className="text-blue-800 space-y-1">
+          <div className='mt-8 p-4 bg-blue-50 rounded-lg'>
+            <h3 className='font-semibold text-blue-900 mb-2'>📋 Test Endpoints:</h3>
+            <ul className='text-blue-800 space-y-1'>
               {endpoints.map((endpoint, index) => (
-                <li key={index} className="text-sm">
+                <li key={index} className='text-sm'>
                   <strong>{endpoint.name}:</strong> {endpoint.url}
                 </li>
               ))}
             </ul>
-            <p className="text-blue-700 text-sm mt-2">
+            <p className='text-blue-700 text-sm mt-2'>
               <strong>Note:</strong> These URLs are proxied through Next.js to http://localhost:4000
             </p>
           </div>

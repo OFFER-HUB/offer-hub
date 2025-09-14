@@ -1,31 +1,31 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   createApplicationHandler,
   getApplicationsByProjectHandler,
   updateApplicationStatusHandler,
-} from "@/controllers/application.controller";
-import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+} from '@/controllers/application.controller';
+import { authorizeRoles, verifyToken } from '@/middlewares/auth.middleware';
 
 const router = Router();
 
 router.post(
-  "/",
+  '/',
   verifyToken,
-  authorizeRoles("freelancer"),
+  authorizeRoles('freelancer'),
   createApplicationHandler
 );
 
 router.get(
-  "/project/:id",
+  '/project/:id',
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles('client', 'admin'),
   getApplicationsByProjectHandler
 );
 
 router.patch(
-  "/:id",
+  '/:id',
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles('client', 'admin'),
   updateApplicationStatusHandler
 );
 

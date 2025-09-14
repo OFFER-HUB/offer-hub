@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from "express";
-import { reviewResponseService } from "../services/review-response.service";
-import { AppError, MissingFieldsError, ValidationError } from "../utils/AppError";
+import { Request, Response, NextFunction } from 'express';
+import { reviewResponseService } from '../services/review-response.service';
+import { AppError, MissingFieldsError, ValidationError } from '../utils/AppError';
 import { buildSuccessResponse } from '../utils/responseBuilder';
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from '@/lib/supabase/supabase';
 import { 
   CreateReviewResponseDTO, 
   UpdateReviewResponseDTO,
@@ -41,7 +41,7 @@ export class ReviewResponseController {
       }
 
       const response = await reviewResponseService.createResponse(dto, userId);
-      res.status(201).json(buildSuccessResponse(response, "Review response created successfully"));
+      res.status(201).json(buildSuccessResponse(response, 'Review response created successfully'));
     } catch (error) {
       next(error);
     }
@@ -70,7 +70,7 @@ export class ReviewResponseController {
       res.status(200).json(buildSuccessResponse({
         data: responses,
         count: responses.length
-      }, "Review responses fetched successfully"));
+      }, 'Review responses fetched successfully'));
     } catch (error) {
       next(error);
     }
@@ -97,7 +97,7 @@ export class ReviewResponseController {
       // Increment view count
       await reviewResponseService.incrementViewCount(responseId);
 
-      res.status(200).json(buildSuccessResponse(response, "Response fetched successfully"));
+      res.status(200).json(buildSuccessResponse(response, 'Response fetched successfully'));
     } catch (error) {
       next(error);
     }
@@ -130,7 +130,7 @@ export class ReviewResponseController {
       }
 
       const response = await reviewResponseService.updateResponse(responseId, dto, userId);
-      res.status(200).json(buildSuccessResponse(response, "Response updated successfully"));
+      res.status(200).json(buildSuccessResponse(response, 'Response updated successfully'));
     } catch (error) {
       next(error);
     }
@@ -154,7 +154,7 @@ export class ReviewResponseController {
       }
 
       await reviewResponseService.deleteResponse(responseId, userId);
-      res.status(200).json(buildSuccessResponse(null, "Response deleted successfully"));
+      res.status(200).json(buildSuccessResponse(null, 'Response deleted successfully'));
     } catch (error) {
       next(error);
     }
@@ -193,7 +193,7 @@ export class ReviewResponseController {
         response_id: responseId,
         vote_type: dto.vote_type,
         ...result
-      }, "Vote recorded successfully"));
+      }, 'Vote recorded successfully'));
     } catch (error) {
       next(error);
     }
@@ -229,7 +229,7 @@ export class ReviewResponseController {
           offset,
           has_more: responses.length === limit
         }
-      }, "Pending responses fetched successfully"));
+      }, 'Pending responses fetched successfully'));
     } catch (error) {
       next(error);
     }
@@ -264,7 +264,7 @@ export class ReviewResponseController {
       }
 
       const response = await reviewResponseService.moderateResponse(responseId, dto, userId);
-      res.status(200).json(buildSuccessResponse(response, "Response moderated successfully"));
+      res.status(200).json(buildSuccessResponse(response, 'Response moderated successfully'));
     } catch (error) {
       next(error);
     }
@@ -298,7 +298,7 @@ export class ReviewResponseController {
       };
 
       const analytics = await reviewResponseService.getResponseAnalytics(filters);
-      res.status(200).json(buildSuccessResponse(analytics, "Response analytics fetched successfully"));
+      res.status(200).json(buildSuccessResponse(analytics, 'Response analytics fetched successfully'));
     } catch (error) {
       next(error);
     }
@@ -351,7 +351,7 @@ export class ReviewResponseController {
         .range(offset, offset + limit - 1);
 
       if (error) {
-        throw new AppError("Database_Error", 500);
+        throw new AppError('Database_Error', 500);
       }
 
       res.status(200).json(buildSuccessResponse({
@@ -362,7 +362,7 @@ export class ReviewResponseController {
           offset,
           has_more: (data?.length || 0) === limit
         }
-      }, "User responses fetched successfully"));
+      }, 'User responses fetched successfully'));
     } catch (error) {
       next(error);
     }
@@ -378,14 +378,14 @@ export class ReviewResponseController {
   ): Promise<void> => {
     try {
       const guidelines = {
-        professional_tone: "Use professional and constructive language",
-        specificity: "Address specific points mentioned in the review",
-        gratitude: "Thank the reviewer for their feedback",
-        action_items: "Mention any improvements or clarifications",
-        length_guidelines: "Keep responses between 50-500 characters for optimal impact",
+        professional_tone: 'Use professional and constructive language',
+        specificity: 'Address specific points mentioned in the review',
+        gratitude: 'Thank the reviewer for their feedback',
+        action_items: 'Mention any improvements or clarifications',
+        length_guidelines: 'Keep responses between 50-500 characters for optimal impact',
         examples: {
-          good: "Thank you for your feedback! I appreciate your honest review and will work on improving the communication aspect for future projects.",
-          bad: "This review is unfair and doesn't reflect my work quality."
+          good: 'Thank you for your feedback! I appreciate your honest review and will work on improving the communication aspect for future projects.',
+          bad: 'This review is unfair and doesn\'t reflect my work quality.'
         },
         validation_rules: {
           min_length: 10,
@@ -394,7 +394,7 @@ export class ReviewResponseController {
         }
       };
 
-      res.status(200).json(buildSuccessResponse(guidelines, "Response guidelines fetched successfully"));
+      res.status(200).json(buildSuccessResponse(guidelines, 'Response guidelines fetched successfully'));
     } catch (error) {
       next(error);
     }

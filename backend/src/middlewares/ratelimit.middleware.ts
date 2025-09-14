@@ -1,11 +1,11 @@
-import rateLimit from "express-rate-limit";
-import { Request, Response } from "express";
+import rateLimit from 'express-rate-limit';
+import { Request, Response } from 'express';
 import { 
   RateLimitMiddlewareOptions, 
   AuthenticatedRequest,
   RateLimitInfo 
-} from "@/types/middleware.types";
-import { authConfig } from "@/config/auth.config";
+} from '@/types/middleware.types';
+import { authConfig } from '@/config/auth.config';
 
 /**
  * Enhanced rate limiter with comprehensive configuration options
@@ -19,8 +19,8 @@ function createEnhancedLimiter(options: RateLimitMiddlewareOptions) {
     message: {
       success: false,
       error: {
-        code: "RATE_LIMIT_EXCEEDED",
-        message: options.errorMessage || "Too many requests, please try again later.",
+        code: 'RATE_LIMIT_EXCEEDED',
+        message: options.errorMessage || 'Too many requests, please try again later.',
         timestamp: new Date().toISOString(),
       },
     },
@@ -64,8 +64,8 @@ function createEnhancedLimiter(options: RateLimitMiddlewareOptions) {
       res.status(429).json({
         success: false,
         error: {
-          code: "RATE_LIMIT_EXCEEDED",
-          message: options.errorMessage || "Too many requests, please try again later.",
+          code: 'RATE_LIMIT_EXCEEDED',
+          message: options.errorMessage || 'Too many requests, please try again later.',
           details: {
             limit: options.max,
             windowMs: options.windowMs,
@@ -85,7 +85,7 @@ function createEnhancedLimiter(options: RateLimitMiddlewareOptions) {
 export const generalLimiter = createEnhancedLimiter({
   windowMs: authConfig.rateLimiting.general.windowMs,
   max: authConfig.rateLimiting.general.max,
-  errorMessage: "Too many requests from this IP, please try again later.",
+  errorMessage: 'Too many requests from this IP, please try again later.',
 });
 
 /**
@@ -95,7 +95,7 @@ export const generalLimiter = createEnhancedLimiter({
 export const authLimiter = createEnhancedLimiter({
   windowMs: authConfig.rateLimiting.auth.windowMs,
   max: authConfig.rateLimiting.auth.max,
-  errorMessage: "Too many authentication attempts, please try again later.",
+  errorMessage: 'Too many authentication attempts, please try again later.',
   skipSuccessfulRequests: true, // Don't count successful logins
 });
 
@@ -106,7 +106,7 @@ export const authLimiter = createEnhancedLimiter({
 export const adminLimiter = createEnhancedLimiter({
   windowMs: authConfig.rateLimiting.admin.windowMs,
   max: authConfig.rateLimiting.admin.max,
-  errorMessage: "Too many admin requests, please try again later.",
+  errorMessage: 'Too many admin requests, please try again later.',
   keyGenerator: (req: Request) => {
     const authReq = req as AuthenticatedRequest;
     // Use user ID for authenticated admin requests, IP for others
@@ -121,7 +121,7 @@ export const adminLimiter = createEnhancedLimiter({
 export const userLimiter = createEnhancedLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 200, // 200 requests per user per window
-  errorMessage: "Too many requests from this user, please try again later.",
+  errorMessage: 'Too many requests from this user, please try again later.',
   keyGenerator: (req: Request) => {
     const authReq = req as AuthenticatedRequest;
     if (!authReq.user) {
@@ -138,7 +138,7 @@ export const userLimiter = createEnhancedLimiter({
 export const strictLimiter = createEnhancedLimiter({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 5, // Only 5 attempts per hour
-  errorMessage: "Too many sensitive operations attempted, please try again later.",
+  errorMessage: 'Too many sensitive operations attempted, please try again later.',
   keyGenerator: (req: Request) => {
     const authReq = req as AuthenticatedRequest;
     return authReq.user?.id || req.ip || 'anonymous';
@@ -152,7 +152,7 @@ export const strictLimiter = createEnhancedLimiter({
 export const uploadLimiter = createEnhancedLimiter({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 20, // 20 uploads per hour
-  errorMessage: "Too many file uploads, please try again later.",
+  errorMessage: 'Too many file uploads, please try again later.',
   keyGenerator: (req: Request) => {
     const authReq = req as AuthenticatedRequest;
     return authReq.user?.id || req.ip || 'anonymous';
@@ -166,7 +166,7 @@ export const uploadLimiter = createEnhancedLimiter({
 export const searchLimiter = createEnhancedLimiter({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 30, // 30 searches per 5 minutes
-  errorMessage: "Too many search requests, please try again later.",
+  errorMessage: 'Too many search requests, please try again later.',
   keyGenerator: (req: Request) => {
     const authReq = req as AuthenticatedRequest;
     return authReq.user?.id || req.ip || 'anonymous';

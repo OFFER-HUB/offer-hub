@@ -1,7 +1,7 @@
 
-import { Request, Response, NextFunction } from "express";
-import { reviewService } from "../services/review.service";
-import { AppError, MissingFieldsError, ValidationError } from "../utils/AppError";
+import { Request, Response, NextFunction } from 'express';
+import { reviewService } from '../services/review.service';
+import { AppError, MissingFieldsError, ValidationError } from '../utils/AppError';
 import { buildSuccessResponse } from '../utils/responseBuilder';
 import { CreateReviewDTO, UpdateReviewDTO } from '../types/review.types';
 
@@ -17,7 +17,7 @@ export class ReviewController {
 
       const dto: CreateReviewDTO = req.body;
       const review = await reviewService.createReview(dto);
-      res.status(201).json(buildSuccessResponse(review, "Review created successfully"));
+      res.status(201).json(buildSuccessResponse(review, 'Review created successfully'));
 
   };
 
@@ -35,7 +35,7 @@ export class ReviewController {
       res.status(404).json({ success: false, message: 'Review not found' });
       return;
     }
-    res.status(200).json(buildSuccessResponse(review, "Review fetched successfully"));
+    res.status(200).json(buildSuccessResponse(review, 'Review fetched successfully'));
   };
 
   /**
@@ -47,9 +47,9 @@ export class ReviewController {
     next: NextFunction
   ): Promise<void> => {
     const { userId } = req.params;
-    if (!userId) throw new MissingFieldsError("User ID is required");
+    if (!userId) throw new MissingFieldsError('User ID is required');
     const reviews = await reviewService.getReviewsByUser(userId);
-    res.status(200).json(buildSuccessResponse(reviews, "Reviews fetched successfully"));
+    res.status(200).json(buildSuccessResponse(reviews, 'Reviews fetched successfully'));
   };
 
   // TODO: Implement updateReview and deleteReview endpoints

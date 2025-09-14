@@ -29,13 +29,13 @@ import { Progress } from '@/components/ui/progress';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const stageIcons: Record<WorkflowStageName, React.ReactNode> = {
-  dispute_initiation: <FileText className="h-5 w-5" />,
-  mediator_assignment: <Users className="h-5 w-5" />,
-  evidence_collection: <FileText className="h-5 w-5" />,
-  mediation_process: <MessageSquare className="h-5 w-5" />,
-  resolution_or_escalation: <AlertCircle className="h-5 w-5" />,
-  arbitration: <Gavel className="h-5 w-5" />,
-  resolution_implementation: <TrendingUp className="h-5 w-5" />,
+  dispute_initiation: <FileText className='h-5 w-5' />,
+  mediator_assignment: <Users className='h-5 w-5' />,
+  evidence_collection: <FileText className='h-5 w-5' />,
+  mediation_process: <MessageSquare className='h-5 w-5' />,
+  resolution_or_escalation: <AlertCircle className='h-5 w-5' />,
+  arbitration: <Gavel className='h-5 w-5' />,
+  resolution_implementation: <TrendingUp className='h-5 w-5' />,
 };
 
 const stageLabels: Record<WorkflowStageName, string> = {
@@ -68,12 +68,12 @@ const statusColors: Record<WorkflowStageStatus, string> = {
 };
 
 const statusIcons: Record<WorkflowStageStatus, React.ReactNode> = {
-  pending: <Clock className="h-4 w-4" />,
-  in_progress: <AlertCircle className="h-4 w-4" />,
-  completed: <CheckCircle className="h-4 w-4" />,
-  skipped: <XCircle className="h-4 w-4" />,
-  failed: <XCircle className="h-4 w-4" />,
-  escalated: <ArrowRight className="h-4 w-4" />,
+  pending: <Clock className='h-4 w-4' />,
+  in_progress: <AlertCircle className='h-4 w-4' />,
+  completed: <CheckCircle className='h-4 w-4' />,
+  skipped: <XCircle className='h-4 w-4' />,
+  failed: <XCircle className='h-4 w-4' />,
+  escalated: <ArrowRight className='h-4 w-4' />,
 };
 
 export function WorkflowStages({ 
@@ -143,7 +143,7 @@ export function WorkflowStages({
 
   if (compact) {
     return (
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+      <div className='flex items-center space-x-2 overflow-x-auto pb-2'>
         {stages.map((stage, index) => {
           const status = getStageStatus(stage);
           const progress = getStageProgress(stage);
@@ -177,22 +177,22 @@ export function WorkflowStages({
                     </div>
                     
                     {showProgress && isActive && (
-                      <div className="w-16">
-                        <Progress value={progress} className="h-1" />
+                      <div className='w-16'>
+                        <Progress value={progress} className='h-1' />
                       </div>
                     )}
                     
                     {index < stages.length - 1 && (
-                      <ChevronRight className="h-4 w-4 text-gray-400 ml-2" />
+                      <ChevronRight className='h-4 w-4 text-gray-400 ml-2' />
                     )}
                   </motion.div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <div className="space-y-1">
-                    <p className="font-semibold">{stageLabels[stage.stageName]}</p>
-                    <p className="text-sm text-gray-600">{stageDescriptions[stage.stageName]}</p>
+                  <div className='space-y-1'>
+                    <p className='font-semibold'>{stageLabels[stage.stageName]}</p>
+                    <p className='text-sm text-gray-600'>{stageDescriptions[stage.stageName]}</p>
                     {stage.metadata?.duration && (
-                      <p className="text-xs text-gray-500">
+                      <p className='text-xs text-gray-500'>
                         Duration: {formatDuration(stage.metadata.duration)}
                       </p>
                     )}
@@ -207,7 +207,7 @@ export function WorkflowStages({
   }
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {stages.map((stage, index) => {
         const status = getStageStatus(stage);
         const progress = getStageProgress(stage);
@@ -233,10 +233,10 @@ export function WorkflowStages({
               } ${isClickable ? 'cursor-pointer' : 'cursor-not-allowed'}`}
               onClick={() => isClickable && onStageClick?.(stage.stageName)}
             >
-              <CardContent className="p-6">
-                <div className="flex items-start space-x-4">
+              <CardContent className='p-6'>
+                <div className='flex items-start space-x-4'>
                   {/* Stage Icon & Status */}
-                  <div className="flex flex-col items-center space-y-2">
+                  <div className='flex flex-col items-center space-y-2'>
                     <div className={`p-3 rounded-full ${
                       isActive ? 'bg-blue-500 text-white' :
                       isCompleted ? 'bg-green-500 text-white' :
@@ -247,10 +247,10 @@ export function WorkflowStages({
                     </div>
                     
                     <Badge 
-                      variant="outline" 
+                      variant='outline' 
                       className={`text-xs ${statusColors[status]}`}
                     >
-                      <div className="flex items-center space-x-1">
+                      <div className='flex items-center space-x-1'>
                         {statusIcons[status]}
                         <span>{status.replace('_', ' ')}</span>
                       </div>
@@ -258,25 +258,25 @@ export function WorkflowStages({
                   </div>
 
                   {/* Stage Content */}
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center justify-between">
+                  <div className='flex-1 space-y-3'>
+                    <div className='flex items-center justify-between'>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className='text-lg font-semibold text-gray-900'>
                           {stageLabels[stage.stageName]}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className='text-sm text-gray-600'>
                           {stageDescriptions[stage.stageName]}
                         </p>
                       </div>
                       
-                      <div className="text-right space-y-1">
+                      <div className='text-right space-y-1'>
                         {stage.metadata?.duration && (
-                          <p className="text-sm text-gray-500">
+                          <p className='text-sm text-gray-500'>
                             Duration: {formatDuration(stage.metadata.duration)}
                           </p>
                         )}
                         {stage.deadline && (
-                          <p className="text-sm text-gray-500">
+                          <p className='text-sm text-gray-500'>
                             Due: {formatDate(stage.deadline)}
                           </p>
                         )}
@@ -285,19 +285,19 @@ export function WorkflowStages({
 
                     {/* Progress Bar */}
                     {showProgress && (isActive || isCompleted) && (
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
+                      <div className='space-y-2'>
+                        <div className='flex justify-between text-sm'>
                           <span>Progress</span>
                           <span>{progress}%</span>
                         </div>
-                        <Progress value={progress} className="h-2" />
+                        <Progress value={progress} className='h-2' />
                       </div>
                     )}
 
                     {/* Time Remaining */}
                     {isActive && timeRemaining && (
-                      <div className="flex items-center space-x-2 text-sm">
-                        <Clock className="h-4 w-4 text-gray-500" />
+                      <div className='flex items-center space-x-2 text-sm'>
+                        <Clock className='h-4 w-4 text-gray-500' />
                         <span className={timeRemaining === 'Overdue' ? 'text-red-600 font-medium' : 'text-gray-600'}>
                           {timeRemaining}
                         </span>
@@ -306,20 +306,20 @@ export function WorkflowStages({
 
                     {/* Requirements */}
                     {stage.metadata?.requirements && (
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-gray-700 flex items-center space-x-1">
-                          <Info className="h-4 w-4" />
+                      <div className='space-y-2'>
+                        <h4 className='text-sm font-medium text-gray-700 flex items-center space-x-1'>
+                          <Info className='h-4 w-4' />
                           <span>Requirements</span>
                         </h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
+                        <ul className='text-sm text-gray-600 space-y-1'>
                           {stage.metadata.requirements.slice(0, 3).map((requirement: string, reqIndex: number) => (
-                            <li key={reqIndex} className="flex items-center space-x-2">
-                              <div className="w-1 h-1 bg-gray-400 rounded-full" />
+                            <li key={reqIndex} className='flex items-center space-x-2'>
+                              <div className='w-1 h-1 bg-gray-400 rounded-full' />
                               <span>{requirement}</span>
                             </li>
                           ))}
                           {stage.metadata.requirements.length > 3 && (
-                            <li className="text-xs text-gray-500">
+                            <li className='text-xs text-gray-500'>
                               +{stage.metadata.requirements.length - 3} more requirements
                             </li>
                           )}
@@ -328,8 +328,8 @@ export function WorkflowStages({
                     )}
 
                     {/* Stage Dates */}
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <div className="flex items-center space-x-4">
+                    <div className='flex items-center justify-between text-xs text-gray-500'>
+                      <div className='flex items-center space-x-4'>
                         {stage.startedAt && (
                           <span>Started: {formatDate(stage.startedAt)}</span>
                         )}
@@ -345,9 +345,9 @@ export function WorkflowStages({
 
                     {/* Action Button */}
                     {isActive && isClickable && (
-                      <div className="pt-2">
-                        <Button size="sm" variant="outline" className="w-full">
-                          <Info className="h-4 w-4 mr-2" />
+                      <div className='pt-2'>
+                        <Button size='sm' variant='outline' className='w-full'>
+                          <Info className='h-4 w-4 mr-2' />
                           View Details
                         </Button>
                       </div>
@@ -361,17 +361,17 @@ export function WorkflowStages({
       })}
 
       {/* Stage Navigation */}
-      <Card className="bg-gray-50">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Info className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-600">
+      <Card className='bg-gray-50'>
+        <CardContent className='p-4'>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center space-x-2'>
+              <Info className='h-4 w-4 text-gray-500' />
+              <span className='text-sm text-gray-600'>
                 Click on completed or current stages to view details
               </span>
             </div>
             
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <div className='flex items-center space-x-2 text-sm text-gray-500'>
               <span>Total Stages: {stages.length}</span>
               <span>•</span>
               <span>

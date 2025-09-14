@@ -18,14 +18,14 @@ export interface CreateReviewDTO {
 
 export type ReviewsFetchResponse = {
   success: true;
-  message: "Reviews_fetched_successfully";
+  message: 'Reviews_fetched_successfully';
   data: Review[];
   count: number;
 };
 
 export type ReviewCreateResponse = {
   success: true;
-  message: "Review_created_successfully";
+  message: 'Review_created_successfully';
   data: Review;
 };
 

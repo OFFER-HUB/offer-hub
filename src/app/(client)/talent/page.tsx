@@ -1,17 +1,17 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Heart, Filter } from "lucide-react"
-import { useState, useMemo } from "react"
-import SearchBar from "@/components/talent/SearchBar"
-import FilterComponent from "@/components/talent/TalentFilters"
-import TalentCard from "@/components/talent/TalentCard"
-import { talentProfileData as talentMockData } from "@/lib/mockData/talent-mock-data"
-import type { Filters } from "@/lib/mockData/filters-mock-data"
-import { useRouter } from "next/navigation"
-import TalentLayout from "@/components/talent/talents/TalentLayout"
+'use client'
+import { Button } from '@/components/ui/button'
+import { Heart, Filter } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import SearchBar from '@/components/talent/SearchBar'
+import FilterComponent from '@/components/talent/TalentFilters'
+import TalentCard from '@/components/talent/TalentCard'
+import { talentProfileData as talentMockData } from '@/lib/mockData/talent-mock-data'
+import type { Filters } from '@/lib/mockData/filters-mock-data'
+import { useRouter } from 'next/navigation'
+import TalentLayout from '@/components/talent/talents/TalentLayout'
 
 const TalentPage = () => {
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState('')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [activeFilters, setActiveFilters] = useState<Filters>({
     categories: [],
@@ -83,46 +83,46 @@ const TalentPage = () => {
   }
 
   const handleFavouriteClick = () => {
-    router.push("/talent/saved")
+    router.push('/talent/saved')
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="">
-        <div className="">
-          <div className="bg-white px-6 py-2">
-            <div className="flex items-center justify-between">
-              <div className="flex-1 text-center">
-                <h1 className="text-base font-bold text-gray-900">Talents</h1>
+    <div className='min-h-screen bg-gray-100'>
+      <div className=''>
+        <div className=''>
+          <div className='bg-white px-6 py-2'>
+            <div className='flex items-center justify-between'>
+              <div className='flex-1 text-center'>
+                <h1 className='text-base font-bold text-gray-900'>Talents</h1>
               </div>
-              <Button onClick={handleFavouriteClick} className="bg-teal-600 hover:bg-teal-700 text-white rounded-full">
-                <Heart className="w-4 h-4 mr-2" />
+              <Button onClick={handleFavouriteClick} className='bg-teal-600 hover:bg-teal-700 text-white rounded-full'>
+                <Heart className='w-4 h-4 mr-2' />
                 Favourite
               </Button>
             </div>
           </div>
 
           <TalentLayout>
-            <div className="flex gap-4 mb-8">
+            <div className='flex gap-4 mb-8'>
               <Button
                 onClick={openFilter}
-                className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 px-4"
+                className='bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 px-4'
               >
-                <Filter className="w-5 h-5" />
+                <Filter className='w-5 h-5' />
                 Filter
               </Button>
-              <div className="flex-1">
-                <SearchBar onSearch={handleSearch} placeholder="Search" />
+              <div className='flex-1'>
+                <SearchBar onSearch={handleSearch} placeholder='Search' />
               </div>
             </div>
 
-            <div className="mb-6">
-              <p className="text-sm text-gray-600">
+            <div className='mb-6'>
+              <p className='text-sm text-gray-600'>
                 Showing {filteredTalents.length} of {talents.length} talents
               </p>
             </div>
 
-            <div className="space-y-0">
+            <div className='space-y-0'>
               {filteredTalents.length > 0 ? (
                 filteredTalents.map((talent) => (
                   <TalentCard
@@ -142,9 +142,9 @@ const TalentPage = () => {
                   />
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg mb-2">No talents found</p>
-                  <p className="text-gray-400 text-sm">Try adjusting your search or filter criteria</p>
+                <div className='text-center py-12'>
+                  <p className='text-gray-500 text-lg mb-2'>No talents found</p>
+                  <p className='text-gray-400 text-sm'>Try adjusting your search or filter criteria</p>
                 </div>
               )}
             </div>

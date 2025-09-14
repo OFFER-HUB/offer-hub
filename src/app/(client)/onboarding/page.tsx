@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import LandingPage from '@/components/client-onboarding/LandingPage';
@@ -192,7 +192,7 @@ const OnboardingContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className='min-h-screen bg-gray-50'>
       {renderCurrentStep()}
     </div>
   );
@@ -201,7 +201,7 @@ const OnboardingContent: React.FC = () => {
 // Main component that wraps OnboardingContent in Suspense
 const OnboardingPage: React.FC = () => {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className='min-h-screen bg-gray-50 flex items-center justify-center'>Loading...</div>}>
       <OnboardingContent />
     </Suspense>
   );

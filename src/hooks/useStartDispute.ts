@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { formSchema } from "../schemas/start-dispute-form.schema";
-import { toast } from "sonner";
-import { StartDisputePayload, DisputeResponse } from "../types/escrow.types";
-import { isDisputeResponse, isErrorWithMessage } from "../utils/type-guards";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { formSchema } from '../schemas/start-dispute-form.schema';
+import { toast } from 'sonner';
+import { StartDisputePayload, DisputeResponse } from '../types/escrow.types';
+import { isDisputeResponse, isErrorWithMessage } from '../utils/type-guards';
 
 export const useStartDisputeForm = () => {
   const [loading, setLoading] = useState(false);
@@ -18,9 +18,9 @@ export const useStartDisputeForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      contractId: "",
-      signer: "",
-      reason: "",
+      contractId: '',
+      signer: '',
+      reason: '',
     },
   });
 
@@ -35,7 +35,7 @@ export const useStartDisputeForm = () => {
 
       if (!unsignedTransaction) {
         throw new Error(
-          "Dispute functionality temporarily unavailable - escrow hooks not configured."
+          'Dispute functionality temporarily unavailable - escrow hooks not configured.'
         );
       }
 
@@ -46,28 +46,28 @@ export const useStartDisputeForm = () => {
       // });
       
       // Placeholder for now - implement wallet integration
-      const signedXdr = "PLACEHOLDER_SIGNED_XDR";
+      const signedXdr = 'PLACEHOLDER_SIGNED_XDR';
 
       if (!signedXdr) {
-        throw new Error("Signed transaction is missing.");
+        throw new Error('Signed transaction is missing.');
       }
 
       // const data = await sendTransaction({ // Temporarily commented
       //   signedXdr,
       //   returnEscrowDataIsRequired: false,
       // });
-      const data: DisputeResponse = { status: "SUCCESS", message: "Temporary success" }; // Temporary placeholder
+      const data: DisputeResponse = { status: 'SUCCESS', message: 'Temporary success' }; // Temporary placeholder
 
-      if (isDisputeResponse(data) && data.status === "SUCCESS") {
+      if (isDisputeResponse(data) && data.status === 'SUCCESS') {
         setResponse(data);
-        toast.success("Dispute started successfully!");
+        toast.success('Dispute started successfully!');
         form.reset();
       } else {
-        throw new Error(data.message || "Transaction failed");
+        throw new Error(data.message || 'Transaction failed');
       }
     } catch (error) {
-      console.error("Error starting dispute:", error);
-      const errorMessage = isErrorWithMessage(error) ? error.message : "An unknown error occurred";
+      console.error('Error starting dispute:', error);
+      const errorMessage = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
       toast.error(errorMessage);
     } finally {
       setLoading(false);

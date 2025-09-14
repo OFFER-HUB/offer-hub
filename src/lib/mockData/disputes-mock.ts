@@ -1,4 +1,4 @@
-import { Dispute } from "@/types/dispute";
+import { Dispute } from '@/types/dispute';
 
 
 export const mockDisputes: Dispute[] = [

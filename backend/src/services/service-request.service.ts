@@ -1,12 +1,12 @@
-import { supabase } from "@/lib/supabase/supabase";
-import { ForbiddenError, NotFoundError } from "@/utils/AppError";
-import { ConflictError ,InternalServerError} from "@/utils/AppError";
+import { supabase } from '@/lib/supabase/supabase';
+import { ForbiddenError, NotFoundError } from '@/utils/AppError';
+import { ConflictError ,InternalServerError} from '@/utils/AppError';
 export interface ServiceRequest {
   id: string;
   service_id: string;
   client_id: string;
   message: string;
-  status: "pending" | "accepted" | "rejected";
+  status: 'pending' | 'accepted' | 'rejected';
   created_at: string;
 }
 
@@ -36,40 +36,40 @@ export class ServiceRequestService {
   ): Promise<ServiceRequest> {
     // Check if the client is trying to request their own service
     const { data: service, error: serviceError } = await supabase
-      .from("services")
-      .select("user_id")
-      .eq("id", data.service_id)
+      .from('services')
+      .select('user_id')
+      .eq('id', data.service_id)
       .single();
 
     if (serviceError) {
-      throw new NotFoundError("Service not found");
+      throw new NotFoundError('Service not found');
     }
 
     if (service.user_id === data.client_id) {
-      throw new ForbiddenError("Cannot request your own service");
+      throw new ForbiddenError('Cannot request your own service');
     }
 
     // Check for existing pending requests from the same client to the same service
     const { data: existingRequest, error: existingError } = await supabase
-      .from("service_requests")
-      .select("id")
-      .eq("service_id", data.service_id)
-      .eq("client_id", data.client_id)
-      .eq("status", "pending")
+      .from('service_requests')
+      .select('id')
+      .eq('service_id', data.service_id)
+      .eq('client_id', data.client_id)
+      .eq('status', 'pending')
       .single();
 
     if (existingRequest) {
-      throw new ConflictError("You already have a pending request for this service");
+      throw new ConflictError('You already have a pending request for this service');
     }
 
     // Create the service request
     const { data: newRequest, error } = await supabase
-      .from("service_requests")
+      .from('service_requests')
       .insert({
         service_id: data.service_id,
         client_id: data.client_id,
         message: data.message,
-        status: "pending",
+        status: 'pending',
       })
       .select()
       .single();
@@ -85,7 +85,7 @@ export class ServiceRequestService {
     freelancerId: string
   ): Promise<ServiceRequestWithDetails[]> {
     const { data, error } = await supabase
-      .from("service_requests")
+      .from('service_requests')
       .select(
         `
         *,
@@ -102,8 +102,8 @@ export class ServiceRequestService {
         )
       `
       )
-      .eq("service.user_id", freelancerId)
-      .order("created_at", { ascending: false });
+      .eq('service.user_id', freelancerId)
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw new InternalServerError(`Failed to fetch service requests: ${error.message}`);
@@ -114,12 +114,12 @@ export class ServiceRequestService {
 
   async updateRequestStatus(
     requestId: string,
-    status: "accepted" | "rejected",
+    status: 'accepted' | 'rejected',
     freelancerId: string
   ): Promise<ServiceRequest> {
     // First, verify that the freelancer owns the service
     const { data: request, error: requestError } = await supabase
-      .from("service_requests")
+      .from('service_requests')
       .select(
         `
         *,
@@ -128,26 +128,26 @@ export class ServiceRequestService {
         )
       `
       )
-      .eq("id", requestId)
+      .eq('id', requestId)
       .single();
 
     if (requestError || !request) {
-      throw new NotFoundError("Service request not found");
+      throw new NotFoundError('Service request not found');
     }
 
     if (request.service.user_id !== freelancerId) {
-      throw new ForbiddenError("You can only update requests for your own services");
+      throw new ForbiddenError('You can only update requests for your own services');
     }
 
-    if (request.status !== "pending") {
-      throw new ConflictError("Request has already been processed");
+    if (request.status !== 'pending') {
+      throw new ConflictError('Request has already been processed');
     }
 
     // Update the request status
     const { data: updatedRequest, error } = await supabase
-      .from("service_requests")
+      .from('service_requests')
       .update({ status })
-      .eq("id", requestId)
+      .eq('id', requestId)
       .select()
       .single();
 

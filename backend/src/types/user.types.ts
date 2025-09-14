@@ -1,4 +1,4 @@
-type PublicUser = Omit<User, "nonce" | "created_at">;
+type PublicUser = Omit<User, 'nonce' | 'created_at'>;
 
 export interface CreateUserDTO {
   wallet_address: string;

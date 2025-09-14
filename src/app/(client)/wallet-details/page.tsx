@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import DepositButton from '@/components/wallet/DepositButton'
 import DepositModal from '@/components/wallet/DepositModal'
@@ -10,54 +10,54 @@ import { useState } from 'react'
 
 const assets: AssetProps[] = [
   {
-    id: "eth123",
-    assetName: "Ethereum",
-    assetImage: "/assetImage.png",
-    assetAbrv: "ETH",
+    id: 'eth123',
+    assetName: 'Ethereum',
+    assetImage: '/assetImage.png',
+    assetAbrv: 'ETH',
     assetBalance: 1.02,
     assetInDollar: 404.12,
     percentageMovement: 24,
-    movementType: "up"
+    movementType: 'up'
   },
   {
-    id: "avax123",
-    assetName: "Avax",
-    assetImage: "/assetImage.png",
-    assetAbrv: "AVX",
+    id: 'avax123',
+    assetName: 'Avax',
+    assetImage: '/assetImage.png',
+    assetAbrv: 'AVX',
     assetBalance: 10.02,
     assetInDollar: 44.12,
     percentageMovement: 24,
-    movementType: "down"
+    movementType: 'down'
   },
   {
-    id: "matic123",
-    assetName: "Matic",
-    assetImage: "/assetImage.png",
-    assetAbrv: "MAT",
+    id: 'matic123',
+    assetName: 'Matic',
+    assetImage: '/assetImage.png',
+    assetAbrv: 'MAT',
     assetBalance: 1.02,
     assetInDollar: 4.12,
     percentageMovement: 24,
-    movementType: "neutral"
+    movementType: 'neutral'
   },
   {
-    id: "stellar123",
-    assetName: "Stellar",
-    assetImage: "/assetImage.png",
-    assetAbrv: "XLM",
+    id: 'stellar123',
+    assetName: 'Stellar',
+    assetImage: '/assetImage.png',
+    assetAbrv: 'XLM',
     assetBalance: 100.02,
     assetInDollar: 4004.12,
     percentageMovement: 50,
-    movementType: "up"
+    movementType: 'up'
   },
   {
-    id: "usdc123",
-    assetName: "USDC",
-    assetImage: "/assetImage.png",
-    assetAbrv: "USDC",
+    id: 'usdc123',
+    assetName: 'USDC',
+    assetImage: '/assetImage.png',
+    assetAbrv: 'USDC',
     assetBalance: 102,
     assetInDollar: 102.12,
     percentageMovement: 0.99,
-    movementType: "neutral"
+    movementType: 'neutral'
   },
 ]
 function Wallet() {

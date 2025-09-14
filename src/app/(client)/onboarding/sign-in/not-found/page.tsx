@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import RoleSelector from '@/components/auth/RoleSelector';
@@ -49,13 +49,13 @@ const SignInNotFoundContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
+    <div className='min-h-screen bg-gray-50 flex items-center justify-center p-4'>
+      <div className='w-full max-w-md bg-white rounded-2xl shadow-xl p-6'>
         <div className='bg-[#F1F3F7] rounded-xl p-4 mb-6'>
           <RoleSelector
             email={rejectedEmail}
             onRoleSelect={handleRoleSelect}
-            className=""
+            className=''
           />
         </div>
 
@@ -67,7 +67,7 @@ const SignInNotFoundContent: React.FC = () => {
           showEmailAuth={true}
           showPasswordField={false}
           disabled={isLoading}
-          className="mb-20"
+          className='mb-20'
         />
 
 
@@ -79,7 +79,7 @@ const SignInNotFoundContent: React.FC = () => {
 // Main component that wraps SignInNotFoundContent in Suspense
 const SignInNotFoundPage: React.FC = () => {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className='min-h-screen bg-gray-50 flex items-center justify-center'>Loading...</div>}>
       <SignInNotFoundContent />
     </Suspense>
   );

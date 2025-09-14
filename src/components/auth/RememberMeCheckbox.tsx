@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 interface RememberMeCheckboxProps {
   checked: boolean;
@@ -15,17 +15,17 @@ export function RememberMeCheckbox({
   disabled,
 }: RememberMeCheckboxProps) {
   return (
-    <div className="flex items-center space-x-2">
+    <div className='flex items-center space-x-2'>
       <Checkbox
-        id="keep-logged-in"
+        id='keep-logged-in'
         checked={checked}
         onCheckedChange={onChange}
         disabled={disabled}
-        className="border-gray-300 data-[state=checked]:bg-slate-800 data-[state=checked]:border-slate-800"
+        className='border-gray-300 data-[state=checked]:bg-slate-800 data-[state=checked]:border-slate-800'
       />
       <Label
-        htmlFor="keep-logged-in"
-        className="text-sm text-gray-700 font-normal cursor-pointer"
+        htmlFor='keep-logged-in'
+        className='text-sm text-gray-700 font-normal cursor-pointer'
       >
         Keep me logged in
       </Label>
