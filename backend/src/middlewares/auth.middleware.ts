@@ -47,6 +47,34 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
     };
 
     try {
+      // Dev bypass for local testing
+      console.log('DEV_AUTH_BYPASS=', process.env.DEV_AUTH_BYPASS);
+      if (process.env.DEV_AUTH_BYPASS === 'true') {
+        req.user = {
+          id: 'dev-user',
+          wallet_address: null as any,
+          username: 'dev',
+          name: 'Developer',
+          bio: '',
+          email: 'dev@example.com',
+          is_freelancer: false as any,
+          nonce: '',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          role: 'client'
+        } as AuthUser;
+        req.securityContext = {
+          requestId,
+          ipAddress: securityContext.ipAddress,
+          userAgent: securityContext.userAgent,
+          timestamp: startTime,
+          endpoint: req.url,
+          method: req.method,
+          isAuthenticated: true
+        };
+        setSecurityHeaders(res);
+        return next();
+      }
       // Check if route is public
       if (isPublicRoute(req.url)) {
         securityContext.isAuthenticated = false;

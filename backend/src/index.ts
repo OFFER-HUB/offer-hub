@@ -20,6 +20,7 @@ import conversationRoutes from "@/routes/conversation.routes";
 import messageRoutes from "@/routes/message.routes";
 import reviewResponseRoutes from "@/routes/review-response.routes";
 import { workflowRoutes } from "@/routes/workflow.routes";
+import achievementRoutes from "@/routes/achievement.routes";
 
 // Setup global error handlers for uncaught exceptions and unhandled rejections
 setupGlobalErrorHandlers();
@@ -54,6 +55,18 @@ app.use("/api/users", authenticateToken(), userRoutes);
 app.use("/api/conversations", authenticateToken(), conversationRoutes);
 app.use("/api/messages", authenticateToken(), messageRoutes);
 app.use("/api", reviewResponseRoutes);
+
+// Achievement routes (mounted at /api so it serves:
+//   GET /api/achievements
+//   GET /api/users/:userId/achievements
+//   GET /api/users/:userId/achievements/analytics
+//   GET /api/achievements/leaderboard
+//   POST /api/users/:userId/achievements/:achievementId/claim
+//   POST /api/users/:userId/achievements/progress
+//   POST /api/achievements/share
+//   PATCH /api/notifications/:notificationId/read
+// )
+app.use("/api", achievementRoutes);
 
 // Simple test endpoint to verify server is working
 app.get("/test", (req, res) => {
