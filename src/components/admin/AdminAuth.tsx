@@ -1,23 +1,29 @@
 "use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAdminUsersApi } from '@/hooks/api-connections/use-admin-users-api';
-import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAdminUsersApi } from "@/hooks/api-connections/use-admin-users-api";
+import { AlertCircle, Loader2 } from "lucide-react";
 
 interface AdminAuthProps {
   onAuthenticated: () => void;
 }
 
 export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState("");
   const [showCreateAdmin, setShowCreateAdmin] = useState(false);
   const { createAdminUser, setAuthToken, loading, error } = useAdminUsersApi();
 
-  const handleTokenSubmit = (e: React.FormEvent) => {
+  const handleTokenSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (token.trim()) {
       setAuthToken(token.trim());
@@ -63,7 +69,11 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={!token.trim()}>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!token.trim()}
+                >
                   Authenticate
                 </Button>
               </form>
@@ -73,7 +83,9 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-muted-foreground">Or</span>
+                  <span className="bg-white px-2 text-muted-foreground">
+                    Or
+                  </span>
                 </div>
               </div>
 
@@ -88,15 +100,25 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
           ) : (
             <div className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-md">
-                <h3 className="font-medium text-blue-900 mb-2">Create Test Admin User</h3>
+                <h3 className="font-medium text-blue-900 mb-2">
+                  Create Test Admin User
+                </h3>
                 <p className="text-sm text-blue-700 mb-3">
-                  This will create a test admin user and automatically authenticate you.
-                  This is for development/testing purposes only.
+                  This will create a test admin user and automatically
+                  authenticate you. This is for development/testing purposes
+                  only.
                 </p>
                 <div className="text-xs text-blue-600 space-y-1">
-                  <p><strong>Username:</strong> admin_user</p>
-                  <p><strong>Email:</strong> admin@offerhub.com</p>
-                  <p><strong>Wallet:</strong> 0xadmin123456789abcdef123456789abcdef123456</p>
+                  <p>
+                    <strong>Username:</strong> admin_user
+                  </p>
+                  <p>
+                    <strong>Email:</strong> admin@offerhub.com
+                  </p>
+                  <p>
+                    <strong>Wallet:</strong>{" "}
+                    0xadmin123456789abcdef123456789abcdef123456
+                  </p>
                 </div>
               </div>
 
@@ -111,7 +133,7 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
                     Creating Admin User...
                   </>
                 ) : (
-                  'Create & Authenticate'
+                  "Create & Authenticate"
                 )}
               </Button>
 
@@ -127,7 +149,9 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
           )}
 
           <div className="mt-6 p-4 bg-gray-50 rounded-md">
-            <h4 className="font-medium text-gray-900 mb-2">For Production Use:</h4>
+            <h4 className="font-medium text-gray-900 mb-2">
+              For Production Use:
+            </h4>
             <ol className="text-xs text-gray-600 space-y-1 list-decimal list-inside">
               <li>Get an admin JWT token from your authentication system</li>
               <li>Enter the token in the field above</li>

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { RecoverySentCard } from "./RecoverySentCard";
 import { RecoverySentHeader } from "./RecoverySentHeader";
 

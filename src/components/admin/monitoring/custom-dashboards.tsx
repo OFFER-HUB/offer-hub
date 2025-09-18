@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+import React, { useState, useCallback } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Sheet,
   SheetContent,
@@ -31,19 +31,18 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Plus,
   Edit,
   Trash2,
-  Share,
   Copy,
   MoreVertical,
   Settings,
@@ -51,26 +50,19 @@ import {
   BarChart3,
   PieChart,
   Activity,
-  Users,
-  DollarSign,
   TrendingUp,
   AlertTriangle,
   Eye,
   Save,
-  X,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   LineChart as LineChartComponent,
   BarChart as BarChartComponent,
   PieChart as PieChartComponent,
   AreaChart,
-} from '@/components/ui/charts';
-import {
-  MonitoringDashboard,
-  DashboardWidget,
-} from '@/types/monitoring.types';
-import { usePlatformMonitoring } from '@/hooks/use-platform-monitoring';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/charts";
+import { DashboardWidget } from "@/types/monitoring.types";
+import { usePlatformMonitoring } from "@/hooks/use-platform-monitoring";
 
 interface WidgetTemplateProps {
   type: string;
@@ -80,7 +72,13 @@ interface WidgetTemplateProps {
   onAdd: () => void;
 }
 
-function WidgetTemplate({ type, icon, title, description, onAdd }: WidgetTemplateProps) {
+function WidgetTemplate({
+  type,
+  icon,
+  title,
+  description,
+  onAdd,
+}: WidgetTemplateProps) {
   return (
     <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
       <div className="flex items-center justify-between">
@@ -105,25 +103,29 @@ interface DashboardCanvasProps {
   onWidgetEdit: (widget: DashboardWidget) => void;
 }
 
-function DashboardCanvas({ widgets, onWidgetDelete, onWidgetEdit }: DashboardCanvasProps) {
+function DashboardCanvas({
+  widgets,
+  onWidgetDelete,
+  onWidgetEdit,
+}: DashboardCanvasProps) {
   const generateMockData = (type: string) => {
     switch (type) {
-      case 'line-chart':
-      case 'area-chart':
+      case "line-chart":
+      case "area-chart":
         return Array.from({ length: 7 }, (_, i) => ({
           name: `Day ${i + 1}`,
           value: Math.floor(Math.random() * 1000) + 100,
         }));
-      case 'bar-chart':
+      case "bar-chart":
         return Array.from({ length: 5 }, (_, i) => ({
           name: `Category ${i + 1}`,
           value: Math.floor(Math.random() * 500) + 50,
         }));
-      case 'pie-chart':
+      case "pie-chart":
         return [
-          { name: 'Desktop', value: 45 },
-          { name: 'Mobile', value: 35 },
-          { name: 'Tablet', value: 20 },
+          { name: "Desktop", value: 45 },
+          { name: "Mobile", value: 35 },
+          { name: "Tablet", value: 20 },
         ];
       default:
         return [];
@@ -134,7 +136,7 @@ function DashboardCanvas({ widgets, onWidgetDelete, onWidgetEdit }: DashboardCan
     const data = generateMockData(widget.type);
 
     switch (widget.type) {
-      case 'metric-card':
+      case "metric-card":
         return (
           <div className="p-6">
             <div className="flex items-center space-x-3">
@@ -142,50 +144,57 @@ function DashboardCanvas({ widgets, onWidgetDelete, onWidgetEdit }: DashboardCan
                 <TrendingUp className="h-6 w-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-600">{widget.title}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  {widget.title}
+                </p>
                 <p className="text-2xl font-bold text-gray-900">12,345</p>
                 <p className="text-sm text-green-600">+5.2% vs last week</p>
               </div>
             </div>
           </div>
         );
-      case 'line-chart':
+      case "line-chart":
         return (
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-4">{widget.title}</h3>
             <LineChartComponent data={data} height={200} />
           </div>
         );
-      case 'bar-chart':
+      case "bar-chart":
         return (
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-4">{widget.title}</h3>
             <BarChartComponent data={data} height={200} />
           </div>
         );
-      case 'pie-chart':
+      case "pie-chart":
         return (
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-4">{widget.title}</h3>
             <PieChartComponent data={data} height={200} />
           </div>
         );
-      case 'area-chart':
+      case "area-chart":
         return (
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-4">{widget.title}</h3>
-            <AreaChart data={data} dataKeys={['value']} height={200} />
+            <AreaChart data={data} dataKeys={["value"]} height={200} />
           </div>
         );
-      case 'alert-list':
+      case "alert-list":
         return (
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-4">{widget.title}</h3>
             <div className="space-y-2">
               {Array.from({ length: 3 }, (_, i) => (
-                <div key={i} className="flex items-center space-x-2 p-2 bg-yellow-50 rounded">
+                <div
+                  key={i}
+                  className="flex items-center space-x-2 p-2 bg-yellow-50 rounded"
+                >
                   <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                  <span className="text-sm">Alert {i + 1}: High CPU usage detected</span>
+                  <span className="text-sm">
+                    Alert {i + 1}: High CPU usage detected
+                  </span>
                 </div>
               ))}
             </div>
@@ -207,8 +216,12 @@ function DashboardCanvas({ widgets, onWidgetDelete, onWidgetEdit }: DashboardCan
         <div className="flex items-center justify-center h-full text-gray-500">
           <div className="text-center">
             <Plus className="h-12 w-12 mx-auto mb-4" />
-            <p className="text-lg font-medium">Your dashboard widgets will appear here</p>
-            <p className="text-sm">Add widgets from the sidebar to get started</p>
+            <p className="text-lg font-medium">
+              Your dashboard widgets will appear here
+            </p>
+            <p className="text-sm">
+              Add widgets from the sidebar to get started
+            </p>
           </div>
         </div>
       ) : (
@@ -274,7 +287,12 @@ interface WidgetConfigDialogProps {
   onSave: (widget: DashboardWidget) => void;
 }
 
-function WidgetConfigDialog({ widget, open, onClose, onSave }: WidgetConfigDialogProps) {
+function WidgetConfigDialog({
+  widget,
+  open,
+  onClose,
+  onSave,
+}: WidgetConfigDialogProps) {
   const [config, setConfig] = useState<DashboardWidget | null>(widget);
 
   const handleSave = () => {
@@ -303,14 +321,18 @@ function WidgetConfigDialog({ widget, open, onClose, onSave }: WidgetConfigDialo
               <Input
                 id="widget-title"
                 value={config.title}
-                onChange={(e) => setConfig({ ...config, title: e.target.value })}
+                onChange={(e) =>
+                  setConfig({ ...config, title: e.target.value })
+                }
               />
             </div>
             <div>
               <Label htmlFor="widget-type">Type</Label>
               <Select
                 value={config.type}
-                onValueChange={(value) => setConfig({ ...config, type: value as any })}
+                onValueChange={(value) =>
+                  setConfig({ ...config, type: value as any })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -328,11 +350,13 @@ function WidgetConfigDialog({ widget, open, onClose, onSave }: WidgetConfigDialo
           <div>
             <Label htmlFor="refresh-interval">Refresh Interval (seconds)</Label>
             <Select
-              value={config.refreshInterval?.toString() || '30'}
-              onValueChange={(value) => setConfig({
-                ...config,
-                refreshInterval: parseInt(value)
-              })}
+              value={config.refreshInterval?.toString() || "30"}
+              onValueChange={(value) =>
+                setConfig({
+                  ...config,
+                  refreshInterval: parseInt(value),
+                })
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -374,14 +398,16 @@ export default function CustomDashboards() {
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isWidgetPanelOpen, setIsWidgetPanelOpen] = useState(false);
-  const [editingWidget, setEditingWidget] = useState<DashboardWidget | null>(null);
+  const [editingWidget, setEditingWidget] = useState<DashboardWidget | null>(
+    null
+  );
   const [dashboardWidgets, setDashboardWidgets] = useState<DashboardWidget[]>(
     activeDashboard?.widgets || []
   );
 
   const [newDashboard, setNewDashboard] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     isDefault: false,
     shared: false,
   });
@@ -398,19 +424,24 @@ export default function CustomDashboards() {
           timeRange: {
             start: new Date(Date.now() - 24 * 60 * 60 * 1000),
             end: new Date(),
-            interval: '1h',
+            interval: "1h",
           },
         },
         refreshInterval: 30,
-        createdBy: 'current-user',
+        createdBy: "current-user",
         shared: newDashboard.shared,
         permissions: [],
       });
 
       setIsCreateDialogOpen(false);
-      setNewDashboard({ name: '', description: '', isDefault: false, shared: false });
+      setNewDashboard({
+        name: "",
+        description: "",
+        isDefault: false,
+        shared: false,
+      });
     } catch (error) {
-      console.error('Failed to create dashboard:', error);
+      console.error("Failed to create dashboard:", error);
     }
   };
 
@@ -418,9 +449,13 @@ export default function CustomDashboards() {
     const newWidget: DashboardWidget = {
       id: `widget-${Date.now()}`,
       type: type as any,
-      title: `New ${type.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
+      title: `New ${type
+        .replace("-", " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase())}`,
       config: {
-        chartType: type.includes('chart') ? type.split('-')[0] as any : undefined,
+        chartType: type.includes("chart")
+          ? (type.split("-")[0] as any)
+          : undefined,
         displayOptions: {
           showLegend: true,
           showGrid: true,
@@ -429,15 +464,15 @@ export default function CustomDashboards() {
       },
       position: { x: 0, y: 0 },
       size: { width: 4, height: 2 },
-      dataSource: { type: 'system' },
+      dataSource: { type: "system" },
     };
 
-    setDashboardWidgets(prev => [...prev, newWidget]);
+    setDashboardWidgets((prev) => [...prev, newWidget]);
     setIsWidgetPanelOpen(false);
   }, []);
 
   const handleWidgetDelete = useCallback((id: string) => {
-    setDashboardWidgets(prev => prev.filter(widget => widget.id !== id));
+    setDashboardWidgets((prev) => prev.filter((widget) => widget.id !== id));
   }, []);
 
   const handleWidgetEdit = useCallback((widget: DashboardWidget) => {
@@ -445,8 +480,8 @@ export default function CustomDashboards() {
   }, []);
 
   const handleWidgetSave = useCallback((updatedWidget: DashboardWidget) => {
-    setDashboardWidgets(prev =>
-      prev.map(widget =>
+    setDashboardWidgets((prev) =>
+      prev.map((widget) =>
         widget.id === updatedWidget.id ? updatedWidget : widget
       )
     );
@@ -460,7 +495,7 @@ export default function CustomDashboards() {
           widgets: dashboardWidgets,
         });
       } catch (error) {
-        console.error('Failed to save dashboard:', error);
+        console.error("Failed to save dashboard:", error);
       }
     }
   };
@@ -471,19 +506,15 @@ export default function CustomDashboards() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold text-gray-900">
-            {activeDashboard?.name || 'Custom Dashboard'}
+            {activeDashboard?.name || "Custom Dashboard"}
           </h1>
-          {activeDashboard?.isDefault && (
-            <Badge>Default</Badge>
-          )}
-          {activeDashboard?.shared && (
-            <Badge variant="outline">Shared</Badge>
-          )}
+          {activeDashboard?.isDefault && <Badge>Default</Badge>}
+          {activeDashboard?.shared && <Badge variant="outline">Shared</Badge>}
         </div>
 
         <div className="flex items-center space-x-3">
           <Select
-            value={activeDashboard?.id || ''}
+            value={activeDashboard?.id || ""}
             onValueChange={loadDashboard}
           >
             <SelectTrigger className="w-64">
@@ -512,71 +543,77 @@ export default function CustomDashboards() {
                   Click to add widgets to your dashboard
                 </SheetDescription>
               </SheetHeader>
-              
+
               <div className="mt-6 space-y-4">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Metrics</h3>
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">
+                    Metrics
+                  </h3>
                   <div className="space-y-2">
                     <WidgetTemplate
                       type="metric-card"
                       icon={<TrendingUp className="h-5 w-5" />}
                       title="Metric Card"
                       description="Display key metrics and KPIs"
-                      onAdd={() => handleWidgetAdd('metric-card')}
+                      onAdd={() => handleWidgetAdd("metric-card")}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Charts</h3>
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">
+                    Charts
+                  </h3>
                   <div className="space-y-2">
                     <WidgetTemplate
                       type="line-chart"
                       icon={<LineChart className="h-5 w-5" />}
                       title="Line Chart"
                       description="Show trends over time"
-                      onAdd={() => handleWidgetAdd('line-chart')}
+                      onAdd={() => handleWidgetAdd("line-chart")}
                     />
                     <WidgetTemplate
                       type="bar-chart"
                       icon={<BarChart3 className="h-5 w-5" />}
                       title="Bar Chart"
                       description="Compare categories"
-                      onAdd={() => handleWidgetAdd('bar-chart')}
+                      onAdd={() => handleWidgetAdd("bar-chart")}
                     />
                     <WidgetTemplate
                       type="pie-chart"
                       icon={<PieChart className="h-5 w-5" />}
                       title="Pie Chart"
                       description="Show proportions"
-                      onAdd={() => handleWidgetAdd('pie-chart')}
+                      onAdd={() => handleWidgetAdd("pie-chart")}
                     />
                     <WidgetTemplate
                       type="area-chart"
                       icon={<Activity className="h-5 w-5" />}
                       title="Area Chart"
                       description="Visualize cumulative data"
-                      onAdd={() => handleWidgetAdd('area-chart')}
+                      onAdd={() => handleWidgetAdd("area-chart")}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Lists</h3>
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">
+                    Lists
+                  </h3>
                   <div className="space-y-2">
                     <WidgetTemplate
                       type="alert-list"
                       icon={<AlertTriangle className="h-5 w-5" />}
                       title="Alert List"
                       description="Show recent alerts"
-                      onAdd={() => handleWidgetAdd('alert-list')}
+                      onAdd={() => handleWidgetAdd("alert-list")}
                     />
                     <WidgetTemplate
                       type="table"
                       icon={<Eye className="h-5 w-5" />}
                       title="Data Table"
                       description="Tabular data display"
-                      onAdd={() => handleWidgetAdd('table')}
+                      onAdd={() => handleWidgetAdd("table")}
                     />
                   </div>
                 </div>
@@ -584,7 +621,10 @@ export default function CustomDashboards() {
             </SheetContent>
           </Sheet>
 
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
@@ -595,7 +635,8 @@ export default function CustomDashboards() {
               <DialogHeader>
                 <DialogTitle>Create New Dashboard</DialogTitle>
                 <DialogDescription>
-                  Create a custom dashboard with your preferred widgets and layout.
+                  Create a custom dashboard with your preferred widgets and
+                  layout.
                 </DialogDescription>
               </DialogHeader>
 
@@ -605,10 +646,12 @@ export default function CustomDashboards() {
                   <Input
                     id="dashboard-name"
                     value={newDashboard.name}
-                    onChange={(e) => setNewDashboard({
-                      ...newDashboard,
-                      name: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setNewDashboard({
+                        ...newDashboard,
+                        name: e.target.value,
+                      })
+                    }
                     placeholder="My Custom Dashboard"
                   />
                 </div>
@@ -618,10 +661,12 @@ export default function CustomDashboards() {
                   <Textarea
                     id="dashboard-description"
                     value={newDashboard.description}
-                    onChange={(e) => setNewDashboard({
-                      ...newDashboard,
-                      description: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setNewDashboard({
+                        ...newDashboard,
+                        description: e.target.value,
+                      })
+                    }
                     placeholder="Dashboard description..."
                   />
                 </div>
@@ -630,22 +675,28 @@ export default function CustomDashboards() {
                   <Switch
                     id="default-dashboard"
                     checked={newDashboard.isDefault}
-                    onCheckedChange={(checked) => setNewDashboard({
-                      ...newDashboard,
-                      isDefault: checked
-                    })}
+                    onCheckedChange={(checked) =>
+                      setNewDashboard({
+                        ...newDashboard,
+                        isDefault: checked,
+                      })
+                    }
                   />
-                  <Label htmlFor="default-dashboard">Set as default dashboard</Label>
+                  <Label htmlFor="default-dashboard">
+                    Set as default dashboard
+                  </Label>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="shared-dashboard"
                     checked={newDashboard.shared}
-                    onCheckedChange={(checked) => setNewDashboard({
-                      ...newDashboard,
-                      shared: checked
-                    })}
+                    onCheckedChange={(checked) =>
+                      setNewDashboard({
+                        ...newDashboard,
+                        shared: checked,
+                      })
+                    }
                   />
                   <Label htmlFor="shared-dashboard">Share with team</Label>
                 </div>

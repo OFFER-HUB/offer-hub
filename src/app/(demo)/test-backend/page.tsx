@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from "react";
 
 interface TestResult {
   endpoint: string;
-  status: 'loading' | 'success' | 'error';
+  status: "loading" | "success" | "error";
   data?: any;
   error?: string;
   responseTime?: number;
@@ -16,66 +16,68 @@ export default function TestBackendPage() {
 
   const endpoints = [
     {
-      name: 'Health Check',
-      url: '/api/workflow/health',
-      method: 'GET'
+      name: "Health Check",
+      url: "/api/workflow/health",
+      method: "GET",
     },
     {
-      name: 'Workflow State',
-      url: '/api/workflow/disputes/550e8400-e29b-41d4-a716-446655440000/workflow',
-      method: 'GET'
+      name: "Workflow State",
+      url: "/api/workflow/disputes/550e8400-e29b-41d4-a716-446655440000/workflow",
+      method: "GET",
     },
     {
-      name: 'Analytics',
-      url: '/api/workflow/analytics/workflow?disputeId=550e8400-e29b-41d4-a716-446655440000',
-      method: 'GET'
+      name: "Analytics",
+      url: "/api/workflow/analytics/workflow?disputeId=550e8400-e29b-41d4-a716-446655440000",
+      method: "GET",
     },
     {
-      name: 'Progress',
-      url: '/api/workflow/disputes/550e8400-e29b-41d4-a716-446655440000/progress',
-      method: 'GET'
+      name: "Progress",
+      url: "/api/workflow/disputes/550e8400-e29b-41d4-a716-446655440000/progress",
+      method: "GET",
     },
     {
-      name: 'Notifications',
-      url: '/api/workflow/disputes/550e8400-e29b-41d4-a716-446655440000/notifications',
-      method: 'GET'
-    }
+      name: "Notifications",
+      url: "/api/workflow/disputes/550e8400-e29b-41d4-a716-446655440000/notifications",
+      method: "GET",
+    },
   ];
 
-  const testEndpoint = async (endpoint: typeof endpoints[0]): Promise<TestResult> => {
+  const testEndpoint = async (
+    endpoint: (typeof endpoints)[0]
+  ): Promise<TestResult> => {
     const startTime = Date.now();
-    
+
     try {
       console.log(`Testing ${endpoint.name}: ${endpoint.url}`);
-      
+
       const response = await fetch(endpoint.url, {
         method: endpoint.method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       const responseTime = Date.now() - startTime;
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
-      
+
       return {
         endpoint: endpoint.name,
-        status: 'success',
+        status: "success",
         data,
-        responseTime
+        responseTime,
       };
     } catch (error) {
       const responseTime = Date.now() - startTime;
       return {
         endpoint: endpoint.name,
-        status: 'error',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        responseTime
+        status: "error",
+        error: error instanceof Error ? error.message : "Unknown error",
+        responseTime,
       };
     }
   };
@@ -86,41 +88,50 @@ export default function TestBackendPage() {
 
     for (const endpoint of endpoints) {
       // Add loading state
-      setResults(prev => [...prev, {
-        endpoint: endpoint.name,
-        status: 'loading'
-      }]);
+      setResults((prev) => [
+        ...prev,
+        {
+          endpoint: endpoint.name,
+          status: "loading",
+        },
+      ]);
 
       const result = await testEndpoint(endpoint);
-      
-      setResults(prev => 
-        prev.map(r => 
-          r.endpoint === endpoint.name ? result : r
-        )
+
+      setResults((prev) =>
+        prev.map((r) => (r.endpoint === endpoint.name ? result : r))
       );
 
       // Small delay between requests
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     setIsRunning(false);
   };
 
-  const getStatusColor = (status: TestResult['status']) => {
+  const getStatusColor = (status: TestResult["status"]) => {
     switch (status) {
-      case 'loading': return 'text-yellow-600';
-      case 'success': return 'text-green-600';
-      case 'error': return 'text-red-600';
-      default: return 'text-gray-600';
+      case "loading":
+        return "text-yellow-600";
+      case "success":
+        return "text-green-600";
+      case "error":
+        return "text-red-600";
+      default:
+        return "text-gray-600";
     }
   };
 
-  const getStatusIcon = (status: TestResult['status']) => {
+  const getStatusIcon = (status: TestResult["status"]) => {
     switch (status) {
-      case 'loading': return '⏳';
-      case 'success': return '✅';
-      case 'error': return '❌';
-      default: return '❓';
+      case "loading":
+        return "⏳";
+      case "success":
+        return "✅";
+      case "error":
+        return "❌";
+      default:
+        return "❓";
     }
   };
 
@@ -131,18 +142,18 @@ export default function TestBackendPage() {
           <h1 className="text-3xl font-bold text-gray-900 mb-6">
             🧪 Backend API Testing
           </h1>
-          
+
           <div className="mb-6">
             <button
               onClick={runTests}
               disabled={isRunning}
               className={`px-6 py-3 rounded-lg font-semibold ${
                 isRunning
-                  ? 'bg-gray-400 text-white cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? "bg-gray-400 text-white cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
             >
-              {isRunning ? '🔄 Testing...' : '🚀 Run Tests'}
+              {isRunning ? "🔄 Testing..." : "🚀 Run Tests"}
             </button>
           </div>
 
@@ -154,7 +165,9 @@ export default function TestBackendPage() {
                     <span>{getStatusIcon(result.status)}</span>
                     {result.endpoint}
                   </h3>
-                  <span className={`font-medium ${getStatusColor(result.status)}`}>
+                  <span
+                    className={`font-medium ${getStatusColor(result.status)}`}
+                  >
                     {result.status.toUpperCase()}
                   </span>
                 </div>
@@ -181,7 +194,7 @@ export default function TestBackendPage() {
                   </div>
                 )}
 
-                {result.status === 'loading' && (
+                {result.status === "loading" && (
                   <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
                     <p className="text-yellow-800">Testing endpoint...</p>
                   </div>
@@ -197,7 +210,9 @@ export default function TestBackendPage() {
           )}
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2">📋 Test Endpoints:</h3>
+            <h3 className="font-semibold text-blue-900 mb-2">
+              📋 Test Endpoints:
+            </h3>
             <ul className="text-blue-800 space-y-1">
               {endpoints.map((endpoint, index) => (
                 <li key={index} className="text-sm">
@@ -206,7 +221,8 @@ export default function TestBackendPage() {
               ))}
             </ul>
             <p className="text-blue-700 text-sm mt-2">
-              <strong>Note:</strong> These URLs are proxied through Next.js to http://localhost:4000
+              <strong>Note:</strong> These URLs are proxied through Next.js to
+              http://localhost:4000
             </p>
           </div>
         </div>

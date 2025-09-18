@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useEffect, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Users,
   TrendingUp,
@@ -27,35 +27,27 @@ import {
   Eye,
   MousePointer,
   Clock,
-  BarChart3,
-  PieChart,
-  Globe,
-  Smartphone,
-  Monitor,
-  Calendar,
   ArrowRight,
   Download,
   Filter,
   RefreshCw,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   LineChart,
   AreaChart,
   BarChart,
   PieChart as PieChartComponent,
-  ScatterChart,
-  RadarChart,
-} from '@/components/ui/charts';
-import { useUserAnalytics } from '@/hooks/use-platform-monitoring';
-import { TimeRange } from '@/types/monitoring.types';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/charts";
+import { useUserAnalytics } from "@/hooks/use-platform-monitoring";
+import { TimeRange } from "@/types/monitoring.types";
+import { cn } from "@/lib/utils";
 
 interface AnalyticMetricProps {
   title: string;
   value: string | number;
   change?: number;
   icon: React.ReactNode;
-  trend?: 'up' | 'down' | 'stable';
+  trend?: "up" | "down" | "stable";
   subtitle?: string;
 }
 
@@ -64,25 +56,25 @@ function AnalyticMetric({
   value,
   change,
   icon,
-  trend = 'stable',
+  trend = "stable",
   subtitle,
 }: AnalyticMetricProps) {
   const getTrendColor = () => {
     switch (trend) {
-      case 'up':
-        return 'text-green-600';
-      case 'down':
-        return 'text-red-600';
+      case "up":
+        return "text-green-600";
+      case "down":
+        return "text-red-600";
       default:
-        return 'text-gray-600';
+        return "text-gray-600";
     }
   };
 
   const getTrendIcon = () => {
     switch (trend) {
-      case 'up':
+      case "up":
         return <TrendingUp className="h-4 w-4" />;
-      case 'down':
+      case "down":
         return <TrendingDown className="h-4 w-4" />;
       default:
         return null;
@@ -100,13 +92,11 @@ function AnalyticMetric({
             <div>
               <p className="text-sm font-medium text-gray-600">{title}</p>
               <p className="text-2xl font-bold text-gray-900">{value}</p>
-              {subtitle && (
-                <p className="text-xs text-gray-500">{subtitle}</p>
-              )}
+              {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
             </div>
           </div>
           {change !== undefined && (
-            <div className={cn('flex items-center space-x-1', getTrendColor())}>
+            <div className={cn("flex items-center space-x-1", getTrendColor())}>
               {getTrendIcon()}
               <span className="text-sm font-medium">
                 {Math.abs(change).toFixed(1)}%
@@ -129,7 +119,7 @@ interface UserFlowProps {
 }
 
 function UserFlowVisualization({ data }: UserFlowProps) {
-  const maxUsers = Math.max(...data.map(d => d.users));
+  const maxUsers = Math.max(...data.map((d) => d.users));
 
   return (
     <Card>
@@ -151,7 +141,7 @@ function UserFlowVisualization({ data }: UserFlowProps) {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="relative">
                 <div
                   className="bg-blue-200 h-8 rounded-lg flex items-center px-3"
@@ -168,7 +158,7 @@ function UserFlowVisualization({ data }: UserFlowProps) {
                   </div>
                 )}
               </div>
-              
+
               {index < data.length - 1 && (
                 <div className="flex justify-center my-2">
                   <ArrowRight className="h-4 w-4 text-gray-400" />
@@ -187,22 +177,22 @@ interface HeatmapProps {
 }
 
 function ActivityHeatmap({ data }: HeatmapProps) {
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const hours = Array.from({ length: 24 }, (_, i) => i);
-  const maxValue = Math.max(...data.map(d => d.value));
+  const maxValue = Math.max(...data.map((d) => d.value));
 
   const getIntensity = (value: number) => {
     const intensity = value / maxValue;
-    if (intensity > 0.8) return 'bg-blue-900';
-    if (intensity > 0.6) return 'bg-blue-700';
-    if (intensity > 0.4) return 'bg-blue-500';
-    if (intensity > 0.2) return 'bg-blue-300';
-    if (intensity > 0) return 'bg-blue-100';
-    return 'bg-gray-100';
+    if (intensity > 0.8) return "bg-blue-900";
+    if (intensity > 0.6) return "bg-blue-700";
+    if (intensity > 0.4) return "bg-blue-500";
+    if (intensity > 0.2) return "bg-blue-300";
+    if (intensity > 0) return "bg-blue-100";
+    return "bg-gray-100";
   };
 
   const getValue = (day: string, hour: number) => {
-    const item = data.find(d => d.day === day && d.hour === hour);
+    const item = data.find((d) => d.day === day && d.hour === hour);
     return item?.value || 0;
   };
 
@@ -216,24 +206,26 @@ function ActivityHeatmap({ data }: HeatmapProps) {
         <div className="space-y-1">
           <div className="flex space-x-1 text-xs text-gray-500 mb-2">
             <div className="w-12" /> {/* Day label space */}
-            {hours.filter(h => h % 4 === 0).map(hour => (
-              <div key={hour} className="w-4 text-center">
-                {hour}
-              </div>
-            ))}
+            {hours
+              .filter((h) => h % 4 === 0)
+              .map((hour) => (
+                <div key={hour} className="w-4 text-center">
+                  {hour}
+                </div>
+              ))}
           </div>
-          
-          {days.map(day => (
+
+          {days.map((day) => (
             <div key={day} className="flex items-center space-x-1">
               <div className="w-12 text-xs text-gray-600 font-medium">
                 {day}
               </div>
               <div className="flex space-x-1">
-                {hours.map(hour => (
+                {hours.map((hour) => (
                   <div
                     key={hour}
                     className={cn(
-                      'w-4 h-4 rounded-sm cursor-pointer transition-all duration-200 hover:scale-110',
+                      "w-4 h-4 rounded-sm cursor-pointer transition-all duration-200 hover:scale-110",
                       getIntensity(getValue(day, hour))
                     )}
                     title={`${day} ${hour}:00 - ${getValue(day, hour)} users`}
@@ -243,7 +235,7 @@ function ActivityHeatmap({ data }: HeatmapProps) {
             </div>
           ))}
         </div>
-        
+
         <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
           <span>Less</span>
           <div className="flex space-x-1">
@@ -262,13 +254,14 @@ function ActivityHeatmap({ data }: HeatmapProps) {
 }
 
 export default function UserAnalytics() {
-  const { analyticsData, isLoading, error, loadUserAnalytics } = useUserAnalytics();
+  const { analyticsData, isLoading, error, loadUserAnalytics } =
+    useUserAnalytics();
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>({
     start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
     end: new Date(),
-    interval: '24h',
+    interval: "24h",
   });
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Load analytics data when component mounts or time range changes
   useEffect(() => {
@@ -276,42 +269,46 @@ export default function UserAnalytics() {
   }, [selectedTimeRange, loadUserAnalytics]);
 
   // Generate mock data for demonstration
-  const mockEngagementData = useMemo(() => 
-    Array.from({ length: 7 }, (_, i) => ({
-      name: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
-      activeUsers: Math.floor(Math.random() * 1000) + 500,
-      newUsers: Math.floor(Math.random() * 200) + 50,
-      returningUsers: Math.floor(Math.random() * 800) + 300,
-      sessionDuration: Math.floor(Math.random() * 600) + 180,
-    })), []
+  const mockEngagementData = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, i) => ({
+        name: new Date(
+          Date.now() - (6 - i) * 24 * 60 * 60 * 1000
+        ).toLocaleDateString("en-US", { weekday: "short" }),
+        activeUsers: Math.floor(Math.random() * 1000) + 500,
+        newUsers: Math.floor(Math.random() * 200) + 50,
+        returningUsers: Math.floor(Math.random() * 800) + 300,
+        sessionDuration: Math.floor(Math.random() * 600) + 180,
+      })),
+    []
   );
 
   const mockDeviceData = [
-    { name: 'Desktop', value: 45, users: 4500 },
-    { name: 'Mobile', value: 35, users: 3500 },
-    { name: 'Tablet', value: 20, users: 2000 },
+    { name: "Desktop", value: 45, users: 4500 },
+    { name: "Mobile", value: 35, users: 3500 },
+    { name: "Tablet", value: 20, users: 2000 },
   ];
 
   const mockLocationData = [
-    { name: 'United States', users: 3200, sessions: 4500 },
-    { name: 'United Kingdom', users: 1800, sessions: 2400 },
-    { name: 'Canada', users: 1200, sessions: 1600 },
-    { name: 'Germany', users: 900, sessions: 1200 },
-    { name: 'France', users: 700, sessions: 950 },
+    { name: "United States", users: 3200, sessions: 4500 },
+    { name: "United Kingdom", users: 1800, sessions: 2400 },
+    { name: "Canada", users: 1200, sessions: 1600 },
+    { name: "Germany", users: 900, sessions: 1200 },
+    { name: "France", users: 700, sessions: 950 },
   ];
 
   const mockFunnelData = [
-    { step: 'Landing Page', users: 10000, conversionRate: 100, dropoffRate: 0 },
-    { step: 'Sign Up', users: 7500, conversionRate: 75, dropoffRate: 25 },
-    { step: 'Profile Setup', users: 6000, conversionRate: 80, dropoffRate: 20 },
-    { step: 'First Project', users: 4200, conversionRate: 70, dropoffRate: 30 },
-    { step: 'Payment', users: 2940, conversionRate: 70, dropoffRate: 30 },
+    { step: "Landing Page", users: 10000, conversionRate: 100, dropoffRate: 0 },
+    { step: "Sign Up", users: 7500, conversionRate: 75, dropoffRate: 25 },
+    { step: "Profile Setup", users: 6000, conversionRate: 80, dropoffRate: 20 },
+    { step: "First Project", users: 4200, conversionRate: 70, dropoffRate: 30 },
+    { step: "Payment", users: 2940, conversionRate: 70, dropoffRate: 30 },
   ];
 
   const mockHeatmapData = useMemo(() => {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const data = [];
-    
+
     for (const day of days) {
       for (let hour = 0; hour < 24; hour++) {
         data.push({
@@ -321,40 +318,44 @@ export default function UserAnalytics() {
         });
       }
     }
-    
+
     return data;
   }, []);
 
   const mockRetentionData = [
-    { name: 'Week 1', period: 0, users: 1000, retentionRate: 100 },
-    { name: 'Week 2', period: 1, users: 450, retentionRate: 45 },
-    { name: 'Week 3', period: 2, users: 290, retentionRate: 29 },
-    { name: 'Week 4', period: 3, users: 210, retentionRate: 21 },
-    { name: 'Week 5', period: 4, users: 170, retentionRate: 17 },
+    { name: "Week 1", period: 0, users: 1000, retentionRate: 100 },
+    { name: "Week 2", period: 1, users: 450, retentionRate: 45 },
+    { name: "Week 3", period: 2, users: 290, retentionRate: 29 },
+    { name: "Week 4", period: 3, users: 210, retentionRate: 21 },
+    { name: "Week 5", period: 4, users: 170, retentionRate: 17 },
   ];
 
   const handleTimeRangeChange = (range: string) => {
     let start: Date;
     const end = new Date();
-    
+
     switch (range) {
-      case '24h':
+      case "24h":
         start = new Date(Date.now() - 24 * 60 * 60 * 1000);
         break;
-      case '7d':
+      case "7d":
         start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         break;
-      case '30d':
+      case "30d":
         start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
         break;
-      case '90d':
+      case "90d":
         start = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
         break;
       default:
         start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     }
-    
-    setSelectedTimeRange({ start, end, interval: range === '24h' ? '1h' : '24h' });
+
+    setSelectedTimeRange({
+      start,
+      end,
+      interval: range === "24h" ? "1h" : "24h",
+    });
   };
 
   if (error) {
@@ -385,7 +386,7 @@ export default function UserAnalytics() {
             Comprehensive insights into user behavior and engagement
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <Select onValueChange={handleTimeRangeChange} defaultValue="7d">
             <SelectTrigger className="w-32">
@@ -398,12 +399,12 @@ export default function UserAnalytics() {
               <SelectItem value="90d">Last 90 days</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          
+
           <Button variant="outline">
             <Filter className="h-4 w-4 mr-2" />
             Filters
@@ -415,34 +416,47 @@ export default function UserAnalytics() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <AnalyticMetric
           title="Total Users"
-          value={analyticsData?.sessionData.totalSessions.toLocaleString() || '12,450'}
+          value={
+            analyticsData?.sessionData.totalSessions.toLocaleString() ||
+            "12,450"
+          }
           change={8.2}
           trend="up"
           icon={<Users className="h-6 w-6" />}
           subtitle="Active users this period"
         />
-        
+
         <AnalyticMetric
           title="Avg Session Duration"
-          value={analyticsData ? `${Math.round(analyticsData.sessionData.averageSessionDuration / 60)}m` : '8m 42s'}
+          value={
+            analyticsData
+              ? `${Math.round(
+                  analyticsData.sessionData.averageSessionDuration / 60
+                )}m`
+              : "8m 42s"
+          }
           change={-2.1}
           trend="down"
           icon={<Clock className="h-6 w-6" />}
           subtitle="Time spent per session"
         />
-        
+
         <AnalyticMetric
           title="Bounce Rate"
-          value={analyticsData ? `${analyticsData.sessionData.bounceRate.toFixed(1)}%` : '23.5%'}
+          value={
+            analyticsData
+              ? `${analyticsData.sessionData.bounceRate.toFixed(1)}%`
+              : "23.5%"
+          }
           change={-5.3}
           trend="up"
           icon={<Eye className="h-6 w-6" />}
           subtitle="Single page visits"
         />
-        
+
         <AnalyticMetric
           title="Pages per Session"
-          value={analyticsData?.sessionData.pagesPerSession.toFixed(1) || '4.2'}
+          value={analyticsData?.sessionData.pagesPerSession.toFixed(1) || "4.2"}
           change={12.1}
           trend="up"
           icon={<MousePointer className="h-6 w-6" />}
@@ -469,7 +483,7 @@ export default function UserAnalytics() {
               <CardContent>
                 <LineChart
                   data={mockEngagementData}
-                  dataKeys={['activeUsers', 'newUsers', 'returningUsers']}
+                  dataKeys={["activeUsers", "newUsers", "returningUsers"]}
                   height={300}
                   showLegend
                 />
@@ -483,7 +497,7 @@ export default function UserAnalytics() {
               <CardContent>
                 <AreaChart
                   data={mockEngagementData}
-                  dataKeys={['sessionDuration']}
+                  dataKeys={["sessionDuration"]}
                   height={300}
                 />
               </CardContent>
@@ -577,7 +591,10 @@ export default function UserAnalytics() {
               </CardHeader>
               <CardContent>
                 <BarChart
-                  data={mockLocationData.map(item => ({ name: item.name, value: item.users }))}
+                  data={mockLocationData.map((item) => ({
+                    name: item.name,
+                    value: item.users,
+                  }))}
                   height={300}
                 />
               </CardContent>
@@ -601,10 +618,16 @@ export default function UserAnalytics() {
                 <TableBody>
                   {mockLocationData.map((location) => (
                     <TableRow key={location.name}>
-                      <TableCell className="font-medium">{location.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {location.name}
+                      </TableCell>
                       <TableCell>{location.users.toLocaleString()}</TableCell>
-                      <TableCell>{location.sessions.toLocaleString()}</TableCell>
-                      <TableCell>{Math.floor(Math.random() * 300 + 180)}s</TableCell>
+                      <TableCell>
+                        {location.sessions.toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {Math.floor(Math.random() * 300 + 180)}s
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -624,7 +647,7 @@ export default function UserAnalytics() {
             <CardContent>
               <LineChart
                 data={mockRetentionData}
-                dataKeys={['retentionRate']}
+                dataKeys={["retentionRate"]}
                 height={300}
               />
             </CardContent>
@@ -637,8 +660,11 @@ export default function UserAnalytics() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {['Day 1', 'Day 7', 'Day 30'].map((period, index) => (
-                    <div key={period} className="flex items-center justify-between">
+                  {["Day 1", "Day 7", "Day 30"].map((period, index) => (
+                    <div
+                      key={period}
+                      className="flex items-center justify-between"
+                    >
                       <span className="text-sm font-medium">{period}</span>
                       <div className="flex items-center space-x-2">
                         <div className="w-32 bg-gray-200 rounded-full h-2">
@@ -664,16 +690,26 @@ export default function UserAnalytics() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Weekly Churn Rate</span>
-                    <span className="text-lg font-bold text-red-600">12.5%</span>
+                    <span className="text-sm font-medium">
+                      Weekly Churn Rate
+                    </span>
+                    <span className="text-lg font-bold text-red-600">
+                      12.5%
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Monthly Churn Rate</span>
-                    <span className="text-lg font-bold text-red-600">35.2%</span>
+                    <span className="text-sm font-medium">
+                      Monthly Churn Rate
+                    </span>
+                    <span className="text-lg font-bold text-red-600">
+                      35.2%
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">At-Risk Users</span>
-                    <span className="text-lg font-bold text-yellow-600">1,250</span>
+                    <span className="text-lg font-bold text-yellow-600">
+                      1,250
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -683,7 +719,7 @@ export default function UserAnalytics() {
 
         <TabsContent value="conversion" className="space-y-6">
           <UserFlowVisualization data={mockFunnelData} />
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -730,15 +766,20 @@ export default function UserAnalytics() {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { goal: 'Newsletter Signup', rate: 25.4, count: 1240 },
-                    { goal: 'Project Inquiry', rate: 12.8, count: 620 },
-                    { goal: 'Account Creation', rate: 8.9, count: 430 },
-                    { goal: 'First Purchase', rate: 3.2, count: 155 },
+                    { goal: "Newsletter Signup", rate: 25.4, count: 1240 },
+                    { goal: "Project Inquiry", rate: 12.8, count: 620 },
+                    { goal: "Account Creation", rate: 8.9, count: 430 },
+                    { goal: "First Purchase", rate: 3.2, count: 155 },
                   ].map((goal) => (
-                    <div key={goal.goal} className="flex items-center justify-between">
+                    <div
+                      key={goal.goal}
+                      className="flex items-center justify-between"
+                    >
                       <div>
                         <p className="text-sm font-medium">{goal.goal}</p>
-                        <p className="text-xs text-gray-600">{goal.count} completions</p>
+                        <p className="text-xs text-gray-600">
+                          {goal.count} completions
+                        </p>
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-bold">{goal.rate}%</p>

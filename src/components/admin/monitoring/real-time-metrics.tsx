@@ -1,38 +1,39 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Activity,
-  Server,
-  Database,
   Users,
   DollarSign,
   TrendingUp,
   TrendingDown,
   AlertTriangle,
-  CheckCircle,
   RefreshCw,
   Cpu,
   HardDrive,
   Monitor,
-  Wifi,
   Clock,
   Zap,
-} from 'lucide-react';
-import { LineChart, AreaChart, BarChart, MetricsComposedChart } from '@/components/ui/charts';
-import { usePlatformMonitoring } from '@/hooks/use-platform-monitoring';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import {
+  LineChart,
+  AreaChart,
+  BarChart,
+  MetricsComposedChart,
+} from "@/components/ui/charts";
+import { usePlatformMonitoring } from "@/hooks/use-platform-monitoring";
+import { cn } from "@/lib/utils";
 
 interface MetricCardProps {
   title: string;
@@ -40,7 +41,7 @@ interface MetricCardProps {
   change?: number;
   changeLabel?: string;
   icon: React.ReactNode;
-  status?: 'healthy' | 'warning' | 'critical';
+  status?: "healthy" | "warning" | "critical";
   isLoading?: boolean;
 }
 
@@ -50,25 +51,25 @@ function MetricCard({
   change,
   changeLabel,
   icon,
-  status = 'healthy',
+  status = "healthy",
   isLoading = false,
 }: MetricCardProps) {
   const getStatusColor = () => {
     switch (status) {
-      case 'healthy':
-        return 'text-green-600 bg-green-50 border-green-200';
-      case 'warning':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'critical':
-        return 'text-red-600 bg-red-50 border-red-200';
+      case "healthy":
+        return "text-green-600 bg-green-50 border-green-200";
+      case "warning":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "critical":
+        return "text-red-600 bg-red-50 border-red-200";
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return "text-gray-600 bg-gray-50 border-gray-200";
     }
   };
 
   const getChangeColor = () => {
-    if (!change) return 'text-gray-500';
-    return change > 0 ? 'text-green-600' : 'text-red-600';
+    if (!change) return "text-gray-500";
+    return change > 0 ? "text-green-600" : "text-red-600";
   };
 
   const getChangeIcon = () => {
@@ -99,21 +100,33 @@ function MetricCard({
   }
 
   return (
-    <Card className={cn('border-2', getStatusColor().split(' ').slice(2).join(' '))}>
+    <Card
+      className={cn("border-2", getStatusColor().split(" ").slice(2).join(" "))}
+    >
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className={cn('p-3 rounded-full', getStatusColor().split(' ').slice(1).join(' '))}>
-              <div className={getStatusColor().split(' ')[0]}>{icon}</div>
+            <div
+              className={cn(
+                "p-3 rounded-full",
+                getStatusColor().split(" ").slice(1).join(" ")
+              )}
+            >
+              <div className={getStatusColor().split(" ")[0]}>{icon}</div>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-600">{title}</p>
               <p className="text-2xl font-bold text-gray-900">{value}</p>
               {change !== undefined && (
-                <div className={cn('flex items-center space-x-1 text-sm', getChangeColor())}>
+                <div
+                  className={cn(
+                    "flex items-center space-x-1 text-sm",
+                    getChangeColor()
+                  )}
+                >
                   {getChangeIcon()}
                   <span>
-                    {Math.abs(change)}% {changeLabel || 'vs last period'}
+                    {Math.abs(change)}% {changeLabel || "vs last period"}
                   </span>
                 </div>
               )}
@@ -130,7 +143,7 @@ interface PerformanceChartProps {
   data: Array<{ name: string; [key: string]: any }>;
   dataKeys: string[];
   height?: number;
-  type?: 'line' | 'area' | 'bar' | 'composed';
+  type?: "line" | "area" | "bar" | "composed";
   showLegend?: boolean;
 }
 
@@ -139,12 +152,12 @@ function PerformanceChart({
   data,
   dataKeys,
   height = 300,
-  type = 'line',
+  type = "line",
   showLegend = true,
 }: PerformanceChartProps) {
   const renderChart = () => {
     switch (type) {
-      case 'area':
+      case "area":
         return (
           <AreaChart
             data={data}
@@ -153,7 +166,7 @@ function PerformanceChart({
             showLegend={showLegend}
           />
         );
-      case 'bar':
+      case "bar":
         return (
           <BarChart
             data={data}
@@ -162,7 +175,7 @@ function PerformanceChart({
             showLegend={showLegend}
           />
         );
-      case 'composed':
+      case "composed":
         return (
           <MetricsComposedChart
             data={data}
@@ -223,14 +236,16 @@ export default function RealTimeMetrics() {
   } = usePlatformMonitoring();
 
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState('30'); // seconds
+  const [refreshInterval, setRefreshInterval] = useState("30"); // seconds
 
   // Generate mock historical data for charts (in real app, this would come from API)
   const generateChartData = (points = 24) => {
     return Array.from({ length: points }, (_, i) => ({
-      name: new Date(Date.now() - (points - i - 1) * 60 * 60 * 1000).toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
+      name: new Date(
+        Date.now() - (points - i - 1) * 60 * 60 * 1000
+      ).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
       }),
       cpu: Math.random() * 100,
       memory: Math.random() * 100,
@@ -246,7 +261,7 @@ export default function RealTimeMetrics() {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (autoRefresh && isConnected) {
       interval = setInterval(() => {
         refreshMetrics();
@@ -281,40 +296,49 @@ export default function RealTimeMetrics() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Real-time Metrics</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Real-time Metrics
+          </h2>
           <p className="text-gray-600">
             Live monitoring of system performance and user activity
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           {/* Connection Status */}
           <div className="flex items-center space-x-2">
-            <div className={cn(
-              'w-2 h-2 rounded-full',
-              isConnected ? 'bg-green-500' : 'bg-red-500'
-            )} />
+            <div
+              className={cn(
+                "w-2 h-2 rounded-full",
+                isConnected ? "bg-green-500" : "bg-red-500"
+              )}
+            />
             <span className="text-sm text-gray-600">
-              {isConnected ? 'Connected' : 'Disconnected'}
+              {isConnected ? "Connected" : "Disconnected"}
             </span>
           </div>
 
           {/* System Status */}
           <Badge
-            variant={systemHealthStatus === 'healthy' ? 'default' : 'destructive'}
+            variant={
+              systemHealthStatus === "healthy" ? "default" : "destructive"
+            }
             className={cn(
-              systemHealthStatus === 'healthy' && 'bg-green-100 text-green-800',
-              systemHealthStatus === 'warning' && 'bg-yellow-100 text-yellow-800',
-              systemHealthStatus === 'critical' && 'bg-red-100 text-red-800',
+              systemHealthStatus === "healthy" && "bg-green-100 text-green-800",
+              systemHealthStatus === "warning" &&
+                "bg-yellow-100 text-yellow-800",
+              systemHealthStatus === "critical" && "bg-red-100 text-red-800"
             )}
           >
-            System: {systemHealthStatus.charAt(0).toUpperCase() + systemHealthStatus.slice(1)}
+            System:{" "}
+            {systemHealthStatus.charAt(0).toUpperCase() +
+              systemHealthStatus.slice(1)}
           </Badge>
 
           {/* Auto Refresh Toggle */}
           <div className="flex items-center space-x-2">
             <Button
-              variant={autoRefresh ? 'default' : 'outline'}
+              variant={autoRefresh ? "default" : "outline"}
               size="sm"
               onClick={() => setAutoRefresh(!autoRefresh)}
             >
@@ -325,7 +349,7 @@ export default function RealTimeMetrics() {
               )}
               Auto Refresh
             </Button>
-            
+
             <Select value={refreshInterval} onValueChange={setRefreshInterval}>
               <SelectTrigger className="w-20">
                 <SelectValue />
@@ -357,16 +381,18 @@ export default function RealTimeMetrics() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
           title="CPU Usage"
-          value={systemMetrics ? `${systemMetrics.cpu.usage.toFixed(1)}%` : '--'}
+          value={
+            systemMetrics ? `${systemMetrics.cpu.usage.toFixed(1)}%` : "--"
+          }
           change={systemMetrics ? Math.random() * 10 - 5 : undefined}
           icon={<Cpu className="h-6 w-6" />}
           status={
             systemMetrics?.cpu.usage
               ? systemMetrics.cpu.usage > 80
-                ? 'critical'
+                ? "critical"
                 : systemMetrics.cpu.usage > 60
-                ? 'warning'
-                : 'healthy'
+                ? "warning"
+                : "healthy"
               : undefined
           }
           isLoading={isLoading}
@@ -374,16 +400,18 @@ export default function RealTimeMetrics() {
 
         <MetricCard
           title="Memory Usage"
-          value={systemMetrics ? `${systemMetrics.memory.usage.toFixed(1)}%` : '--'}
+          value={
+            systemMetrics ? `${systemMetrics.memory.usage.toFixed(1)}%` : "--"
+          }
           change={systemMetrics ? Math.random() * 10 - 5 : undefined}
           icon={<Monitor className="h-6 w-6" />}
           status={
             systemMetrics?.memory.usage
               ? systemMetrics.memory.usage > 90
-                ? 'critical'
+                ? "critical"
                 : systemMetrics.memory.usage > 70
-                ? 'warning'
-                : 'healthy'
+                ? "warning"
+                : "healthy"
               : undefined
           }
           isLoading={isLoading}
@@ -391,16 +419,18 @@ export default function RealTimeMetrics() {
 
         <MetricCard
           title="Disk Usage"
-          value={systemMetrics ? `${systemMetrics.disk.usage.toFixed(1)}%` : '--'}
+          value={
+            systemMetrics ? `${systemMetrics.disk.usage.toFixed(1)}%` : "--"
+          }
           change={systemMetrics ? Math.random() * 10 - 5 : undefined}
           icon={<HardDrive className="h-6 w-6" />}
           status={
             systemMetrics?.disk.usage
               ? systemMetrics.disk.usage > 90
-                ? 'critical'
+                ? "critical"
                 : systemMetrics.disk.usage > 80
-                ? 'warning'
-                : 'healthy'
+                ? "warning"
+                : "healthy"
               : undefined
           }
           isLoading={isLoading}
@@ -408,16 +438,20 @@ export default function RealTimeMetrics() {
 
         <MetricCard
           title="Response Time"
-          value={performanceMetrics ? `${performanceMetrics.responseTime.api}ms` : '--'}
+          value={
+            performanceMetrics
+              ? `${performanceMetrics.responseTime.api}ms`
+              : "--"
+          }
           change={performanceMetrics ? Math.random() * 20 - 10 : undefined}
           icon={<Clock className="h-6 w-6" />}
           status={
             performanceMetrics?.responseTime.api
               ? performanceMetrics.responseTime.api > 1000
-                ? 'critical'
+                ? "critical"
                 : performanceMetrics.responseTime.api > 500
-                ? 'warning'
-                : 'healthy'
+                ? "warning"
+                : "healthy"
               : undefined
           }
           isLoading={isLoading}
@@ -428,7 +462,9 @@ export default function RealTimeMetrics() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
           title="Active Users"
-          value={userMetrics ? userMetrics.activeUsers.total.toLocaleString() : '--'}
+          value={
+            userMetrics ? userMetrics.activeUsers.total.toLocaleString() : "--"
+          }
           change={userMetrics ? Math.random() * 15 : undefined}
           icon={<Users className="h-6 w-6" />}
           isLoading={isLoading}
@@ -436,7 +472,11 @@ export default function RealTimeMetrics() {
 
         <MetricCard
           title="Requests/sec"
-          value={performanceMetrics ? performanceMetrics.throughput.requestsPerSecond.toFixed(0) : '--'}
+          value={
+            performanceMetrics
+              ? performanceMetrics.throughput.requestsPerSecond.toFixed(0)
+              : "--"
+          }
           change={performanceMetrics ? Math.random() * 25 - 10 : undefined}
           icon={<Activity className="h-6 w-6" />}
           isLoading={isLoading}
@@ -444,16 +484,20 @@ export default function RealTimeMetrics() {
 
         <MetricCard
           title="Error Rate"
-          value={performanceMetrics ? `${performanceMetrics.errorRates.total.toFixed(2)}%` : '--'}
+          value={
+            performanceMetrics
+              ? `${performanceMetrics.errorRates.total.toFixed(2)}%`
+              : "--"
+          }
           change={performanceMetrics ? Math.random() * 5 - 2.5 : undefined}
           icon={<AlertTriangle className="h-6 w-6" />}
           status={
             performanceMetrics?.errorRates.total
               ? performanceMetrics.errorRates.total > 5
-                ? 'critical'
+                ? "critical"
                 : performanceMetrics.errorRates.total > 1
-                ? 'warning'
-                : 'healthy'
+                ? "warning"
+                : "healthy"
               : undefined
           }
           isLoading={isLoading}
@@ -461,7 +505,11 @@ export default function RealTimeMetrics() {
 
         <MetricCard
           title="Revenue Today"
-          value={businessMetrics ? `$${businessMetrics.revenue.daily.toLocaleString()}` : '--'}
+          value={
+            businessMetrics
+              ? `$${businessMetrics.revenue.daily.toLocaleString()}`
+              : "--"
+          }
           change={businessMetrics ? Math.random() * 20 : undefined}
           icon={<DollarSign className="h-6 w-6" />}
           isLoading={isLoading}
@@ -473,28 +521,28 @@ export default function RealTimeMetrics() {
         <PerformanceChart
           title="System Resources"
           data={chartData}
-          dataKeys={['cpu', 'memory', 'disk']}
+          dataKeys={["cpu", "memory", "disk"]}
           type="area"
         />
 
         <PerformanceChart
           title="Response Time & Error Rate"
           data={chartData}
-          dataKeys={['responseTime', 'errorRate']}
+          dataKeys={["responseTime", "errorRate"]}
           type="composed"
         />
 
         <PerformanceChart
           title="Active Users"
           data={chartData}
-          dataKeys={['activeUsers']}
+          dataKeys={["activeUsers"]}
           type="line"
         />
 
         <PerformanceChart
           title="Revenue Trend"
           data={chartData}
-          dataKeys={['revenue']}
+          dataKeys={["revenue"]}
           type="bar"
         />
       </div>
@@ -513,10 +561,7 @@ export default function RealTimeMetrics() {
                     <span>CPU Usage</span>
                     <span>{systemMetrics.cpu.usage.toFixed(1)}%</span>
                   </div>
-                  <Progress 
-                    value={systemMetrics.cpu.usage} 
-                    className="h-2"
-                  />
+                  <Progress value={systemMetrics.cpu.usage} className="h-2" />
                 </div>
 
                 <div>
@@ -524,8 +569,8 @@ export default function RealTimeMetrics() {
                     <span>Memory Usage</span>
                     <span>{systemMetrics.memory.usage.toFixed(1)}%</span>
                   </div>
-                  <Progress 
-                    value={systemMetrics.memory.usage} 
+                  <Progress
+                    value={systemMetrics.memory.usage}
                     className="h-2"
                   />
                 </div>
@@ -535,19 +580,32 @@ export default function RealTimeMetrics() {
                     <span>Disk Usage</span>
                     <span>{systemMetrics.disk.usage.toFixed(1)}%</span>
                   </div>
-                  <Progress 
-                    value={systemMetrics.disk.usage} 
-                    className="h-2"
-                  />
+                  <Progress value={systemMetrics.disk.usage} className="h-2" />
                 </div>
 
                 <div>
                   <div className="flex justify-between text-sm mb-2">
                     <span>Network Load</span>
-                    <span>{((systemMetrics.network.bytesIn + systemMetrics.network.bytesOut) / 1024 / 1024).toFixed(2)} MB/s</span>
+                    <span>
+                      {(
+                        (systemMetrics.network.bytesIn +
+                          systemMetrics.network.bytesOut) /
+                        1024 /
+                        1024
+                      ).toFixed(2)}{" "}
+                      MB/s
+                    </span>
                   </div>
-                  <Progress 
-                    value={Math.min(((systemMetrics.network.bytesIn + systemMetrics.network.bytesOut) / 1024 / 1024 / 100) * 100, 100)} 
+                  <Progress
+                    value={Math.min(
+                      ((systemMetrics.network.bytesIn +
+                        systemMetrics.network.bytesOut) /
+                        1024 /
+                        1024 /
+                        100) *
+                        100,
+                      100
+                    )}
                     className="h-2"
                   />
                 </div>

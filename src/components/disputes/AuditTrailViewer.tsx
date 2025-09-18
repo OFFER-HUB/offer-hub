@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useDisputeWorkflow } from '@/hooks/use-dispute-workflow';
-import { 
-  AuditTrailViewerProps, 
-  WorkflowAuditTrail 
-} from '@/types/workflow.types';
-import { 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useDisputeWorkflow } from "@/hooks/use-dispute-workflow";
+import {
+  AuditTrailViewerProps,
+  WorkflowAuditTrail,
+} from "@/types/workflow.types";
+import {
   History,
   User,
   Clock,
@@ -18,61 +18,66 @@ import {
   AlertCircle,
   Settings,
   Download,
-  Filter,
   Search,
   Eye,
   EyeOff,
-  Calendar,
   ChevronDown,
-  ChevronUp
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { toast } from 'react-hot-toast';
+  ChevronUp,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import { toast } from "react-hot-toast";
 
 const actionIcons: Record<string, React.ReactNode> = {
-  'stage_transition': <ArrowRight className="h-4 w-4" />,
-  'progress_update': <CheckCircle className="h-4 w-4" />,
-  'notification_sent': <FileText className="h-4 w-4" />,
-  'deadline_extended': <Clock className="h-4 w-4" />,
-  'escalation_triggered': <AlertCircle className="h-4 w-4" />,
-  'evidence_uploaded': <FileText className="h-4 w-4" />,
-  'mediator_assigned': <User className="h-4 w-4" />,
-  'dispute_resolved': <CheckCircle className="h-4 w-4" />,
-  'dispute_created': <FileText className="h-4 w-4" />,
-  'settings_changed': <Settings className="h-4 w-4" />,
+  stage_transition: <ArrowRight className="h-4 w-4" />,
+  progress_update: <CheckCircle className="h-4 w-4" />,
+  notification_sent: <FileText className="h-4 w-4" />,
+  deadline_extended: <Clock className="h-4 w-4" />,
+  escalation_triggered: <AlertCircle className="h-4 w-4" />,
+  evidence_uploaded: <FileText className="h-4 w-4" />,
+  mediator_assigned: <User className="h-4 w-4" />,
+  dispute_resolved: <CheckCircle className="h-4 w-4" />,
+  dispute_created: <FileText className="h-4 w-4" />,
+  settings_changed: <Settings className="h-4 w-4" />,
 };
 
 const actionColors: Record<string, string> = {
-  'stage_transition': 'text-blue-600 bg-blue-100',
-  'progress_update': 'text-green-600 bg-green-100',
-  'notification_sent': 'text-purple-600 bg-purple-100',
-  'deadline_extended': 'text-yellow-600 bg-yellow-100',
-  'escalation_triggered': 'text-red-600 bg-red-100',
-  'evidence_uploaded': 'text-indigo-600 bg-indigo-100',
-  'mediator_assigned': 'text-cyan-600 bg-cyan-100',
-  'dispute_resolved': 'text-green-600 bg-green-100',
-  'dispute_created': 'text-gray-600 bg-gray-100',
-  'settings_changed': 'text-orange-600 bg-orange-100',
+  stage_transition: "text-blue-600 bg-blue-100",
+  progress_update: "text-green-600 bg-green-100",
+  notification_sent: "text-purple-600 bg-purple-100",
+  deadline_extended: "text-yellow-600 bg-yellow-100",
+  escalation_triggered: "text-red-600 bg-red-100",
+  evidence_uploaded: "text-indigo-600 bg-indigo-100",
+  mediator_assigned: "text-cyan-600 bg-cyan-100",
+  dispute_resolved: "text-green-600 bg-green-100",
+  dispute_created: "text-gray-600 bg-gray-100",
+  settings_changed: "text-orange-600 bg-orange-100",
 };
 
-export function AuditTrailViewer({ 
+export function AuditTrailViewer({
   disputeId,
   showDetailedChanges = true,
   filterByAction = [],
   filterByUser = [],
-  exportable = true 
+  exportable = true,
 }: AuditTrailViewerProps) {
   const { actions } = useDisputeWorkflow(disputeId);
   const [auditTrail, setAuditTrail] = useState<WorkflowAuditTrail[]>([]);
   const [filteredTrail, setFilteredTrail] = useState<WorkflowAuditTrail[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedActions, setSelectedActions] = useState<string[]>(filterByAction);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedActions, setSelectedActions] =
+    useState<string[]>(filterByAction);
   const [selectedUsers, setSelectedUsers] = useState<string[]>(filterByUser);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [showMetadata, setShowMetadata] = useState(false);
@@ -81,88 +86,88 @@ export function AuditTrailViewer({
   useEffect(() => {
     const mockAuditTrail: WorkflowAuditTrail[] = [
       {
-        id: '1',
+        id: "1",
         disputeId,
-        action: 'dispute_created',
-        performedBy: 'user123',
+        action: "dispute_created",
+        performedBy: "user123",
         performedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
         newState: {
-          status: 'open',
-          stage: 'dispute_initiation',
-          initiator: 'user123'
+          status: "open",
+          stage: "dispute_initiation",
+          initiator: "user123",
         },
         metadata: {
-          reason: 'Payment dispute',
+          reason: "Payment dispute",
           amount: 1500,
-          projectId: 'proj_456'
-        }
+          projectId: "proj_456",
+        },
       },
       {
-        id: '2',
+        id: "2",
         disputeId,
-        action: 'evidence_uploaded',
-        performedBy: 'user123',
+        action: "evidence_uploaded",
+        performedBy: "user123",
         performedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
         oldState: { evidenceCount: 0 },
         newState: { evidenceCount: 3 },
         metadata: {
-          files: ['contract.pdf', 'screenshot1.png', 'email_thread.txt'],
-          totalSize: '2.4MB'
-        }
+          files: ["contract.pdf", "screenshot1.png", "email_thread.txt"],
+          totalSize: "2.4MB",
+        },
       },
       {
-        id: '3',
+        id: "3",
         disputeId,
-        action: 'mediator_assigned',
-        performedBy: 'admin456',
+        action: "mediator_assigned",
+        performedBy: "admin456",
         performedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
         oldState: { mediator: null },
-        newState: { mediator: 'mediator789' },
+        newState: { mediator: "mediator789" },
         metadata: {
-          mediatorName: 'John Smith',
-          expertise: ['contract_disputes', 'payment_issues']
-        }
+          mediatorName: "John Smith",
+          expertise: ["contract_disputes", "payment_issues"],
+        },
       },
       {
-        id: '4',
+        id: "4",
         disputeId,
-        action: 'stage_transition',
-        performedBy: 'mediator789',
+        action: "stage_transition",
+        performedBy: "mediator789",
         performedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-        oldState: { stage: 'evidence_collection' },
-        newState: { stage: 'mediation_process' },
+        oldState: { stage: "evidence_collection" },
+        newState: { stage: "mediation_process" },
         metadata: {
-          reason: 'Evidence review completed',
-          transitionTime: '2 days ahead of schedule'
-        }
+          reason: "Evidence review completed",
+          transitionTime: "2 days ahead of schedule",
+        },
       },
       {
-        id: '5',
+        id: "5",
         disputeId,
-        action: 'deadline_extended',
-        performedBy: 'admin456',
+        action: "deadline_extended",
+        performedBy: "admin456",
         performedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
         oldState: { deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000) },
         newState: { deadline: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000) },
         metadata: {
           extensionHours: 48,
-          reason: 'Additional evidence required from both parties'
-        }
+          reason: "Additional evidence required from both parties",
+        },
       },
       {
-        id: '6',
+        id: "6",
         disputeId,
-        action: 'notification_sent',
-        performedBy: 'system',
+        action: "notification_sent",
+        performedBy: "system",
         performedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
         metadata: {
-          recipient: 'user123',
-          type: 'deadline_reminder',
-          deliveryMethod: 'email'
-        }
-      }
+          recipient: "user123",
+          type: "deadline_reminder",
+          deliveryMethod: "email",
+        },
+      },
     ];
-    
+
     setAuditTrail(mockAuditTrail);
   }, [disputeId]);
 
@@ -171,18 +176,23 @@ export function AuditTrailViewer({
     let filtered = auditTrail;
 
     if (searchTerm) {
-      filtered = filtered.filter(entry => 
-        entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        entry.performedBy.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (entry) =>
+          entry.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          entry.performedBy.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (selectedActions.length > 0) {
-      filtered = filtered.filter(entry => selectedActions.includes(entry.action));
+      filtered = filtered.filter((entry) =>
+        selectedActions.includes(entry.action)
+      );
     }
 
     if (selectedUsers.length > 0) {
-      filtered = filtered.filter(entry => selectedUsers.includes(entry.performedBy));
+      filtered = filtered.filter((entry) =>
+        selectedUsers.includes(entry.performedBy)
+      );
     }
 
     setFilteredTrail(filtered);
@@ -190,25 +200,28 @@ export function AuditTrailViewer({
 
   const handleExport = () => {
     if (!filteredTrail.length) {
-      toast.error('No audit trail data to export');
+      toast.error("No audit trail data to export");
       return;
     }
 
     const dataStr = JSON.stringify(filteredTrail, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `audit-trail-${disputeId}-${new Date().toISOString().split('T')[0]}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `audit-trail-${disputeId}-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-    
-    toast.success('Audit trail exported successfully');
+
+    toast.success("Audit trail exported successfully");
   };
 
   const toggleExpanded = (id: string) => {
-    setExpandedItems(prev => {
+    setExpandedItems((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
         newSet.delete(id);
@@ -220,12 +233,12 @@ export function AuditTrailViewer({
   };
 
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -235,27 +248,30 @@ export function AuditTrailViewer({
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(hours / 24);
 
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
     const minutes = Math.floor(diff / (1000 * 60));
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   };
 
   const getActionLabel = (action: string): string => {
-    return action.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return action.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
   const getUserDisplayName = (userId: string): string => {
     const userMap: Record<string, string> = {
-      'user123': 'Client User',
-      'admin456': 'Platform Admin',
-      'mediator789': 'John Smith (Mediator)',
-      'system': 'System'
+      user123: "Client User",
+      admin456: "Platform Admin",
+      mediator789: "John Smith (Mediator)",
+      system: "System",
     };
     return userMap[userId] || userId;
   };
 
-  const renderStateDiff = (oldState?: Record<string, any>, newState?: Record<string, any>) => {
+  const renderStateDiff = (
+    oldState?: Record<string, any>,
+    newState?: Record<string, any>
+  ) => {
     if (!showDetailedChanges || (!oldState && !newState)) return null;
 
     return (
@@ -275,7 +291,7 @@ export function AuditTrailViewer({
               </div>
             </div>
           )}
-          
+
           {newState && (
             <div className="flex items-start space-x-2">
               <div className="flex-shrink-0">
@@ -308,8 +324,10 @@ export function AuditTrailViewer({
   };
 
   // Get unique actions and users for filters
-  const uniqueActions = [...new Set(auditTrail.map(entry => entry.action))];
-  const uniqueUsers = [...new Set(auditTrail.map(entry => entry.performedBy))];
+  const uniqueActions = [...new Set(auditTrail.map((entry) => entry.action))];
+  const uniqueUsers = [
+    ...new Set(auditTrail.map((entry) => entry.performedBy)),
+  ];
 
   return (
     <div className="space-y-6">
@@ -324,17 +342,21 @@ export function AuditTrailViewer({
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowMetadata(!showMetadata)}
           >
-            {showMetadata ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
-            {showMetadata ? 'Hide' : 'Show'} Metadata
+            {showMetadata ? (
+              <EyeOff className="h-4 w-4 mr-2" />
+            ) : (
+              <Eye className="h-4 w-4 mr-2" />
+            )}
+            {showMetadata ? "Hide" : "Show"} Metadata
           </Button>
-          
+
           {exportable && (
             <Button variant="outline" size="sm" onClick={handleExport}>
               <Download className="h-4 w-4 mr-2" />
@@ -359,35 +381,39 @@ export function AuditTrailViewer({
                 />
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
-              <Select 
-                value={selectedActions.length > 0 ? selectedActions[0] : 'all'} 
-                onValueChange={(value) => setSelectedActions(value === 'all' ? [] : [value])}
+              <Select
+                value={selectedActions.length > 0 ? selectedActions[0] : "all"}
+                onValueChange={(value) =>
+                  setSelectedActions(value === "all" ? [] : [value])
+                }
               >
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Filter by action" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Actions</SelectItem>
-                  {uniqueActions.map(action => (
+                  {uniqueActions.map((action) => (
                     <SelectItem key={action} value={action}>
                       {getActionLabel(action)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              
-              <Select 
-                value={selectedUsers.length > 0 ? selectedUsers[0] : 'all'} 
-                onValueChange={(value) => setSelectedUsers(value === 'all' ? [] : [value])}
+
+              <Select
+                value={selectedUsers.length > 0 ? selectedUsers[0] : "all"}
+                onValueChange={(value) =>
+                  setSelectedUsers(value === "all" ? [] : [value])
+                }
               >
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Filter by user" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Users</SelectItem>
-                  {uniqueUsers.map(user => (
+                  {uniqueUsers.map((user) => (
                     <SelectItem key={user} value={user}>
                       {getUserDisplayName(user)}
                     </SelectItem>
@@ -404,7 +430,8 @@ export function AuditTrailViewer({
         <AnimatePresence>
           {filteredTrail.map((entry, index) => {
             const isExpanded = expandedItems.has(entry.id);
-            const hasDetails = entry.oldState || entry.newState || entry.metadata;
+            const hasDetails =
+              entry.oldState || entry.newState || entry.metadata;
 
             return (
               <motion.div
@@ -417,10 +444,17 @@ export function AuditTrailViewer({
                 <Card>
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-3">
-                      <div className={`flex-shrink-0 p-2 rounded-full ${actionColors[entry.action] || 'text-gray-600 bg-gray-100'}`}>
-                        {actionIcons[entry.action] || <FileText className="h-4 w-4" />}
+                      <div
+                        className={`flex-shrink-0 p-2 rounded-full ${
+                          actionColors[entry.action] ||
+                          "text-gray-600 bg-gray-100"
+                        }`}
+                      >
+                        {actionIcons[entry.action] || (
+                          <FileText className="h-4 w-4" />
+                        )}
                       </div>
-                      
+
                       <div className="flex-1 space-y-2">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -430,20 +464,24 @@ export function AuditTrailViewer({
                             <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                               <div className="flex items-center space-x-1">
                                 <User className="h-4 w-4" />
-                                <span>{getUserDisplayName(entry.performedBy)}</span>
+                                <span>
+                                  {getUserDisplayName(entry.performedBy)}
+                                </span>
                               </div>
                               <div className="flex items-center space-x-1">
                                 <Clock className="h-4 w-4" />
-                                <span>{getRelativeTime(entry.performedAt)}</span>
+                                <span>
+                                  {getRelativeTime(entry.performedAt)}
+                                </span>
                               </div>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center space-x-2">
                             <Badge variant="outline" className="text-xs">
                               {formatDate(entry.performedAt)}
                             </Badge>
-                            
+
                             {hasDetails && (
                               <Button
                                 variant="ghost"
@@ -459,9 +497,12 @@ export function AuditTrailViewer({
                             )}
                           </div>
                         </div>
-                        
+
                         {/* Collapsible Details */}
-                        <Collapsible open={isExpanded} onOpenChange={() => toggleExpanded(entry.id)}>
+                        <Collapsible
+                          open={isExpanded}
+                          onOpenChange={() => toggleExpanded(entry.id)}
+                        >
                           <CollapsibleContent className="space-y-4">
                             {renderStateDiff(entry.oldState, entry.newState)}
                             {renderMetadata(entry.metadata)}
@@ -475,16 +516,20 @@ export function AuditTrailViewer({
             );
           })}
         </AnimatePresence>
-        
+
         {filteredTrail.length === 0 && (
           <Card>
             <CardContent className="p-8 text-center">
               <History className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No audit trail found</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                No audit trail found
+              </h3>
               <p className="text-gray-600">
-                {searchTerm || selectedActions.length > 0 || selectedUsers.length > 0
-                  ? 'Try adjusting your filters'
-                  : 'No activities have been recorded yet'}
+                {searchTerm ||
+                selectedActions.length > 0 ||
+                selectedUsers.length > 0
+                  ? "Try adjusting your filters"
+                  : "No activities have been recorded yet"}
               </p>
             </CardContent>
           </Card>
@@ -495,8 +540,15 @@ export function AuditTrailViewer({
       <Card className="bg-gray-50">
         <CardContent className="p-4">
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>Showing {filteredTrail.length} of {auditTrail.length} entries</span>
-            <span>Last updated: {auditTrail.length > 0 ? getRelativeTime(auditTrail[0].performedAt) : 'Never'}</span>
+            <span>
+              Showing {filteredTrail.length} of {auditTrail.length} entries
+            </span>
+            <span>
+              Last updated:{" "}
+              {auditTrail.length > 0
+                ? getRelativeTime(auditTrail[0].performedAt)
+                : "Never"}
+            </span>
           </div>
         </CardContent>
       </Card>

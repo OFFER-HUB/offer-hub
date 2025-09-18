@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { User } from '@/types/user.types';
+import { User } from "@/types/user.types";
 
 interface ProfileHeaderProps {
   user: User | null;
@@ -9,15 +8,20 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({ user, isLoading }: ProfileHeaderProps) {
   const getInitials = (name?: string) => {
     if (!name) return "U";
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Unknown";
     try {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric'
+      return new Date(dateString).toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
       });
     } catch {
       return "Unknown";

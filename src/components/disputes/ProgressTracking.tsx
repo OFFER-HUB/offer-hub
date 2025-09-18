@@ -1,18 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useDisputeWorkflow } from '@/hooks/use-dispute-workflow';
-import { 
-  ProgressTrackingProps, 
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { useDisputeWorkflow } from "@/hooks/use-dispute-workflow";
+import {
+  ProgressTrackingProps,
   WorkflowProgress,
-  UseProgressTrackingReturn 
-} from '@/types/workflow.types';
-import { 
-  TrendingUp, 
-  Clock, 
-  CheckCircle, 
-  AlertCircle,
+} from "@/types/workflow.types";
+import {
+  TrendingUp,
+  Clock,
+  CheckCircle,
   Plus,
   Edit3,
   Save,
@@ -21,82 +19,91 @@ import {
   Calendar,
   User,
   MessageSquare,
-  BarChart3
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { toast } from 'react-hot-toast';
+  BarChart3,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { toast } from "react-hot-toast";
 
-export function ProgressTracking({ 
-  disputeId, 
+export function ProgressTracking({
+  disputeId,
   showMilestones = true,
   showNotes = true,
   allowUpdates = true,
-  compact = false 
+  compact = false,
 }: ProgressTrackingProps) {
   const { workflowState, actions } = useDisputeWorkflow(disputeId);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingProgress, setEditingProgress] = useState<WorkflowProgress | null>(null);
-  const [newMilestone, setNewMilestone] = useState('');
-  const [newNote, setNewNote] = useState('');
+  const [editingProgress, setEditingProgress] =
+    useState<WorkflowProgress | null>(null);
+  const [newMilestone, setNewMilestone] = useState("");
+  const [newNote, setNewNote] = useState("");
   const [newProgress, setNewProgress] = useState(0);
 
   // Mock progress data - in real implementation, this would come from the API
   const [progressData, setProgressData] = useState<WorkflowProgress[]>([
     {
-      id: '1',
+      id: "1",
       disputeId,
-      stageId: 'dispute_initiation',
+      stageId: "dispute_initiation",
       progressPercentage: 100,
-      milestone: 'Dispute submitted successfully',
-      notes: 'All required information provided and evidence uploaded',
+      milestone: "Dispute submitted successfully",
+      notes: "All required information provided and evidence uploaded",
       updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-      updatedBy: 'user123'
+      updatedBy: "user123",
     },
     {
-      id: '2',
+      id: "2",
       disputeId,
-      stageId: 'mediator_assignment',
+      stageId: "mediator_assignment",
       progressPercentage: 75,
-      milestone: 'Mediator assigned and contacted',
-      notes: 'Waiting for mediator acceptance and initial review',
+      milestone: "Mediator assigned and contacted",
+      notes: "Waiting for mediator acceptance and initial review",
       updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
-      updatedBy: 'admin456'
+      updatedBy: "admin456",
     },
     {
-      id: '3',
+      id: "3",
       disputeId,
-      stageId: 'evidence_collection',
+      stageId: "evidence_collection",
       progressPercentage: 45,
-      milestone: 'Initial evidence submitted',
-      notes: 'Client evidence received, waiting for freelancer response',
+      milestone: "Initial evidence submitted",
+      notes: "Client evidence received, waiting for freelancer response",
       updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
-      updatedBy: 'mediator789'
-    }
+      updatedBy: "mediator789",
+    },
   ]);
 
-  const handleUpdateProgress = async (progressId: string, updates: Partial<WorkflowProgress>) => {
+  const handleUpdateProgress = async (
+    progressId: string,
+    updates: Partial<WorkflowProgress>
+  ) => {
     try {
       await actions.updateProgress({
         id: progressId,
         ...updates,
         updatedAt: new Date(),
-        updatedBy: 'current_user' // In real implementation, get from auth context
+        updatedBy: "current_user", // In real implementation, get from auth context
       });
-      
-      setProgressData(prev => 
-        prev.map(p => p.id === progressId ? { ...p, ...updates } : p)
+
+      setProgressData((prev) =>
+        prev.map((p) => (p.id === progressId ? { ...p, ...updates } : p))
       );
-      
-      toast.success('Progress updated successfully');
+
+      toast.success("Progress updated successfully");
     } catch (error) {
-      toast.error('Failed to update progress');
+      toast.error("Failed to update progress");
     }
   };
 
@@ -106,31 +113,31 @@ export function ProgressTracking({
     const newProgressEntry: WorkflowProgress = {
       id: Date.now().toString(),
       disputeId,
-      stageId: workflowState?.currentStage || 'dispute_initiation',
+      stageId: workflowState?.currentStage || "dispute_initiation",
       progressPercentage: newProgress,
       milestone: newMilestone,
       notes: newNote,
       updatedAt: new Date(),
-      updatedBy: 'current_user'
+      updatedBy: "current_user",
     };
 
     try {
       await actions.updateProgress(newProgressEntry);
-      setProgressData(prev => [...prev, newProgressEntry]);
-      setNewMilestone('');
-      setNewNote('');
+      setProgressData((prev) => [...prev, newProgressEntry]);
+      setNewMilestone("");
+      setNewNote("");
       setNewProgress(0);
-      toast.success('Milestone added successfully');
+      toast.success("Milestone added successfully");
     } catch (error) {
-      toast.error('Failed to add milestone');
+      toast.error("Failed to add milestone");
     }
   };
 
   const handleEditProgress = (progress: WorkflowProgress) => {
     setEditingProgress(progress);
     setIsEditing(true);
-    setNewMilestone(progress.milestone || '');
-    setNewNote(progress.notes || '');
+    setNewMilestone(progress.milestone || "");
+    setNewNote(progress.notes || "");
     setNewProgress(progress.progressPercentage);
   };
 
@@ -140,7 +147,7 @@ export function ProgressTracking({
     await handleUpdateProgress(editingProgress.id, {
       milestone: newMilestone,
       notes: newNote,
-      progressPercentage: newProgress
+      progressPercentage: newProgress,
     });
 
     setIsEditing(false);
@@ -149,24 +156,27 @@ export function ProgressTracking({
 
   const calculateOverallProgress = (): number => {
     if (progressData.length === 0) return 0;
-    const totalProgress = progressData.reduce((sum, p) => sum + p.progressPercentage, 0);
+    const totalProgress = progressData.reduce(
+      (sum, p) => sum + p.progressPercentage,
+      0
+    );
     return Math.round(totalProgress / progressData.length);
   };
 
   const getProgressColor = (percentage: number): string => {
-    if (percentage >= 80) return 'bg-green-500';
-    if (percentage >= 60) return 'bg-blue-500';
-    if (percentage >= 40) return 'bg-yellow-500';
-    if (percentage >= 20) return 'bg-orange-500';
-    return 'bg-red-500';
+    if (percentage >= 80) return "bg-green-500";
+    if (percentage >= 60) return "bg-blue-500";
+    if (percentage >= 40) return "bg-yellow-500";
+    if (percentage >= 20) return "bg-orange-500";
+    return "bg-red-500";
   };
 
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -176,10 +186,10 @@ export function ProgressTracking({
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(hours / 24);
 
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
     const minutes = Math.floor(diff / (1000 * 60));
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   };
 
   if (compact) {
@@ -197,7 +207,8 @@ export function ProgressTracking({
           </div>
           <Progress value={calculateOverallProgress()} className="h-2" />
           <div className="mt-2 text-xs text-gray-500">
-            {progressData.length} milestones • Last updated {getRelativeTime(progressData[0]?.updatedAt || new Date())}
+            {progressData.length} milestones • Last updated{" "}
+            {getRelativeTime(progressData[0]?.updatedAt || new Date())}
           </div>
         </CardContent>
       </Card>
@@ -225,11 +236,25 @@ export function ProgressTracking({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="h-4 w-4 text-green-500" />
-                <span>Completed: {progressData.filter(p => p.progressPercentage === 100).length}</span>
+                <span>
+                  Completed:{" "}
+                  {
+                    progressData.filter((p) => p.progressPercentage === 100)
+                      .length
+                  }
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-blue-500" />
-                <span>In Progress: {progressData.filter(p => p.progressPercentage > 0 && p.progressPercentage < 100).length}</span>
+                <span>
+                  In Progress:{" "}
+                  {
+                    progressData.filter(
+                      (p) =>
+                        p.progressPercentage > 0 && p.progressPercentage < 100
+                    ).length
+                  }
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <Target className="h-4 w-4 text-gray-500" />
@@ -276,14 +301,18 @@ export function ProgressTracking({
                       max="100"
                       placeholder="0"
                       value={newProgress}
-                      onChange={(e) => setNewProgress(parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        setNewProgress(parseInt(e.target.value) || 0)
+                      }
                     />
                   </div>
                 </div>
-                
+
                 {showNotes && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Notes (Optional)</label>
+                    <label className="text-sm font-medium">
+                      Notes (Optional)
+                    </label>
                     <Textarea
                       placeholder="Add any additional notes"
                       value={newNote}
@@ -292,8 +321,11 @@ export function ProgressTracking({
                     />
                   </div>
                 )}
-                
-                <Button onClick={handleAddMilestone} disabled={!newMilestone.trim()}>
+
+                <Button
+                  onClick={handleAddMilestone}
+                  disabled={!newMilestone.trim()}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Add Milestone
                 </Button>
@@ -315,7 +347,11 @@ export function ProgressTracking({
                     <div className="flex items-start justify-between">
                       <div className="flex-1 space-y-3">
                         <div className="flex items-center space-x-3">
-                          <div className={`p-2 rounded-full ${getProgressColor(progress.progressPercentage)} text-white`}>
+                          <div
+                            className={`p-2 rounded-full ${getProgressColor(
+                              progress.progressPercentage
+                            )} text-white`}
+                          >
                             <Target className="h-4 w-4" />
                           </div>
                           <div className="flex-1">
@@ -323,28 +359,37 @@ export function ProgressTracking({
                               {progress.milestone}
                             </h3>
                             <div className="flex items-center space-x-4 text-sm text-gray-600">
-                              <span>{progress.progressPercentage}% Complete</span>
+                              <span>
+                                {progress.progressPercentage}% Complete
+                              </span>
                               <span>•</span>
                               <span>{getRelativeTime(progress.updatedAt)}</span>
                             </div>
                           </div>
                         </div>
-                        
-                        <Progress value={progress.progressPercentage} className="h-2" />
-                        
+
+                        <Progress
+                          value={progress.progressPercentage}
+                          className="h-2"
+                        />
+
                         {showNotes && progress.notes && (
                           <div className="bg-gray-50 p-3 rounded-lg">
                             <div className="flex items-start space-x-2">
                               <MessageSquare className="h-4 w-4 text-gray-500 mt-0.5" />
-                              <p className="text-sm text-gray-700">{progress.notes}</p>
+                              <p className="text-sm text-gray-700">
+                                {progress.notes}
+                              </p>
                             </div>
                           </div>
                         )}
-                        
+
                         <div className="flex items-center justify-between text-xs text-gray-500">
                           <div className="flex items-center space-x-2">
                             <Calendar className="h-3 w-3" />
-                            <span>Updated: {formatDate(progress.updatedAt)}</span>
+                            <span>
+                              Updated: {formatDate(progress.updatedAt)}
+                            </span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <User className="h-3 w-3" />
@@ -352,7 +397,7 @@ export function ProgressTracking({
                           </div>
                         </div>
                       </div>
-                      
+
                       {allowUpdates && (
                         <Button
                           variant="ghost"
@@ -381,20 +426,35 @@ export function ProgressTracking({
             <CardContent>
               <div className="space-y-4">
                 {progressData
-                  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+                  .sort(
+                    (a, b) =>
+                      new Date(b.updatedAt).getTime() -
+                      new Date(a.updatedAt).getTime()
+                  )
                   .map((progress, index) => (
-                    <div key={progress.id} className="flex items-start space-x-4">
-                      <div className={`w-3 h-3 rounded-full mt-2 ${getProgressColor(progress.progressPercentage)}`} />
+                    <div
+                      key={progress.id}
+                      className="flex items-start space-x-4"
+                    >
+                      <div
+                        className={`w-3 h-3 rounded-full mt-2 ${getProgressColor(
+                          progress.progressPercentage
+                        )}`}
+                      />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">{progress.milestone}</h4>
-                          <span className="text-sm text-gray-500">{formatDate(progress.updatedAt)}</span>
+                          <span className="text-sm text-gray-500">
+                            {formatDate(progress.updatedAt)}
+                          </span>
                         </div>
                         <p className="text-sm text-gray-600 mt-1">
                           {progress.progressPercentage}% complete
                         </p>
                         {progress.notes && (
-                          <p className="text-sm text-gray-500 mt-1">{progress.notes}</p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {progress.notes}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -415,18 +475,25 @@ export function ProgressTracking({
             <CardContent>
               <div className="space-y-4">
                 {progressData
-                  .filter(p => p.notes)
+                  .filter((p) => p.notes)
                   .map((progress) => (
-                    <div key={progress.id} className="border-l-4 border-blue-500 pl-4 py-2">
+                    <div
+                      key={progress.id}
+                      className="border-l-4 border-blue-500 pl-4 py-2"
+                    >
                       <div className="flex items-center justify-between">
                         <h4 className="font-medium">{progress.milestone}</h4>
-                        <span className="text-sm text-gray-500">{getRelativeTime(progress.updatedAt)}</span>
+                        <span className="text-sm text-gray-500">
+                          {getRelativeTime(progress.updatedAt)}
+                        </span>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">{progress.notes}</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {progress.notes}
+                      </p>
                     </div>
                   ))}
-                
-                {progressData.filter(p => p.notes).length === 0 && (
+
+                {progressData.filter((p) => p.notes).length === 0 && (
                   <div className="text-center py-8 text-gray-500">
                     <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>No notes available</p>
@@ -452,7 +519,7 @@ export function ProgressTracking({
                 onChange={(e) => setNewMilestone(e.target.value)}
               />
             </div>
-            
+
             <div className="space-y-2">
               <label className="text-sm font-medium">Progress %</label>
               <Input
@@ -463,7 +530,7 @@ export function ProgressTracking({
                 onChange={(e) => setNewProgress(parseInt(e.target.value) || 0)}
               />
             </div>
-            
+
             <div className="space-y-2">
               <label className="text-sm font-medium">Notes</label>
               <Textarea
@@ -472,7 +539,7 @@ export function ProgressTracking({
                 rows={3}
               />
             </div>
-            
+
             <div className="flex justify-end space-x-2">
               <Button variant="outline" onClick={() => setIsEditing(false)}>
                 <X className="h-4 w-4 mr-2" />

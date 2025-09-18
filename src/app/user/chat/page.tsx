@@ -1,14 +1,10 @@
 "use client";
 
-import { ConversationList } from "@/components/chat/conversation-list";
-import { MessagePanel } from "@/components/chat/message-panel";
-
 import { useMessages } from "@/hooks/useMessages";
 import { MessagesSidebar } from "@/components/messages/messages-sidebar";
 import { MessagesMain } from "@/components/messages/messages-main";
 
-
-const currentUserId = 'user-1';
+const currentUserId = "user-1";
 
 export default function MessagingInterface() {
   const {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Check, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
@@ -108,9 +107,7 @@ export function UserTable({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem
-                          onClick={() =>
-                            handleOverflowAction("view", user.id)
-                          }
+                          onClick={() => handleOverflowAction("view", user.id)}
                         >
                           View Details
                         </DropdownMenuItem>

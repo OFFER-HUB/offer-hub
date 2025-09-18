@@ -1,26 +1,26 @@
 "use client";
 
 import type React from "react";
-import Image from "next/image";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Ellipsis } from "lucide-react";
 
 export interface ProjectCardProps {
   title?: string;
   person?: string;
-  freelancerName?: string; 
+  freelancerName?: string;
   date?: string;
-  dateRange?: string; 
+  dateRange?: string;
   avatarSrc?: string;
-  freelancerAvatar?: string; 
+  freelancerAvatar?: string;
   menuIcon?: React.ReactNode;
   onMessage?: () => void;
   showDropdownMenu?: boolean;
@@ -38,11 +38,11 @@ export function ProjectCard({
   onMessage,
   showDropdownMenu = true,
 }: ProjectCardProps) {
-
   const displayTitle = title;
   const displayPerson = person || freelancerName || "Freelancer Name";
   const displayDate = date || dateRange || "Today";
-  const displayAvatar = avatarSrc || freelancerAvatar || "/placeholder.svg?height=40&width=40";
+  const displayAvatar =
+    avatarSrc || freelancerAvatar || "/placeholder.svg?height=40&width=40";
 
   return (
     <Card className="border border-gray-200 rounded-xl shadow-sm bg-white">
@@ -56,7 +56,9 @@ export function ProjectCard({
             <div className="mt-3 flex items-center gap-3">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={displayAvatar} alt={displayPerson} />
-                <AvatarFallback>{displayPerson?.[0]?.toUpperCase() || 'F'}</AvatarFallback>
+                <AvatarFallback>
+                  {displayPerson?.[0]?.toUpperCase() || "F"}
+                </AvatarFallback>
               </Avatar>
               <div className="min-w-0 text-sm">
                 <p className="font-medium text-slate-700">{displayPerson}</p>
@@ -83,9 +85,9 @@ export function ProjectCard({
         </div>
 
         <div className="mt-4">
-          <Button 
+          <Button
             onClick={onMessage}
-            className="w-full rounded-full bg-[#002333] hover:bg-[#012b3f] text-white" 
+            className="w-full rounded-full bg-[#002333] hover:bg-[#012b3f] text-white"
             variant="default"
           >
             Message
@@ -95,6 +97,5 @@ export function ProjectCard({
     </Card>
   );
 }
-
 
 export default ProjectCard;

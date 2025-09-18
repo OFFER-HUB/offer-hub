@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, CheckCircle } from "lucide-react";
+import { Calendar, CheckCircle } from "lucide-react";
 import { WorkExperience } from "@/lib/mockData/freelancer-profile-mock";
 
 interface ExperienceSectionProps {

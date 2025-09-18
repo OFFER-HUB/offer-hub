@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Camera, FileText, Send, Upload } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Camera, FileText, Send, Upload } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import Icon from '../../../public/Icon.svg';
-import Image from 'next/image';
-import { Input } from '@/components/ui/input';
+import { Button } from "@/components/ui/button";
 
-import type { Conversation, Message } from '@/types/messages.types';
-import { cn } from '@/lib/utils';
-import { useRef, useState } from 'react';
+import { Input } from "@/components/ui/input";
+
+import type { Conversation, Message } from "@/types/messages.types";
+import { cn } from "@/lib/utils";
+import { useRef, useState } from "react";
 
 interface MessagesMainProps {
   activeConversation: Conversation | null;
@@ -20,8 +19,14 @@ interface MessagesMainProps {
   error?: string | null;
 }
 
-export function MessagesMain({ activeConversation, messages, onSendMessage, loading, error }: MessagesMainProps) {
-  const [newMessage, setNewMessage] = useState('');
+export function MessagesMain({
+  activeConversation,
+  messages,
+  onSendMessage,
+  loading,
+  error,
+}: MessagesMainProps) {
+  const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,9 +37,9 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
     setSendError(null);
     try {
       await onSendMessage(newMessage);
-      setNewMessage('');
+      setNewMessage("");
     } catch (e: any) {
-      setSendError(e.message || 'Failed to send message');
+      setSendError(e.message || "Failed to send message");
     } finally {
       setSending(false);
     }
@@ -46,10 +51,10 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
       setSending(true);
       setSendError(null);
       try {
-        await onSendMessage('', file);
-        setNewMessage('');
+        await onSendMessage("", file);
+        setNewMessage("");
       } catch (err: any) {
-        setSendError(err.message || 'Failed to send file');
+        setSendError(err.message || "Failed to send file");
       } finally {
         setSending(false);
       }
@@ -59,7 +64,9 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
   if (!activeConversation) {
     return (
       <div className="flex items-center justify-center flex-1">
-        <p className="text-gray-500">Select a conversation to start messaging</p>
+        <p className="text-gray-500">
+          Select a conversation to start messaging
+        </p>
       </div>
     );
   }
@@ -71,15 +78,21 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
           <div className="*:data-[slot=avatar]:ring-background flex -space-x-7 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
             {activeConversation.participants?.map((e) => (
               <Avatar className="w-10 h-10 border border-white" key={e.id}>
-                <AvatarImage src={e.avatar_url || '/placeholder.svg'} alt={e.name} />
+                <AvatarImage
+                  src={e.avatar_url || "/placeholder.svg"}
+                  alt={e.name}
+                />
                 <AvatarFallback className="text-gray-600 bg-gray-200">
-                  {e.name.split(' ').map((n) => n[0]).join('')}
+                  {e.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
                 </AvatarFallback>
               </Avatar>
             ))}
           </div>
           <h2 className="font-medium text-gray-900">
-            {activeConversation.participants?.map((e) => e.name).join(', ')}
+            {activeConversation.participants?.map((e) => e.name).join(", ")}
           </h2>
         </div>
       </div>
@@ -96,12 +109,14 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
             <div
               key={message.id}
               className={cn(
-                'flex',
-                message.sender_id === activeConversation.client_id ? 'justify-end' : 'justify-start'
+                "flex",
+                message.sender_id === activeConversation.client_id
+                  ? "justify-end"
+                  : "justify-start"
               )}
             >
               <div className="max-w-xs lg:max-w-md">
-                {message.message_type === 'file' && message.file_url && (
+                {message.message_type === "file" && message.file_url && (
                   <div className="p-4 mb-2 border border-gray-200 rounded-lg bg-gray-50">
                     <div className="flex items-start gap-3">
                       <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 bg-red-100 rounded">
@@ -112,9 +127,21 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
                           {message.file_name}
                         </p>
                         <p className="mt-1 text-xs text-gray-500">
-                          {message.file_url?.split('.').pop()?.toUpperCase()} • {message.file_size ? `${(message.file_size / (1024 * 1024)).toFixed(1)}mb` : ''}
+                          {message.file_url?.split(".").pop()?.toUpperCase()} •{" "}
+                          {message.file_size
+                            ? `${(message.file_size / (1024 * 1024)).toFixed(
+                                1
+                              )}mb`
+                            : ""}
                         </p>
-                        <a href={message.file_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 underline">Download</a>
+                        <a
+                          href={message.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-blue-500 underline"
+                        >
+                          Download
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -122,14 +149,16 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
                 <div className="relative">
                   <div
                     className={cn(
-                      'px-4 py-3 rounded-2xl relative',
+                      "px-4 py-3 rounded-2xl relative",
                       message.sender_id === activeConversation.client_id
-                        ? 'bg-blue-500 text-white rounded-br-md'
-                        : 'bg-gray-200 text-gray-900 rounded-bl-md'
+                        ? "bg-blue-500 text-white rounded-br-md"
+                        : "bg-gray-200 text-gray-900 rounded-bl-md"
                     )}
                   >
-                    {message.message_type === 'system' ? (
-                      <p className="text-xs italic text-gray-500">{message.content}</p>
+                    {message.message_type === "system" ? (
+                      <p className="text-xs italic text-gray-500">
+                        {message.content}
+                      </p>
                     ) : (
                       <p className="text-sm">{message.content}</p>
                     )}
@@ -139,9 +168,24 @@ export function MessagesMain({ activeConversation, messages, onSendMessage, load
                       <div className="absolute bottom-0 left-0 w-0 h-0 border-r-[8px] border-r-gray-200 border-t-[8px] border-t-transparent"></div>
                     )}
                   </div>
-                  <div className={cn('text-xs mt-1 text-gray-500', message.sender_id === activeConversation.client_id ? 'text-right' : 'text-left')}>
-                    {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                    {message.is_read ? <span className="ml-2 text-green-500">Read</span> : <span className="ml-2 text-gray-400">Unread</span>}
+                  <div
+                    className={cn(
+                      "text-xs mt-1 text-gray-500",
+                      message.sender_id === activeConversation.client_id
+                        ? "text-right"
+                        : "text-left"
+                    )}
+                  >
+                    {new Date(message.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                    {message.is_read ? (
+                      <span className="ml-2 text-green-500">Read</span>
+                    ) : (
+                      <span className="ml-2 text-gray-400">Unread</span>
+                    )}
                   </div>
                 </div>
               </div>

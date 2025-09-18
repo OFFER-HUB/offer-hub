@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -15,7 +18,12 @@ interface DatePickerProps {
   label?: string;
 }
 
-export function DatePicker({ date, onDateChange, placeholder = "Pick a date", label }: DatePickerProps) {
+export function DatePicker({
+  date,
+  onDateChange,
+  placeholder = "Pick a date",
+  label,
+}: DatePickerProps) {
   return (
     <div className="space-y-2">
       {label && (
@@ -45,4 +53,4 @@ export function DatePicker({ date, onDateChange, placeholder = "Pick a date", la
       </Popover>
     </div>
   );
-} 
+}

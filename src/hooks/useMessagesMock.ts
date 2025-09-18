@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
 import { conversations as rawConvs } from "@/lib/mockData/conversations-mock";
 import { messages as rawMsgs } from "@/lib/mockData/messages-mock";
 import { currentUserId, users } from "@/lib/mockData/users-mock";

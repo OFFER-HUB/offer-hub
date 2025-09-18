@@ -1,4 +1,3 @@
-import React from "react";
 import PasswordRecoveryHeader from "./PasswordRecoveryHeader";
 import PasswordRecoveryForm from "./PasswordRecoveryForm";
 

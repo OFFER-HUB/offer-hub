@@ -1,15 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MobileWorkflowProps, 
-  MobileWorkflowState,
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MobileWorkflowProps,
   PendingAction,
-  WorkflowState,
-  WorkflowStageName 
-} from '@/types/workflow.types';
-import { 
+  WorkflowStageName,
+} from "@/types/workflow.types";
+import {
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -20,64 +18,64 @@ import {
   MessageSquare,
   Gavel,
   TrendingUp,
-  ArrowRight,
   Smartphone,
   Wifi,
   WifiOff,
   Hand,
   MoveLeft,
-  MoveRight
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { toast } from 'react-hot-toast';
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { toast } from "react-hot-toast";
 
-export function MobileWorkflow({ 
+export function MobileWorkflow({
   disputeId,
   onActionComplete,
   showOfflineIndicator = true,
-  enableGestures = true 
+  enableGestures = true,
 }: MobileWorkflowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOffline, setIsOffline] = useState(false);
   const [pendingActions, setPendingActions] = useState<PendingAction[]>([]);
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
-  
+  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
+    null
+  );
+
   // Default values for missing props
-  const currentStage = 'initial' as any;
+  const currentStage = "initial" as any;
   const progressPercentage = 0;
 
   // Mock pending actions - in real implementation, this would come from the API
   useEffect(() => {
     const mockActions: PendingAction[] = [
       {
-        id: '1',
-        type: 'upload_evidence',
-        title: 'Upload Evidence',
-        description: 'Please upload supporting documents for your dispute',
+        id: "1",
+        type: "upload_evidence",
+        title: "Upload Evidence",
+        description: "Please upload supporting documents for your dispute",
         deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-        priority: 'high'
+        priority: "high",
       },
       {
-        id: '2',
-        type: 'respond_to_mediator',
-        title: 'Respond to Mediator',
-        description: 'The mediator has requested additional information',
+        id: "2",
+        type: "respond_to_mediator",
+        title: "Respond to Mediator",
+        description: "The mediator has requested additional information",
         deadline: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-        priority: 'urgent'
+        priority: "urgent",
       },
       {
-        id: '3',
-        type: 'accept_settlement',
-        title: 'Review Settlement Offer',
-        description: 'A settlement offer has been proposed',
+        id: "3",
+        type: "accept_settlement",
+        title: "Review Settlement Offer",
+        description: "A settlement offer has been proposed",
         deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-        priority: 'medium'
-      }
+        priority: "medium",
+      },
     ];
-    
+
     setPendingActions(mockActions);
   }, [disputeId]);
 
@@ -86,27 +84,27 @@ export function MobileWorkflow({
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
   // Gesture handling
-  const handleSwipe = (direction: 'left' | 'right') => {
+  const handleSwipe = (direction: "left" | "right") => {
     if (!enableGestures) return;
-    
+
     setSwipeDirection(direction);
-    
-    if (direction === 'left' && currentIndex < pendingActions.length - 1) {
+
+    if (direction === "left" && currentIndex < pendingActions.length - 1) {
       setCurrentIndex(currentIndex + 1);
-    } else if (direction === 'right' && currentIndex > 0) {
+    } else if (direction === "right" && currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
-    
+
     setTimeout(() => setSwipeDirection(null), 300);
   };
 
@@ -124,74 +122,94 @@ export function MobileWorkflow({
       // Only handle horizontal swipes
       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
         if (deltaX > 0) {
-          handleSwipe('right');
+          handleSwipe("right");
         } else {
-          handleSwipe('left');
+          handleSwipe("left");
         }
       }
     };
 
     const handleTouchEnd = () => {
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
     };
 
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
   };
 
   const handleActionComplete = (action: PendingAction) => {
-    setPendingActions(prev => prev.filter(a => a.id !== action.id));
+    setPendingActions((prev) => prev.filter((a) => a.id !== action.id));
     onActionComplete?.(action);
-    toast.success('Action completed successfully');
+    toast.success("Action completed successfully");
   };
 
   const getStageIcon = (stage: WorkflowStageName) => {
     switch (stage) {
-      case 'dispute_initiation': return <FileText className="h-6 w-6" />;
-      case 'mediator_assignment': return <Users className="h-6 w-6" />;
-      case 'evidence_collection': return <FileText className="h-6 w-6" />;
-      case 'mediation_process': return <MessageSquare className="h-6 w-6" />;
-      case 'resolution_or_escalation': return <AlertCircle className="h-6 w-6" />;
-      case 'arbitration': return <Gavel className="h-6 w-6" />;
-      case 'resolution_implementation': return <TrendingUp className="h-6 w-6" />;
-      default: return <FileText className="h-6 w-6" />;
+      case "dispute_initiation":
+        return <FileText className="h-6 w-6" />;
+      case "mediator_assignment":
+        return <Users className="h-6 w-6" />;
+      case "evidence_collection":
+        return <FileText className="h-6 w-6" />;
+      case "mediation_process":
+        return <MessageSquare className="h-6 w-6" />;
+      case "resolution_or_escalation":
+        return <AlertCircle className="h-6 w-6" />;
+      case "arbitration":
+        return <Gavel className="h-6 w-6" />;
+      case "resolution_implementation":
+        return <TrendingUp className="h-6 w-6" />;
+      default:
+        return <FileText className="h-6 w-6" />;
     }
   };
 
   const getStageLabel = (stage: WorkflowStageName): string => {
-    return stage.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return stage.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
-  const getPriorityColor = (priority: 'low' | 'medium' | 'high' | 'urgent'): string => {
+  const getPriorityColor = (
+    priority: "low" | "medium" | "high" | "urgent"
+  ): string => {
     switch (priority) {
-      case 'urgent': return 'border-red-500 bg-red-50';
-      case 'high': return 'border-orange-500 bg-orange-50';
-      case 'medium': return 'border-yellow-500 bg-yellow-50';
-      case 'low': return 'border-green-500 bg-green-50';
-      default: return 'border-gray-300 bg-gray-50';
+      case "urgent":
+        return "border-red-500 bg-red-50";
+      case "high":
+        return "border-orange-500 bg-orange-50";
+      case "medium":
+        return "border-yellow-500 bg-yellow-50";
+      case "low":
+        return "border-green-500 bg-green-50";
+      default:
+        return "border-gray-300 bg-gray-50";
     }
   };
 
-  const getPriorityIcon = (priority: 'low' | 'medium' | 'high' | 'urgent') => {
+  const getPriorityIcon = (priority: "low" | "medium" | "high" | "urgent") => {
     switch (priority) {
-      case 'urgent': return <AlertCircle className="h-4 w-4 text-red-600" />;
-      case 'high': return <AlertCircle className="h-4 w-4 text-orange-600" />;
-      case 'medium': return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'low': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      default: return <Clock className="h-4 w-4 text-gray-600" />;
+      case "urgent":
+        return <AlertCircle className="h-4 w-4 text-red-600" />;
+      case "high":
+        return <AlertCircle className="h-4 w-4 text-orange-600" />;
+      case "medium":
+        return <Clock className="h-4 w-4 text-yellow-600" />;
+      case "low":
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-600" />;
     }
   };
 
   const formatTimeRemaining = (deadline: Date): string => {
     const now = new Date();
     const diff = deadline.getTime() - now.getTime();
-    
-    if (diff <= 0) return 'Overdue';
-    
+
+    if (diff <= 0) return "Overdue";
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
+
     if (days > 0) return `${days}d ${hours}h`;
     return `${hours}h`;
   };
@@ -205,11 +223,13 @@ export function MobileWorkflow({
             <div className="flex items-center space-x-3">
               <Smartphone className="h-5 w-5 text-gray-500" />
               <div>
-                <h1 className="font-semibold text-gray-900">Dispute Workflow</h1>
+                <h1 className="font-semibold text-gray-900">
+                  Dispute Workflow
+                </h1>
                 <p className="text-sm text-gray-600">Mobile View</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               {showOfflineIndicator && (
                 <div className="flex items-center space-x-1">
@@ -247,7 +267,7 @@ export function MobileWorkflow({
               </div>
               <Badge variant="secondary">{progressPercentage}%</Badge>
             </div>
-            
+
             <div className="mt-4">
               <Progress value={progressPercentage} className="h-2" />
             </div>
@@ -275,17 +295,39 @@ export function MobileWorkflow({
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
-                initial={{ opacity: 0, x: swipeDirection === 'left' ? 300 : swipeDirection === 'right' ? -300 : 0 }}
+                initial={{
+                  opacity: 0,
+                  x:
+                    swipeDirection === "left"
+                      ? 300
+                      : swipeDirection === "right"
+                      ? -300
+                      : 0,
+                }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: swipeDirection === 'left' ? -300 : swipeDirection === 'right' ? 300 : 0 }}
+                exit={{
+                  opacity: 0,
+                  x:
+                    swipeDirection === "left"
+                      ? -300
+                      : swipeDirection === "right"
+                      ? 300
+                      : 0,
+                }}
                 transition={{ duration: 0.3 }}
                 onTouchStart={handleTouchStart}
               >
-                <Card className={`${getPriorityColor(pendingActions[currentIndex]?.priority || 'medium')} border-2`}>
+                <Card
+                  className={`${getPriorityColor(
+                    pendingActions[currentIndex]?.priority || "medium"
+                  )} border-2`}
+                >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-2">
-                        {getPriorityIcon(pendingActions[currentIndex]?.priority || 'medium')}
+                        {getPriorityIcon(
+                          pendingActions[currentIndex]?.priority || "medium"
+                        )}
                         <h3 className="font-semibold text-gray-900">
                           {pendingActions[currentIndex]?.title}
                         </h3>
@@ -294,25 +336,30 @@ export function MobileWorkflow({
                         {pendingActions[currentIndex]?.priority}
                       </Badge>
                     </div>
-                    
+
                     <p className="text-sm text-gray-600 mb-4">
                       {pendingActions[currentIndex]?.description}
                     </p>
-                    
+
                     {pendingActions[currentIndex]?.deadline && (
                       <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                         <div className="flex items-center space-x-1">
                           <Clock className="h-4 w-4" />
                           <span>
-                            Due: {formatTimeRemaining(pendingActions[currentIndex].deadline)}
+                            Due:{" "}
+                            {formatTimeRemaining(
+                              pendingActions[currentIndex].deadline
+                            )}
                           </span>
                         </div>
                       </div>
                     )}
-                    
+
                     <Button
                       className="w-full"
-                      onClick={() => handleActionComplete(pendingActions[currentIndex])}
+                      onClick={() =>
+                        handleActionComplete(pendingActions[currentIndex])
+                      }
                     >
                       Complete Action
                     </Button>
@@ -328,7 +375,7 @@ export function MobileWorkflow({
                   <button
                     key={index}
                     className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
+                      index === currentIndex ? "bg-blue-500" : "bg-gray-300"
                     }`}
                     onClick={() => setCurrentIndex(index)}
                   />
@@ -364,7 +411,9 @@ export function MobileWorkflow({
           <Card>
             <CardContent className="p-8 text-center">
               <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">All Actions Complete</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                All Actions Complete
+              </h3>
               <p className="text-gray-600">
                 You're all caught up! Check back later for new actions.
               </p>

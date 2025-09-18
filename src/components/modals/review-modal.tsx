@@ -1,12 +1,11 @@
 "use client";
-
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
-import StarRating from '@/components/ui/star-rating';
-import { useReviewsApi } from '@/hooks/api-connections/use-reviews-api';
-import { Review } from '@/types/review.types';
-import { useNotification } from '@/lib/contexts/NotificatonContext';
-import { VALIDATION_LIMITS } from '@/constants/magic-numbers';
+import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+import StarRating from "@/components/ui/star-rating";
+import { useReviewsApi } from "@/hooks/api-connections/use-reviews-api";
+import { Review } from "@/types/review.types";
+import { useNotification } from "@/lib/contexts/NotificatonContext";
+import { VALIDATION_LIMITS } from "@/constants/magic-numbers";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -27,37 +26,39 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 }) => {
   const { useCreateReview } = useReviewsApi();
   const { mutate: createReview, isLoading, error } = useCreateReview();
-  const { actions: { addNotification } } = useNotification();
+  const {
+    actions: { addNotification },
+  } = useNotification();
 
   const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>('');
-  const [validationError, setValidationError] = useState<string>('');
+  const [comment, setComment] = useState<string>("");
+  const [validationError, setValidationError] = useState<string>("");
 
   // Reset form when modal opens/closes
   useEffect(() => {
     if (!isOpen) {
       setRating(0);
-      setComment('');
-      setValidationError('');
+      setComment("");
+      setValidationError("");
     }
   }, [isOpen]);
 
   const validateForm = (): boolean => {
     if (rating === 0) {
-      setValidationError('Please select a rating');
+      setValidationError("Please select a rating");
       return false;
     }
     if (rating < 1 || rating > 5) {
-      setValidationError('Rating must be between 1 and 5');
+      setValidationError("Rating must be between 1 and 5");
       return false;
     }
-    setValidationError('');
+    setValidationError("");
     return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -73,9 +74,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
       // Success feedback
       addNotification({
-        type: 'success',
-        title: 'Review Submitted',
-        message: 'Your review has been submitted successfully!',
+        type: "success",
+        title: "Review Submitted",
+        message: "Your review has been submitted successfully!",
       });
 
       // Call onCreated callback with the new review
@@ -83,12 +84,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
       // Reset form and close modal
       setRating(0);
-      setComment('');
-      setValidationError('');
+      setComment("");
+      setValidationError("");
       onClose();
     } catch (err) {
       // Error is already handled in the hook and shown in the error state
-      console.error('Failed to submit review:', err);
+      console.error("Failed to submit review:", err);
     }
   };
 
@@ -124,7 +125,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
               />
               {rating > 0 && (
                 <span className="text-sm text-gray-600">
-                  {rating} star{rating !== 1 ? 's' : ''}
+                  {rating} star{rating !== 1 ? "s" : ""}
                 </span>
               )}
             </div>
@@ -132,7 +133,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
           {/* Comment Section */}
           <div>
-            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="comment"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Comment (Optional)
             </label>
             <textarea
@@ -147,24 +151,19 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             />
             <div className="flex justify-between mt-1">
               <div className="text-xs text-gray-500">
-                {comment.length}/{VALIDATION_LIMITS.MAX_REVIEW_COMMENT_LENGTH} characters
+                {comment.length}/{VALIDATION_LIMITS.MAX_REVIEW_COMMENT_LENGTH}{" "}
+                characters
               </div>
             </div>
           </div>
 
           {/* Validation Error */}
           {validationError && (
-            <div className="text-red-600 text-sm">
-              {validationError}
-            </div>
+            <div className="text-red-600 text-sm">{validationError}</div>
           )}
 
           {/* API Error */}
-          {error && (
-            <div className="text-red-600 text-sm">
-              {error}
-            </div>
-          )}
+          {error && <div className="text-red-600 text-sm">{error}</div>}
 
           {/* Action Buttons */}
           <div className="flex justify-end space-x-3 pt-4">
@@ -182,12 +181,27 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 flex items-center"
             >
               {isLoading && (
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
               )}
-              {isLoading ? 'Submitting...' : 'Submit Review'}
+              {isLoading ? "Submitting..." : "Submit Review"}
             </button>
           </div>
         </form>

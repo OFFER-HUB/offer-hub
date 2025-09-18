@@ -1,11 +1,13 @@
+
 import React from "react";
 import withErrorBoundary from "@/components/shared/WithErrorBoundary";
+
 import {
   Heart,
   MessageCircle,
   ChevronLeft,
   ChevronRight,
-  Star,
+
 } from "lucide-react";
 import StarRating from "@/components/ui/star-rating";
 import { useReviewsApi } from "@/hooks/api-connections/use-reviews-api";
@@ -24,8 +26,12 @@ const UserProfile = ({
 }: UserProfileProps) => {
   // Fetch real reviews data
   const { useUserReviews, computeAverage } = useReviewsApi();
-  const { data: reviews = [], isLoading: reviewsLoading, error: reviewsError } = useUserReviews(userId);
-  
+  const {
+    data: reviews = [],
+    isLoading: reviewsLoading,
+    error: reviewsError,
+  } = useUserReviews(userId);
+
   const averageRating = computeAverage(reviews);
   return (
     <div className="min-h-screen bg-white p-4 md:p-8 max-w-4xl mx-auto">
@@ -209,8 +215,12 @@ const UserProfile = ({
             {reviews.length > 0 && (
               <div className="flex items-center space-x-2">
                 <StarRating rating={averageRating} size="sm" />
-                <span className="text-sm font-medium text-gray-700">{averageRating}</span>
-                <span className="text-sm text-gray-500">({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
+                <span className="text-sm font-medium text-gray-700">
+                  {averageRating}
+                </span>
+                <span className="text-sm text-gray-500">
+                  ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
+                </span>
               </div>
             )}
           </div>
@@ -219,7 +229,10 @@ const UserProfile = ({
             {reviewsLoading ? (
               <div className="space-y-6">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="border-b border-gray-100 pb-6 last:border-b-0 animate-pulse">
+                  <div
+                    key={i}
+                    className="border-b border-gray-100 pb-6 last:border-b-0 animate-pulse"
+                  >
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="h-5 bg-gray-300 rounded w-32 mb-2"></div>
@@ -239,22 +252,29 @@ const UserProfile = ({
             ) : reviews.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">No reviews yet</p>
-                <p className="text-gray-400 text-sm mt-1">Reviews from completed contracts will appear here</p>
+                <p className="text-gray-400 text-sm mt-1">
+                  Reviews from completed contracts will appear here
+                </p>
               </div>
             ) : (
               reviews.map((review) => {
                 const reviewDate = new Date(review.created_at);
-                const formattedDate = reviewDate.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
+                const formattedDate = reviewDate.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
                 });
 
                 return (
-                  <div key={review.id} className="border-b border-gray-100 pb-6 last:border-b-0">
+                  <div
+                    key={review.id}
+                    className="border-b border-gray-100 pb-6 last:border-b-0"
+                  >
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900">Client Review</h3>
+                        <h3 className="font-semibold text-gray-900">
+                          Client Review
+                        </h3>
                         <p className="text-sm text-gray-500">{formattedDate}</p>
                       </div>
                       <StarRating rating={review.rating} size="sm" />
@@ -264,7 +284,9 @@ const UserProfile = ({
                         &quot;{review.comment}&quot;
                       </p>
                     )}
-                    <p className="text-xs text-gray-400 mt-2">Contract: {review.contract_id.slice(-8)}</p>
+                    <p className="text-xs text-gray-400 mt-2">
+                      Contract: {review.contract_id.slice(-8)}
+                    </p>
                   </div>
                 );
               })

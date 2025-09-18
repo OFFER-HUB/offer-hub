@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import { useState, useMemo, type ChangeEvent, type FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Circle, CircleCheck } from "lucide-react";
-
+import type { ChangeEvent } from "react";
 const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,7 +59,11 @@ const ResetPasswordPage: React.FC = () => {
               <Input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+
+
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setPassword(e.target.value)
+                }
                 placeholder="Enter new password"
                 aria-label="Enter new password"
                 className="focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-400 text-sm sm:text-base"
@@ -78,7 +82,10 @@ const ResetPasswordPage: React.FC = () => {
             </div>
             <div className="mt-2">
               <p className="text-sm font-medium text-neutral-600">
-                Strength: <span className="text-gray-500 font-light">{getStrength()}</span>
+                Strength:{" "}
+                <span className="text-gray-500 font-light">
+                  {getStrength()}
+                </span>
               </p>
               <ul className="text-xs sm:text-sm mt-1 space-y-1">
                 <li
@@ -123,7 +130,9 @@ const ResetPasswordPage: React.FC = () => {
                       <Circle className="h-4 w-4 sm:h-5 sm:w-5 text-gray-300" />
                     )}
                   </span>
-                  <span>At least one uppercase, lowercase characters or numbers.</span>
+                  <span>
+                    At least one uppercase, lowercase characters or numbers.
+                  </span>
                 </li>
                 <li
                   className={`flex items-center text-xs sm:text-xs ${
@@ -164,7 +173,9 @@ const ResetPasswordPage: React.FC = () => {
               <Input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setConfirmPassword(e.target.value)
+                }
                 placeholder="Confirm new password"
                 aria-label="Confirm new password"
                 className={`${
@@ -184,7 +195,9 @@ const ResetPasswordPage: React.FC = () => {
               </button>
             </div>
             {!passwordsMatch && confirmPassword && (
-              <p className="text-red-500 text-xs sm:text-sm mt-1">Password mis-match.</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">
+                Password mis-match.
+              </p>
             )}
           </div>
           <Button

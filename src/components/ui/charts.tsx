@@ -1,6 +1,5 @@
-"use client"
+"use client";
 
-import React from "react";
 import {
   LineChart as RechartsLineChart,
   Line,
@@ -29,8 +28,18 @@ import {
 
 // Common colors for charts
 const CHART_COLORS = [
-  "#15949C", "#002333", "#4F46E5", "#059669", "#DC2626", "#D97706", 
-  "#7C3AED", "#DB2777", "#2563EB", "#0891B2", "#65A30D", "#CA8A04"
+  "#15949C",
+  "#002333",
+  "#4F46E5",
+  "#059669",
+  "#DC2626",
+  "#D97706",
+  "#7C3AED",
+  "#DB2777",
+  "#2563EB",
+  "#0891B2",
+  "#65A30D",
+  "#CA8A04",
 ];
 
 export interface ChartData {
@@ -67,22 +76,25 @@ export function LineChart({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsLineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <RechartsLineChart
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
-          <XAxis 
-            dataKey="name" 
+          <XAxis
+            dataKey="name"
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <YAxis 
+          <YAxis
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -98,8 +110,19 @@ export function LineChart({
               dataKey={key}
               stroke={CHART_COLORS[index % CHART_COLORS.length]}
               strokeWidth={strokeWidth}
-              dot={showDots ? { fill: CHART_COLORS[index % CHART_COLORS.length], strokeWidth: 0, r: 4 } : false}
-              activeDot={{ r: 6, fill: CHART_COLORS[index % CHART_COLORS.length] }}
+              dot={
+                showDots
+                  ? {
+                      fill: CHART_COLORS[index % CHART_COLORS.length],
+                      strokeWidth: 0,
+                      r: 4,
+                    }
+                  : false
+              }
+              activeDot={{
+                r: 6,
+                fill: CHART_COLORS[index % CHART_COLORS.length],
+              }}
             />
           ))}
         </RechartsLineChart>
@@ -127,13 +150,13 @@ export function BarChart({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsBarChart 
-          data={data} 
+        <RechartsBarChart
+          data={data}
           layout={orientation === "horizontal" ? "horizontal" : "vertical"}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
-          <XAxis 
+          <XAxis
             type={orientation === "horizontal" ? "number" : "category"}
             dataKey={orientation === "horizontal" ? undefined : "name"}
             stroke="#6B7280"
@@ -141,7 +164,7 @@ export function BarChart({
             tickLine={false}
             axisLine={false}
           />
-          <YAxis 
+          <YAxis
             type={orientation === "horizontal" ? "category" : "number"}
             dataKey={orientation === "horizontal" ? "name" : undefined}
             stroke="#6B7280"
@@ -149,7 +172,7 @@ export function BarChart({
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -158,11 +181,7 @@ export function BarChart({
             }}
           />
           {showLegend && <Legend />}
-          <Bar 
-            dataKey={dataKey} 
-            fill={CHART_COLORS[0]}
-            radius={[4, 4, 0, 0]}
-          />
+          <Bar dataKey={dataKey} fill={CHART_COLORS[0]} radius={[4, 4, 0, 0]} />
         </RechartsBarChart>
       </ResponsiveContainer>
     </div>
@@ -188,22 +207,25 @@ export function AreaChart({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsAreaChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <RechartsAreaChart
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
-          <XAxis 
-            dataKey="name" 
+          <XAxis
+            dataKey="name"
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <YAxis 
+          <YAxis
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -248,7 +270,7 @@ export function PieChart({
   className = "",
 }: PieChartProps) {
   const radius = outerRadius || Math.min(height * 0.4, 120);
-  
+
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
@@ -258,17 +280,25 @@ export function PieChart({
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={showLabels ? ({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%` : false}
+            label={
+              showLabels
+                ? ({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                : false
+            }
             outerRadius={radius}
             innerRadius={innerRadius}
             fill="#8884d8"
             dataKey={dataKey}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+              <Cell
+                key={`cell-${index}`}
+                fill={CHART_COLORS[index % CHART_COLORS.length]}
+              />
             ))}
           </Pie>
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -302,26 +332,29 @@ export function ScatterChart({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsScatterChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <RechartsScatterChart
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
-          <XAxis 
-            type="number" 
+          <XAxis
+            type="number"
             dataKey={xDataKey}
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <YAxis 
-            type="number" 
+          <YAxis
+            type="number"
             dataKey={yDataKey}
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip 
-            cursor={{ strokeDasharray: '3 3' }}
+          <Tooltip
+            cursor={{ strokeDasharray: "3 3" }}
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -354,11 +387,14 @@ export function RadarChart({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsRadarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <RechartsRadarChart
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
           {showGrid && <PolarGrid />}
           <PolarAngleAxis dataKey="name" />
           <PolarRadiusAxis />
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -404,22 +440,25 @@ export function MetricsComposedChart({
   return (
     <div className={`w-full ${className}`} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <ComposedChart
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />}
-          <XAxis 
-            dataKey="name" 
+          <XAxis
+            dataKey="name"
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <YAxis 
+          <YAxis
             stroke="#6B7280"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               backgroundColor: "white",
               border: "1px solid #E5E7EB",
@@ -441,7 +480,11 @@ export function MetricsComposedChart({
             <Bar
               key={key}
               dataKey={key}
-              fill={CHART_COLORS[(index + areaDataKeys.length) % CHART_COLORS.length]}
+              fill={
+                CHART_COLORS[
+                  (index + areaDataKeys.length) % CHART_COLORS.length
+                ]
+              }
             />
           ))}
           {lineDataKeys.map((key, index) => (
@@ -449,7 +492,12 @@ export function MetricsComposedChart({
               key={key}
               type="monotone"
               dataKey={key}
-              stroke={CHART_COLORS[(index + areaDataKeys.length + barDataKeys.length) % CHART_COLORS.length]}
+              stroke={
+                CHART_COLORS[
+                  (index + areaDataKeys.length + barDataKeys.length) %
+                    CHART_COLORS.length
+                ]
+              }
               strokeWidth={2}
             />
           ))}
@@ -458,4 +506,3 @@ export function MetricsComposedChart({
     </div>
   );
 }
-

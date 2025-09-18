@@ -1,45 +1,44 @@
-"use client"
-import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
-import { useTalentData } from "@/hooks/talent/useTalentData"
-import Image from "next/image"
-import TalentLayout from "@/components/talent/talents/TalentLayout"
+"use client";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useTalentData } from "@/hooks/talent/useTalentData";
+import Image from "next/image";
+import TalentLayout from "@/components/talent/talents/TalentLayout";
 
 export default function OfferSuccessPage() {
-  const params = useParams()
-  const router = useRouter()
-  const talentId = params.id as string
-  const { getTalentById } = useTalentData()
+  const params = useParams();
+  const router = useRouter();
+  const talentId = params.id as string;
+  const { getTalentById } = useTalentData();
 
-  const [offerData, setOfferData] = useState<any>(null)
-  const talent = getTalentById(Number(talentId))
+  const [offerData, setOfferData] = useState<any>(null);
+  const talent = getTalentById(Number(talentId));
 
   useEffect(() => {
     // Retrieve complete offer data
-    const storedData = sessionStorage.getItem("completeOfferData")
+    const storedData = sessionStorage.getItem("completeOfferData");
     if (storedData) {
-      setOfferData(JSON.parse(storedData))
+      setOfferData(JSON.parse(storedData));
     }
 
     // Clean up session storage
     return () => {
-      sessionStorage.removeItem("offerFormData")
-      sessionStorage.removeItem("completeOfferData")
-    }
-  }, [])
+      sessionStorage.removeItem("offerFormData");
+      sessionStorage.removeItem("completeOfferData");
+    };
+  }, []);
 
   const handleMessage = () => {
-    router.push(`/talent/${talentId}/messages`)
-  }
+    router.push(`/talent/${talentId}/messages`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className='bg-white px-6 py-2'>
-        <div className='flex items-center justify-between'>
-          <div className='flex-1 text-center'>
-            <h1 className='text-base font-bold text-gray-900'>Talents</h1>
+      <div className="bg-white px-6 py-2">
+        <div className="flex items-center justify-between">
+          <div className="flex-1 text-center">
+            <h1 className="text-base font-bold text-gray-900">Talents</h1>
           </div>
         </div>
       </div>
@@ -48,8 +47,12 @@ export default function OfferSuccessPage() {
           <div className="text-center">
             {/* Success Message */}
             <div className="mb-8">
-              <h1 className="text-sm font-bold text-gray-900 mb-2">You have sent offer to</h1>
-              <p className="text-xl text-gray-500">{talent?.name || "John D"}</p>
+              <h1 className="text-sm font-bold text-gray-900 mb-2">
+                You have sent offer to
+              </h1>
+              <p className="text-xl text-gray-500">
+                {talent?.name || "John D"}
+              </p>
             </div>
 
             {/* Success Icon */}
@@ -73,5 +76,5 @@ export default function OfferSuccessPage() {
         </div>
       </TalentLayout>
     </div>
-  )
+  );
 }

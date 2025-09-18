@@ -1,12 +1,13 @@
 "use client"
 
 import { useMemo, useState } from "react"
+
 import withErrorBoundary from "@/components/shared/WithErrorBoundary";
 import { ProjectCard } from "@/components/projects/ProjectCard"
 import { ProjectTabs } from "@/components/projects/ProjectTabs"
 import { ProjectsList } from "@/components/projects/ProjectsList"
-import { MoreHorizontal } from "lucide-react"
-import { getMockProjects, type Project } from "@/lib/mockData/projects-list-mock"
+
+import { getMockProjects} from "@/lib/mockData/projects-list-mock"
 
 const TABS = [
   { key: "active", label: "Active project" },

@@ -3,15 +3,20 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 
 interface TimelineConfigurationFormProps {
   onNext: () => void;
   onBack: () => void;
 }
 
-export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurationFormProps) {
-  const [projectType, setProjectType] = useState<"long-term" | "short-term">("long-term");
+export function TimelineConfigurationForm({
+  onNext,
+  onBack,
+}: TimelineConfigurationFormProps) {
+  const [projectType, setProjectType] = useState<"long-term" | "short-term">(
+    "long-term"
+  );
 
   const handleNext = () => {
     onNext();
@@ -34,10 +39,10 @@ export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurat
           {/* Project Type Selection */}
           <div className="space-y-4">
             {/* Long Term Project Option */}
-            <div 
+            <div
               className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                projectType === "long-term" 
-                  ? "border-teal-500" 
+                projectType === "long-term"
+                  ? "border-teal-500"
                   : "border-gray-200 hover:border-gray-300"
               }`}
               onClick={() => setProjectType("long-term")}
@@ -48,7 +53,8 @@ export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurat
                     Long term project
                   </h3>
                   <p className="text-sm text-gray-600">
-                    More than thirty hours a week and/or will be longer than three months.
+                    More than thirty hours a week and/or will be longer than
+                    three months.
                   </p>
                 </div>
                 <div className="ml-4">
@@ -64,10 +70,10 @@ export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurat
             </div>
 
             {/* Short Term Project Option */}
-            <div 
+            <div
               className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                projectType === "short-term" 
-                  ? "border-teal-500" 
+                projectType === "short-term"
+                  ? "border-teal-500"
                   : "border-gray-200 hover:border-gray-300"
               }`}
               onClick={() => setProjectType("short-term")}
@@ -78,7 +84,8 @@ export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurat
                     Short term project
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Less than thirty hours a week and/or will be shorter than three months.
+                    Less than thirty hours a week and/or will be shorter than
+                    three months.
                   </p>
                 </div>
                 <div className="ml-4">
@@ -97,32 +104,32 @@ export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurat
 
         {/* Navigation Buttons */}
         <div className="flex flex-col gap-4 pt-8 items-center">
-          <Button 
+          <Button
             className="bg-gray-800 hover:bg-gray-900 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              width: '361px',
-              height: '44px',
-              borderRadius: '32px',
-              padding: '16px',
-              gap: '10px',
-              color: '#FFFFFF'
+              width: "361px",
+              height: "44px",
+              borderRadius: "32px",
+              padding: "16px",
+              gap: "10px",
+              color: "#FFFFFF",
             }}
             onClick={handleNext}
             disabled={!canProceed}
           >
             Post job
           </Button>
-          
-          <Button 
+
+          <Button
             className="text-white font-medium hover:bg-opacity-90"
             style={{
-              width: '361px',
-              height: '44px',
-              borderRadius: '32px',
-              padding: '16px',
-              gap: '10px',
-              backgroundColor: '#149A9B',
-              color: '#FFFFFF'
+              width: "361px",
+              height: "44px",
+              borderRadius: "32px",
+              padding: "16px",
+              gap: "10px",
+              backgroundColor: "#149A9B",
+              color: "#FFFFFF",
             }}
             onClick={onBack}
           >
@@ -132,4 +139,4 @@ export function TimelineConfigurationForm({ onNext, onBack }: TimelineConfigurat
       </CardContent>
     </Card>
   );
-} 
+}
