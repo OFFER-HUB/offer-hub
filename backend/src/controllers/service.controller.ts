@@ -48,6 +48,38 @@ export const createServiceHandler = async (
   
 };
 
+/**
+ * Get all services with optional filtering
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ *
+ * Query Parameters:
+ * - category: Filter by service category (string)
+ * - min: Minimum price filter (number)
+ * - max: Maximum price filter (number)
+ * - keyword: Filter by keyword in title or description (string)
+ * - page: Page number for pagination (default: 1)
+ * - limit: Number of results per page (default: 10, max: 50)
+ *
+ * Example requests:
+ * GET /api/services?category=web&min=100
+ * GET /api/services?keyword=react&page=2&limit=5
+ * GET /api/services?min=50&max=500&category=design
+ *
+ * Response format:
+ * {
+ *   "success": true,
+ *   "message": "Services retrieved successfully",
+ *   "data": [...],
+ *   "pagination": {
+ *     "current_page": 1,
+ *     "total_pages": 5,
+ *     "total_items": 50,
+ *     "per_page": 10
+ *   }
+ * }
+ */
 export const getAllServicesHandler = async (
   req: Request,
   res: Response,
