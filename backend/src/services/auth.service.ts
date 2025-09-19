@@ -11,7 +11,7 @@ import {
   signRefreshToken,
 } from "@/utils/jwt.utils";
 import { supabase } from "@/lib/supabase/supabase";
-import { AuthUser, LoginDTO, RefreshTokenRecord, EmailLoginDTO, AuditLogEntry, DeviceInfo } from "@/types/auth.types";
+import { AuthUser, LoginDTO, RefreshTokenRecord, EmailLoginDTO, AuditLogEntry, DeviceInfo, UserRole } from "@/types/auth.types";
 import { AppError } from "@/utils/AppError";
 import { randomBytes } from "crypto";
 import { utils } from "ethers";
@@ -43,9 +43,17 @@ export async function getNonce(wallet_address: string) {
 export async function signup(data: CreateUserDTO) {
   const newUser = await userService.createUser(data);
 
-  const accessToken = signAccessToken({ user_id: newUser.id });
+  const accessToken = signAccessToken({ 
+    sub: newUser.id,
+    email: newUser.email,
+    role: newUser.role || UserRole.CLIENT,
+    permissions: newUser.permissions?.map((p: { name: string }) => p.name) || []
+  });
   const { refreshToken, refreshTokenHash } = signRefreshToken({
-    user_id: newUser.id,
+    sub: newUser.id,
+    email: newUser.email,
+    role: newUser.role || UserRole.CLIENT,
+    permissions: newUser.permissions?.map((p: any) => p.name) || []
   });
 
   // Save refresh token in DB
@@ -84,12 +92,12 @@ export async function login(data: LoginDTO) {
   // Verify signature
   let recoveredAddress: string;
   try {
-    recoveredAddress = utils.verifyMessage(user.nonce, signature);
+    recoveredAddress = utils.verifyMessage(user.nonce || '', signature || '');
   } catch {
     throw new AppError("Invalid signature", 401);
   }
 
-  if (recoveredAddress.toLowerCase() !== wallet_address.toLowerCase()) {
+  if (recoveredAddress.toLowerCase() !== (wallet_address || '').toLowerCase()) {
     throw new AppError("Signature does not match wallet address", 401);
   }
 
@@ -100,9 +108,17 @@ export async function login(data: LoginDTO) {
     .eq("wallet_address", wallet_address);
 
   // Issue tokens
-  const accessToken = signAccessToken({ user_id: user.id });
+  const accessToken = signAccessToken({ 
+    sub: user.id,
+    email: user.email || '',
+    role: user.role || UserRole.CLIENT,
+    permissions: user.permissions?.map((p: any) => p.name) || []
+  });
   const { refreshToken, refreshTokenHash } = signRefreshToken({
-    user_id: user.id,
+    sub: user.id,
+    email: user.email || '',
+    role: user.role || UserRole.CLIENT,
+    permissions: user.permissions?.map((p: any) => p.name) || []
   });
 
   const { error: rtInsertError } = await supabase
@@ -132,9 +148,17 @@ export async function refreshSession(tokenRecord: RefreshTokenRecord) {
     throw new AppError("User not found", 404);
   }
 
-  const accessToken = signAccessToken({ user_id: user.id });
+  const accessToken = signAccessToken({ 
+    sub: user.id,
+    email: user.email || '',
+    role: user.role || UserRole.CLIENT,
+    permissions: user.permissions?.map((p: any) => p.name) || []
+  });
   const { refreshToken: newRefreshToken, refreshTokenHash } = signRefreshToken({
-    user_id: user.id,
+    sub: user.id,
+    email: user.email || '',
+    role: user.role || UserRole.CLIENT,
+    permissions: user.permissions?.map((p: any) => p.name) || []
   });
 
   const { data: rotateData, error: rotateError } = await supabase
@@ -178,7 +202,7 @@ export async function getMe(userId: string) {
 
   const safeUser = sanitizeUser(user);
 
-  return safeUser as AuthUser;
+  return safeUser as unknown as AuthUser;
 }
 
 /**
@@ -192,13 +216,12 @@ export async function loginWithEmail(data: EmailLoginDTO, deviceInfo: DeviceInfo
 
   // Log login attempt
   await logAuthAttempt({
-    user_id: undefined, // Will be set after user lookup
+    userId: '', // Will be set after user lookup
     action: 'login_attempt',
-    ip_address: deviceInfo.ip_address,
-    user_agent: deviceInfo.user_agent,
-    timestamp: new Date().toISOString(),
-    success: false,
-    metadata: { email },
+    resource: 'auth',
+    ipAddress: deviceInfo.ip_address || '',
+    userAgent: deviceInfo.user_agent || '',
+    timestamp: new Date(),
   });
 
   // Find user by email
@@ -210,14 +233,12 @@ export async function loginWithEmail(data: EmailLoginDTO, deviceInfo: DeviceInfo
 
   if (error || !user) {
     await logAuthAttempt({
-      user_id: undefined,
+      userId: '',
       action: 'login_failure',
-      ip_address: deviceInfo.ip_address,
-      user_agent: deviceInfo.user_agent,
-      timestamp: new Date().toISOString(),
-      success: false,
-      error_message: "User not found",
-      metadata: { email },
+      resource: 'auth',
+      ipAddress: deviceInfo.ip_address || '',
+      userAgent: deviceInfo.user_agent || '',
+      timestamp: new Date(),
     });
     throw new AppError("Invalid email or password", 401);
   }
@@ -225,14 +246,12 @@ export async function loginWithEmail(data: EmailLoginDTO, deviceInfo: DeviceInfo
   // Check if user has a password (email auth enabled)
   if (!user.password_hash) {
     await logAuthAttempt({
-      user_id: user.id,
+      userId: user.id,
       action: 'login_failure',
-      ip_address: deviceInfo.ip_address,
-      user_agent: deviceInfo.user_agent,
-      timestamp: new Date().toISOString(),
-      success: false,
-      error_message: "Email authentication not enabled for this account",
-      metadata: { email },
+      resource: 'auth',
+      ipAddress: deviceInfo.ip_address || '',
+      userAgent: deviceInfo.user_agent || '',
+      timestamp: new Date(),
     });
     throw new AppError("Email authentication not enabled for this account. Please use wallet authentication.", 401);
   }
@@ -241,14 +260,12 @@ export async function loginWithEmail(data: EmailLoginDTO, deviceInfo: DeviceInfo
   const isPasswordValid = await bcrypt.compare(password, user.password_hash);
   if (!isPasswordValid) {
     await logAuthAttempt({
-      user_id: user.id,
+      userId: user.id,
       action: 'login_failure',
-      ip_address: deviceInfo.ip_address,
-      user_agent: deviceInfo.user_agent,
-      timestamp: new Date().toISOString(),
-      success: false,
-      error_message: "Invalid password",
-      metadata: { email },
+      resource: 'auth',
+      ipAddress: deviceInfo.ip_address || '',
+      userAgent: deviceInfo.user_agent || '',
+      timestamp: new Date(),
     });
     throw new AppError("Invalid email or password", 401);
   }
@@ -256,26 +273,28 @@ export async function loginWithEmail(data: EmailLoginDTO, deviceInfo: DeviceInfo
   // Check if user is active
   if (user.status !== 'active') {
     await logAuthAttempt({
-      user_id: user.id,
+      userId: user.id,
       action: 'login_failure',
-      ip_address: deviceInfo.ip_address,
-      user_agent: deviceInfo.user_agent,
-      timestamp: new Date().toISOString(),
-      success: false,
-      error_message: `Account ${user.status}`,
-      metadata: { email },
+      resource: 'auth',
+      ipAddress: deviceInfo.ip_address || '',
+      userAgent: deviceInfo.user_agent || '',
+      timestamp: new Date(),
     });
     throw new AppError(`Account is ${user.status}. Please contact support.`, 403);
   }
 
   // Generate tokens
   const accessToken = signAccessToken({
-    user_id: user.id,
-    role: user.role || 'client'
+    sub: user.id,
+    email: user.email || '',
+    role: user.role || UserRole.CLIENT,
+    permissions: user.permissions?.map((p: any) => p.name) || []
   });
   const { refreshToken, refreshTokenHash } = signRefreshToken({
-    user_id: user.id,
-    role: user.role || 'client'
+    sub: user.id,
+    email: user.email || '',
+    role: user.role || UserRole.CLIENT,
+    permissions: user.permissions?.map((p: any) => p.name) || []
   });
 
   // Calculate expiration times
@@ -319,13 +338,12 @@ export async function loginWithEmail(data: EmailLoginDTO, deviceInfo: DeviceInfo
 
   // Log successful login
   await logAuthAttempt({
-    user_id: user.id,
+    userId: user.id,
     action: 'login_success',
-    ip_address: deviceInfo.ip_address,
-    user_agent: deviceInfo.user_agent,
-    timestamp: new Date().toISOString(),
-    success: true,
-    metadata: { email, session_id: sessionId },
+    resource: 'auth',
+    ipAddress: deviceInfo.ip_address || '',
+    userAgent: deviceInfo.user_agent || '',
+    timestamp: new Date(),
   });
 
   const safeUser = sanitizeUser(user);

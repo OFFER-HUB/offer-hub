@@ -5,7 +5,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import * as authService from "@/services/auth.service";
-import { EmailLoginDTO } from "@/types/auth.types";
+import { DeviceInfo, EmailLoginDTO } from "@/types/auth.types";
 
 export async function getNonce(
   req: Request,
@@ -89,7 +89,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
     const { message } = await authService.logoutUser(
-      req.refreshTokenRecord.token_hash
+      req.refreshTokenRecord?.token_hash || ''
     );
     res.status(200).json({ message });
   } catch (err) {
@@ -148,10 +148,12 @@ export async function loginWithEmail(req: Request, res: Response, next: NextFunc
     }
 
     // Get device info for audit logging
-    const deviceInfo = {
+    const deviceInfo: DeviceInfo = {
+      type: getDeviceType(req.get('User-Agent') || '') as 'desktop' | 'mobile' | 'tablet',
+      os: getOSFromUserAgent(req.get('User-Agent') || ''),
+      browser: getBrowserFromUserAgent(req.get('User-Agent') || ''),
       ip_address: req.ip || req.connection.remoteAddress || 'unknown',
       user_agent: req.get('User-Agent') || 'unknown',
-      device_type: getDeviceType(req.get('User-Agent') || ''),
     };
 
     const result = await authService.loginWithEmail({ email, password }, deviceInfo);
@@ -229,4 +231,38 @@ function getDeviceType(userAgent: string): string {
   } else {
     return 'desktop';
   }
+}
+
+/**
+ * Get OS from user agent
+ * @param userAgent - User agent string
+ * @returns OS name
+ */
+function getOSFromUserAgent(userAgent: string): string {
+  const ua = userAgent.toLowerCase();
+
+  if (ua.includes('windows')) return 'Windows';
+  if (ua.includes('macintosh') || ua.includes('mac os x')) return 'macOS';
+  if (ua.includes('linux')) return 'Linux';
+  if (ua.includes('android')) return 'Android';
+  if (ua.includes('iphone') || ua.includes('ipad')) return 'iOS';
+
+  return 'Unknown';
+}
+
+/**
+ * Get browser from user agent
+ * @param userAgent - User agent string
+ * @returns Browser name
+ */
+function getBrowserFromUserAgent(userAgent: string): string {
+  const ua = userAgent.toLowerCase();
+
+  if (ua.includes('chrome') && !ua.includes('edg')) return 'Chrome';
+  if (ua.includes('firefox')) return 'Firefox';
+  if (ua.includes('safari') && !ua.includes('chrome')) return 'Safari';
+  if (ua.includes('edg')) return 'Edge';
+  if (ua.includes('opera')) return 'Opera';
+
+  return 'Unknown';
 }

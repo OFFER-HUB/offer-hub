@@ -2,6 +2,7 @@ import { Router } from "express";
 import { reviewResponseController } from "../controllers/review-response.controller";
 import { authenticateToken, authorizeRoles } from "../middlewares/auth.middleware";
 import { validateFields, validateUUID } from "../middlewares/validation.middleware";
+import { UserRole } from "../types/auth.types";
 
 const router = Router();
 
@@ -64,13 +65,13 @@ router.get(
 // Admin/Moderator routes
 router.get(
   '/admin/responses/pending',
-  authorizeRoles('admin', 'moderator'),
+  authorizeRoles(UserRole.ADMIN, UserRole.MODERATOR),
   reviewResponseController.getPendingResponses
 );
 
 router.put(
   '/admin/responses/:responseId/moderate',
-  authorizeRoles('admin', 'moderator'),
+  authorizeRoles(UserRole.ADMIN, UserRole.MODERATOR),
   validateUUID('responseId'),
   validateFields(['status']),
   reviewResponseController.moderateResponse
@@ -78,7 +79,7 @@ router.put(
 
 router.get(
   '/admin/responses/analytics',
-  authorizeRoles('admin', 'moderator'),
+  authorizeRoles(UserRole.ADMIN, UserRole.MODERATOR),
   reviewResponseController.getResponseAnalytics
 );
 

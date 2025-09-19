@@ -7,13 +7,14 @@ import {
   deleteProjectHandler,
 } from "@/controllers/project.controller";
 import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+import { UserRole } from "@/types/auth.types";
 
 const router = Router();
 
 router.post(
   "/",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   createProjectHandler
 );
 
@@ -24,14 +25,14 @@ router.get("/:id", getProjectByIdHandler);
 router.patch(
   "/:id",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   updateProjectHandler
 );
 
 router.delete(
   "/:id",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   deleteProjectHandler
 );
 

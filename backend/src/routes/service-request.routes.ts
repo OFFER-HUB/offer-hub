@@ -5,27 +5,28 @@ import {
   updateRequestStatusHandler,
 } from "@/controllers/service-request.controller";
 import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+import { UserRole } from "@/types/auth.types";
 
 const router = Router();
 
 router.post(
   "/",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   createServiceRequestHandler
 );
 
 router.get(
   "/:freelancerId",
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   getRequestsForFreelancerHandler
 );
 
 router.patch(
   "/:id",
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   updateRequestStatusHandler
 );
 

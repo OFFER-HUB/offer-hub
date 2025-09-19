@@ -25,7 +25,8 @@ const logger = {
     console.warn(`[WARN] ${message}`, data);
   }
 };
-import { validationResult } from 'express-validator';
+// import expressValidator from 'express-validator';
+// const { validationResult } = expressValidator;
 
 export class WorkflowController {
   private workflowService: WorkflowService;

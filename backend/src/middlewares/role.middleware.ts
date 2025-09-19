@@ -79,7 +79,7 @@ export const requireRole = (options: RoleMiddlewareOptions) => {
  */
 export const requireAdmin = (options: Partial<RoleMiddlewareOptions> = {}) => {
   return requireRole({
-    requiredRoles: ['admin'],
+    requiredRoles: [UserRole.ADMIN],
     allowAny: true,
     ...options,
   });
@@ -91,7 +91,7 @@ export const requireAdmin = (options: Partial<RoleMiddlewareOptions> = {}) => {
  */
 export const requireModerator = (options: Partial<RoleMiddlewareOptions> = {}) => {
   return requireRole({
-    requiredRoles: ['admin', 'moderator'],
+    requiredRoles: [UserRole.ADMIN, UserRole.MODERATOR],
     allowAny: true,
     ...options,
   });
@@ -103,7 +103,7 @@ export const requireModerator = (options: Partial<RoleMiddlewareOptions> = {}) =
  */
 export const requireFreelancer = (options: Partial<RoleMiddlewareOptions> = {}) => {
   return requireRole({
-    requiredRoles: ['freelancer', 'admin'],
+    requiredRoles: [UserRole.FREELANCER, UserRole.ADMIN],
     allowAny: true,
     ...options,
   });
@@ -115,7 +115,7 @@ export const requireFreelancer = (options: Partial<RoleMiddlewareOptions> = {}) 
  */
 export const requireClient = (options: Partial<RoleMiddlewareOptions> = {}) => {
   return requireRole({
-    requiredRoles: ['client', 'admin'],
+    requiredRoles: [UserRole.CLIENT, UserRole.ADMIN],
     allowAny: true,
     ...options,
   });
@@ -279,13 +279,14 @@ export function hasAllRoles(userRole: UserRole, requiredRoles: UserRole[]): bool
  * @returns numeric permission level (higher = more permissions)
  */
 export function getPermissionLevel(role: UserRole): number {
-  const levels = {
-    'client': 1,
-    'freelancer': 2,
-    'moderator': 3,
-    'admin': 4,
+  const levels: Record<UserRole, number> = {
+    [UserRole.CLIENT]: 1,
+    [UserRole.FREELANCER]: 2,
+    [UserRole.MODERATOR]: 3,
+    [UserRole.ADMIN]: 4,
+    [UserRole.USER]: 1, // Default level for USER role
   };
-  
+
   return levels[role] || 0;
 }
 

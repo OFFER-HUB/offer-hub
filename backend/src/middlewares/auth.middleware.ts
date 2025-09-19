@@ -135,16 +135,17 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
       // Ensure user has required fields for AuthUser type
       const authUser: AuthUser = {
         id: user.id,
+        email: user.email || '',
+        firstName: user.name || '',
+        lastName: '',
+        role: user.role || UserRole.CLIENT,
+        permissions: user.permissions || [],
+        isActive: user.isActive !== false,
+        isEmailVerified: user.isEmailVerified || false,
+        lastLoginAt: user.lastLoginAt ? new Date(user.lastLoginAt) : undefined,
+        createdAt: new Date(user.created_at || new Date()),
+        updatedAt: new Date(),
         wallet_address: user.wallet_address,
-        username: user.username,
-        name: user.name,
-        bio: user.bio,
-        email: user.email,
-        is_freelancer: user.is_freelancer,
-        nonce: user.nonce,
-        created_at: user.created_at || new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        role: user.role || 'client',
       };
 
       // Attach user and token info to request
@@ -178,6 +179,7 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
 
       next();
     } catch (error) {
+      console.error('Token validation error:', error);
       await logAuthAttempt({
         ...securityContext,
         success: false,

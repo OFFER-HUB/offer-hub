@@ -7,6 +7,7 @@ import {
   deleteServiceHandler,
 } from "@/controllers/service.controller";
 import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+import { UserRole } from "@/types/auth.types";
 
 const router = Router();
 
@@ -29,7 +30,7 @@ const router = Router();
 router.post(
   "/",
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   createServiceHandler
 );
 
@@ -66,7 +67,7 @@ router.get("/:id", getServiceByIdHandler);
 router.patch(
   "/:id",
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   updateServiceHandler
 );
 
@@ -80,7 +81,7 @@ router.patch(
 router.delete(
   "/:id",
   verifyToken,
-  authorizeRoles("freelancer", "admin"),
+  authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   deleteServiceHandler
 );
 export default router;

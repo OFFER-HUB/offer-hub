@@ -5,27 +5,28 @@ import {
   updateApplicationStatusHandler,
 } from "@/controllers/application.controller";
 import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+import { UserRole } from "@/types/auth.types";
 
 const router = Router();
 
 router.post(
   "/",
   verifyToken,
-  authorizeRoles("freelancer"),
+  authorizeRoles(UserRole.FREELANCER),
   createApplicationHandler
 );
 
 router.get(
   "/project/:id",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   getApplicationsByProjectHandler
 );
 
 router.patch(
   "/:id",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   updateApplicationStatusHandler
 );
 

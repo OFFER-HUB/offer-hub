@@ -7,12 +7,13 @@ import {
   getContractsByStatusHandler,
 } from "@/controllers/contract.controller";
 import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
+import { UserRole } from "@/types/auth.types";
 
 const router = Router();
 
 // POST /api/contracts - Create contract
 // Protected route - requires authentication
-router.post("/", verifyToken, authorizeRoles("client"), createContractHandler);
+router.post("/", verifyToken, authorizeRoles(UserRole.CLIENT), createContractHandler);
 
 // GET /api/contracts/:id - Get contract details
 // Protected route - requires authentication
@@ -23,7 +24,7 @@ router.get("/:id", verifyToken, getContractByIdHandler);
 router.patch(
   "/:id",
   verifyToken,
-  authorizeRoles("client", "admin"),
+  authorizeRoles(UserRole.CLIENT, UserRole.ADMIN),
   updateContractStatusHandler
 );
 
@@ -36,7 +37,7 @@ router.get("/user/:userId", verifyToken, getContractsByUserHandler);
 router.get(
   "/status/:status",
   verifyToken,
-  authorizeRoles("admin"),
+  authorizeRoles(UserRole.ADMIN),
   getContractsByStatusHandler
 );
 
