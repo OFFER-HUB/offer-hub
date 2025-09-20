@@ -15,7 +15,7 @@ import { errorHandlerMiddleware, setupGlobalErrorHandlers } from "./middlewares/
 import { generalLimiter, authLimiter } from "./middlewares/ratelimit.middleware";
 import { authenticateToken } from "./middlewares/auth.middleware";
 import { loggerMiddleware } from "./middlewares/logger.middleware";
-
+import { logger } from "./utils/logger";
 import conversationRoutes from "@/routes/conversation.routes";
 import messageRoutes from "@/routes/message.routes";
 import { adminIntegrationRoutes, adminExternalApiRoutes, adminWebhookRoutes } from "@/routes/admin-integration.routes";
@@ -28,20 +28,28 @@ import { redactSensitiveHeaders } from "@/middlewares/sensitive-data-redaction.m
 import reviewResponseRoutes from "@/routes/review-response.routes";
 import { workflowRoutes } from "@/routes/workflow.routes";
 
+
 // Setup global error handlers for uncaught exceptions and unhandled rejections
 setupGlobalErrorHandlers();
 
 const app = express();
 const port = process.env.PORT || 4000;
 
+// Middleware setup
+logger.debug("Setting up CORS and JSON middleware");
 app.use(cors());
 app.use(express.json());
 
 // Request logging middleware
+logger.debug("Setting up logger middleware");
 app.use(loggerMiddleware);
 
 // Apply general rate limiting to all routes
+logger.debug("Setting up rate limiting");
 app.use(generalLimiter);
+
+// Route setup
+logger.debug("Setting up routes");
 
 // Workflow routes (no authentication required for testing)
 app.use("/api/workflow", workflowRoutes);
@@ -64,6 +72,7 @@ app.use("/api", reviewResponseRoutes);
 
 // Simple test endpoint to verify server is working
 app.get("/test", (req, res) => {
+  logger.debug("Test endpoint accessed");
   res.json({ message: "Server is working", timestamp: new Date() });
 });
 
@@ -92,14 +101,18 @@ app.use("/api/admin/webhooks",
 );
 
 app.get("/", (_req, res) => {
+  logger.debug("Root endpoint accessed");
   res.send("💼 OFFER-HUB backend is up and running!");
 });
 
 // Use the new error handling middleware
 app.use(errorHandlerMiddleware);
 
+// Start server
 app.listen(port, () => {
-  console.log(`🚀 OFFER-HUB server is live at http://localhost:${port}`);
-  console.log("🌐 Connecting freelancers and clients around the world...");
-  console.log("�� Working...");
+  logger.info(`🚀 OFFER-HUB server is live at http://localhost:${port}`);
+  logger.info("🌐 Connecting freelancers and clients around the world...");
+  logger.info("✅ Working...");
+  logger.debug(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  logger.debug("All routes and middleware configured successfully");
 });
