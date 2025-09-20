@@ -6,24 +6,25 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
-  Users,
-  DollarSign,
   Activity,
   AlertTriangle,
-  TrendingUp,
-  TrendingDown,
-  Server,
-  Shield,
+  DollarSign,
   FileText,
   RefreshCw,
+  Server,
+  Shield,
+  TrendingDown,
+  TrendingUp,
+  Users,
 } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAdminDashboard } from "@/hooks/use-admin-dashboard";
-import { SystemHealthMetrics, PlatformStatistics } from "@/types/admin.types";
 import { cn } from "@/lib/utils";
+import { PlatformStatistics, SystemHealthMetrics } from "@/types/admin.types";
 
 interface MetricCardProps {
   title: string;

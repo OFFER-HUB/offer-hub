@@ -1,10 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Award, CheckCircle, Clock, MapPin, Send, Star } from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, Clock, CheckCircle, Award, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { FreelancerProfile } from "@/lib/mockData/freelancer-profile-mock";
 
 interface ProfileHeaderProps {

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useMemo, useState } from 'react';
+
 import { useWalletContext } from "@/components/onboarding/WalletContext";
 import { CreateUserDTO } from "@/types/user.types";
 

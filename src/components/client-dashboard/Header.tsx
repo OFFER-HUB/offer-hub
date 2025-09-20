@@ -1,8 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 
 function Header() {
   return (

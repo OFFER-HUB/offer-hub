@@ -3,17 +3,23 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowUpRight,
-  ArrowDownRight,
-  DollarSign,
-  Calendar,
-  TrendingUp,
-  TrendingDown,
-  CreditCard,
   AlertCircle,
+  ArrowDownRight,
+  ArrowUpRight,
+  Calendar,
   ClockIcon,
+  CreditCard,
+  DollarSign,
   FileText,
+  TrendingDown,
+  TrendingUp,
 } from "lucide-react";
+
+import PaymentChart from "@/components/payments/payment-chart";
+import RecentTransactionsTable from "@/components/payments/recent-transactions-table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -21,7 +27,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -29,10 +34,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import RecentTransactionsTable from "@/components/payments/recent-transactions-table";
-import PaymentChart from "@/components/payments/payment-chart";
 
 export default function PaymentOverview() {
   const [timeframe, setTimeframe] = useState("month");

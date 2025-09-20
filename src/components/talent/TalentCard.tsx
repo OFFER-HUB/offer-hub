@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+
 import SaveTalent from '@/components/talent/SaveTalent';
+import { Button } from '@/components/ui/button';
 
 interface Skill {
   name: string;

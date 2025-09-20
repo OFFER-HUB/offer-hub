@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import { Avatar } from "@/components/ui/avatar";
 
 interface MessageBubbleProps {
