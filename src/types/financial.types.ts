@@ -1,5 +1,5 @@
 // Financial Management System Types
-// Comprehensive type definitions for the financial management system
+// Financial types
 
 export interface RevenueStream {
   id: string

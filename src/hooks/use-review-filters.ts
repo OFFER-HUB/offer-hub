@@ -1,7 +1,4 @@
-/**
- * @fileoverview Custom hook for managing review filtering and search functionality
- * @author Offer Hub Team
- */
+// Review filters hook
 
 "use client";
 
@@ -60,16 +57,13 @@ interface UseReviewFiltersReturn {
 }
 
 /**
- * Advanced Review Filtering Hook
+ * Review filtering hook
  *
- * This hook provides sophisticated filtering capabilities for review data,
- * enabling complex filtering scenarios with a clean, reactive interface.
- *
- * Features:
- * - Rating range filtering (min/max)
- * - Date range filtering with date boundaries
- * - Project type categorization
- * - Full-text search with relevance scoring
+ * Basic filtering for reviews:
+ * - Rating range filtering
+ * - Date range filtering
+ * - Project type filtering
+ * - Text search
  * - Customizable sorting with multiple fields
  * - Filter state management
  */

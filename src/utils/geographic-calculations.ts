@@ -152,7 +152,7 @@ export interface Coordinates {
   } {
     const R = unit === 'km' ? 6371 : 3959
     const lat = toRadians(centerLat)
-    const lng = toRadians(centerLng)
+    const _lng = toRadians(centerLng)
     
     // Angular radius
     const angularRadius = radius / R

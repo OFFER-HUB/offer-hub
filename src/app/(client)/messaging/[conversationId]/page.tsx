@@ -9,18 +9,34 @@ import { useMessagesMock as useMessages } from "@/hooks/useMessagesMock"
 import type { Conversation as MessagesConversation } from '@/types/messages.types';
 import type { Conversation as MessagesMainConversation, Message as MessagesMainMessage } from '@/types/index';
 
+type UIConversation = {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  unreadCount?: number;
+};
+
+type UIMessage = {
+  id: string;
+  isOutgoing: boolean;
+  content?: string;
+  timestamp: string;
+  type?: "text" | "file";
+  fileData?: { name: string; size: string; uploadDate: string; status: string };
+};
+
 interface PageProps {
-  params: Promise<{ conversationId: string }>
+  params: { conversationId: string }
 }
 
-export default async function MessagingById({ params }: PageProps) {
-  const { conversationId } = await params
+export default function MessagingById({ params }: PageProps) {
+  const { conversationId } = params
   
   return <MessagingClient conversationId={conversationId} />
 }
 
 // Convert UIConversation to MessagesConversation (for MessagesSidebar)
-const convertUIConversationToMessagesConversation = (uiConv: any): MessagesConversation => {
+const convertUIConversationToMessagesConversation = (uiConv: UIConversation): MessagesConversation => {
   return {
     id: uiConv.id,
     project_id: undefined,
@@ -36,12 +52,12 @@ const convertUIConversationToMessagesConversation = (uiConv: any): MessagesConve
       online: false
     }],
     last_message: undefined,
-    unread_count: uiConv.unreadCount
+    unread_count: uiConv.unreadCount ?? 0
   };
 };
 
 // Convert UIConversation to MessagesMainConversation (for MessagesMainPlus)
-const convertUIConversationToMessagesMainConversation = (uiConv: any): MessagesMainConversation => {
+const convertUIConversationToMessagesMainConversation = (uiConv: UIConversation): MessagesMainConversation => {
   return {
     id: parseInt(uiConv.id),
     name: uiConv.name,
@@ -49,18 +65,18 @@ const convertUIConversationToMessagesMainConversation = (uiConv: any): MessagesM
     lastMessage: 'No messages yet',
     timestamp: new Date().toISOString(),
     isOnline: false,
-    unreadCount: uiConv.unreadCount
+    unreadCount: uiConv.unreadCount ?? 0
   };
 };
 
 // Convert UIMessage to MessagesMainMessage
-const convertUIMessageToMessagesMainMessage = (uiMsg: any): MessagesMainMessage => {
+const convertUIMessageToMessagesMainMessage = (uiMsg: UIMessage): MessagesMainMessage => {
   return {
     id: parseInt(uiMsg.id),
     content: uiMsg.content || '',
     timestamp: uiMsg.timestamp,
     isOutgoing: uiMsg.isOutgoing,
-    type: uiMsg.type || 'text',
+    type: (uiMsg.type as "text" | "file") || 'text',
     fileData: uiMsg.fileData
   };
 };

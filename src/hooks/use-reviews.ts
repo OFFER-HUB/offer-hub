@@ -54,7 +54,7 @@ interface UseReviewsOptions {
 /**
  * useReviews - Advanced Review Management Hook
  *
- * This hook provides centralized logic for comprehensive review management,
+ * Hook for review management,
  * implementing CRUD operations, filtering, pagination, caching, and analytics.
  *
  * Key features:
@@ -693,7 +693,7 @@ export function useReviews({
     }
   }, [userId, enableCaching, invalidateUserCache, loadReviews]);
 
-  // Return comprehensive review management API
+  // Return review management functions
   return {
     // Review data
     reviews,

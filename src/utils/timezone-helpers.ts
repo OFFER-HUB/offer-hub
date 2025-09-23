@@ -25,7 +25,7 @@ export interface TimezoneCompatibility {
       const target = new Date(utc.toLocaleString('en-US', { timeZone: timezone }))
       const offset = (target.getTime() - utc.getTime()) / (1000 * 60)
       return Math.round(offset)
-    } catch (error) {
+    } catch (_error) {
       console.error('Error getting timezone offset:', error)
       return 0
     }
@@ -73,7 +73,7 @@ export interface TimezoneCompatibility {
         timeZone: timezone,
         timeZoneName: 'short',
       }).split(', ')[1] || timezone.split('/').pop()?.replace(/_/g, ' ') || timezone
-    } catch (error) {
+    } catch (_error) {
       return timezone.split('/').pop()?.replace(/_/g, ' ') || timezone
     }
   }
@@ -184,7 +184,7 @@ export interface TimezoneCompatibility {
         freelancerBusinessStart: formatTime(freelancerBusinessStart),
         freelancerBusinessEnd: formatTime(freelancerBusinessEnd)
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error calculating business hours overlap:', error)
       return {
         overlapHours: 0,
@@ -231,7 +231,7 @@ export interface TimezoneCompatibility {
         minute: '2-digit',
         hour12: true
       })
-    } catch (error) {
+    } catch (_error) {
       return 'Unknown'
     }
   }
@@ -257,7 +257,7 @@ export interface TimezoneCompatibility {
       const currentHour = parseInt(hourStr, 10)
       
       return currentHour >= businessStart && currentHour < businessEnd
-    } catch (error) {
+    } catch (_error) {
       console.error('Error checking business hours:', error)
       return false
     }

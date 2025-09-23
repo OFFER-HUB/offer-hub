@@ -1,15 +1,11 @@
 "use client"
 
+import { useParams } from 'next/navigation';
 import TalentLayout from "@/components/talent/TalentLayout";
 
-interface PortfolioPageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export default async function PortfolioPage({ params }: PortfolioPageProps) {
-  const { id } = await params;
+export default function PortfolioPage() {
+  const params = useParams();
+  const id = params.id as string;
 
 
   return (
