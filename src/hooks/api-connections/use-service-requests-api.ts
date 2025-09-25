@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ServiceRequest, CreateServiceRequestDTO, UpdateServiceRequestDTO, RequestStatus } from '@/types/service-request-types';
 
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL = 'http://localhost:4000/api';
 
 interface ApiError {
   status: number;

@@ -77,10 +77,10 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
   if (loading) {
     return (
       <div className={`bg-white rounded-lg border p-6 ${className}`}>
-        <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
-          <div className="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
+        <div className='animate-pulse'>
+          <div className='h-4 bg-gray-200 rounded w-1/3 mb-2'></div>
+          <div className='h-3 bg-gray-200 rounded w-1/2 mb-4'></div>
+          <div className='h-64 bg-gray-200 rounded'></div>
         </div>
       </div>
     );
@@ -89,8 +89,8 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
   if (error) {
     return (
       <div className={`bg-white rounded-lg border p-6 ${className}`}>
-        {title && <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>}
-        <div className="text-red-600 text-center py-8">
+        {title && <h3 className='text-lg font-semibold text-gray-900 mb-2'>{title}</h3>}
+        <div className='text-red-600 text-center py-8'>
           <p>Error loading chart: {error}</p>
         </div>
       </div>
@@ -100,9 +100,9 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
   return (
     <div className={`bg-white rounded-lg border p-6 ${className}`}>
       {title && (
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-          {description && <p className="text-sm text-gray-600 mt-1">{description}</p>}
+        <div className='mb-4'>
+          <h3 className='text-lg font-semibold text-gray-900'>{title}</h3>
+          {description && <p className='text-sm text-gray-600 mt-1'>{description}</p>}
         </div>
       )}
       {children}
@@ -149,28 +149,28 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     if (change === undefined) return null;
 
     if (changeType === 'increase') {
-      return <span className="text-green-600">↗</span>;
+      return <span className='text-green-600'>↗</span>;
     } else if (changeType === 'decrease') {
-      return <span className="text-red-600">↘</span>;
+      return <span className='text-red-600'>↘</span>;
     }
-    return <span className="text-gray-500">→</span>;
+    return <span className='text-gray-500'>→</span>;
   };
 
   return (
     <div className={`bg-white rounded-lg border p-6 ${className}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{formatValue(value)}</p>
+      <div className='flex items-start justify-between'>
+        <div className='flex-1'>
+          <p className='text-sm font-medium text-gray-600'>{title}</p>
+          <p className='text-2xl font-bold text-gray-900 mt-2'>{formatValue(value)}</p>
           {change !== undefined && (
             <div className={`flex items-center mt-2 text-sm ${getChangeColor()}`}>
               {getChangeIcon()}
-              <span className="ml-1">{Math.abs(change).toFixed(1)}%</span>
+              <span className='ml-1'>{Math.abs(change).toFixed(1)}%</span>
             </div>
           )}
         </div>
         {icon && (
-          <div className="text-gray-400 ml-4">
+          <div className='text-gray-400 ml-4'>
             {icon}
           </div>
         )}
@@ -196,22 +196,22 @@ export const LineChartVisualization: React.FC<BaseVisualizationProps & {
 }) => {
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={height}>
+      <ResponsiveContainer width='100%' height={height}>
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+          <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />
           <XAxis
             dataKey={xKey}
-            stroke="#6b7280"
+            stroke='#6b7280'
             fontSize={12}
           />
           <YAxis
-            stroke="#6b7280"
+            stroke='#6b7280'
             fontSize={12}
           />
           {showTooltip && <Tooltip />}
           {showLegend && <Legend />}
           <Line
-            type="monotone"
+            type='monotone'
             dataKey={yKey}
             stroke={strokeColor}
             strokeWidth={2}
@@ -242,22 +242,22 @@ export const AreaChartVisualization: React.FC<BaseVisualizationProps & {
 }) => {
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={height}>
+      <ResponsiveContainer width='100%' height={height}>
         <AreaChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+          <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />
           <XAxis
             dataKey={xKey}
-            stroke="#6b7280"
+            stroke='#6b7280'
             fontSize={12}
           />
           <YAxis
-            stroke="#6b7280"
+            stroke='#6b7280'
             fontSize={12}
           />
           {showTooltip && <Tooltip />}
           {showLegend && <Legend />}
           <Area
-            type="monotone"
+            type='monotone'
             dataKey={yKey}
             stroke={fillColor}
             fill={`${fillColor}30`}
@@ -289,22 +289,22 @@ export const BarChartVisualization: React.FC<BaseVisualizationProps & {
 }) => {
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={height}>
+      <ResponsiveContainer width='100%' height={height}>
         <BarChart
           data={data}
           layout={orientation === 'horizontal' ? 'horizontal' : 'vertical'}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+          <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />
           <XAxis
             type={orientation === 'horizontal' ? 'number' : 'category'}
             dataKey={orientation === 'horizontal' ? undefined : xKey}
-            stroke="#6b7280"
+            stroke='#6b7280'
             fontSize={12}
           />
           <YAxis
             type={orientation === 'horizontal' ? 'category' : 'number'}
             dataKey={orientation === 'horizontal' ? xKey : undefined}
-            stroke="#6b7280"
+            stroke='#6b7280'
             fontSize={12}
           />
           {showTooltip && <Tooltip />}
@@ -341,12 +341,12 @@ export const PieChartVisualization: React.FC<BaseVisualizationProps & {
 }) => {
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={height}>
+      <ResponsiveContainer width='100%' height={height}>
         <PieChart>
           <Pie
             data={data}
-            cx="50%"
-            cy="50%"
+            cx='50%'
+            cy='50%'
             innerRadius={innerRadius}
             outerRadius={outerRadius}
             paddingAngle={2}
@@ -389,12 +389,12 @@ export const DonutChartVisualization: React.FC<BaseVisualizationProps & {
 }) => {
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={height}>
+      <ResponsiveContainer width='100%' height={height}>
         <PieChart>
           <Pie
             data={data}
-            cx="50%"
-            cy="50%"
+            cx='50%'
+            cy='50%'
             innerRadius={60}
             outerRadius={80}
             paddingAngle={2}
@@ -413,15 +413,15 @@ export const DonutChartVisualization: React.FC<BaseVisualizationProps & {
           {showLegend && <Legend />}
           {centerText && (
             <text
-              x="50%"
-              y="50%"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className="text-sm font-medium fill-gray-600"
+              x='50%'
+              y='50%'
+              textAnchor='middle'
+              dominantBaseline='middle'
+              className='text-sm font-medium fill-gray-600'
             >
-              <tspan x="50%" dy="-0.5em">{centerText}</tspan>
+              <tspan x='50%' dy='-0.5em'>{centerText}</tspan>
               {centerValue && (
-                <tspan x="50%" dy="1.2em" className="text-lg font-bold fill-gray-900">
+                <tspan x='50%' dy='1.2em' className='text-lg font-bold fill-gray-900'>
                   {centerValue}
                 </tspan>
               )}
@@ -457,22 +457,22 @@ export const GaugeVisualization: React.FC<{
 
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={height}>
+      <ResponsiveContainer width='100%' height={height}>
         <RadialBarChart
-          cx="50%"
-          cy="50%"
-          innerRadius="60%"
-          outerRadius="90%"
+          cx='50%'
+          cy='50%'
+          innerRadius='60%'
+          outerRadius='90%'
           data={data}
           startAngle={180}
           endAngle={0}
         >
-          <RadialBar dataKey="value" cornerRadius={10} />
+          <RadialBar dataKey='value' cornerRadius={10} />
         </RadialBarChart>
       </ResponsiveContainer>
-      <div className="text-center mt-4">
-        <p className="text-2xl font-bold text-gray-900">{percentage.toFixed(1)}%</p>
-        <p className="text-sm text-gray-600">{title}</p>
+      <div className='text-center mt-4'>
+        <p className='text-2xl font-bold text-gray-900'>{percentage.toFixed(1)}%</p>
+        <p className='text-sm text-gray-600'>{title}</p>
       </div>
     </div>
   );
@@ -565,8 +565,8 @@ export const HeatmapVisualization: React.FC<{
 
   return (
     <div className={`overflow-x-auto ${className}`}>
-      <div className="inline-block min-w-full">
-        <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${xValues.length}, 1fr)` }}>
+      <div className='inline-block min-w-full'>
+        <div className='grid gap-1' style={{ gridTemplateColumns: `repeat(${xValues.length}, 1fr)` }}>
           {yValues.map(y =>
             xValues.map(x => {
               const point = data.find(d => d.x === x && d.y === y);
@@ -576,7 +576,7 @@ export const HeatmapVisualization: React.FC<{
               return (
                 <div
                   key={`${x}-${y}`}
-                  className="aspect-square flex items-center justify-center text-xs font-medium border border-gray-200 rounded"
+                  className='aspect-square flex items-center justify-center text-xs font-medium border border-gray-200 rounded'
                   style={{ backgroundColor: getColor(intensity) }}
                   title={`${x}, ${y}: ${value}`}
                 >
@@ -623,14 +623,14 @@ export const ProgressRing: React.FC<{
 
   return (
     <div className={`relative inline-block ${className}`}>
-      <svg width={size} height={size} className="transform -rotate-90">
+      <svg width={size} height={size} className='transform -rotate-90'>
         <circle
           cx={center}
           cy={center}
           r={radius}
           stroke={backgroundColor}
           strokeWidth={strokeWidth}
-          fill="transparent"
+          fill='transparent'
         />
         <circle
           cx={center}
@@ -638,16 +638,16 @@ export const ProgressRing: React.FC<{
           r={radius}
           stroke={color}
           strokeWidth={strokeWidth}
-          fill="transparent"
+          fill='transparent'
           strokeDasharray={strokeDasharray}
           strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          className="transition-all duration-1000 ease-in-out"
+          strokeLinecap='round'
+          className='transition-all duration-1000 ease-in-out'
         />
       </svg>
       {showText && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-sm font-semibold text-gray-900">
+        <div className='absolute inset-0 flex items-center justify-center'>
+          <span className='text-sm font-semibold text-gray-900'>
             {percentage.toFixed(0)}%
           </span>
         </div>
@@ -744,7 +744,7 @@ export const AnalyticsVisualization: React.FC<{
         );
 
       default:
-        return <div className="text-center py-8 text-gray-500">Visualization type not supported</div>;
+        return <div className='text-center py-8 text-gray-500'>Visualization type not supported</div>;
     }
   };
 

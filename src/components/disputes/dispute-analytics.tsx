@@ -182,13 +182,13 @@ export const AnalyticsDashboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Analytics Error</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+      <div className='flex items-center justify-center h-64'>
+        <div className='text-center'>
+          <AlertTriangle className='h-12 w-12 text-red-500 mx-auto mb-4' />
+          <h3 className='text-lg font-semibold text-gray-900 mb-2'>Analytics Error</h3>
+          <p className='text-gray-600 mb-4'>{error}</p>
           <Button onClick={refreshData}>
-            <RefreshCw className="h-4 w-4 mr-2" />
+            <RefreshCw className='h-4 w-4 mr-2' />
             Try Again
           </Button>
         </div>
@@ -197,19 +197,19 @@ export const AnalyticsDashboard: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div className='space-y-6 p-6 bg-gray-50 min-h-screen'>
+      <div className='flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0'>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dispute Analytics</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className='text-3xl font-bold text-gray-900'>Dispute Analytics</h1>
+          <p className='text-gray-600 mt-2'>
             Comprehensive insights into dispute patterns and resolution performance
           </p>
           {lastUpdated && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className='text-sm text-gray-500 mt-1'>
               Last updated: {format(lastUpdated, 'MMM dd, yyyy HH:mm')}
               {isRealtimeEnabled && isConnected && (
-                <Badge variant="outline" className="ml-2">
-                  <Activity className="h-3 w-3 mr-1" />
+                <Badge variant='outline' className='ml-2'>
+                  <Activity className='h-3 w-3 mr-1' />
                   Live
                 </Badge>
               )}
@@ -217,18 +217,18 @@ export const AnalyticsDashboard: React.FC = () => {
           )}
         </div>
 
-        <div className="flex flex-wrap items-center space-x-2 space-y-2 md:space-y-0">
-          <div className="flex items-center space-x-2">
+        <div className='flex flex-wrap items-center space-x-2 space-y-2 md:space-y-0'>
+          <div className='flex items-center space-x-2'>
             <Switch
               checked={isRealtimeEnabled}
               onCheckedChange={toggleRealtime}
               disabled={isLoading}
             />
-            <Label className="text-sm">Real-time</Label>
+            <Label className='text-sm'>Real-time</Label>
           </div>
 
           <Select value={filters.quickRange} onValueChange={handleQuickRangeChange}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className='w-40'>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -237,18 +237,18 @@ export const AnalyticsDashboard: React.FC = () => {
                   {range.label}
                 </SelectItem>
               ))}
-              <SelectItem value="custom">Custom Range</SelectItem>
+              <SelectItem value='custom'>Custom Range</SelectItem>
             </SelectContent>
           </Select>
 
           <Dialog open={showFilters} onOpenChange={setShowFilters}>
             <DialogTrigger asChild>
-              <Button variant="outline">
-                <Filter className="h-4 w-4 mr-2" />
+              <Button variant='outline'>
+                <Filter className='h-4 w-4 mr-2' />
                 Filters
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className='max-w-2xl'>
               <DialogHeader>
                 <DialogTitle>Filter Analytics</DialogTitle>
               </DialogHeader>
@@ -266,12 +266,12 @@ export const AnalyticsDashboard: React.FC = () => {
           </Button>
 
           <Select onValueChange={(format) => handleExport(format as ExportFormat)}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Export" />
+            <SelectTrigger className='w-32'>
+              <SelectValue placeholder='Export' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ExportFormat.PDF}>
-                <Download className="h-4 w-4 mr-2" />
+                <Download className='h-4 w-4 mr-2' />
                 PDF
               </SelectItem>
               <SelectItem value={ExportFormat.EXCEL}>Excel</SelectItem>
@@ -282,16 +282,16 @@ export const AnalyticsDashboard: React.FC = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
-          <TabsTrigger value="patterns">Patterns</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
+      <Tabs defaultValue='overview' className='space-y-6'>
+        <TabsList className='grid w-full grid-cols-2 md:grid-cols-5'>
+          <TabsTrigger value='overview'>Overview</TabsTrigger>
+          <TabsTrigger value='performance'>Performance</TabsTrigger>
+          <TabsTrigger value='trends'>Trends</TabsTrigger>
+          <TabsTrigger value='patterns'>Patterns</TabsTrigger>
+          <TabsTrigger value='reports'>Reports</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value='overview' className='space-y-6'>
           <OverviewDashboard
             metrics={currentMetrics}
             chartData={chartData}
@@ -304,7 +304,7 @@ export const AnalyticsDashboard: React.FC = () => {
           />
         </TabsContent>
 
-        <TabsContent value="performance" className="space-y-6">
+        <TabsContent value='performance' className='space-y-6'>
           <PerformanceDashboard
             metrics={currentMetrics}
             trendData={trendData}
@@ -314,7 +314,7 @@ export const AnalyticsDashboard: React.FC = () => {
           />
         </TabsContent>
 
-        <TabsContent value="trends" className="space-y-6">
+        <TabsContent value='trends' className='space-y-6'>
           <TrendsDashboard
             trendData={trendData}
             timeSeriesData={timeSeriesData}
@@ -324,7 +324,7 @@ export const AnalyticsDashboard: React.FC = () => {
           />
         </TabsContent>
 
-        <TabsContent value="patterns" className="space-y-6">
+        <TabsContent value='patterns' className='space-y-6'>
           <PatternsDashboard
             patterns={disputePatterns}
             predictiveModel={predictiveModel}
@@ -333,7 +333,7 @@ export const AnalyticsDashboard: React.FC = () => {
           />
         </TabsContent>
 
-        <TabsContent value="reports" className="space-y-6">
+        <TabsContent value='reports' className='space-y-6'>
           <AnalyticsReports />
         </TabsContent>
       </Tabs>
@@ -356,34 +356,34 @@ const OverviewDashboard: React.FC<{
       title: 'Total Disputes',
       value: metrics?.totalDisputes || 0,
       change: resolutionTrend?.change || 0,
-      icon: <BarChart3 className="h-5 w-5" />,
+      icon: <BarChart3 className='h-5 w-5' />,
       format: 'number' as const
     },
     {
       title: 'Resolution Rate',
       value: metrics?.resolutionRate || 0,
       change: 2.1,
-      icon: <CheckCircle className="h-5 w-5" />,
+      icon: <CheckCircle className='h-5 w-5' />,
       format: 'percentage' as const
     },
     {
       title: 'Avg Resolution Time',
       value: metrics?.averageResolutionTime || 0,
       change: -8.3,
-      icon: <Clock className="h-5 w-5" />,
+      icon: <Clock className='h-5 w-5' />,
       format: 'duration' as const
     },
     {
       title: 'User Satisfaction',
       value: metrics?.userSatisfactionRate || 0,
       change: 5.2,
-      icon: <Users className="h-5 w-5" />,
+      icon: <Users className='h-5 w-5' />,
       format: 'number' as const
     }
   ];
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <div className={`grid grid-cols-1 ${mobileView ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-4'} gap-4`}>
         {keyMetrics.map((metric) => (
           <MetricCard
@@ -399,17 +399,17 @@ const OverviewDashboard: React.FC<{
       </div>
 
       <div className={`grid grid-cols-1 ${mobileView ? 'lg:grid-cols-1' : 'lg:grid-cols-3'} gap-6`}>
-        <div className="lg:col-span-2">
+        <div className='lg:col-span-2'>
           <ChartContainer
-            title="Dispute Volume Trend"
-            description="Daily dispute volume over time"
+            title='Dispute Volume Trend'
+            description='Daily dispute volume over time'
             loading={isLoading}
             data={timeSeriesData}
           >
             <LineChartVisualization
               data={timeSeriesData}
-              xKey="timestamp"
-              yKey="value"
+              xKey='timestamp'
+              yKey='value'
               height={300}
             />
           </ChartContainer>
@@ -417,17 +417,17 @@ const OverviewDashboard: React.FC<{
 
         <div>
           <ChartContainer
-            title="Dispute Status Distribution"
-            description="Current status breakdown"
+            title='Dispute Status Distribution'
+            description='Current status breakdown'
             loading={isLoading}
             data={chartData}
           >
             <DonutChartVisualization
               data={chartData}
-              nameKey="name"
-              valueKey="value"
+              nameKey='name'
+              valueKey='value'
               height={300}
-              centerText="Total"
+              centerText='Total'
               centerValue={chartData.reduce((sum, item) => sum + item.value, 0).toString()}
             />
           </ChartContainer>
@@ -437,30 +437,30 @@ const OverviewDashboard: React.FC<{
       <div className={`grid grid-cols-1 ${mobileView ? 'lg:grid-cols-1' : 'lg:grid-cols-2'} gap-6`}>
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <TrendingUp className="h-5 w-5 mr-2" />
+            <CardTitle className='flex items-center'>
+              <TrendingUp className='h-5 w-5 mr-2' />
               Top Dispute Types
             </CardTitle>
             <CardDescription>Most frequent dispute categories</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className='space-y-3'>
               {topDisputes.map((dispute, index) => (
-                <div key={dispute.type} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="text-2xl font-bold text-gray-400">
+                <div key={dispute.type} className='flex items-center justify-between'>
+                  <div className='flex items-center space-x-3'>
+                    <div className='text-2xl font-bold text-gray-400'>
                       {index + 1}
                     </div>
                     <div>
-                      <p className="font-medium">{dispute.type}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className='font-medium'>{dispute.type}</p>
+                      <p className='text-sm text-gray-600'>
                         {ApplicationAnalyticsCalculator.formatDuration(dispute.averageResolutionTime)} avg
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold">{dispute.frequency}</p>
-                    <p className="text-sm text-gray-600">
+                  <div className='text-right'>
+                    <p className='font-semibold'>{dispute.frequency}</p>
+                    <p className='text-sm text-gray-600'>
                       {dispute.successRate.toFixed(1)}% success
                     </p>
                   </div>
@@ -473,35 +473,35 @@ const OverviewDashboard: React.FC<{
         {predictiveModel && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Target className="h-5 w-5 mr-2" />
+              <CardTitle className='flex items-center'>
+                <Target className='h-5 w-5 mr-2' />
                 Predictive Insights
               </CardTitle>
               <CardDescription>AI-powered dispute risk assessment</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
+              <div className='space-y-4'>
+                <div className='flex items-center justify-between'>
                   <span>Risk Score</span>
-                  <div className="flex items-center space-x-2">
+                  <div className='flex items-center space-x-2'>
                     <ProgressRing
                       value={predictiveModel.riskScore}
                       max={100}
                       size={40}
                       color={predictiveModel.riskScore > 70 ? '#EF4444' : predictiveModel.riskScore > 40 ? '#F59E0B' : '#10B981'}
                     />
-                    <span className="font-semibold">{predictiveModel.riskScore}%</span>
+                    <span className='font-semibold'>{predictiveModel.riskScore}%</span>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <p className="text-sm font-medium">Key Recommendations:</p>
+                <div className='space-y-2'>
+                  <p className='text-sm font-medium'>Key Recommendations:</p>
                   {predictiveModel.recommendations.slice(0, 3).map((rec, index) => (
-                    <p key={index} className="text-sm text-gray-600">• {rec}</p>
+                    <p key={index} className='text-sm text-gray-600'>• {rec}</p>
                   ))}
                 </div>
 
-                <div className="text-sm text-gray-500">
+                <div className='text-sm text-gray-500'>
                   Confidence: {(predictiveModel.confidence * 100).toFixed(0)}%
                 </div>
               </div>
@@ -521,58 +521,58 @@ const PerformanceDashboard: React.FC<{
   mobileView: boolean;
 }> = ({ metrics, trendData, chartData, isLoading, mobileView }) => {
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <div className={`grid grid-cols-1 ${mobileView ? 'lg:grid-cols-1' : 'lg:grid-cols-2'} gap-6`}>
         <ChartContainer
-          title="Resolution Performance"
-          description="Key performance indicators"
+          title='Resolution Performance'
+          description='Key performance indicators'
           loading={isLoading}
           data={[]}
         >
-          <div className="grid grid-cols-2 gap-4">
+          <div className='grid grid-cols-2 gap-4'>
             <GaugeVisualization
               value={metrics?.resolutionRate || 0}
               max={100}
-              title="Resolution Rate"
-              color="#10B981"
+              title='Resolution Rate'
+              color='#10B981'
             />
             <GaugeVisualization
               value={metrics?.userSatisfactionRate || 0}
               max={5}
-              title="Satisfaction Score"
-              color="#3B82F6"
+              title='Satisfaction Score'
+              color='#3B82F6'
             />
           </div>
         </ChartContainer>
 
         <ChartContainer
-          title="Performance Trends"
-          description="Weekly performance comparison"
+          title='Performance Trends'
+          description='Weekly performance comparison'
           loading={isLoading}
           data={trendData}
         >
           <AreaChartVisualization
             data={trendData}
-            xKey="period"
-            yKey="value"
+            xKey='period'
+            yKey='value'
             height={300}
-            fillColor="#3B82F6"
+            fillColor='#3B82F6'
           />
         </ChartContainer>
       </div>
 
       <ChartContainer
-        title="Dispute Category Performance"
-        description="Resolution rates by category"
+        title='Dispute Category Performance'
+        description='Resolution rates by category'
         loading={isLoading}
         data={chartData}
       >
         <BarChartVisualization
           data={chartData}
-          xKey="name"
-          yKey="value"
+          xKey='name'
+          yKey='value'
           height={300}
-          orientation="vertical"
+          orientation='vertical'
         />
       </ChartContainer>
     </div>
@@ -587,49 +587,49 @@ const TrendsDashboard: React.FC<{
   mobileView: boolean;
 }> = ({ trendData, timeSeriesData, filters, isLoading, mobileView }) => {
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <ChartContainer
-        title="Volume Trends"
-        description="Dispute volume over time"
+        title='Volume Trends'
+        description='Dispute volume over time'
         loading={isLoading}
         data={timeSeriesData}
       >
         <LineChartVisualization
           data={timeSeriesData}
-          xKey="timestamp"
-          yKey="value"
+          xKey='timestamp'
+          yKey='value'
           height={400}
         />
       </ChartContainer>
 
       <div className={`grid grid-cols-1 ${mobileView ? 'lg:grid-cols-1' : 'lg:grid-cols-2'} gap-6`}>
         <ChartContainer
-          title="Resolution Time Trends"
-          description="Average resolution time changes"
+          title='Resolution Time Trends'
+          description='Average resolution time changes'
           loading={isLoading}
           data={trendData}
         >
           <AreaChartVisualization
             data={trendData}
-            xKey="period"
-            yKey="value"
+            xKey='period'
+            yKey='value'
             height={300}
-            fillColor="#F59E0B"
+            fillColor='#F59E0B'
           />
         </ChartContainer>
 
         <ChartContainer
-          title="Satisfaction Trends"
-          description="User satisfaction over time"
+          title='Satisfaction Trends'
+          description='User satisfaction over time'
           loading={isLoading}
           data={trendData}
         >
           <LineChartVisualization
             data={trendData}
-            xKey="period"
-            yKey="value"
+            xKey='period'
+            yKey='value'
             height={300}
-            strokeColor="#10B981"
+            strokeColor='#10B981'
           />
         </ChartContainer>
       </div>
@@ -644,7 +644,7 @@ const PatternsDashboard: React.FC<{
   mobileView: boolean;
 }> = ({ patterns, predictiveModel, isLoading, mobileView }) => {
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <div className={`grid grid-cols-1 ${mobileView ? 'lg:grid-cols-1' : 'lg:grid-cols-2'} gap-6`}>
         <Card>
           <CardHeader>
@@ -652,12 +652,12 @@ const PatternsDashboard: React.FC<{
             <CardDescription>Identified patterns in dispute data</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className='space-y-4'>
               {patterns.slice(0, 5).map((pattern, index) => (
-                <div key={pattern.type} className="flex items-center justify-between p-3 border rounded-lg">
+                <div key={pattern.type} className='flex items-center justify-between p-3 border rounded-lg'>
                   <div>
-                    <p className="font-medium">{pattern.type}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className='font-medium'>{pattern.type}</p>
+                    <p className='text-sm text-gray-600'>
                       {pattern.frequency} occurrences, {pattern.successRate.toFixed(1)}% success rate
                     </p>
                   </div>
@@ -677,22 +677,22 @@ const PatternsDashboard: React.FC<{
               <CardDescription>Factors contributing to dispute likelihood</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              <div className='space-y-3'>
                 {predictiveModel.factors.map((factor, index) => (
-                  <div key={factor.name} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{factor.name}</span>
+                  <div key={factor.name} className='space-y-2'>
+                    <div className='flex items-center justify-between'>
+                      <span className='text-sm font-medium'>{factor.name}</span>
                       <Badge variant={factor.impact === 'negative' ? 'destructive' : factor.impact === 'positive' ? 'default' : 'secondary'}>
                         {factor.impact}
                       </Badge>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className='w-full bg-gray-200 rounded-full h-2'>
                       <div
-                        className="bg-blue-600 h-2 rounded-full"
+                        className='bg-blue-600 h-2 rounded-full'
                         style={{ width: `${factor.weight * 100}%` }}
                       />
                     </div>
-                    <p className="text-xs text-gray-600">{factor.description}</p>
+                    <p className='text-xs text-gray-600'>{factor.description}</p>
                   </div>
                 ))}
               </div>
@@ -728,15 +728,15 @@ const FilterPanel: React.FC<{
   };
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
+    <div className='space-y-6'>
+      <div className='grid grid-cols-2 gap-4'>
         <div>
           <Label>Status</Label>
-          <div className="mt-2 space-y-2 max-h-32 overflow-y-auto">
+          <div className='mt-2 space-y-2 max-h-32 overflow-y-auto'>
             {Object.values(DisputeStatus).map((status) => (
-              <div key={status} className="flex items-center space-x-2">
+              <div key={status} className='flex items-center space-x-2'>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   id={status}
                   checked={localFilters.status?.includes(status) || false}
                   onChange={(e) => {
@@ -754,7 +754,7 @@ const FilterPanel: React.FC<{
                     }
                   }}
                 />
-                <Label htmlFor={status} className="text-sm capitalize">
+                <Label htmlFor={status} className='text-sm capitalize'>
                   {status.replace('_', ' ')}
                 </Label>
               </div>
@@ -764,11 +764,11 @@ const FilterPanel: React.FC<{
 
         <div>
           <Label>Type</Label>
-          <div className="mt-2 space-y-2 max-h-32 overflow-y-auto">
+          <div className='mt-2 space-y-2 max-h-32 overflow-y-auto'>
             {Object.values(DisputeType).map((type) => (
-              <div key={type} className="flex items-center space-x-2">
+              <div key={type} className='flex items-center space-x-2'>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   id={type}
                   checked={localFilters.type?.includes(type) || false}
                   onChange={(e) => {
@@ -786,7 +786,7 @@ const FilterPanel: React.FC<{
                     }
                   }}
                 />
-                <Label htmlFor={type} className="text-sm capitalize">
+                <Label htmlFor={type} className='text-sm capitalize'>
                   {type}
                 </Label>
               </div>
@@ -795,12 +795,12 @@ const FilterPanel: React.FC<{
         </div>
       </div>
 
-      <div className="flex justify-between">
-        <Button variant="outline" onClick={handleReset}>
+      <div className='flex justify-between'>
+        <Button variant='outline' onClick={handleReset}>
           Reset
         </Button>
-        <div className="space-x-2">
-          <Button variant="outline" onClick={onClose}>
+        <div className='space-x-2'>
+          <Button variant='outline' onClick={onClose}>
             Cancel
           </Button>
           <Button onClick={handleApply}>

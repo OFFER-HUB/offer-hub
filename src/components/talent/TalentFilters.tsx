@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Button } from '@/components/ui/button';
 import { X, Star } from 'lucide-react';
@@ -124,25 +124,25 @@ const Filter: React.FC<FilterProps> = ({ isOpen, onClose, onApply }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center'>
+      <div className='bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
+        <div className='flex items-center justify-between p-6 border-b border-gray-200'>
+          <h2 className='text-xl font-semibold text-gray-900'>Filters</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1"
+            className='text-gray-400 hover:text-gray-600 p-1'
           >
-            <X className="w-5 h-5" />
+            <X className='w-5 h-5' />
           </button>
         </div>
 
         {/* Filter Content */}
-        <div className="p-6 space-y-8">
+        <div className='p-6 space-y-8'>
           {/* Categories */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Categories</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className='text-lg font-medium text-gray-900 mb-4'>Categories</h3>
+            <div className='flex flex-wrap gap-2'>
               {categories.map((category) => (
                 <button
                   key={category}
@@ -161,8 +161,8 @@ const Filter: React.FC<FilterProps> = ({ isOpen, onClose, onApply }) => {
 
           {/* Skills */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Skills</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className='text-lg font-medium text-gray-900 mb-4'>Skills</h3>
+            <div className='flex flex-wrap gap-2'>
               {skills.map((skill) => (
                 <button
                   key={skill}
@@ -181,8 +181,8 @@ const Filter: React.FC<FilterProps> = ({ isOpen, onClose, onApply }) => {
 
           {/* Location */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Location</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className='text-lg font-medium text-gray-900 mb-4'>Location</h3>
+            <div className='flex flex-wrap gap-2'>
               {locations.map((location) => (
                 <button
                   key={location}
@@ -201,8 +201,8 @@ const Filter: React.FC<FilterProps> = ({ isOpen, onClose, onApply }) => {
 
           {/* Rating */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Minimum Rating</h3>
-            <div className="flex gap-2">
+            <h3 className='text-lg font-medium text-gray-900 mb-4'>Minimum Rating</h3>
+            <div className='flex gap-2'>
               {[1, 2, 3, 4, 5].map((rating) => (
                 <button
                   key={rating}
@@ -222,31 +222,31 @@ const Filter: React.FC<FilterProps> = ({ isOpen, onClose, onApply }) => {
 
           {/* Price Range */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Price Range ($/hour)</h3>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Min</label>
+            <h3 className='text-lg font-medium text-gray-900 mb-4'>Price Range ($/hour)</h3>
+            <div className='space-y-4'>
+              <div className='flex items-center gap-4'>
+                <div className='flex-1'>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Min</label>
                   <input
-                    type="number"
+                    type='number'
                     value={priceRange.min}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                    placeholder="0"
+                    className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent'
+                    placeholder='0'
                   />
                 </div>
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Max</label>
+                <div className='flex-1'>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Max</label>
                   <input
-                    type="number"
+                    type='number'
                     value={priceRange.max}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) || 1000 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                    placeholder="1000"
+                    className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent'
+                    placeholder='1000'
                   />
                 </div>
               </div>
-              <div className="text-sm text-gray-600">
+              <div className='text-sm text-gray-600'>
                 ${priceRange.min} - ${priceRange.max} per hour
               </div>
             </div>
@@ -254,32 +254,32 @@ const Filter: React.FC<FilterProps> = ({ isOpen, onClose, onApply }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-          <div className="flex items-center gap-4">
+        <div className='flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50'>
+          <div className='flex items-center gap-4'>
             {hasActiveFilters && (
               <Button
-                variant="ghost"
+                variant='ghost'
                 onClick={clearAllFilters}
-                className="text-gray-600 hover:text-gray-800"
+                className='text-gray-600 hover:text-gray-800'
               >
                 Clear All
               </Button>
             )}
-            <span className="text-sm text-gray-600">
+            <span className='text-sm text-gray-600'>
               {selectedCategories.length + selectedSkills.length + selectedLocations.length + (selectedRating ? 1 : 0)} filters applied
             </span>
           </div>
-          <div className="flex gap-3">
+          <div className='flex gap-3'>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={onClose}
-              className="px-6"
+              className='px-6'
             >
               Cancel
             </Button>
             <Button
               onClick={handleApply}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-6"
+              className='bg-teal-600 hover:bg-teal-700 text-white px-6'
             >
               Apply Filters
             </Button>

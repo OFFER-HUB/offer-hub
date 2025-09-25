@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { checkTokenValidity, logAccessAttempt } from "@/utils/route-protection"
-import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { checkTokenValidity, logAccessAttempt } from '@/utils/route-protection'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export const useAuthGuard = (roles?: string[]) => {
     // mocked wallet connection
-    const address = "0x.........."
+    const address = '0x..........'
     const isConnected = !!address
 
     const router = useRouter()
@@ -25,7 +25,7 @@ export const useAuthGuard = (roles?: string[]) => {
 
 
                 // Token validation
-                const token = localStorage.getItem("authToken")
+                const token = localStorage.getItem('authToken')
                 const valid = await checkTokenValidity(token)
 
 
@@ -47,11 +47,11 @@ export const useAuthGuard = (roles?: string[]) => {
                 // 3. If no roles are specified for the route, allow all authenticated users
                 //     and log "granted".
 
-                const userRoles = JSON.parse(localStorage.getItem("roles") || "[]")
+                const userRoles = JSON.parse(localStorage.getItem('roles') || '[]')
                 if (roles && roles.length > 0) {
                     const allowed = roles.some(r => userRoles.includes(r))
                     setHasAccess(allowed)
-                    logAccessAttempt(pathname, allowed ? "granted" : "denied")
+                    logAccessAttempt(pathname, allowed ? 'granted' : 'denied')
 
                     if (!allowed) {
                         setHasAccess(false)
@@ -59,14 +59,14 @@ export const useAuthGuard = (roles?: string[]) => {
                     }
                 } else {
                     setHasAccess(true)
-                    logAccessAttempt(pathname, "granted")
+                    logAccessAttempt(pathname, 'granted')
                 }
 
                 //  User passed all checks
                 setIsAuthenticated(true)
             } catch (err) {
                 console.error(err)
-                setError("Authentication failed. Please reconnect your wallet.")
+                setError('Authentication failed. Please reconnect your wallet.')
             } finally {
                 setIsLoading(false)
             }

@@ -3,31 +3,31 @@
  * @author Offer Hub Team
  */
 
-import jwt from "jsonwebtoken";
-import { JWTPayload } from "@/types/auth.types";
-import { createHash } from "crypto";
+import jwt from 'jsonwebtoken';
+import { JWTPayload } from '@/types/auth.types';
+import { createHash } from 'crypto';
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
-const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN as any) || "24h";
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN as any) || '24h';
 const JWT_REFRESH_EXPIRES_IN =
-  (process.env.JWT_REFRESH_EXPIRES_IN as any) || "7d";
+  (process.env.JWT_REFRESH_EXPIRES_IN as any) || '7d';
 const JWT_REFRESH_THRESHOLD = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment");
+  throw new Error('JWT_SECRET is not defined in environment');
 }
 
 export function hashToken(token: string) {
-  return createHash("sha256").update(token).digest("hex");
+  return createHash('sha256').update(token).digest('hex');
 }
 
-export function signAccessToken(payload: Omit<JWTPayload, "iat" | "exp">) {
+export function signAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>) {
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
   });
 }
 
-export function signRefreshToken(payload: Omit<JWTPayload, "iat" | "exp">) {
+export function signRefreshToken(payload: Omit<JWTPayload, 'iat' | 'exp'>) {
   const refreshToken = jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_REFRESH_EXPIRES_IN,
   });
@@ -73,10 +73,10 @@ export function isTokenNearExpiration(token: string): boolean {
  * @returns token string or null if invalid format
  */
 export function extractTokenFromHeader(authHeader: string | undefined): string | null {
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return null;
   }
-  return authHeader.split(" ")[1];
+  return authHeader.split(' ')[1];
 }
 
 /**

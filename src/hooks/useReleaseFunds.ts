@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { EscrowRequestResponse } from "@trustless-work/escrow";
-import { ReleaseFundsPayload } from "../types/escrow.types";
+import { useState } from 'react';
+import { EscrowRequestResponse } from '@trustless-work/escrow';
+import { ReleaseFundsPayload } from '../types/escrow.types';
 
 /**
  * Hook to release escrow funds using the @trustless-work/escrow package.
@@ -31,7 +31,7 @@ export const useReleaseFunds = (): UseReleaseFundsReturn => {
    */
   const handleReleaseFunds = async (payload: ReleaseFundsPayload) => {
     if (!payload.contractId || !payload.signer) {
-      throw new Error("Contract ID and signer are required");
+      throw new Error('Contract ID and signer are required');
     }
 
     setLoading(true);
@@ -39,13 +39,13 @@ export const useReleaseFunds = (): UseReleaseFundsReturn => {
 
     try {
       // TODO: Implement when @trustless-work/escrow package is properly configured
-      console.warn("useReleaseFunds: Hook not implemented - type mismatch");
-      throw new Error("useReleaseFunds hook not implemented - type mismatch");
+      console.warn('useReleaseFunds: Hook not implemented - type mismatch');
+      throw new Error('useReleaseFunds hook not implemented - type mismatch');
     } catch (err) {
       const error =
         err instanceof Error
           ? err
-          : new Error("Failed to release escrow funds");
+          : new Error('Failed to release escrow funds');
       setError(error);
       setLoading(false);
       throw error;

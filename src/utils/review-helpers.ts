@@ -10,7 +10,7 @@ import {
   ReviewFilterOptions,
   ReviewStatistics,
   ReviewSearchResult,
-} from "@/types/reviews.types";
+} from '@/types/reviews.types';
 
 /**
  * Validates if a string is a valid UUID.
@@ -32,13 +32,13 @@ export const isValidUUID = (uuid: string): boolean => {
  */
 export const validateReviewInput = (input: CreateReviewDTO): string | null => {
   if (!input.from_id || !isValidUUID(input.from_id)) {
-    return "Invalid reviewer ID";
+    return 'Invalid reviewer ID';
   }
   if (!input.to_id || !isValidUUID(input.to_id)) {
-    return "Invalid reviewee ID";
+    return 'Invalid reviewee ID';
   }
   if (!input.contract_id || !isValidUUID(input.contract_id)) {
-    return "Invalid contract ID";
+    return 'Invalid contract ID';
   }
   if (
     !input.rating ||
@@ -46,7 +46,7 @@ export const validateReviewInput = (input: CreateReviewDTO): string | null => {
     input.rating > 5 ||
     !Number.isInteger(input.rating)
   ) {
-    return "Rating must be a whole number between 1 and 5";
+    return 'Rating must be a whole number between 1 and 5';
   }
   return null;
 };
@@ -59,10 +59,10 @@ export const validateReviewInput = (input: CreateReviewDTO): string | null => {
  */
 export const formatReviewDate = (dateString: string): string => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 };
 
@@ -114,7 +114,7 @@ export const applyFilters = (
     }
 
     // Search text
-    if (filters.search && filters.search.trim() !== "") {
+    if (filters.search && filters.search.trim() !== '') {
       const search = filters.search.toLowerCase();
       const commentMatch = review.comment?.toLowerCase().includes(search);
       const projectTitleMatch = review.project_title
@@ -136,8 +136,8 @@ export const applyFilters = (
 // Sort reviews
 export const sortReviews = (
   reviews: Review[],
-  sortBy: string = "created_at",
-  sortDirection: "asc" | "desc" = "desc"
+  sortBy: string = 'created_at',
+  sortDirection: 'asc' | 'desc' = 'desc'
 ): Review[] => {
   if (!reviews) return [];
 
@@ -145,27 +145,27 @@ export const sortReviews = (
     let valueA, valueB;
 
     switch (sortBy) {
-      case "rating":
+      case 'rating':
         valueA = a.rating;
         valueB = b.rating;
         break;
-      case "project_value":
+      case 'project_value':
         valueA = a.project_value || 0;
         valueB = b.project_value || 0;
         break;
-      case "project_title":
-        valueA = a.project_title || "";
-        valueB = b.project_title || "";
-        return sortDirection === "asc"
+      case 'project_title':
+        valueA = a.project_title || '';
+        valueB = b.project_title || '';
+        return sortDirection === 'asc'
           ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
-      case "created_at":
+      case 'created_at':
       default:
         valueA = new Date(a.created_at).getTime();
         valueB = new Date(b.created_at).getTime();
     }
 
-    return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
+    return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
   });
 };
 
@@ -225,7 +225,7 @@ export const calculateReviewStatistics = (
     const date = new Date(review.created_at);
     const monthYear = `${date.getFullYear()}-${String(
       date.getMonth() + 1
-    ).padStart(2, "0")}`;
+    ).padStart(2, '0')}`;
     reviewsByMonth[monthYear] = (reviewsByMonth[monthYear] || 0) + 1;
 
     // Reviews by project type
@@ -273,7 +273,7 @@ export const searchReviews = (
   reviews: Review[],
   query: string
 ): ReviewSearchResult[] => {
-  if (!query || query.trim() === "" || !reviews?.length) {
+  if (!query || query.trim() === '' || !reviews?.length) {
     return reviews.map((review) => ({ review, relevanceScore: 0 }));
   }
 
@@ -334,27 +334,27 @@ export const searchReviews = (
 
 // Export reviews to CSV
 export const exportToCSV = (reviews: Review[]): string => {
-  if (!reviews || reviews.length === 0) return "";
+  if (!reviews || reviews.length === 0) return '';
 
   // Define headers
   const headers = [
-    "ID",
-    "From ID",
-    "To ID",
-    "Contract ID",
-    "Rating",
-    "Comment",
-    "Created At",
-    "Project Title",
-    "Project Type",
-    "Project Value",
-    "Reviewer Name",
-    "Reviewee Name",
+    'ID',
+    'From ID',
+    'To ID',
+    'Contract ID',
+    'Rating',
+    'Comment',
+    'Created At',
+    'Project Title',
+    'Project Type',
+    'Project Value',
+    'Reviewer Name',
+    'Reviewee Name',
   ];
 
   // Create CSV rows
   const csvRows = [
-    headers.join(","),
+    headers.join(','),
     ...reviews.map((review) => {
       return [
         review.id,
@@ -362,24 +362,24 @@ export const exportToCSV = (reviews: Review[]): string => {
         review.to_id,
         review.contract_id,
         review.rating,
-        review.comment ? `"${review.comment.replace(/"/g, '""')}"` : "",
+        review.comment ? `"${review.comment.replace(/"/g, '""')}"` : '',
         review.created_at,
         review.project_title
           ? `"${review.project_title.replace(/"/g, '""')}"`
-          : "",
-        review.project_type || "",
-        review.project_value || "",
+          : '',
+        review.project_type || '',
+        review.project_value || '',
         review.reviewer_name
           ? `"${review.reviewer_name.replace(/"/g, '""')}"`
-          : "",
+          : '',
         review.reviewee_name
           ? `"${review.reviewee_name.replace(/"/g, '""')}"`
-          : "",
-      ].join(",");
+          : '',
+      ].join(',');
     }),
   ];
 
-  return csvRows.join("\n");
+  return csvRows.join('\n');
 };
 
 // Export reviews to JSON
@@ -464,16 +464,16 @@ export const haveFiltersChanged = (
 // Normalize error message
 export const normalizeErrorMessage = (message: string): string => {
   const errorMap: Record<string, string> = {
-    Missing_required_fields: "All required fields must be filled out",
-    Rating_must_be_a_number: "Rating must be a valid number between 1 and 5",
-    User_ID_is_required: "User ID is required",
-    Invalid_user_ID_format: "Invalid user ID format",
-    "Contract not found": "Contract not found",
-    "Contract not completed":
-      "Reviews can only be submitted for completed contracts",
-    "Not authorized": "You are not authorized to review this contract",
-    "Duplicate review": "You have already reviewed this contract",
+    Missing_required_fields: 'All required fields must be filled out',
+    Rating_must_be_a_number: 'Rating must be a valid number between 1 and 5',
+    User_ID_is_required: 'User ID is required',
+    Invalid_user_ID_format: 'Invalid user ID format',
+    'Contract not found': 'Contract not found',
+    'Contract not completed':
+      'Reviews can only be submitted for completed contracts',
+    'Not authorized': 'You are not authorized to review this contract',
+    'Duplicate review': 'You have already reviewed this contract',
   };
 
-  return errorMap[message] || message || "An error occurred";
+  return errorMap[message] || message || 'An error occurred';
 };

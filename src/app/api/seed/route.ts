@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       errors: [] as string[]
     };
 
-    console.log(`🌱 Starting database seeding...`);
+    console.log('🌱 Starting database seeding...');
     console.log(`📊 Config: ${users} users, clearExisting: ${clearExisting}, dryRun: ${dryRun}`);
 
     // 1. Limpiar datos existentes si se solicita

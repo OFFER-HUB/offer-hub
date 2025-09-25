@@ -1,18 +1,18 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 import {
   isValidEmail,
   isStrongPassword,
   requiredField,
-} from "@/utils/validation-rules";
+} from '@/utils/validation-rules';
 import {
   getNextRateLimitState,
   resetRateLimit,
   isRateLimited,
-} from "@/utils/rate-limiting";
+} from '@/utils/rate-limiting';
 import type {
   AuthValidationState,
   RateLimitState,
-} from "@/types/auth-validation.types";
+} from '@/types/auth-validation.types';
 
 const initialRateLimit: RateLimitState = {
   attempts: 0,
@@ -34,23 +34,23 @@ export function useAuthValidation() {
   // Real-time field validation
   const validateEmail = useCallback((email: string) => {
     if (!requiredField(email)) {
-      return { valid: false, error: "Email is required." };
+      return { valid: false, error: 'Email is required.' };
     }
     if (!isValidEmail(email)) {
-      return { valid: false, error: "Enter a valid email address." };
+      return { valid: false, error: 'Enter a valid email address.' };
     }
     return { valid: true, error: null };
   }, []);
 
   const validatePassword = useCallback((password: string) => {
     if (!requiredField(password)) {
-      return { valid: false, error: "Password is required." };
+      return { valid: false, error: 'Password is required.' };
     }
     if (!isStrongPassword(password)) {
       return {
         valid: false,
         error:
-          "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.",
+          'Password must be at least 8 characters, include uppercase, lowercase, number, and special character.',
       };
     }
     return { valid: true, error: null };
@@ -58,16 +58,16 @@ export function useAuthValidation() {
 
   // Handle field changes
   const onFieldChange = useCallback(
-    (field: "email" | "password", value: string) => {
+    (field: 'email' | 'password', value: string) => {
       setState((prev) => {
         const validation =
-          field === "email" ? validateEmail(value) : validatePassword(value);
+          field === 'email' ? validateEmail(value) : validatePassword(value);
         const newState = {
           ...prev,
           [field]: validation,
           formValid:
-            (field === "email" ? validation.valid : prev.email.valid) &&
-            (field === "password" ? validation.valid : prev.password.valid),
+            (field === 'email' ? validation.valid : prev.email.valid) &&
+            (field === 'password' ? validation.valid : prev.password.valid),
           errorCategory: undefined,
           errorMessage: undefined,
         };
@@ -100,7 +100,7 @@ export function useAuthValidation() {
           password: passwordValidation,
           formValid: false,
           loading: false,
-          errorCategory: "validation",
+          errorCategory: 'validation',
           errorMessage:
             emailValidation.error || passwordValidation.error || undefined,
         }));
@@ -112,7 +112,7 @@ export function useAuthValidation() {
           return {
             ...prev,
             loading: false,
-            errorCategory: "auth",
+            errorCategory: 'auth',
             errorMessage: `Too many failed attempts. Try again in ${Math.ceil(
               (prev.rateLimit.nextAllowed!.getTime() - Date.now()) / 1000,
             )}s.`,
@@ -133,32 +133,32 @@ export function useAuthValidation() {
         // Type guards for error object
         function hasMessage(e: unknown): e is { message: string } {
           return (
-            typeof e === "object" &&
+            typeof e === 'object' &&
             e !== null &&
-            "message" in e &&
-            typeof (e as { message: unknown }).message === "string"
+            'message' in e &&
+            typeof (e as { message: unknown }).message === 'string'
           );
         }
         function hasResponseStatus(
           e: unknown,
         ): e is { response: { status: number } } {
           return (
-            typeof e === "object" &&
+            typeof e === 'object' &&
             e !== null &&
-            "response" in e &&
-            typeof (e as { response: unknown }).response === "object" &&
+            'response' in e &&
+            typeof (e as { response: unknown }).response === 'object' &&
             (e as { response: { status?: unknown } }).response !== null &&
             typeof (e as { response: { status?: unknown } }).response.status ===
-              "number"
+              'number'
           );
         }
         // Network error
-        if (hasMessage(err) && err.message.includes("Network")) {
+        if (hasMessage(err) && err.message.includes('Network')) {
           setState((prev) => ({
             ...prev,
             loading: false,
-            errorCategory: "network",
-            errorMessage: "Network error. Please check your connection.",
+            errorCategory: 'network',
+            errorMessage: 'Network error. Please check your connection.',
           }));
           return;
         }
@@ -167,8 +167,8 @@ export function useAuthValidation() {
           setState((prev) => ({
             ...prev,
             loading: false,
-            errorCategory: "server",
-            errorMessage: "Server error. Please try again later.",
+            errorCategory: 'server',
+            errorMessage: 'Server error. Please try again later.',
           }));
           return;
         }
@@ -180,8 +180,8 @@ export function useAuthValidation() {
           return {
             ...prev,
             loading: false,
-            errorCategory: "auth",
-            errorMessage: "Invalid email or password.",
+            errorCategory: 'auth',
+            errorMessage: 'Invalid email or password.',
             rateLimit: nextRate,
           };
         });

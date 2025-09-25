@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Header } from "@/components/account-settings/header"
-import { Sidebar } from "@/components/account-settings/sidebar"
-import { MessagesSidebar } from "@/components/messages/messages-sidebar"
-import { MessagesMainPlus } from "@/components/messaging/messages-main-plus"
-import { useMessagesMock as useMessages } from "@/hooks/useMessagesMock"
+import { useState } from 'react'
+import { Header } from '@/components/account-settings/header'
+import { Sidebar } from '@/components/account-settings/sidebar'
+import { MessagesSidebar } from '@/components/messages/messages-sidebar'
+import { MessagesMainPlus } from '@/components/messaging/messages-main-plus'
+import { useMessagesMock as useMessages } from '@/hooks/useMessagesMock'
 import type { Conversation as MessagesConversation } from '@/types/messages.types';
 import type { Conversation as MessagesMainConversation, Message as MessagesMainMessage } from '@/types/index';
 
@@ -69,17 +69,17 @@ export default function MessagingPage() {
   const [isUserActive, setIsUserActive] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className='min-h-screen bg-gray-50'>
       <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className="flex">
+      <div className='flex'>
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
           isUserActive={isUserActive}
           setIsUserActive={setIsUserActive}
         />
-        <div className="flex-1 p-6">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 h-[calc(100vh-140px)] flex overflow-hidden">
+        <div className='flex-1 p-6'>
+          <div className='bg-white rounded-2xl shadow-sm border border-gray-200 h-[calc(100vh-140px)] flex overflow-hidden'>
             <MessagesSidebar
               conversations={conversations.map(convertUIConversationToMessagesConversation)}
               activeConversationId={activeConversationId}

@@ -1,13 +1,13 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   createServiceHandler,
   getAllServicesHandler,
   getServiceByIdHandler,
   updateServiceHandler,
   deleteServiceHandler,
-} from "@/controllers/service.controller";
-import { authorizeRoles, verifyToken } from "@/middlewares/auth.middleware";
-import { UserRole } from "@/types/auth.types";
+} from '@/controllers/service.controller';
+import { authorizeRoles, verifyToken } from '@/middlewares/auth.middleware';
+import { UserRole } from '@/types/auth.types';
 
 const router = Router();
 
@@ -28,7 +28,7 @@ const router = Router();
 //   Authorization: Bearer <token>
 //   { "user_id": "UUID", "title": "...", "description": "...", "category": "web", "min_price": 100, "max_price": 500 }
 router.post(
-  "/",
+  '/',
   verifyToken,
   authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   createServiceHandler
@@ -45,14 +45,14 @@ router.post(
 //   limit=number (default 10, allowed range 1..50)
 // Response: 200 OK -> Paginated list
 // Example: GET /api/services?category=web&min=100&max=1000&page=1&limit=10
-router.get("/", getAllServicesHandler);
+router.get('/', getAllServicesHandler);
 
 // GET /api/services/:id - Get service by ID
 // Auth: JWT required
 // Params: id (UUID v4)
 // Response: 200 OK -> Service with freelancer info; 400 -> invalid id; 404 -> not found
 // Example: GET /api/services/3fa85f64-5717-4562-b3fc-2c963f66afa6
-router.get("/:id", getServiceByIdHandler);
+router.get('/:id', getServiceByIdHandler);
 
 // PATCH /api/services/:id - Update a service
 // Auth: JWT required; Roles: freelancer or admin
@@ -65,7 +65,7 @@ router.get("/:id", getServiceByIdHandler);
 //   Authorization: Bearer <token>
 //   { "title": "New title", "min_price": 120, "max_price": 300 }
 router.patch(
-  "/:id",
+  '/:id',
   verifyToken,
   authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   updateServiceHandler
@@ -79,7 +79,7 @@ router.patch(
 //   DELETE /api/services/3fa85f64-5717-4562-b3fc-2c963f66afa6
 //   Authorization: Bearer <token>
 router.delete(
-  "/:id",
+  '/:id',
   verifyToken,
   authorizeRoles(UserRole.FREELANCER, UserRole.ADMIN),
   deleteServiceHandler

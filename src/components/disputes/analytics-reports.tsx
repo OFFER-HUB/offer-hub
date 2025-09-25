@@ -150,32 +150,32 @@ export const ReportBuilder: React.FC<{
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
-              <Label htmlFor="name">Report Name</Label>
+              <Label htmlFor='name'>Report Name</Label>
               <Controller
-                name="name"
+                name='name'
                 control={control}
                 rules={{ required: 'Report name is required' }}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    placeholder="Enter report name"
+                    placeholder='Enter report name'
                     className={errors.name ? 'border-red-500' : ''}
                   />
                 )}
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+              {errors.name && <p className='text-red-500 text-sm mt-1'>{errors.name.message}</p>}
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor='description'>Description</Label>
               <Controller
-                name="description"
+                name='description'
                 control={control}
                 render={({ field }) => (
                   <Textarea
                     {...field}
-                    placeholder="Describe what this report shows"
+                    placeholder='Describe what this report shows'
                     rows={3}
                   />
                 )}
@@ -186,24 +186,24 @@ export const ReportBuilder: React.FC<{
 
       case 1:
         return (
-          <div className="space-y-6">
+          <div className='space-y-6'>
             <div>
               <Label>Date Range</Label>
-              <div className="flex space-x-2 mt-2">
+              <div className='flex space-x-2 mt-2'>
                 <Controller
-                  name="filters.dateRange.from"
+                  name='filters.dateRange.from'
                   control={control}
                   render={({ field }) => (
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start text-left">
-                          <CalendarIcon className="mr-2 h-4 w-4" />
+                        <Button variant='outline' className='w-full justify-start text-left'>
+                          <CalendarIcon className='mr-2 h-4 w-4' />
                           {field.value ? format(field.value, 'PPP') : 'Pick start date'}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
+                      <PopoverContent className='w-auto p-0'>
                         <Calendar
-                          mode="single"
+                          mode='single'
                           selected={field.value}
                           onSelect={field.onChange}
                           initialFocus
@@ -213,19 +213,19 @@ export const ReportBuilder: React.FC<{
                   )}
                 />
                 <Controller
-                  name="filters.dateRange.to"
+                  name='filters.dateRange.to'
                   control={control}
                   render={({ field }) => (
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start text-left">
-                          <CalendarIcon className="mr-2 h-4 w-4" />
+                        <Button variant='outline' className='w-full justify-start text-left'>
+                          <CalendarIcon className='mr-2 h-4 w-4' />
                           {field.value ? format(field.value, 'PPP') : 'Pick end date'}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
+                      <PopoverContent className='w-auto p-0'>
                         <Calendar
-                          mode="single"
+                          mode='single'
                           selected={field.value}
                           onSelect={field.onChange}
                           initialFocus
@@ -237,16 +237,16 @@ export const ReportBuilder: React.FC<{
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <div>
                 <Label>Status</Label>
                 <Controller
-                  name="filters.status"
+                  name='filters.status'
                   control={control}
                   render={({ field }) => (
-                    <div className="mt-2 space-y-2">
+                    <div className='mt-2 space-y-2'>
                       {Object.values(DisputeStatus).map((status) => (
-                        <div key={status} className="flex items-center space-x-2">
+                        <div key={status} className='flex items-center space-x-2'>
                           <Checkbox
                             id={status}
                             checked={field.value?.includes(status) || false}
@@ -259,7 +259,7 @@ export const ReportBuilder: React.FC<{
                               }
                             }}
                           />
-                          <Label htmlFor={status} className="text-sm capitalize">
+                          <Label htmlFor={status} className='text-sm capitalize'>
                             {status.replace('_', ' ')}
                           </Label>
                         </div>
@@ -272,12 +272,12 @@ export const ReportBuilder: React.FC<{
               <div>
                 <Label>Type</Label>
                 <Controller
-                  name="filters.type"
+                  name='filters.type'
                   control={control}
                   render={({ field }) => (
-                    <div className="mt-2 space-y-2">
+                    <div className='mt-2 space-y-2'>
                       {Object.values(DisputeType).map((type) => (
-                        <div key={type} className="flex items-center space-x-2">
+                        <div key={type} className='flex items-center space-x-2'>
                           <Checkbox
                             id={type}
                             checked={field.value?.includes(type) || false}
@@ -290,7 +290,7 @@ export const ReportBuilder: React.FC<{
                               }
                             }}
                           />
-                          <Label htmlFor={type} className="text-sm capitalize">
+                          <Label htmlFor={type} className='text-sm capitalize'>
                             {type}
                           </Label>
                         </div>
@@ -305,12 +305,12 @@ export const ReportBuilder: React.FC<{
 
       case 2:
         return (
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
               <Label>Select Metrics to Include</Label>
-              <p className="text-sm text-gray-600 mt-1">Choose the metrics you want to include in your report</p>
+              <p className='text-sm text-gray-600 mt-1'>Choose the metrics you want to include in your report</p>
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className='grid grid-cols-1 gap-3'>
               {availableMetrics.map((metric) => (
                 <div
                   key={metric.name}
@@ -321,10 +321,10 @@ export const ReportBuilder: React.FC<{
                   }`}
                   onClick={() => handleMetricToggle(metric)}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className='flex items-center justify-between'>
                     <div>
-                      <h4 className="font-medium">{metric.name}</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className='font-medium'>{metric.name}</h4>
+                      <p className='text-sm text-gray-600'>
                         Type: {metric.type} | Format: {metric.format.replace('_', ' ')}
                       </p>
                     </div>
@@ -340,12 +340,12 @@ export const ReportBuilder: React.FC<{
 
       case 3:
         return (
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
               <Label>Select Visualizations</Label>
-              <p className="text-sm text-gray-600 mt-1">Choose how you want to display your data</p>
+              <p className='text-sm text-gray-600 mt-1'>Choose how you want to display your data</p>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className='grid grid-cols-2 gap-3'>
               {availableVisualizations.map((viz) => (
                 <div
                   key={viz.type}
@@ -356,10 +356,10 @@ export const ReportBuilder: React.FC<{
                   }`}
                   onClick={() => handleVisualizationToggle(viz.type)}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className='flex items-center justify-between'>
                     <div>
-                      <h4 className="font-medium">{viz.name}</h4>
-                      <p className="text-sm text-gray-600">{viz.description}</p>
+                      <h4 className='font-medium'>{viz.name}</h4>
+                      <p className='text-sm text-gray-600'>{viz.description}</p>
                     </div>
                     <Checkbox
                       checked={selectedVisualizations.includes(viz.type)}
@@ -373,15 +373,15 @@ export const ReportBuilder: React.FC<{
 
       case 4:
         return (
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
               <Label>Schedule (Optional)</Label>
-              <p className="text-sm text-gray-600 mt-1">Set up automatic report generation</p>
+              <p className='text-sm text-gray-600 mt-1'>Set up automatic report generation</p>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className='flex items-center space-x-2'>
               <Controller
-                name="schedule.enabled"
+                name='schedule.enabled'
                 control={control}
                 render={({ field }) => (
                   <Switch
@@ -394,22 +394,22 @@ export const ReportBuilder: React.FC<{
             </div>
 
             {watch('schedule.enabled') && (
-              <div className="space-y-4 ml-6">
+              <div className='space-y-4 ml-6'>
                 <div>
                   <Label>Frequency</Label>
                   <Controller
-                    name="schedule.frequency"
+                    name='schedule.frequency'
                     control={control}
                     render={({ field }) => (
                       <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select frequency" />
+                          <SelectValue placeholder='Select frequency' />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="daily">Daily</SelectItem>
-                          <SelectItem value="weekly">Weekly</SelectItem>
-                          <SelectItem value="monthly">Monthly</SelectItem>
-                          <SelectItem value="quarterly">Quarterly</SelectItem>
+                          <SelectItem value='daily'>Daily</SelectItem>
+                          <SelectItem value='weekly'>Weekly</SelectItem>
+                          <SelectItem value='monthly'>Monthly</SelectItem>
+                          <SelectItem value='quarterly'>Quarterly</SelectItem>
                         </SelectContent>
                       </Select>
                     )}
@@ -419,13 +419,13 @@ export const ReportBuilder: React.FC<{
                 <div>
                   <Label>Time</Label>
                   <Controller
-                    name="schedule.time"
+                    name='schedule.time'
                     control={control}
                     render={({ field }) => (
                       <Input
                         {...field}
-                        type="time"
-                        placeholder="09:00"
+                        type='time'
+                        placeholder='09:00'
                       />
                     )}
                   />
@@ -434,13 +434,13 @@ export const ReportBuilder: React.FC<{
                 <div>
                   <Label>Recipients (Email addresses, one per line)</Label>
                   <Controller
-                    name="schedule.recipients"
+                    name='schedule.recipients'
                     control={control}
                     render={({ field }) => (
                       <Textarea
                         value={field.value?.join('\n') || ''}
                         onChange={(e) => field.onChange(e.target.value.split('\n').filter(email => email.trim()))}
-                        placeholder="user@example.com"
+                        placeholder='user@example.com'
                         rows={3}
                       />
                     )}
@@ -453,10 +453,10 @@ export const ReportBuilder: React.FC<{
 
       case 5:
         return (
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
               <Label>Report Preview</Label>
-              <p className="text-sm text-gray-600 mt-1">Review your report configuration</p>
+              <p className='text-sm text-gray-600 mt-1'>Review your report configuration</p>
             </div>
 
             <Card>
@@ -465,21 +465,21 @@ export const ReportBuilder: React.FC<{
                 <CardDescription>{watch('description') || 'No description provided'}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   <div>
-                    <h4 className="font-medium">Selected Metrics ({selectedMetrics.length})</h4>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <h4 className='font-medium'>Selected Metrics ({selectedMetrics.length})</h4>
+                    <div className='flex flex-wrap gap-2 mt-2'>
                       {selectedMetrics.map((metric) => (
-                        <Badge key={metric.id} variant="outline">{metric.name}</Badge>
+                        <Badge key={metric.id} variant='outline'>{metric.name}</Badge>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <h4 className="font-medium">Selected Visualizations ({selectedVisualizations.length})</h4>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <h4 className='font-medium'>Selected Visualizations ({selectedVisualizations.length})</h4>
+                    <div className='flex flex-wrap gap-2 mt-2'>
                       {selectedVisualizations.map((viz) => (
-                        <Badge key={viz} variant="outline">
+                        <Badge key={viz} variant='outline'>
                           {availableVisualizations.find(v => v.type === viz)?.name}
                         </Badge>
                       ))}
@@ -488,8 +488,8 @@ export const ReportBuilder: React.FC<{
 
                   {watch('schedule.enabled') && (
                     <div>
-                      <h4 className="font-medium">Schedule</h4>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <h4 className='font-medium'>Schedule</h4>
+                      <p className='text-sm text-gray-600 mt-1'>
                         {watch('schedule.frequency')} at {watch('schedule.time')} to {watch('schedule.recipients')?.length || 0} recipients
                       </p>
                     </div>
@@ -506,14 +506,14 @@ export const ReportBuilder: React.FC<{
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">
+    <div className='max-w-4xl mx-auto'>
+      <div className='mb-8'>
+        <div className='flex items-center justify-between mb-4'>
+          <h2 className='text-2xl font-bold'>
             {initialData ? 'Edit Report' : 'Create New Report'}
           </h2>
-          <div className="flex space-x-2">
-            <Button variant="outline" onClick={onCancel}>
+          <div className='flex space-x-2'>
+            <Button variant='outline' onClick={onCancel}>
               Cancel
             </Button>
             {currentStep === steps.length - 1 && (
@@ -524,9 +524,9 @@ export const ReportBuilder: React.FC<{
           </div>
         </div>
 
-        <div className="flex items-center justify-between mb-6">
+        <div className='flex items-center justify-between mb-6'>
           {steps.map((step, index) => (
-            <div key={step} className="flex items-center">
+            <div key={step} className='flex items-center'>
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   index <= currentStep
@@ -548,14 +548,14 @@ export const ReportBuilder: React.FC<{
       </div>
 
       <Card>
-        <CardContent className="p-6">
+        <CardContent className='p-6'>
           {renderStepContent()}
         </CardContent>
       </Card>
 
-      <div className="flex justify-between mt-6">
+      <div className='flex justify-between mt-6'>
         <Button
-          variant="outline"
+          variant='outline'
           onClick={prevStep}
           disabled={currentStep === 0}
         >
@@ -580,13 +580,13 @@ export const ReportsList: React.FC<{
   onToggleSchedule: (reportId: string, enabled: boolean) => void;
 }> = ({ reports, onEdit, onDelete, onGenerate, onToggleSchedule }) => {
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {reports.length === 0 ? (
         <Card>
-          <CardContent className="text-center py-8">
-            <FileText className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No reports</h3>
-            <p className="mt-1 text-sm text-gray-500">
+          <CardContent className='text-center py-8'>
+            <FileText className='mx-auto h-12 w-12 text-gray-400' />
+            <h3 className='mt-2 text-sm font-medium text-gray-900'>No reports</h3>
+            <p className='mt-1 text-sm text-gray-500'>
               Get started by creating your first custom report.
             </p>
           </CardContent>
@@ -595,63 +595,63 @@ export const ReportsList: React.FC<{
         reports.map((report) => (
           <Card key={report.id}>
             <CardHeader>
-              <div className="flex items-start justify-between">
+              <div className='flex items-start justify-between'>
                 <div>
-                  <CardTitle className="text-lg">{report.name}</CardTitle>
+                  <CardTitle className='text-lg'>{report.name}</CardTitle>
                   <CardDescription>{report.description}</CardDescription>
                 </div>
-                <div className="flex space-x-2">
+                <div className='flex space-x-2'>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => onGenerate(report.id)}
                   >
-                    <Play className="h-4 w-4" />
+                    <Play className='h-4 w-4' />
                   </Button>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => onEdit(report)}
                   >
-                    <Edit className="h-4 w-4" />
+                    <Edit className='h-4 w-4' />
                   </Button>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => onDelete(report.id)}
                   >
-                    <Trash className="h-4 w-4" />
+                    <Trash className='h-4 w-4' />
                   </Button>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Created by {report.createdBy}</span>
-                  <span className="text-gray-600">
+              <div className='space-y-3'>
+                <div className='flex items-center justify-between text-sm'>
+                  <span className='text-gray-600'>Created by {report.createdBy}</span>
+                  <span className='text-gray-600'>
                     {format(new Date(report.createdAt), 'MMM dd, yyyy')}
                   </span>
                 </div>
 
-                <div className="flex items-center space-x-4 text-sm">
+                <div className='flex items-center space-x-4 text-sm'>
                   <span>{report.metrics.length} metrics</span>
                   <span>{report.visualizations.length} visualizations</span>
                   {report.lastGenerated && (
-                    <span className="text-gray-600">
+                    <span className='text-gray-600'>
                       Last generated: {format(new Date(report.lastGenerated), 'MMM dd, yyyy')}
                     </span>
                   )}
                 </div>
 
                 {report.schedule && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center space-x-2'>
                       <Badge variant={report.schedule.enabled ? 'default' : 'secondary'}>
                         {report.schedule.enabled ? 'Scheduled' : 'Disabled'}
                       </Badge>
                       {report.schedule.enabled && (
-                        <span className="text-sm text-gray-600">
+                        <span className='text-sm text-gray-600'>
                           {report.schedule.frequency} at {report.schedule.time}
                         </span>
                       )}
@@ -691,15 +691,15 @@ export const ReportViewer: React.FC<{
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className='space-y-6'>
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold">{report.name}</h2>
-          <p className="text-gray-600">{report.description}</p>
+          <h2 className='text-2xl font-bold'>{report.name}</h2>
+          <p className='text-gray-600'>{report.description}</p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           <Select value={exportFormat} onValueChange={(value) => setExportFormat(value as ExportFormat)}>
-            <SelectTrigger className="w-32">
+            <SelectTrigger className='w-32'>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -710,13 +710,13 @@ export const ReportViewer: React.FC<{
             </SelectContent>
           </Select>
           <Button onClick={handleExport}>
-            <Download className="h-4 w-4 mr-2" />
+            <Download className='h-4 w-4 mr-2' />
             Export
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
         {report.metrics.map((metric) => (
           <MetricCard
             key={metric.id}
@@ -729,7 +729,7 @@ export const ReportViewer: React.FC<{
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
         {report.visualizations.map((vizType, index) => (
           <AnalyticsVisualization
             key={`${vizType}-${index}`}
@@ -782,9 +782,9 @@ export const AnalyticsReports: React.FC = () => {
     return (
       <div>
         <Button
-          variant="outline"
+          variant='outline'
           onClick={() => setSelectedReport(null)}
-          className="mb-4"
+          className='mb-4'
         >
           ← Back to Reports
         </Button>
@@ -810,14 +810,14 @@ export const AnalyticsReports: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className='space-y-6'>
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold">Custom Reports</h2>
-          <p className="text-gray-600">Create and manage custom analytics reports</p>
+          <h2 className='text-2xl font-bold'>Custom Reports</h2>
+          <p className='text-gray-600'>Create and manage custom analytics reports</p>
         </div>
         <Button onClick={() => setShowBuilder(true)}>
-          <FileText className="h-4 w-4 mr-2" />
+          <FileText className='h-4 w-4 mr-2' />
           Create Report
         </Button>
       </div>

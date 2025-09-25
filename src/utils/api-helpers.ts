@@ -1,12 +1,12 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 export function getErrorMessage(err: unknown): string {
   if (axios.isAxiosError(err)) {
     const e = err as AxiosError<any>;
     const msg =
-      typeof e.response?.data === "object" && e.response?.data !== null
+      typeof e.response?.data === 'object' && e.response?.data !== null
         ? (e.response.data as any).message
         : undefined;
     if (msg) return msg;
@@ -14,16 +14,16 @@ export function getErrorMessage(err: unknown): string {
     return e.message;
   }
   if (err instanceof Error) return err.message;
-  return "Unknown error";
+  return 'Unknown error';
 }
 
 export function withAuth(
   headers?: Record<string, string>
 ): Record<string, string> {
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+    typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
   return {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     ...(headers || {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
@@ -105,9 +105,9 @@ export function buildQuery(
 ): string {
   const search = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
-    if (value === undefined || value === null || value === "") return;
+    if (value === undefined || value === null || value === '') return;
     search.set(key, String(value));
   });
   const qs = search.toString();
-  return qs ? `?${qs}` : "";
+  return qs ? `?${qs}` : '';
 }

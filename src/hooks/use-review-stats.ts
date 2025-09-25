@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { Review, ReviewStatistics } from "@/types/reviews.types";
-import { calculateReviewStatistics } from "@/utils/review-helpers";
+import { useMemo } from 'react';
+import { Review, ReviewStatistics } from '@/types/reviews.types';
+import { calculateReviewStatistics } from '@/utils/review-helpers';
 
 /**
  * Configuration options for the useReviewStats hook
@@ -76,7 +76,7 @@ export function useReviewStats({
       const date = new Date(review.created_at);
       const monthYear = `${date.getFullYear()}-${String(
         date.getMonth() + 1
-      ).padStart(2, "0")}`;
+      ).padStart(2, '0')}`;
 
       if (!reviewsByMonth[monthYear]) {
         reviewsByMonth[monthYear] = { sum: 0, count: 0 };
@@ -150,27 +150,27 @@ export function useReviewStats({
   // Generate key insights
   const insights = useMemo(() => {
     if (!reviews || reviews.length === 0) {
-      return ["No reviews available for analysis."];
+      return ['No reviews available for analysis.'];
     }
 
     const result: string[] = [];
 
     // Overall rating insight
     if (statistics.averageRating >= 4.5) {
-      result.push("Excellent overall rating - consistently high reviews.");
+      result.push('Excellent overall rating - consistently high reviews.');
     } else if (statistics.averageRating >= 4) {
-      result.push("Very good overall rating - strong performance.");
+      result.push('Very good overall rating - strong performance.');
     } else if (statistics.averageRating >= 3.5) {
       result.push(
-        "Good overall rating - positive reviews with room for improvement."
+        'Good overall rating - positive reviews with room for improvement.'
       );
     } else if (statistics.averageRating >= 3) {
       result.push(
-        "Average overall rating - consider addressing areas for improvement."
+        'Average overall rating - consider addressing areas for improvement.'
       );
     } else {
       result.push(
-        "Below average rating - focused improvement efforts recommended."
+        'Below average rating - focused improvement efforts recommended.'
       );
     }
 
@@ -209,9 +209,9 @@ export function useReviewStats({
     // Project type insights
     if (Object.keys(statistics.reviewsByProjectType).length > 0) {
       // Find best and worst performing project types
-      let bestType = "";
+      let bestType = '';
       let bestRating = 0;
-      let worstType = "";
+      let worstType = '';
       let worstRating = 5;
 
       Object.entries(statistics.reviewsByProjectType).forEach(

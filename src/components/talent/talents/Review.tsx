@@ -1,7 +1,7 @@
-"use client"
-import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+'use client'
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Review {
   id: string | number;
@@ -20,7 +20,7 @@ interface ReviewsCarouselProps {
 }
 
 export default function ReviewsCarousel({
-  title = "Reviews",
+  title = 'Reviews',
   reviews,
   renderStars,
   itemsPerPage = 3,
@@ -36,60 +36,60 @@ export default function ReviewsCarousel({
     );
 
   return (
-    <div className="bg-gray-50  p-6 border">
+    <div className='bg-gray-50  p-6 border'>
       {/* Header */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-        <div className="px-[5rem]">
-          <div className="border-b border-gray-200" />
+      <div className='mb-6'>
+        <h3 className='text-xl font-semibold text-gray-900'>{title}</h3>
+        <div className='px-[5rem]'>
+          <div className='border-b border-gray-200' />
         </div>
       </div>
 
       {/* Review Content */}
       {reviews.length > 0 && (
-        <div className="">
+        <div className=''>
           {reviews.slice(index, index + itemsPerPage).map((review) => (
             <div
               key={review.id}
-              className="hover:shadow-md transition mb-4 p-2 rounded-md"
+              className='hover:shadow-md transition mb-4 p-2 rounded-md'
             >
-              <div className="flex items-center justify-between mb-0">
-                <h4 className="font-semibold text-gray-900 leading-tight">
+              <div className='flex items-center justify-between mb-0'>
+                <h4 className='font-semibold text-gray-900 leading-tight'>
                   {review.clientName}
                 </h4>
-                <div className="flex items-center gap-1">
+                <div className='flex items-center gap-1'>
                   {renderStars(review.rating)}
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mb-2">{review.date.slice(0,1).toUpperCase()+review.date.slice(1)}</p>
-              <p className="text-gray-700 leading-relaxed text-sm">"{review.comment}"</p>
+              <p className='text-sm text-gray-500 mb-2'>{review.date.slice(0,1).toUpperCase()+review.date.slice(1)}</p>
+              <p className='text-gray-700 leading-relaxed text-sm'>"{review.comment}"</p>
             </div>
           ))}
         </div>
       )}
 
       {/* Pagination */}
-      <div className="flex items-center justify-between mt-6 px-20">
+      <div className='flex items-center justify-between mt-6 px-20'>
         <Button
           onClick={prev}
-          variant="outline"
-          size="sm"
-          className="bg-transparent shadow-none border-none text-gray-500 cursor-pointer"
+          variant='outline'
+          size='sm'
+          className='bg-transparent shadow-none border-none text-gray-500 cursor-pointer'
           disabled={index === 0}
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className='w-4 h-4' />
           Back
         </Button>
 
-        <div className="flex gap-2">
+        <div className='flex gap-2'>
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
               onClick={() => setIndex(i * itemsPerPage)}
               className={`w-2 h-2 rounded-full ${
                 Math.floor(index / itemsPerPage) === i
-                  ? "bg-gray-800"
-                  : "bg-gray-300"
+                  ? 'bg-gray-800'
+                  : 'bg-gray-300'
               }`}
             />
           ))}
@@ -97,13 +97,13 @@ export default function ReviewsCarousel({
 
         <Button
           onClick={next}
-          variant="outline"
-          size="sm"
-          className="bg-transparent shadow-none border-none text-gray-500 cursor-pointer"
+          variant='outline'
+          size='sm'
+          className='bg-transparent shadow-none border-none text-gray-500 cursor-pointer'
           disabled={index >= (totalPages - 1) * itemsPerPage}
         >
           Next
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className='w-4 h-4' />
         </Button>
       </div>
     </div>

@@ -4,21 +4,21 @@
 export interface RevenueStream {
   id: string
   name: string
-  type: "commission" | "subscription" | "premium_features" | "advertising"
+  type: 'commission' | 'subscription' | 'premium_features' | 'advertising'
   amount: number
   currency: string
   date: Date
   projectId?: string
   userId?: string
-  status: "pending" | "completed" | "failed"
+  status: 'pending' | 'completed' | 'failed'
 }
 
 export interface Fee {
   id: string
   name: string
-  type: "percentage" | "fixed"
+  type: 'percentage' | 'fixed'
   value: number
-  category: "platform" | "payment_processing" | "withdrawal" | "premium"
+  category: 'platform' | 'payment_processing' | 'withdrawal' | 'premium'
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -26,13 +26,13 @@ export interface Fee {
 
 export interface Transaction {
   id: string
-  type: "revenue" | "expense" | "refund" | "withdrawal"
+  type: 'revenue' | 'expense' | 'refund' | 'withdrawal'
   amount: number
   currency: string
   description: string
   category: string
   date: Date
-  status: "pending" | "completed" | "failed" | "cancelled"
+  status: 'pending' | 'completed' | 'failed' | 'cancelled'
   userId?: string
   projectId?: string
   feeId?: string
@@ -44,11 +44,11 @@ export interface Expense {
   name: string
   amount: number
   currency: string
-  category: "infrastructure" | "marketing" | "operations" | "development" | "legal"
+  category: 'infrastructure' | 'marketing' | 'operations' | 'development' | 'legal'
   date: Date
   description?: string
   isRecurring: boolean
-  recurringPeriod?: "monthly" | "quarterly" | "yearly"
+  recurringPeriod?: 'monthly' | 'quarterly' | 'yearly'
 }
 
 export interface FinancialMetrics {
@@ -71,7 +71,7 @@ export interface TaxInfo {
   taxableIncome: number
   taxRate: number
   taxAmount: number
-  status: "calculated" | "filed" | "paid"
+  status: 'calculated' | 'filed' | 'paid'
   dueDate: Date
   filedDate?: Date
   paidDate?: Date
@@ -80,7 +80,7 @@ export interface TaxInfo {
 export interface FinancialReport {
   id: string
   name: string
-  type: "profit_loss" | "revenue_analysis" | "expense_report" | "tax_report"
+  type: 'profit_loss' | 'revenue_analysis' | 'expense_report' | 'tax_report'
   period: {
     start: Date
     end: Date

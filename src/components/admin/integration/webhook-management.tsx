@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Plus, 
   Webhook, 
@@ -32,10 +32,10 @@ import {
   Filter,
   ExternalLink,
   Zap
-} from "lucide-react";
-import { toast } from "sonner";
-import { useAdminIntegration } from "@/hooks/use-admin-integration";
-import { Webhook as WebhookType, CreateWebhookDTO, WebhookEvent, RetryPolicy } from "@/types/admin-integration.types";
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { useAdminIntegration } from '@/hooks/use-admin-integration';
+import { Webhook as WebhookType, CreateWebhookDTO, WebhookEvent, RetryPolicy } from '@/types/admin-integration.types';
 
 interface WebhookManagementProps {
   className?: string;
@@ -53,8 +53,8 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
     refreshWebhooks,
   } = useAdminIntegration();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showTestDialog, setShowTestDialog] = useState(false);
@@ -65,9 +65,9 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
   const filteredWebhooks = webhooks.filter(webhook => {
     const matchesSearch = webhook.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          webhook.url.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || 
-                         (statusFilter === "active" && webhook.is_active) ||
-                         (statusFilter === "inactive" && !webhook.is_active);
+    const matchesStatus = statusFilter === 'all' || 
+                         (statusFilter === 'active' && webhook.is_active) ||
+                         (statusFilter === 'inactive' && !webhook.is_active);
     return matchesSearch && matchesStatus;
   });
 
@@ -75,71 +75,71 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
     try {
       await createWebhook(data);
       setShowCreateDialog(false);
-      toast.success("Webhook created successfully");
+      toast.success('Webhook created successfully');
     } catch (error) {
-      toast.error("Failed to create webhook");
+      toast.error('Failed to create webhook');
     }
   };
 
   const handleTestWebhook = async (webhookId: string, eventType: string, testData: any) => {
     try {
       await testWebhook(webhookId, eventType, testData);
-      toast.success("Webhook test triggered successfully");
+      toast.success('Webhook test triggered successfully');
     } catch (error) {
-      toast.error("Failed to test webhook");
+      toast.error('Failed to test webhook');
     }
   };
 
   const handleDeleteWebhook = async (id: string) => {
     try {
       await deleteWebhook(id);
-      toast.success("Webhook deleted successfully");
+      toast.success('Webhook deleted successfully');
     } catch (error) {
-      toast.error("Failed to delete webhook");
+      toast.error('Failed to delete webhook');
     }
   };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
+    toast.success('Copied to clipboard');
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
   const getStatusBadge = (isActive: boolean, failureCount: number) => {
     if (!isActive) {
-      return <Badge variant="secondary">Inactive</Badge>;
+      return <Badge variant='secondary'>Inactive</Badge>;
     }
     if (failureCount > 5) {
-      return <Badge variant="destructive">Failed</Badge>;
+      return <Badge variant='destructive'>Failed</Badge>;
     }
     if (failureCount > 0) {
-      return <Badge variant="outline">Degraded</Badge>;
+      return <Badge variant='outline'>Degraded</Badge>;
     }
-    return <Badge variant="default">Active</Badge>;
+    return <Badge variant='default'>Active</Badge>;
   };
 
   const getEventTypeBadge = (eventType: string) => {
     const colors: Record<string, string> = {
-      "user.created": "bg-blue-100 text-blue-800",
-      "user.updated": "bg-blue-100 text-blue-800",
-      "project.created": "bg-green-100 text-green-800",
-      "project.completed": "bg-green-100 text-green-800",
-      "contract.created": "bg-purple-100 text-purple-800",
-      "dispute.opened": "bg-red-100 text-red-800",
-      "system.error": "bg-red-100 text-red-800",
+      'user.created': 'bg-blue-100 text-blue-800',
+      'user.updated': 'bg-blue-100 text-blue-800',
+      'project.created': 'bg-green-100 text-green-800',
+      'project.completed': 'bg-green-100 text-green-800',
+      'contract.created': 'bg-purple-100 text-purple-800',
+      'dispute.opened': 'bg-red-100 text-red-800',
+      'system.error': 'bg-red-100 text-red-800',
     };
     
     return (
-      <Badge className={colors[eventType] || "bg-gray-100 text-gray-800"}>
+      <Badge className={colors[eventType] || 'bg-gray-100 text-gray-800'}>
         {eventType}
       </Badge>
     );
@@ -148,27 +148,27 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Webhook Management</h2>
-          <p className="text-muted-foreground">
+          <h2 className='text-2xl font-bold tracking-tight'>Webhook Management</h2>
+          <p className='text-muted-foreground'>
             Configure webhooks for real-time event notifications
           </p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={refreshWebhooks}
             disabled={isLoadingWebhooks}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoadingWebhooks ? "animate-spin" : ""}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoadingWebhooks ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
               <Button>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className='h-4 w-4 mr-2' />
                 Create Webhook
               </Button>
             </DialogTrigger>
@@ -182,27 +182,27 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
 
       {/* Filters */}
       <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <CardContent className='pt-6'>
+          <div className='flex items-center space-x-4'>
+            <div className='flex-1'>
+              <div className='relative'>
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4' />
                 <Input
-                  placeholder="Search webhooks..."
+                  placeholder='Search webhooks...'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className='pl-10'
                 />
               </div>
             </div>
             <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Status" />
+              <SelectTrigger className='w-40'>
+                <SelectValue placeholder='Status' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value='all'>All Status</SelectItem>
+                <SelectItem value='active'>Active</SelectItem>
+                <SelectItem value='inactive'>Inactive</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -210,31 +210,31 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
       </Card>
 
       {/* Webhooks List */}
-      <div className="grid gap-4">
+      <div className='grid gap-4'>
         {isLoadingWebhooks ? (
-          <div className="flex items-center justify-center py-8">
-            <RefreshCw className="h-6 w-6 animate-spin mr-2" />
+          <div className='flex items-center justify-center py-8'>
+            <RefreshCw className='h-6 w-6 animate-spin mr-2' />
             Loading webhooks...
           </div>
         ) : errorWebhooks ? (
-          <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
+          <Alert variant='destructive'>
+            <AlertTriangle className='h-4 w-4' />
             <AlertDescription>{errorWebhooks}</AlertDescription>
           </Alert>
         ) : filteredWebhooks.length === 0 ? (
           <Card>
-            <CardContent className="flex flex-col items-center justify-center py-8">
-              <Webhook className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No Webhooks Found</h3>
-              <p className="text-muted-foreground text-center mb-4">
-                {searchQuery || statusFilter !== "all" 
-                  ? "No webhooks match your current filters."
-                  : "Create your first webhook to receive real-time event notifications."
+            <CardContent className='flex flex-col items-center justify-center py-8'>
+              <Webhook className='h-12 w-12 text-muted-foreground mb-4' />
+              <h3 className='text-lg font-semibold mb-2'>No Webhooks Found</h3>
+              <p className='text-muted-foreground text-center mb-4'>
+                {searchQuery || statusFilter !== 'all' 
+                  ? 'No webhooks match your current filters.'
+                  : 'Create your first webhook to receive real-time event notifications.'
                 }
               </p>
-              {(!searchQuery && statusFilter === "all") && (
+              {(!searchQuery && statusFilter === 'all') && (
                 <Button onClick={() => setShowCreateDialog(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className='h-4 w-4 mr-2' />
                   Create Webhook
                 </Button>
               )}
@@ -243,70 +243,70 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
         ) : (
           filteredWebhooks.map((webhook) => (
             <Card key={webhook.id}>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Webhook className="h-5 w-5 text-primary" />
+              <CardContent className='pt-6'>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center space-x-4'>
+                    <div className='p-2 bg-primary/10 rounded-lg'>
+                      <Webhook className='h-5 w-5 text-primary' />
                     </div>
                     <div>
-                      <h3 className="font-semibold">{webhook.name}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className='font-semibold'>{webhook.name}</h3>
+                      <p className='text-sm text-muted-foreground'>
                         {webhook.url}
                       </p>
-                      <div className="flex items-center space-x-2 mt-1">
+                      <div className='flex items-center space-x-2 mt-1'>
                         {getStatusBadge(webhook.is_active, webhook.failure_count)}
                         {webhook.last_triggered_at && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant='outline' className='text-xs'>
                             Last triggered: {formatDate(webhook.last_triggered_at)}
                           </Badge>
                         )}
                         {webhook.failure_count > 0 && (
-                          <Badge variant="destructive" className="text-xs">
+                          <Badge variant='destructive' className='text-xs'>
                             {webhook.failure_count} failures
                           </Badge>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className='flex items-center space-x-2'>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => {
                         setSelectedWebhook(webhook);
                         setShowTestDialog(true);
                       }}
                     >
-                      <Play className="h-4 w-4" />
+                      <Play className='h-4 w-4' />
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => {
                         setSelectedWebhook(webhook);
                         setShowEditDialog(true);
                       }}
                     >
-                      <Edit className="h-4 w-4" />
+                      <Edit className='h-4 w-4' />
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => handleDeleteWebhook(webhook.id)}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className='h-4 w-4' />
                     </Button>
                   </div>
                 </div>
                 
                 {/* Events */}
-                <div className="mt-4">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Zap className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Events</span>
+                <div className='mt-4'>
+                  <div className='flex items-center space-x-2 mb-2'>
+                    <Zap className='h-4 w-4 text-muted-foreground' />
+                    <span className='text-sm font-medium'>Events</span>
                   </div>
-                  <div className="flex flex-wrap gap-1">
+                  <div className='flex flex-wrap gap-1'>
                     {webhook.events.map((event, index) => (
                       <div key={index}>
                         {getEventTypeBadge(event.type)}
@@ -316,10 +316,10 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
                 </div>
 
                 {/* Retry Policy */}
-                <div className="mt-3 p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium">Retry Policy</span>
-                    <div className="flex items-center space-x-4">
+                <div className='mt-3 p-3 bg-muted/50 rounded-lg'>
+                  <div className='flex items-center justify-between text-sm'>
+                    <span className='font-medium'>Retry Policy</span>
+                    <div className='flex items-center space-x-4'>
                       <span>{webhook.retry_policy.max_retries} max retries</span>
                       <span>{webhook.retry_policy.retry_delay_ms}ms delay</span>
                       <span>{webhook.retry_policy.backoff_multiplier}x backoff</span>
@@ -348,10 +348,10 @@ export function WebhookManagement({ className }: WebhookManagementProps) {
               onSubmit={async (data) => {
                 try {
                   await updateWebhook(selectedWebhook.id, data);
-                  toast.success("Webhook updated");
+                  toast.success('Webhook updated');
                   setShowEditDialog(false);
                 } catch {
-                  toast.error("Failed to update webhook");
+                  toast.error('Failed to update webhook');
                 }
               }}
             />
@@ -392,8 +392,8 @@ interface CreateWebhookDialogProps {
 
 function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
   const [formData, setFormData] = useState<CreateWebhookDTO>({
-    name: "",
-    url: "",
+    name: '',
+    url: '',
     events: [],
     retry_policy: {
       max_retries: 3,
@@ -404,17 +404,17 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
   });
 
   const [newEvent, setNewEvent] = useState<WebhookEvent>({
-    type: "",
+    type: '',
     filters: [],
   });
 
   const availableEventTypes = [
-    "user.created", "user.updated", "user.deleted", "user.suspended",
-    "project.created", "project.updated", "project.completed", "project.cancelled",
-    "contract.created", "contract.updated", "contract.completed", "contract.terminated",
-    "dispute.opened", "dispute.resolved", "payment.released", "payment.refunded",
-    "system.maintenance", "system.error", "api.key_created", "api.key_revoked",
-    "webhook.created", "webhook.updated", "webhook.failed"
+    'user.created', 'user.updated', 'user.deleted', 'user.suspended',
+    'project.created', 'project.updated', 'project.completed', 'project.cancelled',
+    'contract.created', 'contract.updated', 'contract.completed', 'contract.terminated',
+    'dispute.opened', 'dispute.resolved', 'payment.released', 'payment.refunded',
+    'system.maintenance', 'system.error', 'api.key_created', 'api.key_revoked',
+    'webhook.created', 'webhook.updated', 'webhook.failed'
   ];
 
   const handleAddEvent = () => {
@@ -423,7 +423,7 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
         ...formData,
         events: [...formData.events, newEvent],
       });
-      setNewEvent({ type: "", filters: [] });
+      setNewEvent({ type: '', filters: [] });
     }
   };
 
@@ -442,55 +442,55 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="name">Webhook Name</Label>
+    <form onSubmit={handleSubmit} className='space-y-6'>
+      <div className='space-y-2'>
+        <Label htmlFor='name'>Webhook Name</Label>
         <Input
-          id="name"
+          id='name'
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Enter webhook name"
+          placeholder='Enter webhook name'
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="url">Webhook URL</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='url'>Webhook URL</Label>
         <Input
-          id="url"
-          type="url"
+          id='url'
+          type='url'
           value={formData.url}
           onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-          placeholder="https://example.com/webhook"
+          placeholder='https://example.com/webhook'
           required
         />
       </div>
 
-      <div className="space-y-4">
+      <div className='space-y-4'>
         <Label>Events</Label>
-        <div className="space-y-3">
+        <div className='space-y-3'>
           {formData.events.map((event, index) => (
-            <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-              <Badge variant="outline">{event.type}</Badge>
+            <div key={index} className='flex items-center justify-between p-3 border rounded-lg'>
+              <Badge variant='outline'>{event.type}</Badge>
               <Button
-                type="button"
-                variant="ghost"
-                size="sm"
+                type='button'
+                variant='ghost'
+                size='sm'
                 onClick={() => handleRemoveEvent(index)}
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className='h-4 w-4' />
               </Button>
             </div>
           ))}
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           <Select
             value={newEvent.type}
             onValueChange={(value) => setNewEvent({ ...newEvent, type: value })}
           >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select event type" />
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='Select event type' />
             </SelectTrigger>
             <SelectContent>
               {availableEventTypes.map((eventType) => (
@@ -501,20 +501,20 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
             </SelectContent>
           </Select>
           
-          <Button type="button" onClick={handleAddEvent}>
-            <Plus className="h-4 w-4" />
+          <Button type='button' onClick={handleAddEvent}>
+            <Plus className='h-4 w-4' />
           </Button>
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className='space-y-4'>
         <Label>Retry Policy</Label>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="max_retries">Max Retries</Label>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='space-y-2'>
+            <Label htmlFor='max_retries'>Max Retries</Label>
             <Input
-              id="max_retries"
-              type="number"
+              id='max_retries'
+              type='number'
               value={formData.retry_policy?.max_retries || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -527,11 +527,11 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
               })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="retry_delay_ms">Retry Delay (ms)</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='retry_delay_ms'>Retry Delay (ms)</Label>
             <Input
-              id="retry_delay_ms"
-              type="number"
+              id='retry_delay_ms'
+              type='number'
               value={formData.retry_policy?.retry_delay_ms || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -544,12 +544,12 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
               })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="backoff_multiplier">Backoff Multiplier</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='backoff_multiplier'>Backoff Multiplier</Label>
             <Input
-              id="backoff_multiplier"
-              type="number"
-              step="0.1"
+              id='backoff_multiplier'
+              type='number'
+              step='0.1'
               value={formData.retry_policy?.backoff_multiplier || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -562,11 +562,11 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
               })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="max_delay_ms">Max Delay (ms)</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='max_delay_ms'>Max Delay (ms)</Label>
             <Input
-              id="max_delay_ms"
-              type="number"
+              id='max_delay_ms'
+              type='number'
               value={formData.retry_policy?.max_delay_ms || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -582,11 +582,11 @@ function CreateWebhookDialog({ onClose, onSubmit }: CreateWebhookDialogProps) {
         </div>
       </div>
 
-      <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline" onClick={onClose}>
+      <div className='flex justify-end space-x-2'>
+        <Button type='button' variant='outline' onClick={onClose}>
           Cancel
         </Button>
-        <Button type="submit">Create Webhook</Button>
+        <Button type='submit'>Create Webhook</Button>
       </div>
     </form>
   );
@@ -614,56 +614,56 @@ function EditWebhookDialog({ webhook, onClose, onSubmit }: EditWebhookDialogProp
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="name">Webhook Name</Label>
+    <form onSubmit={handleSubmit} className='space-y-6'>
+      <div className='space-y-2'>
+        <Label htmlFor='name'>Webhook Name</Label>
         <Input
-          id="name"
+          id='name'
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="url">Webhook URL</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='url'>Webhook URL</Label>
         <Input
-          id="url"
-          type="url"
+          id='url'
+          type='url'
           value={formData.url}
           onChange={(e) => setFormData({ ...formData, url: e.target.value })}
           required
         />
       </div>
 
-      <div className="flex items-center space-x-2">
+      <div className='flex items-center space-x-2'>
         <Switch
-          id="is_active"
+          id='is_active'
           checked={formData.is_active}
           onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
         />
-        <Label htmlFor="is_active">Active</Label>
+        <Label htmlFor='is_active'>Active</Label>
       </div>
 
-      <div className="space-y-4">
+      <div className='space-y-4'>
         <Label>Events</Label>
-        <div className="space-y-2">
+        <div className='space-y-2'>
           {formData.events.map((event, index) => (
-            <Badge key={index} variant="outline" className="mr-2">
+            <Badge key={index} variant='outline' className='mr-2'>
               {event.type}
             </Badge>
           ))}
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className='space-y-4'>
         <Label>Retry Policy</Label>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="max_retries">Max Retries</Label>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='space-y-2'>
+            <Label htmlFor='max_retries'>Max Retries</Label>
             <Input
-              id="max_retries"
-              type="number"
+              id='max_retries'
+              type='number'
               value={formData.retry_policy?.max_retries || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -676,11 +676,11 @@ function EditWebhookDialog({ webhook, onClose, onSubmit }: EditWebhookDialogProp
               })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="retry_delay_ms">Retry Delay (ms)</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='retry_delay_ms'>Retry Delay (ms)</Label>
             <Input
-              id="retry_delay_ms"
-              type="number"
+              id='retry_delay_ms'
+              type='number'
               value={formData.retry_policy?.retry_delay_ms || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -693,12 +693,12 @@ function EditWebhookDialog({ webhook, onClose, onSubmit }: EditWebhookDialogProp
               })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="backoff_multiplier">Backoff Multiplier</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='backoff_multiplier'>Backoff Multiplier</Label>
             <Input
-              id="backoff_multiplier"
-              type="number"
-              step="0.1"
+              id='backoff_multiplier'
+              type='number'
+              step='0.1'
               value={formData.retry_policy?.backoff_multiplier || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -711,11 +711,11 @@ function EditWebhookDialog({ webhook, onClose, onSubmit }: EditWebhookDialogProp
               })}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="max_delay_ms">Max Delay (ms)</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='max_delay_ms'>Max Delay (ms)</Label>
             <Input
-              id="max_delay_ms"
-              type="number"
+              id='max_delay_ms'
+              type='number'
               value={formData.retry_policy?.max_delay_ms || 0}
               onChange={(e) => setFormData({
                 ...formData,
@@ -731,11 +731,11 @@ function EditWebhookDialog({ webhook, onClose, onSubmit }: EditWebhookDialogProp
         </div>
       </div>
 
-      <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline" onClick={onClose}>
+      <div className='flex justify-end space-x-2'>
+        <Button type='button' variant='outline' onClick={onClose}>
           Cancel
         </Button>
-        <Button type="submit">Update Webhook</Button>
+        <Button type='submit'>Update Webhook</Button>
       </div>
     </form>
   );
@@ -749,8 +749,8 @@ interface TestWebhookDialogProps {
 }
 
 function TestWebhookDialog({ webhook, onClose, onSubmit }: TestWebhookDialogProps) {
-  const [eventType, setEventType] = useState(webhook.events[0]?.type || "");
-  const [testData, setTestData] = useState("");
+  const [eventType, setEventType] = useState(webhook.events[0]?.type || '');
+  const [testData, setTestData] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -758,17 +758,17 @@ function TestWebhookDialog({ webhook, onClose, onSubmit }: TestWebhookDialogProp
       const parsedData = testData ? JSON.parse(testData) : {};
       onSubmit(eventType, parsedData);
     } catch (error) {
-      toast.error("Invalid JSON data");
+      toast.error('Invalid JSON data');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="event_type">Event Type</Label>
+    <form onSubmit={handleSubmit} className='space-y-6'>
+      <div className='space-y-2'>
+        <Label htmlFor='event_type'>Event Type</Label>
         <Select value={eventType} onValueChange={setEventType}>
           <SelectTrigger>
-            <SelectValue placeholder="Select event type" />
+            <SelectValue placeholder='Select event type' />
           </SelectTrigger>
           <SelectContent>
             {webhook.events.map((event) => (
@@ -780,10 +780,10 @@ function TestWebhookDialog({ webhook, onClose, onSubmit }: TestWebhookDialogProp
         </Select>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="test_data">Test Data (JSON)</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='test_data'>Test Data (JSON)</Label>
         <Textarea
-          id="test_data"
+          id='test_data'
           value={testData}
           onChange={(e) => setTestData(e.target.value)}
           placeholder='{"id": "123", "name": "Test Event"}'
@@ -791,11 +791,11 @@ function TestWebhookDialog({ webhook, onClose, onSubmit }: TestWebhookDialogProp
         />
       </div>
 
-      <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline" onClick={onClose}>
+      <div className='flex justify-end space-x-2'>
+        <Button type='button' variant='outline' onClick={onClose}>
           Cancel
         </Button>
-        <Button type="submit">Send Test</Button>
+        <Button type='submit'>Send Test</Button>
       </div>
     </form>
   );

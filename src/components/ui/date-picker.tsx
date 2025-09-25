@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { format } from 'date-fns';
@@ -26,27 +26,27 @@ interface DatePickerProps {
 export const DatePicker: React.FC<DatePickerProps> = ({
   date,
   onSelect,
-  placeholder = "Pick a date",
+  placeholder = 'Pick a date',
   className,
 }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant='outline'
           className={cn(
-            "w-full justify-start text-left font-normal",
-            !date && "text-muted-foreground",
+            'w-full justify-start text-left font-normal',
+            !date && 'text-muted-foreground',
             className
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>{placeholder}</span>}
+          <CalendarIcon className='mr-2 h-4 w-4' />
+          {date ? format(date, 'PPP') : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className='w-auto p-0'>
         <Calendar
-          mode="single"
+          mode='single'
           selected={date}
           onSelect={onSelect}
           initialFocus

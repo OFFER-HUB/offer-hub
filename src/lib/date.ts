@@ -3,9 +3,9 @@
 // 12h time, locale-stable.
 export function formatTime12h(date: Date) {
   const hours = date.getHours() % 12 || 12;
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = date.getHours() >= 12 ? "pm" : "am";
-  return `${hours.toString().padStart(2, "0")}:${minutes} ${ampm}`;
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = date.getHours() >= 12 ? 'pm' : 'am';
+  return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
 }
 
 // Strict UTC date key to avoid SSR/client timezone differences.
@@ -34,13 +34,13 @@ export function formatDayLabel(date: Date) {
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  if (isSameDay(date, today)) return "Today";
-  if (isSameDay(date, yesterday)) return "Yesterday";
+  if (isSameDay(date, today)) return 'Today';
+  if (isSameDay(date, yesterday)) return 'Yesterday';
 
   // Use a fixed locale so server and client match exactly.
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
   }).format(date);
 }

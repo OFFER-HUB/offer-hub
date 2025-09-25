@@ -1,24 +1,15 @@
-"use client"
-import { useState, useRef } from "react"
-import type React from "react"
+'use client'
+import { useState, useRef } from 'react'
+import type React from 'react'
 
-export interface UseMessageComposerReturn {
-  newMessage: string;
-  setNewMessage: React.Dispatch<React.SetStateAction<string>>;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
-  handleSendMessage: () => void;
-  handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleKeyPress: (e: React.KeyboardEvent) => void;
-}
-
-export function useMessageComposer(onSendMessage: (content: string, file?: File) => void): UseMessageComposerReturn {
-  const [newMessage, setNewMessage] = useState("")
+export function useMessages(onSendMessage: (content: string, file?: File) => void) {
+  const [newMessage, setNewMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
       onSendMessage(newMessage)
-      setNewMessage("")
+      setNewMessage('')
     }
   }
 
@@ -30,7 +21,7 @@ export function useMessageComposer(onSendMessage: (content: string, file?: File)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
     }

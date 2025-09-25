@@ -1,13 +1,13 @@
-import { NextFunction, Response } from "express";
-import { AppError } from "@/utils/AppError";
+import { NextFunction, Response } from 'express';
+import { AppError } from '@/utils/AppError';
 import { 
   AuthenticatedRequest, 
   RoleMiddlewareOptions,
   AuthAttemptLog 
-} from "@/types/middleware.types";
-import { UserRole } from "@/types/auth.types";
-import { authConfig, getRequiredRole } from "@/config/auth.config";
-import { v4 as uuidv4 } from "uuid";
+} from '@/types/middleware.types';
+import { UserRole } from '@/types/auth.types';
+import { authConfig, getRequiredRole } from '@/config/auth.config';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Role-based access control middleware
@@ -17,7 +17,7 @@ export const requireRole = (options: RoleMiddlewareOptions) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     // Ensure user is authenticated
     if (!req.user) {
-      return next(new AppError("Authentication required", 401));
+      return next(new AppError('Authentication required', 401));
     }
 
     const userRole = req.user.role;
@@ -139,7 +139,7 @@ export const requireOwnership = (
 ) => {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return next(new AppError("Authentication required", 401));
+      return next(new AppError('Authentication required', 401));
     }
 
     const resourceId = req.params[resourceIdParam];
@@ -210,7 +210,7 @@ export const requireOwnership = (
 export const requireRouteRole = (options: Partial<RoleMiddlewareOptions> = {}) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return next(new AppError("Authentication required", 401));
+      return next(new AppError('Authentication required', 401));
     }
 
     // Get required role for the current route

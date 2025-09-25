@@ -10,10 +10,10 @@ import type {
   FinancialReport,
   PaymentProcessingMetrics,
   ProfitabilityAnalysis,
-} from "@/types/financial.types"
+} from '@/types/financial.types'
 
-import React from "react"
-import { Document, Page, Text, View, StyleSheet, pdf } from "@react-pdf/renderer"
+import React from 'react'
+import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer'
 import {
   mockRevenueStreams,
   mockFees,
@@ -22,7 +22,7 @@ import {
   mockFinancialMetrics,
   mockPaymentMetrics,
   mockProfitabilityAnalysis,
-} from "@/data/mock-financial-data"
+} from '@/data/mock-financial-data'
 
 // Revenue Streams
 export async function getRevenueStreams(period?: { start: Date; end: Date }): Promise<RevenueStream[]> {
@@ -73,7 +73,7 @@ export async function getFees(): Promise<Fee[]> {
   return mockFees
 }
 
-export async function createFee(feeData: Omit<Fee, "id" | "createdAt" | "updatedAt">): Promise<Fee> {
+export async function createFee(feeData: Omit<Fee, 'id' | 'createdAt' | 'updatedAt'>): Promise<Fee> {
   // Simulate API creation
   const newFee: Fee = {
     ...feeData,
@@ -91,7 +91,7 @@ export async function updateFee(feeId: string, updates: Partial<Fee>): Promise<F
   // Simulate API update
   const fees = await getFees()
   const fee = fees.find((f) => f.id === feeId)
-  if (!fee) throw new Error("Fee not found")
+  if (!fee) throw new Error('Fee not found')
 
   return { ...fee, ...updates, updatedAt: new Date() }
 }
@@ -99,7 +99,7 @@ export async function updateFee(feeId: string, updates: Partial<Fee>): Promise<F
 export async function deleteFee(feeId: string): Promise<void> {
   // Simulate API deletion
   const feeIndex = mockFees.findIndex((f) => f.id === feeId)
-  if (feeIndex === -1) throw new Error("Fee not found")
+  if (feeIndex === -1) throw new Error('Fee not found')
   
   mockFees.splice(feeIndex, 1)
 }
@@ -120,41 +120,41 @@ export async function generateReport(type: string, period: { start: Date; end: D
 
   return {
     id: `report_${Date.now()}`,
-    name: `${type.replace("_", " ").toUpperCase()} Report`,
+    name: `${type.replace('_', ' ').toUpperCase()} Report`,
     type: type as any,
     period,
     data: metrics,
     generatedAt: new Date(),
-    generatedBy: "system",
+    generatedBy: 'system',
   }
 }
 
 // Export Functions
-export async function exportData(format: "csv" | "pdf", data: any): Promise<Blob> {
-  console.log("Export called with format:", format, "and data:", data)
+export async function exportData(format: 'csv' | 'pdf', data: any): Promise<Blob> {
+  console.log('Export called with format:', format, 'and data:', data)
 
   try {
     let blob: Blob
 
     switch (format) {
-      case "csv":
+      case 'csv':
         blob = exportToCSV(data)
         break
-      case "pdf":
+      case 'pdf':
         blob = await exportToPDF(data)
         break
       default:
         throw new Error(`Unsupported format: ${format}`)
     }
 
-    console.log("Created blob:", blob.size, "bytes")
+    console.log('Created blob:', blob.size, 'bytes')
     if (!blob || blob.size === 0) {
-      throw new Error("Failed to create export blob")
+      throw new Error('Failed to create export blob')
     }
     return blob
   } catch (error) {
-    console.error("Export error:", error)
-    throw new Error(`Failed to export data as ${format}: ${error instanceof Error ? error.message : "Unknown error"}`)
+    console.error('Export error:', error)
+    throw new Error(`Failed to export data as ${format}: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
@@ -164,7 +164,7 @@ function exportToCSV(data: any): Blob {
 
   // Add header with report info
   csvRows.push(`"Financial Report - Generated ${new Date().toLocaleDateString()}"`)
-  csvRows.push("") // Empty row for spacing
+  csvRows.push('') // Empty row for spacing
 
   // Financial Summary Section
   if (data.totalRevenue !== undefined) {
@@ -174,7 +174,7 @@ function exportToCSV(data: any): Blob {
     csvRows.push(`"Total Expenses","${data.totalExpenses}","$${data.totalExpenses.toLocaleString()}"`)
     csvRows.push(`"Net Profit","${data.netProfit}","$${data.netProfit.toLocaleString()}"`)
     csvRows.push(`"Profit Margin","${data.profitMargin}","${data.profitMargin.toFixed(2)}%"`)
-    csvRows.push("") // Empty row
+    csvRows.push('') // Empty row
   }
 
   // Expense Breakdown Section
@@ -185,9 +185,9 @@ function exportToCSV(data: any): Blob {
     const total = data.expenseBreakdownData.reduce((sum: number, item: any) => sum + item.value, 0)
     data.expenseBreakdownData.forEach((item: any) => {
       const percentage = ((item.value / total) * 100).toFixed(2)
-      csvRows.push(`"${item.name}","${item.value}","${percentage}%","${item.color || "N/A"}"`)
+      csvRows.push(`"${item.name}","${item.value}","${percentage}%","${item.color || 'N/A'}"`)
     })
-    csvRows.push("") // Empty row
+    csvRows.push('') // Empty row
   }
 
   // Revenue Streams Section
@@ -202,79 +202,79 @@ function exportToCSV(data: any): Blob {
     })
   }
 
-  const csvContent = csvRows.join("\n")
-  return new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+  const csvContent = csvRows.join('\n')
+  return new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
 }
 
 async function exportToPDF(data: any): Promise<Blob> {
   const styles = StyleSheet.create({
     page: {
-      flexDirection: "column",
-      backgroundColor: "#FFFFFF",
+      flexDirection: 'column',
+      backgroundColor: '#FFFFFF',
       padding: 30,
-      fontFamily: "Helvetica",
+      fontFamily: 'Helvetica',
     },
     title: {
       fontSize: 24,
       marginBottom: 20,
-      textAlign: "center",
-      color: "#002333",
-      fontWeight: "bold",
+      textAlign: 'center',
+      color: '#002333',
+      fontWeight: 'bold',
     },
     subtitle: {
       fontSize: 16,
       marginBottom: 15,
       marginTop: 20,
-      color: "#002333",
-      fontWeight: "bold",
-      borderBottom: "2 solid #3B82F6",
+      color: '#002333',
+      fontWeight: 'bold',
+      borderBottom: '2 solid #3B82F6',
       paddingBottom: 5,
     },
     row: {
-      flexDirection: "row",
-      justifyContent: "space-between",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       marginBottom: 8,
       paddingHorizontal: 10,
     },
     label: {
       fontSize: 12,
-      color: "#002333",
-      fontWeight: "bold",
+      color: '#002333',
+      fontWeight: 'bold',
       flex: 1,
     },
     value: {
       fontSize: 12,
-      color: "#002333",
+      color: '#002333',
       flex: 1,
-      textAlign: "right",
+      textAlign: 'right',
     },
     tableHeader: {
-      flexDirection: "row",
-      backgroundColor: "#DEEFE7",
+      flexDirection: 'row',
+      backgroundColor: '#DEEFE7',
       padding: 8,
       marginBottom: 5,
     },
     tableRow: {
-      flexDirection: "row",
+      flexDirection: 'row',
       padding: 8,
-      borderBottom: "1 solid #DEEFE7",
+      borderBottom: '1 solid #DEEFE7',
     },
     tableCell: {
       fontSize: 10,
-      color: "#002333",
+      color: '#002333',
       flex: 1,
-      textAlign: "left",
+      textAlign: 'left',
     },
     summary: {
-      backgroundColor: "#F8FAFC",
+      backgroundColor: '#F8FAFC',
       padding: 15,
       marginVertical: 10,
       borderRadius: 5,
     },
     date: {
       fontSize: 10,
-      color: "#666666",
-      textAlign: "center",
+      color: '#666666',
+      textAlign: 'center',
       marginBottom: 20,
     },
   })
@@ -285,8 +285,8 @@ async function exportToPDF(data: any): Promise<Blob> {
       null,
       React.createElement(
         Page,
-        { size: "A4", style: styles.page },
-        React.createElement(Text, { style: styles.title }, "Financial Report"),
+        { size: 'A4', style: styles.page },
+        React.createElement(Text, { style: styles.title }, 'Financial Report'),
         React.createElement(Text, { style: styles.date }, `Generated: ${new Date().toLocaleDateString()}`),
 
         // Financial Summary Section
@@ -294,32 +294,32 @@ async function exportToPDF(data: any): Promise<Blob> {
           React.createElement(
             View,
             null,
-            React.createElement(Text, { style: styles.subtitle }, "Financial Summary"),
+            React.createElement(Text, { style: styles.subtitle }, 'Financial Summary'),
             React.createElement(
               View,
               { style: styles.summary },
               React.createElement(
                 View,
                 { style: styles.row },
-                React.createElement(Text, { style: styles.label }, "Total Revenue:"),
+                React.createElement(Text, { style: styles.label }, 'Total Revenue:'),
                 React.createElement(Text, { style: styles.value }, `$${data.totalRevenue.toLocaleString()}`),
               ),
               React.createElement(
                 View,
                 { style: styles.row },
-                React.createElement(Text, { style: styles.label }, "Total Expenses:"),
+                React.createElement(Text, { style: styles.label }, 'Total Expenses:'),
                 React.createElement(Text, { style: styles.value }, `$${data.totalExpenses.toLocaleString()}`),
               ),
               React.createElement(
                 View,
                 { style: styles.row },
-                React.createElement(Text, { style: styles.label }, "Net Profit:"),
+                React.createElement(Text, { style: styles.label }, 'Net Profit:'),
                 React.createElement(Text, { style: styles.value }, `$${data.netProfit.toLocaleString()}`),
               ),
               React.createElement(
                 View,
                 { style: styles.row },
-                React.createElement(Text, { style: styles.label }, "Profit Margin:"),
+                React.createElement(Text, { style: styles.label }, 'Profit Margin:'),
                 React.createElement(Text, { style: styles.value }, `${data.profitMargin.toFixed(2)}%`),
               ),
             ),
@@ -331,14 +331,14 @@ async function exportToPDF(data: any): Promise<Blob> {
           React.createElement(
             View,
             null,
-            React.createElement(Text, { style: styles.subtitle }, "Revenue Streams (Top 10)"),
+            React.createElement(Text, { style: styles.subtitle }, 'Revenue Streams (Top 10)'),
             React.createElement(
               View,
               { style: styles.tableHeader },
-              React.createElement(Text, { style: [styles.tableCell, { fontWeight: "bold" }] }, "Name"),
-              React.createElement(Text, { style: [styles.tableCell, { fontWeight: "bold" }] }, "Type"),
-              React.createElement(Text, { style: [styles.tableCell, { fontWeight: "bold" }] }, "Amount"),
-              React.createElement(Text, { style: [styles.tableCell, { fontWeight: "bold" }] }, "Status"),
+              React.createElement(Text, { style: [styles.tableCell, { fontWeight: 'bold' }] }, 'Name'),
+              React.createElement(Text, { style: [styles.tableCell, { fontWeight: 'bold' }] }, 'Type'),
+              React.createElement(Text, { style: [styles.tableCell, { fontWeight: 'bold' }] }, 'Amount'),
+              React.createElement(Text, { style: [styles.tableCell, { fontWeight: 'bold' }] }, 'Status'),
             ),
             ...data.revenueStreams
               .slice(0, 10)
@@ -347,7 +347,7 @@ async function exportToPDF(data: any): Promise<Blob> {
                   View,
                   { key: index, style: styles.tableRow },
                   React.createElement(Text, { style: styles.tableCell }, stream.name),
-                  React.createElement(Text, { style: styles.tableCell }, stream.type.replace("_", " ")),
+                  React.createElement(Text, { style: styles.tableCell }, stream.type.replace('_', ' ')),
                   React.createElement(Text, { style: styles.tableCell }, `$${stream.amount.toLocaleString()}`),
                   React.createElement(Text, { style: styles.tableCell }, stream.status),
                 ),

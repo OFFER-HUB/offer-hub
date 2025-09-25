@@ -6,5 +6,5 @@ export default function DisputeResolutionLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="min-h-screen">{children}</div>;
+  return <div className='min-h-screen'>{children}</div>;
 }

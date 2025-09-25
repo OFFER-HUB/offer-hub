@@ -91,11 +91,11 @@ export class WorkflowService {
       resolvedDisputes: 7,
       averageResolutionTime: '5.2 days',
       stageDistribution: {
-        'dispute_initiation': 10,
-        'mediator_assignment': 8,
-        'evidence_collection': 6,
-        'mediation': 4,
-        'resolution': 7
+        dispute_initiation: 10,
+        mediator_assignment: 8,
+        evidence_collection: 6,
+        mediation: 4,
+        resolution: 7
       }
     });
   }
@@ -254,20 +254,20 @@ export class WorkflowService {
   }
 
   async healthCheck(): Promise<boolean> {
-    console.log(`[MOCK] Health check - always healthy`);
+    console.log('[MOCK] Health check - always healthy');
     return true;
   }
 
   // Utility methods
   private calculateProgress(stage: WorkflowStageName): number {
     const stageProgress: Record<WorkflowStageName, number> = {
-      'dispute_initiation': 20,
-      'mediator_assignment': 40,
-      'evidence_collection': 60,
-      'mediation': 80,
-      'resolution': 100,
-      'arbitration': 90,
-      'resolution_implementation': 100
+      dispute_initiation: 20,
+      mediator_assignment: 40,
+      evidence_collection: 60,
+      mediation: 80,
+      resolution: 100,
+      arbitration: 90,
+      resolution_implementation: 100
     };
     
     return stageProgress[stage] || 0;
@@ -374,7 +374,7 @@ export class WorkflowService {
   }
 
   async cleanupExpiredWorkflows(): Promise<number> {
-    console.log(`[MOCK] Cleaning up expired workflows`);
+    console.log('[MOCK] Cleaning up expired workflows');
     return 0;
   }
 }

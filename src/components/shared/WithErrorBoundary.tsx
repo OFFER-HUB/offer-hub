@@ -1,8 +1,8 @@
 
-"use client"
+'use client'
 
-import React from "react";
-import ErrorBoundary from "./ErrorBoundary";
+import React from 'react';
+import ErrorBoundary from './ErrorBoundary';
 
 const withErrorBoundary = <P extends object>(
   WrappedComponent: React.ComponentType<P>
@@ -13,7 +13,7 @@ const withErrorBoundary = <P extends object>(
     </ErrorBoundary>
   );
   WithErrorBoundary.displayName = `WithErrorBoundary(${
-    WrappedComponent.displayName || WrappedComponent.name || "Component"
+    WrappedComponent.displayName || WrappedComponent.name || 'Component'
   })`;
   return WithErrorBoundary;
 };

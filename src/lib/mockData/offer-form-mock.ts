@@ -41,115 +41,115 @@ export interface OfferTemplate {
 
 // Default offer form data
 export const defaultOfferFormData: OfferFormData = {
-  offerTitle: "",
-  projectDescription: "",
+  offerTitle: '',
+  projectDescription: '',
   deliverables: [],
-  specialRequirements: "",
+  specialRequirements: '',
   budgetType: 'fixed',
   budgetAmount: 0,
   paymentMilestones: [],
-  terms: "",
-  startDate: "",
-  deadline: "",
-  estimatedDuration: "",
+  terms: '',
+  startDate: '',
+  deadline: '',
+  estimatedDuration: '',
   urgency: 'medium'
 };
 
 // Default payment milestones templates
 export const defaultMilestones: PaymentMilestone[] = [
   {
-    id: "1",
-    title: "Project Start",
+    id: '1',
+    title: 'Project Start',
     percentage: 30,
     amount: 0,
-    description: "Initial payment upon project start"
+    description: 'Initial payment upon project start'
   },
   {
-    id: "2", 
-    title: "Midpoint Review",
+    id: '2', 
+    title: 'Midpoint Review',
     percentage: 40,
     amount: 0,
-    description: "Payment after midpoint deliverables review"
+    description: 'Payment after midpoint deliverables review'
   },
   {
-    id: "3",
-    title: "Project Completion",
+    id: '3',
+    title: 'Project Completion',
     percentage: 30,
     amount: 0,
-    description: "Final payment upon project completion"
+    description: 'Final payment upon project completion'
   }
 ];
 
 // Offer templates for different project types
 export const offerTemplates: OfferTemplate[] = [
   {
-    id: "web-dev",
-    title: "Web Development Project",
-    description: "Template for web development offers",
-    category: "Development",
+    id: 'web-dev',
+    title: 'Web Development Project',
+    description: 'Template for web development offers',
+    category: 'Development',
     defaultData: {
       deliverables: [
-        "Responsive website design",
-        "Frontend implementation",
-        "Backend API development",
-        "Database setup",
-        "Testing and deployment"
+        'Responsive website design',
+        'Frontend implementation',
+        'Backend API development',
+        'Database setup',
+        'Testing and deployment'
       ],
-      terms: "- All code will be delivered with proper documentation\n- 2 rounds of revisions included\n- 30-day bug fix warranty\n- Source code ownership transfers upon final payment"
+      terms: '- All code will be delivered with proper documentation\n- 2 rounds of revisions included\n- 30-day bug fix warranty\n- Source code ownership transfers upon final payment'
     }
   },
   {
-    id: "ui-ux",
-    title: "UI/UX Design Project", 
-    description: "Template for design offers",
-    category: "Design",
+    id: 'ui-ux',
+    title: 'UI/UX Design Project', 
+    description: 'Template for design offers',
+    category: 'Design',
     defaultData: {
       deliverables: [
-        "User research and analysis",
-        "Wireframes and user flows",
-        "High-fidelity mockups",
-        "Interactive prototypes",
-        "Design system documentation"
+        'User research and analysis',
+        'Wireframes and user flows',
+        'High-fidelity mockups',
+        'Interactive prototypes',
+        'Design system documentation'
       ],
-      terms: "- All designs delivered in Figma/Adobe format\n- 3 rounds of revisions included\n- Style guide and assets provided\n- Commercial usage rights included"
+      terms: '- All designs delivered in Figma/Adobe format\n- 3 rounds of revisions included\n- Style guide and assets provided\n- Commercial usage rights included'
     }
   },
   {
-    id: "mobile-app",
-    title: "Mobile App Development",
-    description: "Template for mobile app offers", 
-    category: "Development",
+    id: 'mobile-app',
+    title: 'Mobile App Development',
+    description: 'Template for mobile app offers', 
+    category: 'Development',
     defaultData: {
       deliverables: [
-        "Cross-platform mobile app",
-        "User authentication system",
-        "Core feature implementation",
-        "App store deployment",
-        "User documentation"
+        'Cross-platform mobile app',
+        'User authentication system',
+        'Core feature implementation',
+        'App store deployment',
+        'User documentation'
       ],
-      terms: "- iOS and Android compatibility\n- App store submission assistance\n- 60-day post-launch support\n- Source code and documentation included"
+      terms: '- iOS and Android compatibility\n- App store submission assistance\n- 60-day post-launch support\n- Source code and documentation included'
     }
   }
 ];
 
 // Budget range suggestions based on project type
 export const budgetRanges = {
-  "web-dev": {
+  'web-dev': {
     min: 2000,
     max: 15000,
     suggested: [3000, 5000, 8000, 12000]
   },
-  "ui-ux": {
+  'ui-ux': {
     min: 1500,
     max: 8000,
     suggested: [2000, 3500, 5000, 7000]
   },
-  "mobile-app": {
+  'mobile-app': {
     min: 5000,
     max: 25000,
     suggested: [8000, 12000, 18000, 22000]
   },
-  "general": {
+  general: {
     min: 500,
     max: 50000,
     suggested: [1000, 2500, 5000, 10000]
@@ -158,13 +158,13 @@ export const budgetRanges = {
 
 // Timeline suggestions
 export const timelineSuggestions = [
-  { label: "1 week", value: "1 week", days: 7 },
-  { label: "2 weeks", value: "2 weeks", days: 14 },
-  { label: "1 month", value: "1 month", days: 30 },
-  { label: "2 months", value: "2 months", days: 60 },
-  { label: "3 months", value: "3 months", days: 90 },
-  { label: "6 months", value: "6 months", days: 180 },
-  { label: "Custom", value: "custom", days: 0 }
+  { label: '1 week', value: '1 week', days: 7 },
+  { label: '2 weeks', value: '2 weeks', days: 14 },
+  { label: '1 month', value: '1 month', days: 30 },
+  { label: '2 months', value: '2 months', days: 60 },
+  { label: '3 months', value: '3 months', days: 90 },
+  { label: '6 months', value: '6 months', days: 180 },
+  { label: 'Custom', value: 'custom', days: 0 }
 ];
 
 // Urgency levels with descriptions

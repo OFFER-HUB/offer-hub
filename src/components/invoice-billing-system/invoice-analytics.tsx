@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import { useState, useMemo } from "react"
-import { useInvoiceManagement } from "@/hooks/use-invoice-management"
-import { InvoiceAnalyticsHeader } from "./invoice-analytics-header"
-import { InvoiceAnalyticsCards } from "./invoice-analytics-cards"
-import { InvoiceAnalyticsCharts } from "./invoice-analytics-charts"
+import { useState, useMemo } from 'react'
+import { useInvoiceManagement } from '@/hooks/use-invoice-management'
+import { InvoiceAnalyticsHeader } from './invoice-analytics-header'
+import { InvoiceAnalyticsCards } from './invoice-analytics-cards'
+import { InvoiceAnalyticsCharts } from './invoice-analytics-charts'
 
 export default function InvoiceAnalytics() {
-  const [timeRange, setTimeRange] = useState("1month")
+  const [timeRange, setTimeRange] = useState('1month')
   const { invoices, getInvoiceAnalytics } = useInvoiceManagement()
 
   const analytics = useMemo(() => getInvoiceAnalytics(timeRange), [getInvoiceAnalytics, timeRange])
@@ -25,14 +25,14 @@ export default function InvoiceAnalytics() {
     return Object.entries(statusCounts).map(([status, count]) => ({
       name: status.charAt(0).toUpperCase() + status.slice(1),
       value: count,
-      color: status === "paid" ? "#15949C" : status === "overdue" ? "#ef4444" : "#002333",
+      color: status === 'paid' ? '#15949C' : status === 'overdue' ? '#ef4444' : '#002333',
     }))
   }, [invoices])
 
   // Top customers data
   const topCustomers = useMemo(() => {
     const customerRevenue = invoices
-      .filter((inv) => inv.status === "paid")
+      .filter((inv) => inv.status === 'paid')
       .reduce(
         (acc, invoice) => {
           const customer = invoice.customer.name
@@ -49,7 +49,7 @@ export default function InvoiceAnalytics() {
   }, [invoices])
 
   return (
-    <div className="space-y-8">
+    <div className='space-y-8'>
       {/* Header */}
       <InvoiceAnalyticsHeader
         analytics={analytics}

@@ -20,17 +20,17 @@ export function DisputeMessageDisplay({ messages }: DisputeMessageDisplayProps) 
 
   if (messages.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
-        <div className="text-center">
-          <p className="text-lg font-medium">No messages yet</p>
-          <p className="text-sm">Start the conversation by sending a message</p>
+      <div className='flex items-center justify-center h-full text-gray-500'>
+        <div className='text-center'>
+          <p className='text-lg font-medium'>No messages yet</p>
+          <p className='text-sm'>Start the conversation by sending a message</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-full overflow-y-auto space-y-3">
+    <div className='h-full overflow-y-auto space-y-3'>
       {messages.map((message) => (
         <div
           key={message.id}
@@ -43,7 +43,7 @@ export function DisputeMessageDisplay({ messages }: DisputeMessageDisplayProps) 
                 : 'bg-[#F2F2F2] text-gray-900'
             }`}
           >
-            <p className="text-sm leading-relaxed mb-1">{message.content}</p>
+            <p className='text-sm leading-relaxed mb-1'>{message.content}</p>
             <p
               className={`text-xs ${
                 message.isOutgoing 

@@ -7,7 +7,7 @@ type DisputeListProps = {
 }
 const DisputesList = ({disputes}: DisputeListProps) => {
   return (
-    <main className="flex flex-col gap-4">
+    <main className='flex flex-col gap-4'>
       {disputes.map(dispute => (
         <DisputeCard
           key={dispute.id}

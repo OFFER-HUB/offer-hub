@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useState, useCallback } from "react"
-import type { UserProfileData } from "@/app/types/freelancer-profile"
+import { useState, useCallback } from 'react'
+import type { UserProfileData } from '@/app/types/freelancer-profile'
 
 interface UseFreelancerOnboardingReturn {
   currentStep: number;
@@ -16,7 +16,7 @@ interface UseFreelancerOnboardingReturn {
 export function useFreelancerOnboarding(): UseFreelancerOnboardingReturn {
   const [currentStep, setCurrentStep] = useState(0)
   const [userData, setUserData] = useState<UserProfileData>({
-    languages: [{ id: "1", name: "English", level: "Native or Bilingual" }],
+    languages: [{ id: '1', name: 'English', level: 'Native or Bilingual' }],
     skills: [],
     workExperience: [],
     education: [],
@@ -42,7 +42,7 @@ export function useFreelancerOnboarding(): UseFreelancerOnboardingReturn {
   const resetOnboarding = useCallback(() => {
     setCurrentStep(0)
     setUserData({
-      languages: [{ id: "1", name: "English", level: "Native or Bilingual" }],
+      languages: [{ id: '1', name: 'English', level: 'Native or Bilingual' }],
       skills: [],
       workExperience: [],
       education: [],

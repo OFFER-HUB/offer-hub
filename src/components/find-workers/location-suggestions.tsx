@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { MapPin, TrendingUp, Clock, Users, Star, Globe } from "lucide-react"
-import { LocationData } from "@/types/location.types"
-import { useLocationSearch } from "@/hooks/use-location-search"
-import { getTimezoneCompatibility, getCurrentTimeInTimezone } from "@/utils/timezone-helpers"
+import { useState, useEffect } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { MapPin, TrendingUp, Clock, Users, Star, Globe } from 'lucide-react'
+import { LocationData } from '@/types/location.types'
+import { useLocationSearch } from '@/hooks/use-location-search'
+import { getTimezoneCompatibility, getCurrentTimeInTimezone } from '@/utils/timezone-helpers'
 
 interface LocationSuggestionsProps {
   userTimezone?: string
@@ -100,28 +100,28 @@ export default function LocationSuggestions({
     return (
       <Card 
         key={location.id}
-        className="cursor-pointer hover:shadow-md transition-all duration-200 hover:border-[#15949C]/50"
+        className='cursor-pointer hover:shadow-md transition-all duration-200 hover:border-[#15949C]/50'
         onClick={() => handleLocationClick(location)}
       >
-        <CardContent className="p-4">
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center">
-              <div className="h-8 w-8 rounded-full bg-[#DEEFE7] flex items-center justify-center mr-3">
-                <MapPin className="h-4 w-4 text-[#15949C]" />
+        <CardContent className='p-4'>
+          <div className='flex items-start justify-between mb-3'>
+            <div className='flex items-center'>
+              <div className='h-8 w-8 rounded-full bg-[#DEEFE7] flex items-center justify-center mr-3'>
+                <MapPin className='h-4 w-4 text-[#15949C]' />
               </div>
               <div>
-                <h4 className="font-medium text-[#002333]">{location.name}</h4>
-                <p className="text-xs text-[#002333]/70">{location.country}</p>
+                <h4 className='font-medium text-[#002333]'>{location.name}</h4>
+                <p className='text-xs text-[#002333]/70'>{location.country}</p>
               </div>
             </div>
             {metadata?.marketTrend && (
-              <div className="flex items-center">
+              <div className='flex items-center'>
                 <TrendingUp className={`h-3 w-3 mr-1 ${
                   metadata.marketTrend === 'up' ? 'text-green-500' : 
                   metadata.marketTrend === 'down' ? 'text-red-500' : 'text-gray-500'
                 }`} />
                 <Badge 
-                  variant="outline" 
+                  variant='outline' 
                   className={`text-xs ${
                     metadata.marketTrend === 'up' ? 'text-green-700 border-green-200' :
                     metadata.marketTrend === 'down' ? 'text-red-700 border-red-200' :
@@ -135,11 +135,11 @@ export default function LocationSuggestions({
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className='space-y-2'>
             {/* Time and timezone compatibility */}
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center text-[#002333]/70">
-                <Clock className="h-3 w-3 mr-1" />
+            <div className='flex items-center justify-between text-sm'>
+              <div className='flex items-center text-[#002333]/70'>
+                <Clock className='h-3 w-3 mr-1' />
                 {currentTimes[location.id] || 'Loading...'}
               </div>
               {compatibility && (
@@ -157,12 +157,12 @@ export default function LocationSuggestions({
 
             {/* Market info */}
             {metadata && (
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center text-[#002333]/70">
-                  <Users className="h-3 w-3 mr-1" />
+              <div className='flex items-center justify-between text-sm'>
+                <div className='flex items-center text-[#002333]/70'>
+                  <Users className='h-3 w-3 mr-1' />
                   {metadata.freelancerCount} freelancers
                 </div>
-                <div className="text-[#15949C] font-medium">
+                <div className='text-[#15949C] font-medium'>
                   ${metadata.avgRate}/hr avg
                 </div>
               </div>
@@ -170,9 +170,9 @@ export default function LocationSuggestions({
 
             {/* Top skills */}
             {metadata?.topSkills && (
-              <div className="flex flex-wrap gap-1 mt-2">
+              <div className='flex flex-wrap gap-1 mt-2'>
                 {metadata.topSkills.slice(0, 3).map(skill => (
-                  <Badge key={skill} variant="outline" className="text-xs py-0">
+                  <Badge key={skill} variant='outline' className='text-xs py-0'>
                     {skill}
                   </Badge>
                 ))}
@@ -185,15 +185,15 @@ export default function LocationSuggestions({
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Recent searches */}
       {recentLocations.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-[#002333] mb-3 flex items-center">
-            <Clock className="h-4 w-4 mr-2 text-[#15949C]" />
+          <h3 className='text-sm font-medium text-[#002333] mb-3 flex items-center'>
+            <Clock className='h-4 w-4 mr-2 text-[#15949C]' />
             Recent Searches
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3'>
             {recentLocations.slice(0, 3).map(location => 
               renderLocationCard(location)
             )}
@@ -205,11 +205,11 @@ export default function LocationSuggestions({
 
       {/* Popular locations with market data */}
       <div>
-        <h3 className="text-sm font-medium text-[#002333] mb-3 flex items-center">
-          <TrendingUp className="h-4 w-4 mr-2 text-[#15949C]" />
+        <h3 className='text-sm font-medium text-[#002333] mb-3 flex items-center'>
+          <TrendingUp className='h-4 w-4 mr-2 text-[#15949C]' />
           Popular Freelancer Markets
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
           {locationSuggestions.slice(0, maxSuggestions).map(({ location, ...metadata }) => 
             location ? renderLocationCard(location, metadata) : null
           )}
@@ -220,11 +220,11 @@ export default function LocationSuggestions({
 
       {/* Browse all locations */}
       <div>
-        <h3 className="text-sm font-medium text-[#002333] mb-3 flex items-center">
-          <Globe className="h-4 w-4 mr-2 text-[#15949C]" />
+        <h3 className='text-sm font-medium text-[#002333] mb-3 flex items-center'>
+          <Globe className='h-4 w-4 mr-2 text-[#15949C]' />
           Browse by Region
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className='grid grid-cols-2 sm:grid-cols-4 gap-3'>
           {[
             { region: 'North America', count: 2843, flag: '🇺🇸' },
             { region: 'Europe', count: 1967, flag: '🇪🇺' },
@@ -237,12 +237,12 @@ export default function LocationSuggestions({
           ].map(region => (
             <Button
               key={region.region}
-              variant="outline"
-              className="h-auto p-3 flex flex-col items-center text-center hover:border-[#15949C] hover:text-[#15949C]"
+              variant='outline'
+              className='h-auto p-3 flex flex-col items-center text-center hover:border-[#15949C] hover:text-[#15949C]'
             >
-              <span className="text-lg mb-1">{region.flag}</span>
-              <span className="text-xs font-medium">{region.region}</span>
-              <span className="text-xs text-[#002333]/70">{region.count} freelancers</span>
+              <span className='text-lg mb-1'>{region.flag}</span>
+              <span className='text-xs font-medium'>{region.region}</span>
+              <span className='text-xs text-[#002333]/70'>{region.count} freelancers</span>
             </Button>
           ))}
         </div>
@@ -250,14 +250,14 @@ export default function LocationSuggestions({
 
       {/* Timezone compatibility notice */}
       {userTimezone && showTimezoneCompatibility && (
-        <div className="bg-blue-50 rounded-lg p-4">
-          <div className="flex items-start">
-            <Clock className="h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+        <div className='bg-blue-50 rounded-lg p-4'>
+          <div className='flex items-start'>
+            <Clock className='h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0' />
             <div>
-              <p className="text-sm font-medium text-blue-900 mb-1">
+              <p className='text-sm font-medium text-blue-900 mb-1'>
                 Timezone Compatibility
               </p>
-              <p className="text-xs text-blue-700">
+              <p className='text-xs text-blue-700'>
                 Locations are ranked by timezone compatibility with your current location. 
                 Green badges indicate excellent overlap for real-time collaboration.
               </p>

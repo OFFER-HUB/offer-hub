@@ -1,9 +1,9 @@
 // Common types for messages and conversations. Keeping this centralized
 // ensures consistency across the thread, composer, and mock data.
 
-export type Direction = "sent" | "received"
+export type Direction = 'sent' | 'received'
 
-export type AttachmentKind = "image" | "file"
+export type AttachmentKind = 'image' | 'file'
 
 export type Attachment = {
   id: string
@@ -16,7 +16,7 @@ export type Attachment = {
   height?: number
 }
 
-export type DeliveryStatus = "sent" | "delivered" | "read"
+export type DeliveryStatus = 'sent' | 'delivered' | 'read'
 
 export type Message = {
   id: string

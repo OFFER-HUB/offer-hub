@@ -1,4 +1,5 @@
-import { CheckEmailPage } from "@/components/check-email/CheckEmailPage";
+import { CheckEmailPage } from '@/components/check-email/CheckEmailPage';
+import React from 'react';
 
 const page = () => {
   return (

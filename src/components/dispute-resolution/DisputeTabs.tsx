@@ -18,7 +18,7 @@ export default function DisputeTabs({ activeTab }: DisputeTabsProps) {
   const pathname = usePathname();
 
   return (
-    <div className="flex border-b gap-6">
+    <div className='flex border-b gap-6'>
       {tabs.map((tab) => (
         <Link
           key={tab.value}

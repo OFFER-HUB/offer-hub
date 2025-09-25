@@ -13,7 +13,7 @@ export const createApplicationHandler = async (req: Request, res: Response) => {
     // Validate required fields
     if (!project_id || !freelancer_id || !message) {
       return res.status(400).json(
-        buildErrorResponse("Missing required fields: project_id, freelancer_id, message")
+        buildErrorResponse('Missing required fields: project_id, freelancer_id, message')
       );
     }
 
@@ -24,11 +24,11 @@ export const createApplicationHandler = async (req: Request, res: Response) => {
     });
     
     res.status(201).json(
-      buildSuccessResponse(application, "Application created successfully")
+      buildSuccessResponse(application, 'Application created successfully')
     );
   } catch (error) {
     res.status(500).json(
-      buildErrorResponse("Failed to create application")
+      buildErrorResponse('Failed to create application')
     );
   }
 };
@@ -39,18 +39,18 @@ export const getApplicationsByProjectHandler = async (req: Request, res: Respons
     
     if (!id) {
       return res.status(400).json(
-        buildErrorResponse("Project ID is required")
+        buildErrorResponse('Project ID is required')
       );
     }
 
     const applications = await getApplicationsByProject(id);
     
     res.status(200).json(
-      buildSuccessResponse(applications, "Applications retrieved successfully")
+      buildSuccessResponse(applications, 'Applications retrieved successfully')
     );
   } catch (error) {
     res.status(500).json(
-      buildErrorResponse("Failed to retrieve applications")
+      buildErrorResponse('Failed to retrieve applications')
     );
   }
 };
@@ -62,24 +62,24 @@ export const updateApplicationStatusHandler = async (req: Request, res: Response
     
     if (!id) {
       return res.status(400).json(
-        buildErrorResponse("Application ID is required")
+        buildErrorResponse('Application ID is required')
       );
     }
 
     if (!status) {
       return res.status(400).json(
-        buildErrorResponse("Status is required")
+        buildErrorResponse('Status is required')
       );
     }
 
     const application = await updateApplicationStatus(id, status);
     
     res.status(200).json(
-      buildSuccessResponse(application, "Application status updated successfully")
+      buildSuccessResponse(application, 'Application status updated successfully')
     );
   } catch (error) {
     res.status(500).json(
-      buildErrorResponse("Failed to update application status")
+      buildErrorResponse('Failed to update application status')
     );
   }
 };

@@ -239,10 +239,10 @@ export const useResponseQualityAssessment = () => {
     const overallScore = (factors.length_score + factors.professionalism_score + factors.relevance_score + factors.tone_score) / 4;
     
     const suggestions: string[] = [];
-    if (factors.length_score < 70) suggestions.push("Consider adding more detail to your response");
-    if (factors.professionalism_score < 70) suggestions.push("Use more professional language");
-    if (factors.relevance_score < 70) suggestions.push("Address specific points from the review");
-    if (factors.tone_score < 70) suggestions.push("Maintain a constructive and positive tone");
+    if (factors.length_score < 70) suggestions.push('Consider adding more detail to your response');
+    if (factors.professionalism_score < 70) suggestions.push('Use more professional language');
+    if (factors.relevance_score < 70) suggestions.push('Address specific points from the review');
+    if (factors.tone_score < 70) suggestions.push('Maintain a constructive and positive tone');
 
     return {
       score: overallScore,

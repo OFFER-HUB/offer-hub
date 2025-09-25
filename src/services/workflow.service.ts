@@ -484,7 +484,7 @@ export class WorkflowService {
     const response = await fetch(`${this.baseUrl}/analytics/export?${params.toString()}`, {
       method: 'GET',
       headers: {
-        'Accept': format === 'json' ? 'application/json' : 'text/csv',
+        Accept: format === 'json' ? 'application/json' : 'text/csv',
       },
     });
 

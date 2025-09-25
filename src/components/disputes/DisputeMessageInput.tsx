@@ -42,67 +42,67 @@ export function DisputeMessageInput({ onSendMessage }: DisputeMessageInputProps)
   };
 
   return (
-    <div className="rounded-2xl">
-      <form onSubmit={handleSubmit} className="flex items-center gap-3">
+    <div className='rounded-2xl'>
+      <form onSubmit={handleSubmit} className='flex items-center gap-3'>
         {/* Emoji button */}
         <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="h-10 w-10 p-0 text-gray-500 hover:text-gray-700 rounded-full"
+          type='button'
+          variant='ghost'
+          size='sm'
+          className='h-10 w-10 p-0 text-gray-500 hover:text-gray-700 rounded-full'
         >
-          <Smile className="h-5 w-5" />
+          <Smile className='h-5 w-5' />
         </Button>
 
         {/* Message input container */}
-        <div className="flex-1 relative">
+        <div className='flex-1 relative'>
           <Input
-            type="text"
-            placeholder="Message"
+            type='text'
+            placeholder='Message'
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="w-full bg-gray-100 border-gray-200 rounded-2xl px-4 py-3 pr-20 text-sm placeholder:text-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className='w-full bg-gray-100 border-gray-200 rounded-2xl px-4 py-3 pr-20 text-sm placeholder:text-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
             disabled={isUploading}
           />
           
           {/* Right side icons inside input */}
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-            <label className="cursor-pointer">
+          <div className='absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2'>
+            <label className='cursor-pointer'>
               <input
-                type="file"
-                accept="image/*,.pdf,.doc,.docx"
+                type='file'
+                accept='image/*,.pdf,.doc,.docx'
                 onChange={handleFileUpload}
-                className="hidden"
+                className='hidden'
                 disabled={isUploading}
               />
-              <Share className="h-4 w-4 text-gray-500 hover:text-gray-700" />
+              <Share className='h-4 w-4 text-gray-500 hover:text-gray-700' />
             </label>
 
-            <label className="cursor-pointer">
+            <label className='cursor-pointer'>
               <input
-                type="file"
-                accept="image/*"
+                type='file'
+                accept='image/*'
                 onChange={handleFileUpload}
-                className="hidden"
+                className='hidden'
                 disabled={isUploading}
               />
-              <Camera className="h-4 w-4 text-gray-500 hover:text-gray-700" />
+              <Camera className='h-4 w-4 text-gray-500 hover:text-gray-700' />
             </label>
           </div>
         </div>
 
         {/* Send button */}
         <Button
-          type="submit"
-          size="sm"
-          className="h-10 w-10 p-0 bg-gray-800 hover:bg-gray-900 text-white rounded-full flex-shrink-0"
+          type='submit'
+          size='sm'
+          className='h-10 w-10 p-0 bg-gray-800 hover:bg-gray-900 text-white rounded-full flex-shrink-0'
           disabled={!message.trim() || isUploading}
         >
           {isUploading ? (
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white'></div>
           ) : (
-            <Send className="h-4 w-4" />
+            <Send className='h-4 w-4' />
           )}
         </Button>
       </form>

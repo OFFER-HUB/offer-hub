@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useMemo } from 'react';
 import {
@@ -111,19 +111,19 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 
   return (
     <Card className={`${className}`}>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
+      <CardHeader className='pb-2'>
+        <CardTitle className='text-sm font-medium text-gray-600'>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className='text-2xl font-bold'>{value}</div>
         {change !== undefined && (
           <div className={`flex items-center text-sm ${getTrendColor(trend)}`}>
-            <span className="mr-1">{getTrendIcon(trend)}</span>
+            <span className='mr-1'>{getTrendIcon(trend)}</span>
             <span>{ApplicationAnalyticsCalculator.formatPercentage(Math.abs(change))}</span>
           </div>
         )}
         {description && (
-          <p className="text-sm text-gray-500 mt-1">{description}</p>
+          <p className='text-sm text-gray-500 mt-1'>{description}</p>
         )}
       </CardContent>
     </Card>
@@ -175,10 +175,10 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900">{label}</p>
+        <div className='bg-white p-3 border border-gray-200 rounded-lg shadow-lg'>
+          <p className='font-medium text-gray-900'>{label}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} style={{ color: entry.color }} className="text-sm">
+            <p key={index} style={{ color: entry.color }} className='text-sm'>
               {`${entry.dataKey}: ${formatValue(entry.value, 'number')}`}
             </p>
           ))}
@@ -193,21 +193,21 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
       case VisualizationType.LINE_CHART:
         return (
           <LineChart data={processedData}>
-            {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />}
+            {config.showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />}
             <XAxis
-              dataKey="name"
+              dataKey='name'
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             <YAxis
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             {config.showTooltip && <Tooltip content={<CustomTooltip />} />}
             {config.showLegend && <Legend />}
             <Line
-              type="monotone"
-              dataKey="value"
+              type='monotone'
+              dataKey='value'
               stroke={config.colors[0]}
               strokeWidth={config.strokeWidth}
               dot={{ fill: config.colors[0], strokeWidth: 2, r: 4 }}
@@ -220,21 +220,21 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
       case VisualizationType.AREA_CHART:
         return (
           <AreaChart data={processedData}>
-            {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />}
+            {config.showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />}
             <XAxis
-              dataKey="name"
+              dataKey='name'
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             <YAxis
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             {config.showTooltip && <Tooltip content={<CustomTooltip />} />}
             {config.showLegend && <Legend />}
             <Area
-              type="monotone"
-              dataKey="value"
+              type='monotone'
+              dataKey='value'
               stroke={config.colors[0]}
               strokeWidth={config.strokeWidth}
               fill={`${config.colors[0]}20`}
@@ -246,20 +246,20 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
       case VisualizationType.BAR_CHART:
         return (
           <BarChart data={processedData}>
-            {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />}
+            {config.showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />}
             <XAxis
-              dataKey="name"
+              dataKey='name'
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             <YAxis
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             {config.showTooltip && <Tooltip content={<CustomTooltip />} />}
             {config.showLegend && <Legend />}
             <Bar
-              dataKey="value"
+              dataKey='value'
               fill={config.colors[0]}
               radius={[4, 4, 0, 0]}
               animationDuration={config.animation ? 1500 : 0}
@@ -276,20 +276,20 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
           <PieChart>
             <Pie
               data={processedData}
-              cx="50%"
-              cy="50%"
+              cx='50%'
+              cy='50%'
               innerRadius={0}
               outerRadius={100}
               paddingAngle={2}
-              dataKey="value"
+              dataKey='value'
               animationDuration={config.animation ? 1500 : 0}
             >
               {processedData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
               <LabelList
-                dataKey="name"
-                position="outside"
+                dataKey='name'
+                position='outside'
                 style={{ fontSize: '12px', fill: '#666' }}
               />
             </Pie>
@@ -303,12 +303,12 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
           <PieChart>
             <Pie
               data={processedData}
-              cx="50%"
-              cy="50%"
+              cx='50%'
+              cy='50%'
               innerRadius={60}
               outerRadius={100}
               paddingAngle={2}
-              dataKey="value"
+              dataKey='value'
               animationDuration={config.animation ? 1500 : 0}
             >
               {processedData.map((entry, index) => (
@@ -323,20 +323,20 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
       case VisualizationType.SCATTER_PLOT:
         return (
           <ScatterChart data={processedData}>
-            {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />}
+            {config.showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />}
             <XAxis
-              dataKey="name"
+              dataKey='name'
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             <YAxis
               tick={{ fontSize: 12 }}
-              stroke="#666"
+              stroke='#666'
             />
             {config.showTooltip && <Tooltip content={<CustomTooltip />} />}
             {config.showLegend && <Legend />}
             <Scatter
-              dataKey="value"
+              dataKey='value'
               fill={config.colors[0]}
               animationDuration={config.animation ? 1500 : 0}
             />
@@ -347,15 +347,15 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
         return (
           <RadarChart data={processedData}>
             <PolarGrid />
-            <PolarAngleAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <PolarAngleAxis dataKey='name' tick={{ fontSize: 12 }} />
             <PolarRadiusAxis
               angle={90}
               domain={[0, 'dataMax']}
               tick={{ fontSize: 10 }}
             />
             <Radar
-              name="Value"
-              dataKey="value"
+              name='Value'
+              dataKey='value'
               stroke={config.colors[0]}
               fill={`${config.colors[0]}20`}
               strokeWidth={config.strokeWidth}
@@ -368,13 +368,13 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
 
       case VisualizationType.FUNNEL_CHART:
         return (
-          <BarChart data={processedData} layout="vertical">
-            {config.showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />}
-            <XAxis type="number" tick={{ fontSize: 12 }} stroke="#666" />
-            <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} stroke="#666" />
+          <BarChart data={processedData} layout='vertical'>
+            {config.showGrid && <CartesianGrid strokeDasharray='3 3' stroke='#f0f0f0' />}
+            <XAxis type='number' tick={{ fontSize: 12 }} stroke='#666' />
+            <YAxis type='category' dataKey='name' tick={{ fontSize: 12 }} stroke='#666' />
             {config.showTooltip && <Tooltip content={<CustomTooltip />} />}
             {config.showLegend && <Legend />}
-            <Bar dataKey="value" radius={[0, 4, 4, 0]} animationDuration={config.animation ? 1500 : 0}>
+            <Bar dataKey='value' radius={[0, 4, 4, 0]} animationDuration={config.animation ? 1500 : 0}>
               {processedData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
@@ -387,18 +387,18 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
           <PieChart>
             <Pie
               data={processedData}
-              cx="50%"
-              cy="50%"
+              cx='50%'
+              cy='50%'
               innerRadius={0}
               outerRadius={100}
               paddingAngle={2}
-              dataKey="value"
+              dataKey='value'
               animationDuration={config.animation ? 1500 : 0}
             >
               {processedData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
-              <LabelList dataKey="name" position="outside" style={{ fontSize: '12px', fill: '#666' }} />
+              <LabelList dataKey='name' position='outside' style={{ fontSize: '12px', fill: '#666' }} />
             </Pie>
             {config.showTooltip && <Tooltip content={<CustomTooltip />} />}
             {config.showLegend && <Legend />}
@@ -410,35 +410,35 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
         const percentage = gaugeData ? (gaugeData.value / 100) * 180 : 0;
 
         return (
-          <div className="relative flex items-center justify-center">
-            <svg width="200" height="120" viewBox="0 0 200 120">
+          <div className='relative flex items-center justify-center'>
+            <svg width='200' height='120' viewBox='0 0 200 120'>
               <defs>
-                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#EF4444" />
-                  <stop offset="50%" stopColor="#F59E0B" />
-                  <stop offset="100%" stopColor="#10B981" />
+                <linearGradient id='gaugeGradient' x1='0%' y1='0%' x2='100%' y2='0%'>
+                  <stop offset='0%' stopColor='#EF4444' />
+                  <stop offset='50%' stopColor='#F59E0B' />
+                  <stop offset='100%' stopColor='#10B981' />
                 </linearGradient>
               </defs>
               <path
-                d="M 20 100 A 80 80 0 0 1 180 100"
-                stroke="#E5E7EB"
-                strokeWidth="8"
-                fill="none"
+                d='M 20 100 A 80 80 0 0 1 180 100'
+                stroke='#E5E7EB'
+                strokeWidth='8'
+                fill='none'
               />
               <path
-                d="M 20 100 A 80 80 0 0 1 180 100"
-                stroke="url(#gaugeGradient)"
-                strokeWidth="8"
+                d='M 20 100 A 80 80 0 0 1 180 100'
+                stroke='url(#gaugeGradient)'
+                strokeWidth='8'
                 strokeDasharray={`${percentage} 251.2`}
-                strokeLinecap="round"
-                fill="none"
+                strokeLinecap='round'
+                fill='none'
               />
               <text
-                x="100"
-                y="85"
-                textAnchor="middle"
-                className="text-2xl font-bold"
-                fill="#374151"
+                x='100'
+                y='85'
+                textAnchor='middle'
+                className='text-2xl font-bold'
+                fill='#374151'
               >
                 {gaugeData?.value || 0}%
               </text>
@@ -448,22 +448,22 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
 
       case VisualizationType.TABLE:
         return (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className='overflow-x-auto'>
+            <table className='min-w-full divide-y divide-gray-200'>
+              <thead className='bg-gray-50'>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                     Value
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                     Percentage
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className='bg-white divide-y divide-gray-200'>
                 {processedData.map((row, index) => {
                   const name = 'name' in row ? row.name :
                               'label' in row ? row.label :
@@ -473,13 +473,13 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
 
                   return (
                     <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
                         {name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
                         {formatValue(row.value, 'number')}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
                         {percentage ? ApplicationAnalyticsCalculator.formatPercentage(percentage) : '-'}
                       </td>
                     </tr>
@@ -492,7 +492,7 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
 
       default:
         return (
-          <div className="flex items-center justify-center h-full text-gray-500">
+          <div className='flex items-center justify-center h-full text-gray-500'>
             <p>Visualization type not supported</p>
           </div>
         );
@@ -509,7 +509,7 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
           </CardHeader>
         )}
         <CardContent>
-          <div className="flex items-center justify-center h-64 text-gray-500">
+          <div className='flex items-center justify-center h-64 text-gray-500'>
             <p>No data available</p>
           </div>
         </CardContent>
@@ -530,7 +530,7 @@ export const AnalyticsVisualization: React.FC<AnalyticsVisualizationProps> = ({
           {type === VisualizationType.TABLE || type === VisualizationType.GAUGE ? (
             renderVisualization()
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width='100%' height='100%'>
               {renderVisualization()}
             </ResponsiveContainer>
           )}

@@ -1,5 +1,5 @@
 
-"use client"
+'use client'
 
 import React, { useState } from 'react';
 import { useServiceRequestsApi } from '@/hooks/api-connections/use-service-requests-api';
@@ -38,7 +38,7 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({ open, onClose
   // Reset modal state when closed
   React.useEffect(() => {
     if (!open) {
-      setMessage("");
+      setMessage('');
       setSuccess(false);
     }
   }, [open]);
@@ -46,15 +46,15 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({ open, onClose
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">Request Service</h2>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40'>
+      <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-md'>
+        <h2 className='text-xl font-bold mb-4'>Request Service</h2>
         {success ? (
-          <div className="flex flex-col items-center">
-            <div className="text-green-600 text-base mb-6">Request sent successfully!</div>
+          <div className='flex flex-col items-center'>
+            <div className='text-green-600 text-base mb-6'>Request sent successfully!</div>
             <button
-              type="button"
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              type='button'
+              className='bg-blue-600 text-white px-4 py-2 rounded'
               onClick={onClose}
             >
               Close
@@ -63,23 +63,23 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({ open, onClose
         ) : (
           <form onSubmit={handleSubmit}>
             <textarea
-              className="w-full border rounded p-2 mb-2"
-              placeholder="Write your message for the freelancer..."
+              className='w-full border rounded p-2 mb-2'
+              placeholder='Write your message for the freelancer...'
               value={message}
               onChange={e => setMessage(e.target.value)}
               minLength={VALIDATION_LIMITS.MIN_MESSAGE_LENGTH}
               required
             />
             {error && (
-              <div className="text-red-500 text-sm mb-2">{error.message || 'Error sending request'}</div>
+              <div className='text-red-500 text-sm mb-2'>{error.message || 'Error sending request'}</div>
             )}
-            <div className="flex gap-2 justify-end">
-              <button type="button" className="px-4 py-2" onClick={onClose} disabled={loading}>
+            <div className='flex gap-2 justify-end'>
+              <button type='button' className='px-4 py-2' onClick={onClose} disabled={loading}>
                 Cancel
               </button>
               <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                type='submit'
+                className='bg-blue-600 text-white px-4 py-2 rounded'
                 disabled={loading || !message.trim()}
               >
                 {loading ? 'Sending...' : 'Send Request'}

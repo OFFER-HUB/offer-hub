@@ -10,9 +10,9 @@ export async function getCroppedImg(
     image.onload = resolve;
     image.onerror = reject;
   });
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("No canvas context");
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('No canvas context');
   // Set canvas size to crop size
   canvas.width = crop.width;
   canvas.height = crop.height;
@@ -30,7 +30,7 @@ export async function getCroppedImg(
       (blob) => {
         if (blob) resolve(blob);
       },
-      "image/png",
+      'image/png',
       1
     );
   });

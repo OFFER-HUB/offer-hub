@@ -271,7 +271,7 @@ export function TemplateCustomization({
     switch (variable.type) {
       case 'text':
         return (
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Textarea
               value={value}
               onChange={(e) => handleVariableChange(variable.name, e.target.value)}
@@ -280,7 +280,7 @@ export function TemplateCustomization({
               rows={3}
             />
             {hasError && (
-              <div className="text-sm text-red-600">
+              <div className='text-sm text-red-600'>
                 {hasError.map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -291,9 +291,9 @@ export function TemplateCustomization({
 
       case 'number':
         return (
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Input
-              type="number"
+              type='number'
               value={value}
               onChange={(e) => handleVariableChange(variable.name, parseFloat(e.target.value) || 0)}
               placeholder={variable.description}
@@ -302,7 +302,7 @@ export function TemplateCustomization({
               max={variable.validation?.max}
             />
             {hasError && (
-              <div className="text-sm text-red-600">
+              <div className='text-sm text-red-600'>
                 {hasError.map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -313,15 +313,15 @@ export function TemplateCustomization({
 
       case 'date':
         return (
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Input
-              type="date"
+              type='date'
               value={value}
               onChange={(e) => handleVariableChange(variable.name, e.target.value)}
               className={hasError ? 'border-red-500' : ''}
             />
             {hasError && (
-              <div className="text-sm text-red-600">
+              <div className='text-sm text-red-600'>
                 {hasError.map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -332,7 +332,7 @@ export function TemplateCustomization({
 
       case 'boolean':
         return (
-          <div className="flex items-center space-x-2">
+          <div className='flex items-center space-x-2'>
             <Switch
               checked={!!value}
               onCheckedChange={(checked) => handleVariableChange(variable.name, checked)}
@@ -349,7 +349,7 @@ export function TemplateCustomization({
               onValueChange={(newValue) => handleVariableChange(variable.name, newValue)}
             >
               <SelectTrigger className={hasError ? 'border-red-500' : ''}>
-                <SelectValue placeholder="Select an option" />
+                <SelectValue placeholder='Select an option' />
               </SelectTrigger>
               <SelectContent>
                 {variable.validation.options.map(option => (
@@ -372,7 +372,7 @@ export function TemplateCustomization({
 
       default:
         return (
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Input
               value={value}
               onChange={(e) => handleVariableChange(variable.name, e.target.value)}
@@ -380,7 +380,7 @@ export function TemplateCustomization({
               className={hasError ? 'border-red-500' : ''}
             />
             {hasError && (
-              <div className="text-sm text-red-600">
+              <div className='text-sm text-red-600'>
                 {hasError.map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -393,81 +393,81 @@ export function TemplateCustomization({
 
   const getVariableIcon = (type: string) => {
     switch (type) {
-      case 'text': return <Type className="h-4 w-4" />;
-      case 'number': return <Hash className="h-4 w-4" />;
-      case 'date': return <Calendar className="h-4 w-4" />;
-      case 'boolean': return <ToggleLeft className="h-4 w-4" />;
-      case 'array': return <List className="h-4 w-4" />;
-      default: return <Variable className="h-4 w-4" />;
+      case 'text': return <Type className='h-4 w-4' />;
+      case 'number': return <Hash className='h-4 w-4' />;
+      case 'date': return <Calendar className='h-4 w-4' />;
+      case 'boolean': return <ToggleLeft className='h-4 w-4' />;
+      case 'array': return <List className='h-4 w-4' />;
+      default: return <Variable className='h-4 w-4' />;
     }
   };
 
   const getDeviceIcon = (device: string) => {
     switch (device) {
-      case 'desktop': return <Monitor className="h-4 w-4" />;
-      case 'tablet': return <Tablet className="h-4 w-4" />;
-      case 'mobile': return <Smartphone className="h-4 w-4" />;
-      default: return <Monitor className="h-4 w-4" />;
+      case 'desktop': return <Monitor className='h-4 w-4' />;
+      case 'tablet': return <Tablet className='h-4 w-4' />;
+      case 'mobile': return <Smartphone className='h-4 w-4' />;
+      default: return <Monitor className='h-4 w-4' />;
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Customize Template</h2>
-          <p className="text-gray-600">{template.name}</p>
+          <h2 className='text-2xl font-bold text-gray-900'>Customize Template</h2>
+          <p className='text-gray-600'>{template.name}</p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           {showPreview && (
             <Button
-              size="sm"
-              variant={isPreviewMode ? "default" : "outline"}
+              size='sm'
+              variant={isPreviewMode ? 'default' : 'outline'}
               onClick={() => setIsPreviewMode(!isPreviewMode)}
               disabled={isPreviewLoading}
             >
-              {isPreviewMode ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
+              {isPreviewMode ? <EyeOff className='h-4 w-4 mr-2' /> : <Eye className='h-4 w-4 mr-2' />}
               {isPreviewMode ? 'Hide Preview' : 'Show Preview'}
             </Button>
           )}
-          <Button size="sm" variant="outline" onClick={handleReset} disabled={!isDirty}>
-            <Undo className="h-4 w-4 mr-2" />
+          <Button size='sm' variant='outline' onClick={handleReset} disabled={!isDirty}>
+            <Undo className='h-4 w-4 mr-2' />
             Reset
           </Button>
-          <Button size="sm" onClick={handleSave} disabled={!isDirty}>
-            <Save className="h-4 w-4 mr-2" />
+          <Button size='sm' onClick={handleSave} disabled={!isDirty}>
+            <Save className='h-4 w-4 mr-2' />
             Save
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
         {/* Customization Panel */}
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Global Variables */}
           {template.variables.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Settings className="h-5 w-5" />
+                <CardTitle className='flex items-center space-x-2'>
+                  <Settings className='h-5 w-5' />
                   <span>Global Variables</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className='space-y-4'>
                 {template.variables.map(variable => (
-                  <div key={variable.id} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label className="flex items-center space-x-2">
+                  <div key={variable.id} className='space-y-2'>
+                    <div className='flex items-center justify-between'>
+                      <Label className='flex items-center space-x-2'>
                         {getVariableIcon(variable.type)}
                         <span>{variable.name}</span>
-                        {variable.required && <span className="text-red-500">*</span>}
+                        {variable.required && <span className='text-red-500'>*</span>}
                       </Label>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant='outline' className='text-xs'>
                         {variable.type}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600">{variable.description}</p>
+                    <p className='text-sm text-gray-600'>{variable.description}</p>
                     {allowVariableEditing && renderVariableInput(variable)}
                   </div>
                 ))}
@@ -476,8 +476,8 @@ export function TemplateCustomization({
           )}
 
           {/* Template Sections */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Template Sections</h3>
+          <div className='space-y-4'>
+            <h3 className='text-lg font-semibold'>Template Sections</h3>
             {template.sections.map((section, index) => {
               const isExpanded = expandedSections.includes(section.id);
               const customization = customizations.find(c => c.sectionId === section.id);
@@ -489,21 +489,21 @@ export function TemplateCustomization({
                     onOpenChange={() => toggleSectionExpansion(section.id)}
                   >
                     <CollapsibleTrigger asChild>
-                      <CardHeader className="cursor-pointer hover:bg-gray-50">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
+                      <CardHeader className='cursor-pointer hover:bg-gray-50'>
+                        <div className='flex items-center justify-between'>
+                          <div className='flex items-center space-x-3'>
                             {isExpanded ?
-                              <ChevronDown className="h-4 w-4" /> :
-                              <ChevronUp className="h-4 w-4" />
+                              <ChevronDown className='h-4 w-4' /> :
+                              <ChevronUp className='h-4 w-4' />
                             }
                             <div>
-                              <CardTitle className="text-base">{section.title}</CardTitle>
-                              <p className="text-sm text-gray-600">Section {index + 1}</p>
+                              <CardTitle className='text-base'>{section.title}</CardTitle>
+                              <p className='text-sm text-gray-600'>Section {index + 1}</p>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2">
+                          <div className='flex items-center space-x-2'>
                             {section.optional && (
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant='secondary' className='text-xs'>
                                 Optional
                               </Badge>
                             )}
@@ -520,35 +520,35 @@ export function TemplateCustomization({
                     </CollapsibleTrigger>
 
                     <CollapsibleContent>
-                      <CardContent className="space-y-4">
+                      <CardContent className='space-y-4'>
                         {/* Section Content */}
-                        <div className="space-y-2">
+                        <div className='space-y-2'>
                           <Label>Content</Label>
                           <Textarea
                             value={customization?.modifications.content || section.content}
                             onChange={(e) => handleSectionContentChange(section.id, e.target.value)}
                             rows={6}
-                            className="font-mono text-sm"
+                            className='font-mono text-sm'
                           />
                         </div>
 
                         {/* Section Variables */}
                         {section.variables.length > 0 && (
-                          <div className="space-y-3">
-                            <h4 className="font-medium">Section Variables</h4>
+                          <div className='space-y-3'>
+                            <h4 className='font-medium'>Section Variables</h4>
                             {section.variables.map(variable => (
-                              <div key={variable.id} className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <Label className="flex items-center space-x-2">
+                              <div key={variable.id} className='space-y-2'>
+                                <div className='flex items-center justify-between'>
+                                  <Label className='flex items-center space-x-2'>
                                     {getVariableIcon(variable.type)}
                                     <span>{variable.name}</span>
-                                    {variable.required && <span className="text-red-500">*</span>}
+                                    {variable.required && <span className='text-red-500'>*</span>}
                                   </Label>
-                                  <Badge variant="outline" className="text-xs">
+                                  <Badge variant='outline' className='text-xs'>
                                     {variable.type}
                                   </Badge>
                                 </div>
-                                <p className="text-sm text-gray-600">{variable.description}</p>
+                                <p className='text-sm text-gray-600'>{variable.description}</p>
                                 {allowVariableEditing && renderVariableInput(variable)}
                               </div>
                             ))}
@@ -565,24 +565,24 @@ export function TemplateCustomization({
 
         {/* Preview Panel */}
         {showPreview && isPreviewMode && (
-          <div className="space-y-4">
-            <Card className="sticky top-4">
+          <div className='space-y-4'>
+            <Card className='sticky top-4'>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center space-x-2">
-                    <Eye className="h-5 w-5" />
+                <div className='flex items-center justify-between'>
+                  <CardTitle className='flex items-center space-x-2'>
+                    <Eye className='h-5 w-5' />
                     <span>Preview</span>
                   </CardTitle>
-                  <div className="flex items-center space-x-2">
+                  <div className='flex items-center space-x-2'>
                     {/* Device Toggle */}
-                    <div className="flex items-center space-x-1 border rounded-lg p-1">
+                    <div className='flex items-center space-x-1 border rounded-lg p-1'>
                       {(['desktop', 'tablet', 'mobile'] as const).map(device => (
                         <Button
                           key={device}
-                          size="sm"
-                          variant={devicePreview === device ? "default" : "ghost"}
+                          size='sm'
+                          variant={devicePreview === device ? 'default' : 'ghost'}
                           onClick={() => setDevicePreview(device)}
-                          className="p-1"
+                          className='p-1'
                         >
                           {getDeviceIcon(device)}
                         </Button>
@@ -591,8 +591,8 @@ export function TemplateCustomization({
 
                     {/* Refresh Preview */}
                     <Button
-                      size="sm"
-                      variant="outline"
+                      size='sm'
+                      variant='outline'
                       onClick={generatePreview}
                       disabled={isPreviewLoading}
                     >
@@ -608,18 +608,18 @@ export function TemplateCustomization({
                   'w-full'
                 }`}>
                   {isPreviewLoading ? (
-                    <div className="flex items-center justify-center p-8">
-                      <RefreshCw className="h-6 w-6 animate-spin" />
+                    <div className='flex items-center justify-center p-8'>
+                      <RefreshCw className='h-6 w-6 animate-spin' />
                     </div>
                   ) : previewError ? (
-                    <div className="flex items-center justify-center p-8 text-red-600">
-                      <AlertCircle className="h-6 w-6 mr-2" />
+                    <div className='flex items-center justify-center p-8 text-red-600'>
+                      <AlertCircle className='h-6 w-6 mr-2' />
                       <span>Preview failed to load</span>
                     </div>
                   ) : (
-                    <div className="p-4 bg-white">
+                    <div className='p-4 bg-white'>
                       <div
-                        className="prose prose-sm max-w-none"
+                        className='prose prose-sm max-w-none'
                         dangerouslySetInnerHTML={{ __html: previewContent }}
                       />
                     </div>
@@ -632,26 +632,26 @@ export function TemplateCustomization({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between pt-6 border-t">
-        <div className="flex items-center space-x-2">
+      <div className='flex items-center justify-between pt-6 border-t'>
+        <div className='flex items-center space-x-2'>
           {isDirty && (
-            <Badge variant="outline" className="text-yellow-600">
+            <Badge variant='outline' className='text-yellow-600'>
               Unsaved changes
             </Badge>
           )}
           {Object.keys(validationErrors).length > 0 && (
-            <Badge variant="outline" className="text-red-600">
+            <Badge variant='outline' className='text-red-600'>
               {Object.keys(validationErrors).length} validation errors
             </Badge>
           )}
         </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={onCancel}>
-            <X className="h-4 w-4 mr-2" />
+        <div className='flex space-x-2'>
+          <Button variant='outline' onClick={onCancel}>
+            <X className='h-4 w-4 mr-2' />
             Cancel
           </Button>
           <Button onClick={handleSave} disabled={!isDirty || Object.keys(validationErrors).length > 0}>
-            <Save className="h-4 w-4 mr-2" />
+            <Save className='h-4 w-4 mr-2' />
             Save Customization
           </Button>
         </div>

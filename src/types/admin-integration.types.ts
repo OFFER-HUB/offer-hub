@@ -2,7 +2,7 @@
 // ADMIN API TYPES
 // ============================================================================
 
-export type UserRole = "freelancer" | "client" | "admin" | "moderator";
+export type UserRole = 'freelancer' | 'client' | 'admin' | 'moderator';
 
 export interface AdminApiKey {
   id: string;

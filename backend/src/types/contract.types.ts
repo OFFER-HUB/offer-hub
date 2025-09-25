@@ -1,20 +1,20 @@
 // Base contract interface
 export interface Contract {
   id: string;
-  contract_type: "project" | "service";
+  contract_type: 'project' | 'service';
   project_id?: string;
   service_request_id?: string;
   freelancer_id: string;
   client_id: string;
   contract_on_chain_id: string;
-  escrow_status: "pending" | "funded" | "released" | "disputed";
+  escrow_status: 'pending' | 'funded' | 'released' | 'disputed';
   amount_locked: number;
   created_at: string;
 }
 
 // Contract creation DTO
 export interface CreateContractDTO {
-  contract_type: "project" | "service";
+  contract_type: 'project' | 'service';
   project_id?: string;
   service_request_id?: string;
   freelancer_id: string;
@@ -25,7 +25,7 @@ export interface CreateContractDTO {
 
 // Contract update DTO
 export interface UpdateContractDTO {
-  escrow_status?: "funded" | "released" | "disputed";
+  escrow_status?: 'funded' | 'released' | 'disputed';
 }
 
 // Contract with user information

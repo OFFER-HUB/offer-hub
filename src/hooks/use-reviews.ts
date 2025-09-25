@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Review,
   CreateReviewDTO,
@@ -11,11 +11,11 @@ import {
   ReviewErrorState,
   ExportFormat,
   ReviewMutationEvent,
-} from "@/types/reviews.types";
-import { useReviewsApi } from "@/hooks/api-connections/use-reviews-api";
-import { useReviewCache } from "@/hooks/use-review-cache";
-import { useReviewFilters } from "@/hooks/use-review-filters";
-import { useReviewStats } from "@/hooks/use-review-stats";
+} from '@/types/reviews.types';
+import { useReviewsApi } from '@/hooks/api-connections/use-reviews-api';
+import { useReviewCache } from '@/hooks/use-review-cache';
+import { useReviewFilters } from '@/hooks/use-review-filters';
+import { useReviewStats } from '@/hooks/use-review-stats';
 import {
   validateReviewInput,
   exportToCSV,
@@ -23,7 +23,7 @@ import {
   generatePaginationData,
   haveFiltersChanged,
   normalizeErrorMessage,
-} from "@/utils/review-helpers";
+} from '@/utils/review-helpers';
 
 /**
  * Configuration options for the useReviews hook
@@ -147,7 +147,7 @@ export function useReviews({
   const fetchReviews = useCallback(
     async (targetUserId?: string, filterOptions?: ReviewFilterOptions) => {
       if (!targetUserId) {
-        log("No user ID provided for fetching reviews");
+        log('No user ID provided for fetching reviews');
         return [];
       }
 
@@ -183,7 +183,7 @@ export function useReviews({
         return data;
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch reviews";
+          err instanceof Error ? err.message : 'Failed to fetch reviews';
         log(`Error fetching reviews: ${errorMessage}`, err);
         setErrorState((prev) => ({
           ...prev,
@@ -210,7 +210,7 @@ export function useReviews({
     if (!userId) return;
 
     setLoadingState((prev) => ({ ...prev, isLoading: true }));
-    log("Loading reviews", { userId, filters: debouncedFilters });
+    log('Loading reviews', { userId, filters: debouncedFilters });
 
     try {
       const reviewsData = await fetchReviews(userId, debouncedFilters);
@@ -225,7 +225,7 @@ export function useReviews({
 
       log(`Loaded ${reviewsData.length} reviews`);
     } catch (err) {
-      log("Error loading reviews", err);
+      log('Error loading reviews', err);
     } finally {
       setLoadingState((prev) => ({ ...prev, isLoading: false }));
     }
@@ -334,7 +334,7 @@ export function useReviews({
       // Validate input
       const validationError = validateReviewInput(input);
       if (validationError) {
-        log("Validation error", validationError);
+        log('Validation error', validationError);
         setErrorState((prev) => ({ ...prev, createError: validationError }));
         throw new Error(validationError);
       }
@@ -343,15 +343,15 @@ export function useReviews({
       setErrorState((prev) => ({ ...prev, createError: undefined }));
 
       try {
-        log("Creating review", input);
+        log('Creating review', input);
         const review = await createReview(input);
-        log("Review created", review);
+        log('Review created', review);
 
         // Handle cache updates and state changes
         if (enableCaching) {
           // If the review is for the current viewed user, update their cache
           if (input.to_id === userId) {
-            log("Updating current user's cache and state");
+            log('Updating current user\'s cache and state');
 
             // Update local state only for the current user
             setReviews((prev) => {
@@ -365,7 +365,7 @@ export function useReviews({
             });
           } else {
             // For other users, just invalidate their cache without updating local state
-            log("Invalidating target user's cache", input.to_id);
+            log('Invalidating target user\'s cache', input.to_id);
             invalidateUserCache(input.to_id);
           }
         } else if (input.to_id === userId) {
@@ -375,7 +375,7 @@ export function useReviews({
 
         // Broadcast mutation to other tabs if enabled
         broadcastMutation({
-          type: "create",
+          type: 'create',
           payload: review,
           timestamp: Date.now(),
         });
@@ -383,8 +383,8 @@ export function useReviews({
         return review;
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to create review";
-        log("Error creating review", errorMessage);
+          err instanceof Error ? err.message : 'Failed to create review';
+        log('Error creating review', errorMessage);
         setErrorState((prev) => ({
           ...prev,
           createError: normalizeErrorMessage(errorMessage),
@@ -410,7 +410,7 @@ export function useReviews({
   const updateReview = useCallback(
     async (input: UpdateReviewDTO): Promise<Review> => {
       if (!input.id) {
-        const errorMsg = "Review ID is required for updates";
+        const errorMsg = 'Review ID is required for updates';
         setErrorState((prev) => ({ ...prev, updateError: errorMsg }));
         throw new Error(errorMsg);
       }
@@ -419,7 +419,7 @@ export function useReviews({
       setErrorState((prev) => ({ ...prev, updateError: undefined }));
 
       try {
-        log("Updating review", input);
+        log('Updating review', input);
 
         // Optimistically update the UI while the API request is in progress
         let optimisticUpdatedReview: Review | undefined;
@@ -452,7 +452,7 @@ export function useReviews({
         });
 
         if (!optimisticUpdatedReview) {
-          throw new Error("Review not found");
+          throw new Error('Review not found');
         }
 
         try {
@@ -484,23 +484,23 @@ export function useReviews({
 
           // Broadcast mutation with the authoritative API data
           broadcastMutation({
-            type: "update",
+            type: 'update',
             payload: updatedReview,
             timestamp: Date.now(),
           });
 
-          log("Review updated", updatedReview);
+          log('Review updated', updatedReview);
           return updatedReview;
         } catch (error) {
           // Rollback the optimistic update on error
           setReviews(originalReviews);
-          log("Update failed, rolling back", error);
+          log('Update failed, rolling back', error);
           throw error;
         }
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to update review";
-        log("Error updating review", errorMessage);
+          err instanceof Error ? err.message : 'Failed to update review';
+        log('Error updating review', errorMessage);
         setErrorState((prev) => ({
           ...prev,
           updateError: normalizeErrorMessage(errorMessage),
@@ -525,7 +525,7 @@ export function useReviews({
   const deleteReview = useCallback(
     async (reviewId: string): Promise<void> => {
       if (!reviewId) {
-        const errorMsg = "Review ID is required for deletion";
+        const errorMsg = 'Review ID is required for deletion';
         setErrorState((prev) => ({ ...prev, deleteError: errorMsg }));
         throw new Error(errorMsg);
       }
@@ -534,12 +534,12 @@ export function useReviews({
       setErrorState((prev) => ({ ...prev, deleteError: undefined }));
 
       try {
-        log("Deleting review", { reviewId });
+        log('Deleting review', { reviewId });
 
         // Find the review to be deleted (for cache invalidation)
         const reviewToDelete = reviews.find((r) => r.id === reviewId);
         if (!reviewToDelete) {
-          throw new Error("Review not found");
+          throw new Error('Review not found');
         }
 
         // Store original reviews for rollback in case of API failure
@@ -568,22 +568,22 @@ export function useReviews({
 
           // Broadcast mutation after successful API call
           broadcastMutation({
-            type: "delete",
+            type: 'delete',
             payload: reviewToDelete,
             timestamp: Date.now(),
           });
 
-          log("Review deleted", { reviewId });
+          log('Review deleted', { reviewId });
         } catch (err) {
           // Rollback optimistic update on API failure
-          log("Delete API failed, rolling back", err);
+          log('Delete API failed, rolling back', err);
           setReviews(originalReviews);
           throw err;
         }
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to delete review";
-        log("Error deleting review", errorMessage);
+          err instanceof Error ? err.message : 'Failed to delete review';
+        log('Error deleting review', errorMessage);
         setErrorState((prev) => ({
           ...prev,
           deleteError: normalizeErrorMessage(errorMessage),
@@ -615,13 +615,13 @@ export function useReviews({
 
   // Export reviews in different formats
   const exportReviews = useCallback(
-    (format: ExportFormat = "csv", includeFilters = true): string => {
+    (format: ExportFormat = 'csv', includeFilters = true): string => {
       const dataToExport = includeFilters ? filteredReviews : reviews;
 
       switch (format) {
-        case "json":
+        case 'json':
           return exportToJSON(dataToExport);
-        case "csv":
+        case 'csv':
           return exportToCSV(dataToExport);
         default:
           return exportToCSV(dataToExport);
@@ -632,32 +632,32 @@ export function useReviews({
 
   // Download exported reviews
   const downloadReviews = useCallback(
-    (format: ExportFormat = "csv", filename?: string) => {
+    (format: ExportFormat = 'csv', filename?: string) => {
       const dataToExport = exportReviews(format, true);
 
       // Create file download
-      const element = document.createElement("a");
+      const element = document.createElement('a');
       let mimeType: string;
       let extension: string;
 
       switch (format) {
-        case "json":
-          mimeType = "application/json";
-          extension = "json";
+        case 'json':
+          mimeType = 'application/json';
+          extension = 'json';
           break;
-        case "pdf":
-          mimeType = "application/pdf";
-          extension = "pdf";
+        case 'pdf':
+          mimeType = 'application/pdf';
+          extension = 'pdf';
           break;
-        case "csv":
+        case 'csv':
         default:
-          mimeType = "text/csv";
-          extension = "csv";
+          mimeType = 'text/csv';
+          extension = 'csv';
       }
 
       const finalFilename =
         filename ||
-        `reviews-export-${new Date().toISOString().split("T")[0]}.${extension}`;
+        `reviews-export-${new Date().toISOString().split('T')[0]}.${extension}`;
 
       const blob = new Blob([dataToExport], { type: mimeType });
       const url = URL.createObjectURL(blob);
@@ -668,7 +668,7 @@ export function useReviews({
       element.click();
       document.body.removeChild(element);
 
-      log("Reviews downloaded", { format, filename: finalFilename });
+      log('Reviews downloaded', { format, filename: finalFilename });
     },
     [exportReviews, log]
   );

@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { CreateProjectLayout } from "@/components/create-project/create-project-layout";
-import { ProjectDetailsForm } from "@/components/create-project/project-details-form";
+import { useRouter } from 'next/navigation';
+import { CreateProjectLayout } from '@/components/create-project/create-project-layout';
+import { ProjectDetailsForm } from '@/components/create-project/project-details-form';
 
 export default function CreateProjectStep1() {
   const router = useRouter();
 
   const handleNext = () => {
-    router.push("/client/create-project/step-2");
+    router.push('/client/create-project/step-2');
   };
 
   const handleBack = () => {
-    router.push("/dashboard");
+    router.push('/dashboard');
   };
 
   return (

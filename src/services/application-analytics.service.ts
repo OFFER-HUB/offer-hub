@@ -737,7 +737,7 @@ export class ApplicationAnalyticsService {
   private static getDefaultHeaders(): HeadersInit {
     return {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'X-Client-Version': '1.0.0',
       'Cache-Control': 'no-cache'
     };

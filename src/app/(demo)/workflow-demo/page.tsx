@@ -62,49 +62,49 @@ export default function WorkflowDemoPage() {
 
   const getStageIndex = (stage: string) => {
     const stageMap: Record<string, number> = {
-      'dispute_initiation': 0,
-      'mediator_assignment': 1,
-      'evidence_collection': 2,
-      'mediation_process': 3,
-      'resolution_or_escalation': 4,
-      'arbitration': 5,
-      'resolution_implementation': 6
+      dispute_initiation: 0,
+      mediator_assignment: 1,
+      evidence_collection: 2,
+      mediation_process: 3,
+      resolution_or_escalation: 4,
+      arbitration: 5,
+      resolution_implementation: 6
     };
     return stageMap[stage] || 0;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className='min-h-screen bg-gray-50'>
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <div className='bg-white shadow-sm border-b'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='flex items-center justify-between h-16'>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Dispute Resolution Workflow Demo</h1>
-              <p className="text-sm text-gray-600">Interactive demonstration of the complete workflow system</p>
+              <h1 className='text-2xl font-bold text-gray-900'>Dispute Resolution Workflow Demo</h1>
+              <p className='text-sm text-gray-600'>Interactive demonstration of the complete workflow system</p>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <Badge variant="secondary" className="flex items-center space-x-1">
-                <CheckCircle className="h-3 w-3" />
+            <div className='flex items-center space-x-4'>
+              <Badge variant='secondary' className='flex items-center space-x-1'>
+                <CheckCircle className='h-3 w-3' />
                 <span>Live Demo</span>
               </Badge>
               
-              <div className="flex items-center space-x-2">
+              <div className='flex items-center space-x-2'>
                 <Button
                   variant={viewMode === 'desktop' ? 'default' : 'outline'}
-                  size="sm"
+                  size='sm'
                   onClick={() => setViewMode('desktop')}
                 >
-                  <Monitor className="h-4 w-4 mr-1" />
+                  <Monitor className='h-4 w-4 mr-1' />
                   Desktop
                 </Button>
                 <Button
                   variant={viewMode === 'mobile' ? 'default' : 'outline'}
-                  size="sm"
+                  size='sm'
                   onClick={() => setViewMode('mobile')}
                 >
-                  <Smartphone className="h-4 w-4 mr-1" />
+                  <Smartphone className='h-4 w-4 mr-1' />
                   Mobile
                 </Button>
               </div>
@@ -113,16 +113,16 @@ export default function WorkflowDemoPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+        <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
           {/* Demo Controls Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className='lg:col-span-1 space-y-6'>
             {/* Dispute Selector */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Demo Disputes</CardTitle>
+                <CardTitle className='text-lg'>Demo Disputes</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className='space-y-3'>
                 {demoDisputes.map((dispute) => (
                   <div
                     key={dispute.id}
@@ -133,21 +133,21 @@ export default function WorkflowDemoPage() {
                     }`}
                     onClick={() => setCurrentDisputeId(dispute.id)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-sm text-gray-900 truncate">
+                    <div className='flex items-start justify-between'>
+                      <div className='flex-1'>
+                        <h3 className='font-medium text-sm text-gray-900 truncate'>
                           {dispute.title}
                         </h3>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p className='text-xs text-gray-600 mt-1'>
                           {workflowStages[getStageIndex(dispute.stage)].name}
                         </p>
                       </div>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant='outline' className='text-xs'>
                         {dispute.progress}%
                       </Badge>
                     </div>
-                    <div className="mt-2 flex items-center space-x-2 text-xs text-gray-500">
-                      <Clock className="h-3 w-3" />
+                    <div className='mt-2 flex items-center space-x-2 text-xs text-gray-500'>
+                      <Clock className='h-3 w-3' />
                       <span>{dispute.daysRemaining} days remaining</span>
                     </div>
                   </div>
@@ -158,10 +158,10 @@ export default function WorkflowDemoPage() {
             {/* Workflow Stages Overview */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Workflow Stages</CardTitle>
+                <CardTitle className='text-lg'>Workflow Stages</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
+                <div className='space-y-2'>
                   {workflowStages.map((stage, index) => {
                     const Icon = stage.icon;
                     const isActive = currentDispute && getStageIndex(currentDispute.stage) === index;
@@ -177,13 +177,13 @@ export default function WorkflowDemoPage() {
                         }`}
                       >
                         <div className={`p-1 rounded-full ${isCompleted ? 'bg-green-500' : isActive ? stage.color : 'bg-gray-300'}`}>
-                          <Icon className="h-3 w-3 text-white" />
+                          <Icon className='h-3 w-3 text-white' />
                         </div>
                         <span className={`text-sm ${isActive ? 'font-medium' : ''}`}>
                           {stage.name}
                         </span>
-                        {isCompleted && <CheckCircle className="h-4 w-4 text-green-500 ml-auto" />}
-                        {isActive && <div className="h-2 w-2 bg-blue-500 rounded-full ml-auto animate-pulse" />}
+                        {isCompleted && <CheckCircle className='h-4 w-4 text-green-500 ml-auto' />}
+                        {isActive && <div className='h-2 w-2 bg-blue-500 rounded-full ml-auto animate-pulse' />}
                       </div>
                     );
                   })}
@@ -194,23 +194,23 @@ export default function WorkflowDemoPage() {
             {/* Demo Actions */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Demo Actions</CardTitle>
+                <CardTitle className='text-lg'>Demo Actions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className='space-y-3'>
                 <Button 
-                  className="w-full" 
+                  className='w-full' 
                   onClick={() => setCurrentDisputeId(demoDisputes[Math.floor(Math.random() * demoDisputes.length)].id)}
                 >
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play className='h-4 w-4 mr-2' />
                   Random Dispute
                 </Button>
                 
                 <Button 
-                  variant="outline" 
-                  className="w-full"
+                  variant='outline' 
+                  className='w-full'
                   onClick={() => setCurrentDisputeId('demo-dispute-001')}
                 >
-                  <RotateCcw className="h-4 w-4 mr-2" />
+                  <RotateCcw className='h-4 w-4 mr-2' />
                   Reset Demo
                 </Button>
               </CardContent>
@@ -219,36 +219,36 @@ export default function WorkflowDemoPage() {
             {/* Feature Highlights */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Features Demonstrated</CardTitle>
+                <CardTitle className='text-lg'>Features Demonstrated</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                <div className='space-y-2 text-sm'>
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>7-Stage Workflow Process</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>Real-time Progress Tracking</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>Mobile-Responsive Design</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>Deadline Management</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>Notification System</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>Analytics Dashboard</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  <div className='flex items-center space-x-2'>
+                    <CheckCircle className='h-4 w-4 text-green-500' />
                     <span>Audit Trail</span>
                   </div>
                 </div>
@@ -257,34 +257,34 @@ export default function WorkflowDemoPage() {
           </div>
 
           {/* Main Workflow Interface */}
-          <div className="lg:col-span-3">
+          <div className='lg:col-span-3'>
             <div className={`${viewMode === 'mobile' ? 'max-w-sm mx-auto' : ''}`}>
-              <Card className="mb-6">
+              <Card className='mb-6'>
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                  <CardTitle className='flex items-center justify-between'>
                     <span>Current Dispute: {currentDispute?.title}</span>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="outline">
+                    <div className='flex items-center space-x-2'>
+                      <Badge variant='outline'>
                         {workflowStages[getStageIndex(currentDispute?.stage || 'dispute_initiation')].name}
                       </Badge>
-                      <Badge variant="secondary">
+                      <Badge variant='secondary'>
                         {currentDispute?.progress}% Complete
                       </Badge>
                     </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center space-x-1">
-                      <Clock className="h-4 w-4" />
+                  <div className='flex items-center space-x-4 text-sm text-gray-600'>
+                    <div className='flex items-center space-x-1'>
+                      <Clock className='h-4 w-4' />
                       <span>{currentDispute?.daysRemaining} days remaining</span>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <Users className="h-4 w-4" />
+                    <div className='flex items-center space-x-1'>
+                      <Users className='h-4 w-4' />
                       <span>Mediator: John Smith</span>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <FileText className="h-4 w-4" />
+                    <div className='flex items-center space-x-1'>
+                      <FileText className='h-4 w-4' />
                       <span>Evidence: 3 files uploaded</span>
                     </div>
                   </div>
@@ -310,28 +310,28 @@ export default function WorkflowDemoPage() {
         </div>
 
         {/* Implementation Proof Section */}
-        <div className="mt-12">
+        <div className='mt-12'>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <CheckCircle className="h-6 w-6 text-green-500" />
+              <CardTitle className='flex items-center space-x-2'>
+                <CheckCircle className='h-6 w-6 text-green-500' />
                 <span>Implementation Proof</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="components" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="components">Components</TabsTrigger>
-                  <TabsTrigger value="api">API Endpoints</TabsTrigger>
-                  <TabsTrigger value="database">Database</TabsTrigger>
-                  <TabsTrigger value="features">Features</TabsTrigger>
+              <Tabs defaultValue='components' className='w-full'>
+                <TabsList className='grid w-full grid-cols-4'>
+                  <TabsTrigger value='components'>Components</TabsTrigger>
+                  <TabsTrigger value='api'>API Endpoints</TabsTrigger>
+                  <TabsTrigger value='database'>Database</TabsTrigger>
+                  <TabsTrigger value='features'>Features</TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="components" className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <h4 className="font-semibold">Frontend Components Created:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                <TabsContent value='components' className='space-y-4'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div className='space-y-2'>
+                      <h4 className='font-semibold'>Frontend Components Created:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>✅ DisputeWorkflow.tsx - Main workflow interface</li>
                         <li>✅ WorkflowStages.tsx - Stage management</li>
                         <li>✅ ProgressTracking.tsx - Progress tracking</li>
@@ -342,9 +342,9 @@ export default function WorkflowDemoPage() {
                         <li>✅ AuditTrailViewer.tsx - Audit trail</li>
                       </ul>
                     </div>
-                    <div className="space-y-2">
-                      <h4 className="font-semibold">Supporting Files:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                    <div className='space-y-2'>
+                      <h4 className='font-semibold'>Supporting Files:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>✅ workflow.types.ts - TypeScript interfaces</li>
                         <li>✅ use-dispute-workflow.ts - Custom hook</li>
                         <li>✅ workflow.service.ts - Frontend service</li>
@@ -356,11 +356,11 @@ export default function WorkflowDemoPage() {
                   </div>
                 </TabsContent>
                 
-                <TabsContent value="api" className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TabsContent value='api' className='space-y-4'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <div>
-                      <h4 className="font-semibold mb-2">Workflow Management:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                      <h4 className='font-semibold mb-2'>Workflow Management:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>GET /disputes/:id/workflow</li>
                         <li>POST /workflows (initialize)</li>
                         <li>PUT /disputes/:id/workflow</li>
@@ -369,8 +369,8 @@ export default function WorkflowDemoPage() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Progress & Notifications:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                      <h4 className='font-semibold mb-2'>Progress & Notifications:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>GET /disputes/:id/progress</li>
                         <li>PUT /disputes/:id/progress</li>
                         <li>POST /disputes/:id/milestones</li>
@@ -381,11 +381,11 @@ export default function WorkflowDemoPage() {
                   </div>
                 </TabsContent>
                 
-                <TabsContent value="database" className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TabsContent value='database' className='space-y-4'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <div>
-                      <h4 className="font-semibold mb-2">Core Tables:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                      <h4 className='font-semibold mb-2'>Core Tables:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>✅ workflow_stages</li>
                         <li>✅ workflow_progress</li>
                         <li>✅ workflow_notifications</li>
@@ -397,8 +397,8 @@ export default function WorkflowDemoPage() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Features:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                      <h4 className='font-semibold mb-2'>Features:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>✅ Row Level Security (RLS)</li>
                         <li>✅ Automatic triggers</li>
                         <li>✅ Performance indexes</li>
@@ -411,11 +411,11 @@ export default function WorkflowDemoPage() {
                   </div>
                 </TabsContent>
                 
-                <TabsContent value="features" className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TabsContent value='features' className='space-y-4'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <div>
-                      <h4 className="font-semibold mb-2">✅ All Acceptance Criteria Met:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                      <h4 className='font-semibold mb-2'>✅ All Acceptance Criteria Met:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>✅ Workflow Stages (7 stages defined)</li>
                         <li>✅ Progress Tracking (milestones)</li>
                         <li>✅ Automated Notifications (4 channels)</li>
@@ -431,8 +431,8 @@ export default function WorkflowDemoPage() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">✅ Technical Implementation:</h4>
-                      <ul className="text-sm space-y-1 text-gray-600">
+                      <h4 className='font-semibold mb-2'>✅ Technical Implementation:</h4>
+                      <ul className='text-sm space-y-1 text-gray-600'>
                         <li>✅ TypeScript interfaces (50+ types)</li>
                         <li>✅ React hooks (custom logic)</li>
                         <li>✅ Responsive design (mobile-first)</li>

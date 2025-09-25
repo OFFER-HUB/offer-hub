@@ -1,6 +1,6 @@
-import type { AxiosError } from "axios"
-import type { WalletError } from "@/types/errors.entity"
-import axios from "axios"
+import type { AxiosError } from 'axios'
+import type { WalletError } from '@/types/errors.entity'
+import axios from 'axios'
 
 interface MappedError {
   message: string
@@ -22,17 +22,17 @@ export function handleError(error: AxiosError | WalletError | Error | unknown): 
     const responseData = axiosError.response?.data as ApiResponseData
     
     return {
-      message: responseData?.message || responseData?.error || axiosError.message || "Network error occurred",
+      message: responseData?.message || responseData?.error || axiosError.message || 'Network error occurred',
       code: statusCode?.toString() || axiosError.code,
       originalError: axiosError,
     }
   }
   
   // Handle wallet errors
-  if ((error as WalletError)?.type === "wallet_error") {
+  if ((error as WalletError)?.type === 'wallet_error') {
     const walletError = error as WalletError
     return {
-      message: walletError.message || "Wallet operation failed",
+      message: walletError.message || 'Wallet operation failed',
       code: walletError.code,
       originalError: walletError,
     }
@@ -41,14 +41,14 @@ export function handleError(error: AxiosError | WalletError | Error | unknown): 
   // Handle standard errors
   if (error instanceof Error) {
     return {
-      message: error.message || "An error occurred",
+      message: error.message || 'An error occurred',
       originalError: error,
     }
   }
   
   // Handle unknown errors
   return {
-    message: "An unknown error occurred",
+    message: 'An unknown error occurred',
     originalError: error,
   }
 }

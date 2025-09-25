@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import TalentLayout from "@/components/talent/TalentLayout";
+import TalentLayout from '@/components/talent/TalentLayout';
 
 interface PortfolioPageProps {
   params: Promise<{

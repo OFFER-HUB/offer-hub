@@ -3,7 +3,7 @@
  * Provides utility functions for administrative API operations, validation, and formatting
  */
 
-import { AdminApiKey, Webhook, IntegrationInstance, AdminApiMetrics, AdminSystemHealth } from "@/types/admin-integration.types";
+import { AdminApiKey, Webhook, IntegrationInstance, AdminApiMetrics, AdminSystemHealth } from '@/types/admin-integration.types';
 
 // ============================================================================
 // API KEY UTILITIES
@@ -13,7 +13,7 @@ import { AdminApiKey, Webhook, IntegrationInstance, AdminApiMetrics, AdminSystem
  * Generate a secure API key
  */
 export function generateApiKey(): string {
-  const prefix = "oh_admin_";
+  const prefix = 'oh_admin_';
   const randomBytes = crypto.getRandomValues(new Uint8Array(32));
   const key = Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
   return `${prefix}${key}`;
@@ -23,7 +23,7 @@ export function generateApiKey(): string {
  * Mask API key for display (show only first 8 and last 4 characters)
  */
 export function maskApiKey(apiKey: string): string {
-  if (apiKey.length <= 12) return "••••••••••••";
+  if (apiKey.length <= 12) return '••••••••••••';
   return `${apiKey.substring(0, 8)}••••${apiKey.substring(apiKey.length - 4)}`;
 }
 
@@ -46,10 +46,10 @@ export function isApiKeyExpired(apiKey: AdminApiKey): boolean {
 /**
  * Get API key status
  */
-export function getApiKeyStatus(apiKey: AdminApiKey): "active" | "inactive" | "expired" {
-  if (!apiKey.is_active) return "inactive";
-  if (isApiKeyExpired(apiKey)) return "expired";
-  return "active";
+export function getApiKeyStatus(apiKey: AdminApiKey): 'active' | 'inactive' | 'expired' {
+  if (!apiKey.is_active) return 'inactive';
+  if (isApiKeyExpired(apiKey)) return 'expired';
+  return 'active';
 }
 
 /**
@@ -57,7 +57,7 @@ export function getApiKeyStatus(apiKey: AdminApiKey): "active" | "inactive" | "e
  */
 export function formatApiKeyPermissions(permissions: any[]): string[] {
   return permissions.map(permission => {
-    const actions = permission.actions.join(", ");
+    const actions = permission.actions.join(', ');
     return `${permission.resource}: ${actions}`;
   });
 }
@@ -119,11 +119,11 @@ export function isWebhookHealthy(webhook: Webhook): boolean {
 /**
  * Get webhook health status
  */
-export function getWebhookHealthStatus(webhook: Webhook): "healthy" | "degraded" | "failed" {
-  if (!webhook.is_active) return "failed";
-  if (webhook.failure_count === 0) return "healthy";
-  if (webhook.failure_count < 5) return "degraded";
-  return "failed";
+export function getWebhookHealthStatus(webhook: Webhook): 'healthy' | 'degraded' | 'failed' {
+  if (!webhook.is_active) return 'failed';
+  if (webhook.failure_count === 0) return 'healthy';
+  if (webhook.failure_count < 5) return 'degraded';
+  return 'failed';
 }
 
 /**
@@ -163,15 +163,15 @@ export function validateIntegrationConfig(config: any, schema: any): { isValid: 
   Object.entries(schema).forEach(([key, fieldSchema]: [string, any]) => {
     const value = config[key];
     
-    if (fieldSchema.required && (!value || value === "")) {
+    if (fieldSchema.required && (!value || value === '')) {
       errors.push(`${key} is required`);
     }
     
-    if (value && fieldSchema.type === "number" && isNaN(Number(value))) {
+    if (value && fieldSchema.type === 'number' && isNaN(Number(value))) {
       errors.push(`${key} must be a number`);
     }
     
-    if (value && fieldSchema.type === "boolean" && typeof value !== "boolean") {
+    if (value && fieldSchema.type === 'boolean' && typeof value !== 'boolean') {
       errors.push(`${key} must be a boolean`);
     }
   });
@@ -208,12 +208,12 @@ export function decryptCredentials(encryptedCredentials: string): any {
  */
 export function getIntegrationProviderIcon(type: string): string {
   const icons: Record<string, string> = {
-    webhook: "zap",
-    api: "database",
-    sdk: "settings",
-    plugin: "plug",
+    webhook: 'zap',
+    api: 'database',
+    sdk: 'settings',
+    plugin: 'plug',
   };
-  return icons[type] || "cloud";
+  return icons[type] || 'cloud';
 }
 
 /**
@@ -221,12 +221,12 @@ export function getIntegrationProviderIcon(type: string): string {
  */
 export function getIntegrationProviderColor(type: string): string {
   const colors: Record<string, string> = {
-    webhook: "blue",
-    api: "green",
-    sdk: "purple",
-    plugin: "orange",
+    webhook: 'blue',
+    api: 'green',
+    sdk: 'purple',
+    plugin: 'orange',
   };
-  return colors[type] || "gray";
+  return colors[type] || 'gray';
 }
 
 // ============================================================================
@@ -244,11 +244,11 @@ export function formatApiMetrics(metrics: AdminApiMetrics): {
 } {
   const successRate = metrics.total_requests > 0 
     ? ((metrics.successful_requests / metrics.total_requests) * 100).toFixed(1)
-    : "0.0";
+    : '0.0';
     
   const errorRate = metrics.total_requests > 0
     ? ((metrics.failed_requests / metrics.total_requests) * 100).toFixed(1)
-    : "0.0";
+    : '0.0';
 
   return {
     totalRequests: metrics.total_requests.toLocaleString(),
@@ -263,11 +263,11 @@ export function formatApiMetrics(metrics: AdminApiMetrics): {
  */
 export function getSystemHealthStatusColor(status: string): string {
   const colors: Record<string, string> = {
-    healthy: "green",
-    degraded: "yellow",
-    critical: "red",
+    healthy: 'green',
+    degraded: 'yellow',
+    critical: 'red',
   };
-  return colors[status] || "gray";
+  return colors[status] || 'gray';
 }
 
 /**
@@ -286,10 +286,10 @@ export function formatSystemHealthMetrics(health: AdminSystemHealth): {
   }));
 
   const metrics = [
-    { name: "CPU Usage", value: health.metrics.cpu_usage.toFixed(1), unit: "%" },
-    { name: "Memory Usage", value: health.metrics.memory_usage.toFixed(1), unit: "%" },
-    { name: "Disk Usage", value: health.metrics.disk_usage.toFixed(1), unit: "%" },
-    { name: "Active Connections", value: health.metrics.active_connections.toString(), unit: "" },
+    { name: 'CPU Usage', value: health.metrics.cpu_usage.toFixed(1), unit: '%' },
+    { name: 'Memory Usage', value: health.metrics.memory_usage.toFixed(1), unit: '%' },
+    { name: 'Disk Usage', value: health.metrics.disk_usage.toFixed(1), unit: '%' },
+    { name: 'Active Connections', value: health.metrics.active_connections.toString(), unit: '' },
   ];
 
   return {
@@ -310,14 +310,14 @@ export function formatSystemHealthMetrics(health: AdminSystemHealth): {
 export function formatDate(dateString: string, options?: Intl.DateTimeFormatOptions): string {
   const date = new Date(dateString);
   const defaultOptions: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   };
 
-  return date.toLocaleString("en-US", { ...defaultOptions, ...options });
+  return date.toLocaleString('en-US', { ...defaultOptions, ...options });
 }
 
 /**
@@ -328,7 +328,7 @@ export function getRelativeTime(dateString: string): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-  if (diffInSeconds < 60) return "Just now";
+  if (diffInSeconds < 60) return 'Just now';
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
   if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
@@ -378,7 +378,7 @@ export function validateJson(jsonString: string): { isValid: boolean; data?: any
     const data = JSON.parse(jsonString);
     return { isValid: true, data };
   } catch (error) {
-    return { isValid: false, error: error instanceof Error ? error.message : "Invalid JSON" };
+    return { isValid: false, error: error instanceof Error ? error.message : 'Invalid JSON' };
   }
 }
 
@@ -387,8 +387,8 @@ export function validateJson(jsonString: string): { isValid: boolean; data?: any
  */
 export function sanitizeInput(input: string): string {
   return input
-    .replace(/[<>]/g, "") // Remove potential HTML tags
-    .replace(/['"]/g, "") // Remove quotes
+    .replace(/[<>]/g, '') // Remove potential HTML tags
+    .replace(/['"]/g, '') // Remove quotes
     .trim();
 }
 
@@ -407,13 +407,13 @@ export function calculateRateLimitUsage(current: number, limit: number): number 
 /**
  * Get rate limit status
  */
-export function getRateLimitStatus(current: number, limit: number): "low" | "medium" | "high" | "exceeded" {
+export function getRateLimitStatus(current: number, limit: number): 'low' | 'medium' | 'high' | 'exceeded' {
   const usage = calculateRateLimitUsage(current, limit);
   
-  if (usage >= 100) return "exceeded";
-  if (usage >= 80) return "high";
-  if (usage >= 50) return "medium";
-  return "low";
+  if (usage >= 100) return 'exceeded';
+  if (usage >= 80) return 'high';
+  if (usage >= 50) return 'medium';
+  return 'low';
 }
 
 /**
@@ -431,23 +431,23 @@ export function formatRateLimit(current: number, limit: number): string {
  * Extract error message from API response
  */
 export function extractErrorMessage(error: any): string {
-  if (typeof error === "string") return error;
+  if (typeof error === 'string') return error;
   if (error?.message) return error.message;
   if (error?.error?.message) return error.error.message;
   if (error?.response?.data?.message) return error.response.data.message;
-  return "An unknown error occurred";
+  return 'An unknown error occurred';
 }
 
 /**
  * Get error severity level
  */
-export function getErrorSeverity(error: any): "low" | "medium" | "high" | "critical" {
+export function getErrorSeverity(error: any): 'low' | 'medium' | 'high' | 'critical' {
   const message = extractErrorMessage(error).toLowerCase();
   
-  if (message.includes("critical") || message.includes("fatal")) return "critical";
-  if (message.includes("error") || message.includes("failed")) return "high";
-  if (message.includes("warning") || message.includes("caution")) return "medium";
-  return "low";
+  if (message.includes('critical') || message.includes('fatal')) return 'critical';
+  if (message.includes('error') || message.includes('failed')) return 'high';
+  if (message.includes('warning') || message.includes('caution')) return 'medium';
+  return 'low';
 }
 
 /**
@@ -455,7 +455,7 @@ export function getErrorSeverity(error: any): "low" | "medium" | "high" | "criti
  */
 export function formatError(error: any): {
   message: string;
-  severity: "low" | "medium" | "high" | "critical";
+  severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: string;
 } {
   return {
@@ -478,10 +478,10 @@ export function exportAsJson(data: any, filename: string): void {
     return;
   }
   const jsonString = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonString], { type: "application/json" });
+  const blob = new Blob([jsonString], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = url;
   link.download = `${filename}.json`;
   document.body.appendChild(link);
@@ -508,10 +508,10 @@ export function exportAsCsv(data: any[], filename: string): void {
     ...data.map(row => headers.map(h => `"${escapeCell(row[h])}"`).join(',')),
   ].join('\n');
 
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = url;
   link.download = `${filename}.csv`;
   document.body.appendChild(link);
@@ -533,20 +533,20 @@ export function generateNotificationMessage(
   resource: string,
   success: boolean
 ): string {
-  const action = success ? "successfully" : "failed to";
+  const action = success ? 'successfully' : 'failed to';
   return `${operation} ${resource} ${action}`;
 }
 
 /**
  * Get notification type based on operation
  */
-export function getNotificationType(operation: string): "info" | "success" | "warning" | "error" {
+export function getNotificationType(operation: string): 'info' | 'success' | 'warning' | 'error' {
   const operationLower = operation.toLowerCase();
   
-  if (operationLower.includes("create") || operationLower.includes("add")) return "success";
-  if (operationLower.includes("update") || operationLower.includes("modify")) return "info";
-  if (operationLower.includes("delete") || operationLower.includes("remove")) return "warning";
-  if (operationLower.includes("error") || operationLower.includes("fail")) return "error";
+  if (operationLower.includes('create') || operationLower.includes('add')) return 'success';
+  if (operationLower.includes('update') || operationLower.includes('modify')) return 'info';
+  if (operationLower.includes('delete') || operationLower.includes('remove')) return 'warning';
+  if (operationLower.includes('error') || operationLower.includes('fail')) return 'error';
   
-  return "info";
+  return 'info';
 }

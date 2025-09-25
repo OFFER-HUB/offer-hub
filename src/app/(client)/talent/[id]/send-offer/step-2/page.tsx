@@ -1,4 +1,4 @@
-import Step2PageClient from "./Step2PageClient";
+import Step2PageClient from './Step2PageClient';
 
 interface Step2PageProps {
   params: Promise<{

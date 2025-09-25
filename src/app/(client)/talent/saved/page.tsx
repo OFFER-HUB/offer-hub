@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Header from '@/components/client-dashboard/Header'
 import { ClientSidebar } from '@/components/client-dashboard/Sidebar'
@@ -133,13 +133,13 @@ const SavedTalentsPage = () => {
                   onClick={openFilter}
                   className='bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 px-4'
                 >
-                  <Filter className="w-5 h-5" />
+                  <Filter className='w-5 h-5' />
                   Filter
                 </Button>
                 <div className='flex-1'>
                   <SearchBar 
                     onSearch={handleSearch}
-                    placeholder="Search saved talents"
+                    placeholder='Search saved talents'
                   />
                 </div>
               </div>
@@ -171,7 +171,7 @@ const SavedTalentsPage = () => {
                   ))
                 ) : savedTalents.length === 0 ? (
                   <div className='text-center py-12'>
-                    <Heart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                    <Heart className='w-16 h-16 mx-auto text-gray-300 mb-4' />
                     <p className='text-gray-500 text-lg mb-2'>No saved talents yet</p>
                     <p className='text-gray-400 text-sm'>Start exploring talents and save your favorites to see them here</p>
                   </div>

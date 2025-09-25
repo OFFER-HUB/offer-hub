@@ -1,27 +1,27 @@
-"use client";
-import React, { useRef, useState } from "react";
-import { useAvatarUpload } from "../../hooks/use-avatar-upload";
-import AvatarCropper from "./avatar-cropper";
-import Modal from "../ui/Modal";
-import { getCroppedImg } from "../../utils/crop-utils";
-import AvatarPreview from "./avatar-preview";
-import { AvatarError, AvatarCropData } from "../../types/avatar.types";
+'use client';
+import React, { useRef, useState } from 'react';
+import { useAvatarUpload } from '../../hooks/use-avatar-upload';
+import AvatarCropper from './avatar-cropper';
+import Modal from '../ui/Modal';
+import { getCroppedImg } from '../../utils/crop-utils';
+import AvatarPreview from './avatar-preview';
+import { AvatarError, AvatarCropData } from '../../types/avatar.types';
 
 const fallbackColors = [
-  "bg-blue-500",
-  "bg-green-500",
-  "bg-red-500",
-  "bg-yellow-500",
-  "bg-purple-500",
-  "bg-pink-500",
-  "bg-indigo-500",
+  'bg-blue-500',
+  'bg-green-500',
+  'bg-red-500',
+  'bg-yellow-500',
+  'bg-purple-500',
+  'bg-pink-500',
+  'bg-indigo-500',
 ];
 
 function getInitials(name: string) {
   return name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
-    .join("")
+    .join('')
     .toUpperCase();
 }
 
@@ -31,7 +31,7 @@ interface AvatarUploadProps {
 }
 
 export default function AvatarUpload({
-  userName = "User",
+  userName = 'User',
   onUpload,
 }: AvatarUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -111,12 +111,12 @@ export default function AvatarUpload({
     fallbackColors[userName.charCodeAt(0) % fallbackColors.length];
 
   return (
-    <div className="flex flex-col items-center w-full max-w-md mx-auto">
+    <div className='flex flex-col items-center w-full max-w-md mx-auto'>
       <div
         className={`w-40 h-40 rounded-full border-4 border-dashed flex items-center justify-center cursor-pointer transition-colors duration-200 ${
           dragActive
-            ? "border-blue-400 bg-blue-50"
-            : "border-gray-300 bg-gray-100"
+            ? 'border-blue-400 bg-blue-50'
+            : 'border-gray-300 bg-gray-100'
         }`}
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => {
@@ -135,7 +135,7 @@ export default function AvatarUpload({
           <div
             className={`w-full h-full flex items-center justify-center rounded-full ${fallbackColor}`}
           >
-            <span className="text-4xl text-white font-bold">
+            <span className='text-4xl text-white font-bold'>
               {getInitials(userName)}
             </span>
           </div>
@@ -143,29 +143,29 @@ export default function AvatarUpload({
       </div>
       <input
         ref={inputRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp,image/svg+xml"
-        className="hidden"
+        type='file'
+        accept='image/png,image/jpeg,image/webp,image/svg+xml'
+        className='hidden'
         onChange={handleChange}
       />
       {uploading && (
-        <div className="w-full mt-2">
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className='w-full mt-2'>
+          <div className='h-2 bg-gray-200 rounded-full overflow-hidden'>
             <div
-              className="h-full bg-blue-500 transition-all"
+              className='h-full bg-blue-500 transition-all'
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="text-xs text-gray-500 mt-1">
-            {progress < 100 ? `Uploading... ${progress}%` : "Uploading... 100%"}
+          <div className='text-xs text-gray-500 mt-1'>
+            {progress < 100 ? `Uploading... ${progress}%` : 'Uploading... 100%'}
           </div>
         </div>
       )}
       {showUploaded && (
-        <div className="text-green-600 mt-2 text-sm font-semibold">uploaded</div>
+        <div className='text-green-600 mt-2 text-sm font-semibold'>uploaded</div>
       )}
       {error && (
-        <div className="text-red-500 mt-2 text-sm">
+        <div className='text-red-500 mt-2 text-sm'>
           {(error as AvatarError).message}
         </div>
       )}
@@ -174,14 +174,14 @@ export default function AvatarUpload({
       {showCropModal && cropImage && (
         <Modal>
           <div
-            className="p-8 bg-white rounded shadow-lg w-full max-w-2xl flex flex-col items-center"
+            className='p-8 bg-white rounded shadow-lg w-full max-w-2xl flex flex-col items-center'
             style={{ minWidth: 480, minHeight: 600 }}
           >
-            <h2 className="text-2xl font-semibold mb-6 w-full text-center">
+            <h2 className='text-2xl font-semibold mb-6 w-full text-center'>
               Crop your avatar
             </h2>
-            <div className="w-full flex flex-col items-center">
-              <div className="relative w-[400px] h-[400px] bg-black/80 rounded mb-8 flex items-center justify-center">
+            <div className='w-full flex flex-col items-center'>
+              <div className='relative w-[400px] h-[400px] bg-black/80 rounded mb-8 flex items-center justify-center'>
                 <AvatarCropper
                   image={cropImage}
                   crop={crop}
@@ -194,23 +194,23 @@ export default function AvatarUpload({
                   onCropComplete={handleCropComplete}
                 />
               </div>
-              <div className="w-full max-w-[400px] mb-4">
-                <label className="flex items-center justify-between text-sm text-gray-600 mb-2">
+              <div className='w-full max-w-[400px] mb-4'>
+                <label className='flex items-center justify-between text-sm text-gray-600 mb-2'>
                   <span>Zoom</span>
-                  <span className="ml-2 text-xs text-gray-500">{Math.round(zoom * 100)}%</span>
+                  <span className='ml-2 text-xs text-gray-500'>{Math.round(zoom * 100)}%</span>
                 </label>
                 <input
-                  type="range"
+                  type='range'
                   min={1}
                   max={3}
                   step={0.01}
                   value={zoom}
                   onChange={(e) => setZoom(Number(e.target.value))}
-                  className="w-full"
+                  className='w-full'
                 />
               </div>
               <button
-                className="w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-lg font-semibold"
+                className='w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-lg font-semibold'
                 style={{ maxWidth: 350 }}
                 onClick={async () => {
                   if (!croppedAreaPixels || !cropImage) return;
@@ -221,7 +221,7 @@ export default function AvatarUpload({
                   );
                   const croppedFile = new File(
                     [croppedBlob],
-                    "avatar-cropped.png",
+                    'avatar-cropped.png',
                     { type: croppedBlob.type }
                   );
                   confirmCrop(croppedFile);

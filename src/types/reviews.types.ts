@@ -1,7 +1,7 @@
 import {
   Review as BaseReview,
   CreateReviewDTO as BaseCreateReviewDTO,
-} from "@/types/review.types";
+} from '@/types/review.types';
 
 /**
  * Enhanced Review with extended properties for the management system.
@@ -130,27 +130,27 @@ export interface ReviewErrorState {
 /**
  * Supported export formats for review data.
  */
-export type ExportFormat = "csv" | "json" | "pdf";
+export type ExportFormat = 'csv' | 'json' | 'pdf';
 
 /**
  * Available fields for sorting reviews.
  */
 export type ReviewSortField =
-  | "rating"
-  | "created_at"
-  | "project_title"
-  | "project_value";
+  | 'rating'
+  | 'created_at'
+  | 'project_title'
+  | 'project_value';
 
 /**
  * Sort direction options.
  */
-export type SortDirection = "asc" | "desc";
+export type SortDirection = 'asc' | 'desc';
 
 /**
  * Event structure for review mutations across tabs.
  */
 export interface ReviewMutationEvent {
-  type: "create" | "update" | "delete";
+  type: 'create' | 'update' | 'delete';
   payload: Review;
   timestamp: number;
 }
@@ -159,10 +159,10 @@ export interface ReviewMutationEvent {
  * Key structure for review cache entries.
  */
 export type ReviewQueryKey =
-  | ["review", string] // single review by id
-  | ["reviews", string] // reviews by user id
-  | ["reviews", string, ReviewFilterOptions] // filtered reviews
-  | ["reviews", string, ReviewFilterOptions, PaginationOptions]; // paginated filtered reviews
+  | ['review', string] // single review by id
+  | ['reviews', string] // reviews by user id
+  | ['reviews', string, ReviewFilterOptions] // filtered reviews
+  | ['reviews', string, ReviewFilterOptions, PaginationOptions]; // paginated filtered reviews
 
 /**
  * Search result with relevance scoring.

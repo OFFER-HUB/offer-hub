@@ -1,7 +1,7 @@
-import React from "react"
-import { Document, Page, Text, View, pdf, StyleSheet } from "@react-pdf/renderer"
-import type { InvoiceAnalytics, Invoice } from "@/types/invoice.types"
-import { formatCurrency, formatDate } from "@/utils/invoice-helpers"
+import React from 'react'
+import { Document, Page, Text, View, pdf, StyleSheet } from '@react-pdf/renderer'
+import type { InvoiceAnalytics, Invoice } from '@/types/invoice.types'
+import { formatCurrency, formatDate } from '@/utils/invoice-helpers'
 
 // PDF Styles for analytics
 const analyticsStyles = StyleSheet.create({
@@ -186,13 +186,13 @@ export async function generateAnalyticsPDF(data: AnalyticsPDFData): Promise<Blob
       null,
       React.createElement(
         Page,
-        { size: "A4", style: analyticsStyles.page },
+        { size: 'A4', style: analyticsStyles.page },
 
         // Header
         React.createElement(
           View,
           { style: analyticsStyles.header },
-          React.createElement(Text, { style: analyticsStyles.title }, "Invoice Analytics Report"),
+          React.createElement(Text, { style: analyticsStyles.title }, 'Invoice Analytics Report'),
           React.createElement(
             Text,
             { style: analyticsStyles.subtitle },
@@ -204,37 +204,37 @@ export async function generateAnalyticsPDF(data: AnalyticsPDFData): Promise<Blob
         React.createElement(
           View,
           { style: analyticsStyles.section },
-          React.createElement(Text, { style: analyticsStyles.sectionTitle }, "Overview"),
+          React.createElement(Text, { style: analyticsStyles.sectionTitle }, 'Overview'),
           React.createElement(
             View,
             { style: analyticsStyles.summaryGrid },
             React.createElement(
               View,
               { style: analyticsStyles.summaryCard },
-              React.createElement(Text, { style: analyticsStyles.cardTitle }, "TOTAL REVENUE"),
+              React.createElement(Text, { style: analyticsStyles.cardTitle }, 'TOTAL REVENUE'),
               React.createElement(Text, { style: analyticsStyles.cardValue }, formatCurrency(analytics.totalRevenue)),
-              React.createElement(Text, { style: analyticsStyles.cardDescription }, "All paid invoices"),
+              React.createElement(Text, { style: analyticsStyles.cardDescription }, 'All paid invoices'),
             ),
             React.createElement(
               View,
               { style: analyticsStyles.summaryCard },
-              React.createElement(Text, { style: analyticsStyles.cardTitle }, "TOTAL INVOICES"),
+              React.createElement(Text, { style: analyticsStyles.cardTitle }, 'TOTAL INVOICES'),
               React.createElement(Text, { style: analyticsStyles.cardValue }, analytics.totalInvoices.toString()),
-              React.createElement(Text, { style: analyticsStyles.cardDescription }, "All created invoices"),
+              React.createElement(Text, { style: analyticsStyles.cardDescription }, 'All created invoices'),
             ),
             React.createElement(
               View,
               { style: analyticsStyles.summaryCard },
-              React.createElement(Text, { style: analyticsStyles.cardTitle }, "PAYMENT RATE"),
+              React.createElement(Text, { style: analyticsStyles.cardTitle }, 'PAYMENT RATE'),
               React.createElement(Text, { style: analyticsStyles.cardValue }, `${analytics.paymentRate.toFixed(1)}%`),
-              React.createElement(Text, { style: analyticsStyles.cardDescription }, "Invoices paid on time"),
+              React.createElement(Text, { style: analyticsStyles.cardDescription }, 'Invoices paid on time'),
             ),
             React.createElement(
               View,
               { style: analyticsStyles.summaryCard },
-              React.createElement(Text, { style: analyticsStyles.cardTitle }, "AVG PAYMENT TIME"),
+              React.createElement(Text, { style: analyticsStyles.cardTitle }, 'AVG PAYMENT TIME'),
               React.createElement(Text, { style: analyticsStyles.cardValue }, `${analytics.averagePaymentTime} days`),
-              React.createElement(Text, { style: analyticsStyles.cardDescription }, "Average time to payment"),
+              React.createElement(Text, { style: analyticsStyles.cardDescription }, 'Average time to payment'),
             ),
           ),
         ),
@@ -243,14 +243,14 @@ export async function generateAnalyticsPDF(data: AnalyticsPDFData): Promise<Blob
         React.createElement(
           View,
           { style: analyticsStyles.section },
-          React.createElement(Text, { style: analyticsStyles.sectionTitle }, "Invoice Status Distribution"),
+          React.createElement(Text, { style: analyticsStyles.sectionTitle }, 'Invoice Status Distribution'),
           React.createElement(
             View,
             { style: analyticsStyles.tableHeader },
-            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.statusCell] }, "Status"),
-            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.countCell] }, "Count"),
-            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.percentageCell] }, "Percentage"),
-            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.revenueCell] }, "Revenue"),
+            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.statusCell] }, 'Status'),
+            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.countCell] }, 'Count'),
+            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.percentageCell] }, 'Percentage'),
+            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.revenueCell] }, 'Revenue'),
           ),
           ...statusWithPercentages.map((status, index) =>
             React.createElement(
@@ -284,12 +284,12 @@ export async function generateAnalyticsPDF(data: AnalyticsPDFData): Promise<Blob
         topCustomers.length > 0 && React.createElement(
           View,
           { style: analyticsStyles.section },
-          React.createElement(Text, { style: analyticsStyles.sectionTitle }, "Top Customers"),
+          React.createElement(Text, { style: analyticsStyles.sectionTitle }, 'Top Customers'),
           React.createElement(
             View,
             { style: analyticsStyles.tableHeader },
-            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.customerNameCell] }, "Customer"),
-            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.customerRevenueCell] }, "Revenue"),
+            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.customerNameCell] }, 'Customer'),
+            React.createElement(Text, { style: [analyticsStyles.tableHeaderText, analyticsStyles.customerRevenueCell] }, 'Revenue'),
           ),
           ...topCustomers.slice(0, 10).map((customer, index) =>
             React.createElement(
@@ -313,7 +313,7 @@ export async function generateAnalyticsPDF(data: AnalyticsPDFData): Promise<Blob
         analytics.monthlyRevenue && analytics.monthlyRevenue.length > 0 && React.createElement(
           View,
           { style: analyticsStyles.section },
-          React.createElement(Text, { style: analyticsStyles.sectionTitle }, "Monthly Revenue Trend"),
+          React.createElement(Text, { style: analyticsStyles.sectionTitle }, 'Monthly Revenue Trend'),
           ...analytics.monthlyRevenue.slice(-12).map((month, index) =>
             React.createElement(
               View,

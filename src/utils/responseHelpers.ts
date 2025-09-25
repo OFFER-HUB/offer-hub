@@ -391,24 +391,24 @@ export const canUserModerate = (userRole?: string): boolean => {
 export const getResponseTemplates = (reviewRating: number): string[] => {
   const templates = {
     5: [
-      "Thank you so much for the 5-star review! I'm thrilled that you were completely satisfied with the project. It was a pleasure working with you, and I look forward to future collaborations.",
-      "I really appreciate the excellent rating! Your clear communication and feedback throughout the project made it a great experience. Thank you for choosing me for this work."
+      'Thank you so much for the 5-star review! I\'m thrilled that you were completely satisfied with the project. It was a pleasure working with you, and I look forward to future collaborations.',
+      'I really appreciate the excellent rating! Your clear communication and feedback throughout the project made it a great experience. Thank you for choosing me for this work.'
     ],
     4: [
-      "Thank you for the positive review! I'm glad you were satisfied with the project. I'll continue to work on improving my services based on your feedback.",
-      "I appreciate the 4-star rating and your constructive feedback. It helps me understand what worked well and where I can improve for future projects."
+      'Thank you for the positive review! I\'m glad you were satisfied with the project. I\'ll continue to work on improving my services based on your feedback.',
+      'I appreciate the 4-star rating and your constructive feedback. It helps me understand what worked well and where I can improve for future projects.'
     ],
     3: [
-      "Thank you for your honest review. I understand your concerns and I'm committed to addressing them. I'll use this feedback to improve my services and ensure better outcomes in future projects.",
-      "I appreciate you taking the time to provide feedback. While I'm disappointed that the project didn't fully meet your expectations, I'm committed to learning from this experience and improving."
+      'Thank you for your honest review. I understand your concerns and I\'m committed to addressing them. I\'ll use this feedback to improve my services and ensure better outcomes in future projects.',
+      'I appreciate you taking the time to provide feedback. While I\'m disappointed that the project didn\'t fully meet your expectations, I\'m committed to learning from this experience and improving.'
     ],
     2: [
-      "Thank you for your honest feedback. I take full responsibility for the issues you've raised and I'm committed to addressing them. I'll use this as a learning opportunity to improve my services.",
-      "I sincerely apologize that the project didn't meet your expectations. Your feedback is valuable and I'm taking steps to improve my processes to prevent similar issues in the future."
+      'Thank you for your honest feedback. I take full responsibility for the issues you\'ve raised and I\'m committed to addressing them. I\'ll use this as a learning opportunity to improve my services.',
+      'I sincerely apologize that the project didn\'t meet your expectations. Your feedback is valuable and I\'m taking steps to improve my processes to prevent similar issues in the future.'
     ],
     1: [
-      "I sincerely apologize for the poor experience you had with this project. I take full responsibility and I'm committed to making significant improvements to my services. Thank you for your honest feedback.",
-      "I'm deeply sorry that the project fell short of your expectations. Your feedback is crucial for my improvement, and I'm taking immediate steps to address the issues you've raised."
+      'I sincerely apologize for the poor experience you had with this project. I take full responsibility and I\'m committed to making significant improvements to my services. Thank you for your honest feedback.',
+      'I\'m deeply sorry that the project fell short of your expectations. Your feedback is crucial for my improvement, and I\'m taking immediate steps to address the issues you\'ve raised.'
     ]
   };
   

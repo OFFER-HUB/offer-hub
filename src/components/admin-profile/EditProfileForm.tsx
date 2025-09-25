@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ChevronLeft } from "lucide-react";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ChevronLeft } from 'lucide-react';
 
 interface EditProfileFormProps {
   user: {
@@ -24,16 +24,16 @@ export default function EditProfileForm({
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    phone: user.phone || "",
+    phone: user.phone || '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validate = () => {
     const errs: { [key: string]: string } = {};
-    if (!formData.firstName) errs.firstName = "First name is required.";
-    if (!formData.lastName) errs.lastName = "Last name is required.";
-    if (!formData.email) errs.email = "Email is required.";
+    if (!formData.firstName) errs.firstName = 'First name is required.';
+    if (!formData.lastName) errs.lastName = 'Last name is required.';
+    if (!formData.email) errs.email = 'Email is required.';
     return errs;
   };
 
@@ -54,103 +54,103 @@ export default function EditProfileForm({
   };
 
   return (
-    <div className="relative h-full w-full">
+    <div className='relative h-full w-full'>
       <Button
-        variant="ghost"
+        variant='ghost'
         onClick={onBack}
-        className="absolute left-4 top-4 flex items-center gap-2 text-gray-600 hover:text-gray-900"
+        className='absolute left-4 top-4 flex items-center gap-2 text-gray-600 hover:text-gray-900'
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className='w-4 h-4' />
         Back
       </Button>
-      <div className="pt-20 pb-6 px-6 h-full overflow-y-auto">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
+      <div className='pt-20 pb-6 px-6 h-full overflow-y-auto'>
+        <div className='max-w-2xl mx-auto'>
+          <div className='bg-white rounded-lg border border-gray-200 p-8'>
+            <h2 className='text-2xl font-semibold text-gray-900 mb-8 text-center'>
               Edit details
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className='space-y-6'>
               <div>
                 <Label
-                  htmlFor="firstName"
-                  className="text-sm font-medium text-gray-700"
+                  htmlFor='firstName'
+                  className='text-sm font-medium text-gray-700'
                 >
                   First Name:
                 </Label>
                 <Input
-                  id="firstName"
-                  type="text"
+                  id='firstName'
+                  type='text'
                   value={formData.firstName}
-                  onChange={(e) => handleChange("firstName", e.target.value)}
-                  className="mt-1 h-12"
+                  onChange={(e) => handleChange('firstName', e.target.value)}
+                  className='mt-1 h-12'
                   required
                 />
                 {errors.firstName && (
-                  <p className="text-red-500 text-xs mt-1">
+                  <p className='text-red-500 text-xs mt-1'>
                     {errors.firstName}
                   </p>
                 )}
               </div>
               <div>
                 <Label
-                  htmlFor="lastName"
-                  className="text-sm font-medium text-gray-700"
+                  htmlFor='lastName'
+                  className='text-sm font-medium text-gray-700'
                 >
                   Last Name:
                 </Label>
                 <Input
-                  id="lastName"
-                  type="text"
+                  id='lastName'
+                  type='text'
                   value={formData.lastName}
-                  onChange={(e) => handleChange("lastName", e.target.value)}
-                  className="mt-1 h-12"
+                  onChange={(e) => handleChange('lastName', e.target.value)}
+                  className='mt-1 h-12'
                   required
                 />
                 {errors.lastName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+                  <p className='text-red-500 text-xs mt-1'>{errors.lastName}</p>
                 )}
               </div>
               <div>
                 <Label
-                  htmlFor="email"
-                  className="text-sm font-medium text-gray-700"
+                  htmlFor='email'
+                  className='text-sm font-medium text-gray-700'
                 >
                   Email Address
                 </Label>
                 <Input
-                  id="email"
-                  type="email"
+                  id='email'
+                  type='email'
                   value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  className="mt-1 h-12"
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  className='mt-1 h-12'
                   required
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                  <p className='text-red-500 text-xs mt-1'>{errors.email}</p>
                 )}
               </div>
               <div>
                 <Label
-                  htmlFor="phone"
-                  className="text-sm font-medium text-gray-700"
+                  htmlFor='phone'
+                  className='text-sm font-medium text-gray-700'
                 >
                   Phone Number:
                 </Label>
                 <Input
-                  id="phone"
-                  type="tel"
+                  id='phone'
+                  type='tel'
                   value={formData.phone}
-                  onChange={(e) => handleChange("phone", e.target.value)}
-                  placeholder="Phone Number"
-                  className="mt-1 h-12"
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  placeholder='Phone Number'
+                  className='mt-1 h-12'
                 />
               </div>
               <Button
-                type="submit"
+                type='submit'
                 disabled={isLoading}
-                className="w-full h-12 bg-[#002333] hover:bg-[#001a26] text-white font-medium rounded-full"
+                className='w-full h-12 bg-[#002333] hover:bg-[#001a26] text-white font-medium rounded-full'
               >
-                {isLoading ? "Saving..." : "Save Changes"}
+                {isLoading ? 'Saving...' : 'Save Changes'}
               </Button>
             </form>
           </div>

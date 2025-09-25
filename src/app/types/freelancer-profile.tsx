@@ -25,7 +25,7 @@ export interface Education {
   description: string
 }
 
-export type LanguageLevel = "Basic" | "Conversational" | "Fluent" | "Native or Bilingual" | "My Level is"
+export type LanguageLevel = 'Basic' | 'Conversational' | 'Fluent' | 'Native or Bilingual' | 'My Level is'
 export interface Language {
   id: string
   name: string
@@ -45,7 +45,7 @@ export interface ProfileDetails {
 
 // Main user data type for the freelancer profile
 export interface UserProfileData {
-  role?: "freelancer" | "client"
+  role?: 'freelancer' | 'client'
   jobCategory?: string
   jobTypes?: string[]
   skills?: string[]

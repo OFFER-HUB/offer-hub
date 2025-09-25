@@ -60,7 +60,7 @@ export interface Invoice {
   milestoneId?: string
 }
 
-export type InvoiceStatus = "draft" | "sent" | "viewed" | "paid" | "overdue" | "cancelled" | "refunded"
+export type InvoiceStatus = 'draft' | 'sent' | 'viewed' | 'paid' | 'overdue' | 'cancelled' | 'refunded'
 
 export interface InvoiceTemplate {
   id: string
@@ -72,7 +72,7 @@ export interface InvoiceTemplate {
     secondary: string
     accent: string
   }
-  layout: "modern" | "classic" | "minimal" | "professional"
+  layout: 'modern' | 'classic' | 'minimal' | 'professional'
   includeCompanyLogo: boolean
   includePaymentTerms: boolean
   includeNotes: boolean
@@ -107,7 +107,7 @@ export interface InvoiceFilters {
 
 export interface CreateInvoiceRequest {
   customerId: string
-  items: Omit<InvoiceItem, "id" | "total">[]
+  items: Omit<InvoiceItem, 'id' | 'total'>[]
   dueDate: Date
   currency: string
   notes?: string
@@ -119,7 +119,7 @@ export interface CreateInvoiceRequest {
 
 export interface UpdateInvoiceRequest {
   status?: InvoiceStatus
-  items?: Omit<InvoiceItem, "id" | "total">[]
+  items?: Omit<InvoiceItem, 'id' | 'total'>[]
   dueDate?: Date
   notes?: string
   terms?: string

@@ -105,9 +105,9 @@ export function DisputeWorkflow({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="flex items-center space-x-2">
-          <RefreshCw className="h-5 w-5 animate-spin" />
+      <div className='flex items-center justify-center p-8'>
+        <div className='flex items-center space-x-2'>
+          <RefreshCw className='h-5 w-5 animate-spin' />
           <span>Loading workflow...</span>
         </div>
       </div>
@@ -116,14 +116,14 @@ export function DisputeWorkflow({
 
   if (error) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6 text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Error Loading Workflow</h3>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={handleRefresh} variant="outline">
-              <RefreshCw className="h-4 w-4 mr-2" />
+      <div className='flex items-center justify-center p-8'>
+        <Card className='w-full max-w-md'>
+          <CardContent className='p-6 text-center'>
+            <AlertCircle className='h-12 w-12 text-red-500 mx-auto mb-4' />
+            <h3 className='text-lg font-semibold mb-2'>Error Loading Workflow</h3>
+            <p className='text-gray-600 mb-4'>{error}</p>
+            <Button onClick={handleRefresh} variant='outline'>
+              <RefreshCw className='h-4 w-4 mr-2' />
               Retry
             </Button>
           </CardContent>
@@ -134,15 +134,15 @@ export function DisputeWorkflow({
 
   if (!workflowState) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6 text-center">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No Workflow Found</h3>
-            <p className="text-gray-600 mb-4">
+      <div className='flex items-center justify-center p-8'>
+        <Card className='w-full max-w-md'>
+          <CardContent className='p-6 text-center'>
+            <FileText className='h-12 w-12 text-gray-400 mx-auto mb-4' />
+            <h3 className='text-lg font-semibold mb-2'>No Workflow Found</h3>
+            <p className='text-gray-600 mb-4'>
               No workflow has been initialized for this dispute.
             </p>
-            <Button onClick={handleRefresh} variant="outline">
+            <Button onClick={handleRefresh} variant='outline'>
               Initialize Workflow
             </Button>
           </CardContent>
@@ -162,38 +162,38 @@ export function DisputeWorkflow({
 
   const getStageIcon = (stage: WorkflowStageName) => {
     switch (stage) {
-      case 'dispute_initiation': return <FileText className="h-4 w-4" />;
-      case 'mediator_assignment': return <Users className="h-4 w-4" />;
-      case 'evidence_collection': return <FileText className="h-4 w-4" />;
-      case 'mediation_process': return <Users className="h-4 w-4" />;
-      case 'resolution_or_escalation': return <AlertCircle className="h-4 w-4" />;
-      case 'arbitration': return <Users className="h-4 w-4" />;
-      case 'resolution_implementation': return <TrendingUp className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+      case 'dispute_initiation': return <FileText className='h-4 w-4' />;
+      case 'mediator_assignment': return <Users className='h-4 w-4' />;
+      case 'evidence_collection': return <FileText className='h-4 w-4' />;
+      case 'mediation_process': return <Users className='h-4 w-4' />;
+      case 'resolution_or_escalation': return <AlertCircle className='h-4 w-4' />;
+      case 'arbitration': return <Users className='h-4 w-4' />;
+      case 'resolution_implementation': return <TrendingUp className='h-4 w-4' />;
+      default: return <FileText className='h-4 w-4' />;
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Dispute Workflow</h2>
-          <p className="text-gray-600">Track and manage dispute resolution progress</p>
+          <h2 className='text-2xl font-bold text-gray-900'>Dispute Workflow</h2>
+          <p className='text-gray-600'>Track and manage dispute resolution progress</p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className='flex items-center space-x-2'>
           <Button
             onClick={handleRefresh}
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             disabled={isRefreshing}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
           {isMobile && (
-            <Badge variant="secondary" className="flex items-center space-x-1">
-              <Smartphone className="h-3 w-3" />
+            <Badge variant='secondary' className='flex items-center space-x-1'>
+              <Smartphone className='h-3 w-3' />
               <span>Mobile</span>
             </Badge>
           )}
@@ -203,7 +203,7 @@ export function DisputeWorkflow({
       {/* Progress Overview */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className='flex items-center justify-between'>
             <span>Overall Progress</span>
             <Badge variant={progressPercentage === 100 ? 'default' : 'secondary'}>
               {progressPercentage}% Complete
@@ -211,18 +211,18 @@ export function DisputeWorkflow({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <Progress value={progressPercentage} className="h-3" />
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4" />
+          <div className='space-y-4'>
+            <Progress value={progressPercentage} className='h-3' />
+            <div className='flex items-center justify-between text-sm text-gray-600'>
+              <div className='flex items-center space-x-2'>
+                <Clock className='h-4 w-4' />
                 <span>
                   Current Stage: {currentStage?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </span>
               </div>
               {nextDeadline && (
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-4 w-4" />
+                <div className='flex items-center space-x-2'>
+                  <Clock className='h-4 w-4' />
                   <span>Next Deadline: {new Date(nextDeadline).toLocaleDateString()}</span>
                 </div>
               )}
@@ -233,35 +233,35 @@ export function DisputeWorkflow({
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="stages">Stages</TabsTrigger>
-          <TabsTrigger value="progress">Progress</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+        <TabsList className='grid w-full grid-cols-2 lg:grid-cols-4'>
+          <TabsTrigger value='overview'>Overview</TabsTrigger>
+          <TabsTrigger value='stages'>Stages</TabsTrigger>
+          <TabsTrigger value='progress'>Progress</TabsTrigger>
+          <TabsTrigger value='notifications'>Notifications</TabsTrigger>
           {showAnalytics && (
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value='analytics'>Analytics</TabsTrigger>
           )}
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <TabsContent value='overview' className='space-y-4'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
             {/* Current Stage Card */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-sm font-medium text-gray-600'>
                   Current Stage
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center space-x-3">
+                <div className='flex items-center space-x-3'>
                   <div className={`p-2 rounded-full ${getStageColor(currentStage!)} text-white`}>
                     {getStageIcon(currentStage!)}
                   </div>
                   <div>
-                    <p className="font-semibold">
+                    <p className='font-semibold'>
                       {currentStage?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className='text-sm text-gray-600'>
                       {workflowState.configuration.stages.find(s => s.stageName === currentStage)?.duration}h duration
                     </p>
                   </div>
@@ -271,37 +271,37 @@ export function DisputeWorkflow({
 
             {/* Progress Card */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-sm font-medium text-gray-600'>
                   Progress
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                <div className='space-y-2'>
+                  <div className='flex justify-between text-sm'>
                     <span>Overall</span>
                     <span>{progressPercentage}%</span>
                   </div>
-                  <Progress value={progressPercentage} className="h-2" />
+                  <Progress value={progressPercentage} className='h-2' />
                 </div>
               </CardContent>
             </Card>
 
             {/* Next Action Card */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">
+              <CardHeader className='pb-3'>
+                <CardTitle className='text-sm font-medium text-gray-600'>
                   Next Action
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium">
+                <div className='space-y-2'>
+                  <p className='text-sm font-medium'>
                     {canAdvanceStage ? 'Ready to advance' : 'Complete current stage'}
                   </p>
                   {canAdvanceStage && (
-                    <Button size="sm" className="w-full">
-                      <ChevronRight className="h-4 w-4 mr-1" />
+                    <Button size='sm' className='w-full'>
+                      <ChevronRight className='h-4 w-4 mr-1' />
                       Advance Stage
                     </Button>
                   )}
@@ -316,17 +316,17 @@ export function DisputeWorkflow({
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm">
-                  <FileText className="h-4 w-4 mr-2" />
+              <div className='flex flex-wrap gap-2'>
+                <Button variant='outline' size='sm'>
+                  <FileText className='h-4 w-4 mr-2' />
                   View Evidence
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Users className="h-4 w-4 mr-2" />
+                <Button variant='outline' size='sm'>
+                  <Users className='h-4 w-4 mr-2' />
                   Contact Mediator
                 </Button>
-                <Button variant="outline" size="sm">
-                  <History className="h-4 w-4 mr-2" />
+                <Button variant='outline' size='sm'>
+                  <History className='h-4 w-4 mr-2' />
                   View History
                 </Button>
               </div>
@@ -334,7 +334,7 @@ export function DisputeWorkflow({
           </Card>
         </TabsContent>
 
-        <TabsContent value="stages">
+        <TabsContent value='stages'>
           <WorkflowStages
             stages={workflowState.configuration.stages.map(stage => ({
               id: stage.stageName,
@@ -357,7 +357,7 @@ export function DisputeWorkflow({
           />
         </TabsContent>
 
-        <TabsContent value="progress">
+        <TabsContent value='progress'>
           <ProgressTracking
             disputeId={disputeId}
             showMilestones={true}
@@ -366,7 +366,7 @@ export function DisputeWorkflow({
           />
         </TabsContent>
 
-        <TabsContent value="notifications">
+        <TabsContent value='notifications'>
           <NotificationCenter
             disputeId={disputeId}
             showAllNotifications={true}
@@ -376,10 +376,10 @@ export function DisputeWorkflow({
         </TabsContent>
 
         {showAnalytics && (
-          <TabsContent value="analytics">
+          <TabsContent value='analytics'>
             <WorkflowAnalytics
               disputeId={disputeId}
-              timeRange="30d"
+              timeRange='30d'
               showDetailedMetrics={true}
               exportable={true}
             />
@@ -390,8 +390,8 @@ export function DisputeWorkflow({
       {/* Deadline Manager - Always visible */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Clock className="h-5 w-5" />
+          <CardTitle className='flex items-center space-x-2'>
+            <Clock className='h-5 w-5' />
             <span>Deadlines & Escalations</span>
           </CardTitle>
         </CardHeader>
@@ -408,8 +408,8 @@ export function DisputeWorkflow({
       {/* Audit Trail - Collapsible */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <History className="h-5 w-5" />
+          <CardTitle className='flex items-center space-x-2'>
+            <History className='h-5 w-5' />
             <span>Audit Trail</span>
           </CardTitle>
         </CardHeader>

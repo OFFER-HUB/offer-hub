@@ -1,11 +1,11 @@
-import { useWalletContext } from "./WalletContext";
+import { useWalletContext } from './WalletContext';
 import {
 	FREIGHTER_ID,
 	LOBSTR_ID,
 	WalletNetwork,
-} from "@creit.tech/stellar-wallets-kit";
-import { useState } from "react";
-import { kit } from "./wallet-kit.constant";
+} from '@creit.tech/stellar-wallets-kit';
+import { useState } from 'react';
+import { kit } from './wallet-kit.constant';
 
 export const useWallet = () => {
 	const walletState = useWalletContext();
@@ -23,19 +23,19 @@ export const useWallet = () => {
 
 			const walletName =
 				walletId === FREIGHTER_ID
-					? "Freighter"
+					? 'Freighter'
 					: walletId === LOBSTR_ID
-						? "LOBSTR"
-						: "Unknown Wallet";
+						? 'LOBSTR'
+						: 'Unknown Wallet';
 
 			walletState.connect(address, walletName);
 
 			return { success: true, address };
 		} catch (error: unknown) {
 			const errorMessage =
-				(error as Error)?.message || "Error connecting wallet";
+				(error as Error)?.message || 'Error connecting wallet';
 			setError(errorMessage);
-			console.error("Error connecting wallet:", error);
+			console.error('Error connecting wallet:', error);
 			return { success: false, error: errorMessage };
 		} finally {
 			setIsConnecting(false);
@@ -50,9 +50,9 @@ export const useWallet = () => {
 			return { success: true };
 		} catch (error: unknown) {
 			const errorMessage =
-				(error as Error)?.message || "Error disconnecting wallet";
+				(error as Error)?.message || 'Error disconnecting wallet';
 			setError(errorMessage);
-			console.error("Error disconnecting wallet:", error);
+			console.error('Error disconnecting wallet:', error);
 			return { success: false, error: errorMessage };
 		}
 	};
@@ -61,7 +61,7 @@ export const useWallet = () => {
 		try {
 			setError(null);
 			if (!walletState.address) {
-				throw new Error("No wallet connected");
+				throw new Error('No wallet connected');
 			}
 
 			const { signedTxXdr } = await kit.signTransaction(xdr, {
@@ -72,9 +72,9 @@ export const useWallet = () => {
 			return { success: true, signedTxXdr };
 		} catch (error: unknown) {
 			const errorMessage =
-				(error as Error)?.message || "Error signing transaction";
+				(error as Error)?.message || 'Error signing transaction';
 			setError(errorMessage);
-			console.error("Error signing transaction:", error);
+			console.error('Error signing transaction:', error);
 			return { success: false, error: errorMessage };
 		}
 	};

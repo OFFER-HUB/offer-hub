@@ -1,10 +1,10 @@
 
-import type React from "react"
+import type React from 'react'
 
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface CustomerInfo {
   name: string
@@ -27,35 +27,35 @@ export function CustomerInfoForm  ({ customerInfo, setCustomerInfo }: CustomerIn
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-[#002333]">Customer Information</CardTitle>
+        <CardTitle className='text-[#002333]'>Customer Information</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <CardContent className='space-y-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           <div>
-            <Label htmlFor="customerName">Customer Name *</Label>
+            <Label htmlFor='customerName'>Customer Name *</Label>
             <Input
-              id="customerName"
+              id='customerName'
               value={customerInfo.name}
               onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
-              placeholder="Enter customer name"
+              placeholder='Enter customer name'
             />
           </div>
           <div>
-            <Label htmlFor="customerEmail">Email Address *</Label>
+            <Label htmlFor='customerEmail'>Email Address *</Label>
             <Input
-              id="customerEmail"
-              type="email"
+              id='customerEmail'
+              type='email'
               value={customerInfo.email}
               onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
-              placeholder="customer@example.com"
+              placeholder='customer@example.com'
             />
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className='space-y-4'>
           <Label>Billing Address</Label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='md:col-span-2'>
               <Input
                 value={customerInfo.address.street}
                 onChange={(e) =>
@@ -64,7 +64,7 @@ export function CustomerInfoForm  ({ customerInfo, setCustomerInfo }: CustomerIn
                     address: { ...customerInfo.address, street: e.target.value },
                   })
                 }
-                placeholder="Street address"
+                placeholder='Street address'
               />
             </div>
             <Input
@@ -75,7 +75,7 @@ export function CustomerInfoForm  ({ customerInfo, setCustomerInfo }: CustomerIn
                   address: { ...customerInfo.address, city: e.target.value },
                 })
               }
-              placeholder="City"
+              placeholder='City'
             />
             <Input
               value={customerInfo.address.state}
@@ -85,7 +85,7 @@ export function CustomerInfoForm  ({ customerInfo, setCustomerInfo }: CustomerIn
                   address: { ...customerInfo.address, state: e.target.value },
                 })
               }
-              placeholder="State"
+              placeholder='State'
             />
             <Input
               value={customerInfo.address.zipCode}
@@ -95,7 +95,7 @@ export function CustomerInfoForm  ({ customerInfo, setCustomerInfo }: CustomerIn
                   address: { ...customerInfo.address, zipCode: e.target.value },
                 })
               }
-              placeholder="ZIP Code"
+              placeholder='ZIP Code'
             />
             <Select
               value={customerInfo.address.country}
@@ -110,11 +110,11 @@ export function CustomerInfoForm  ({ customerInfo, setCustomerInfo }: CustomerIn
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="USA">United States</SelectItem>
-                <SelectItem value="CAN">Canada</SelectItem>
-                <SelectItem value="GBR">United Kingdom</SelectItem>
-                <SelectItem value="AUS">Australia</SelectItem>
-                <SelectItem value="NGN">Nigeria</SelectItem>
+                <SelectItem value='USA'>United States</SelectItem>
+                <SelectItem value='CAN'>Canada</SelectItem>
+                <SelectItem value='GBR'>United Kingdom</SelectItem>
+                <SelectItem value='AUS'>Australia</SelectItem>
+                <SelectItem value='NGN'>Nigeria</SelectItem>
               </SelectContent>
             </Select>
           </div>

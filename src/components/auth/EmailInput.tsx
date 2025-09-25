@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface EmailInputProps {
   value: string;
@@ -15,18 +15,18 @@ export function EmailInput({
   placeholder,
 }: EmailInputProps) {
   return (
-    <div className="w-full">
-      <Label htmlFor="email">Email</Label>
+    <div className='w-full'>
+      <Label htmlFor='email'>Email</Label>
       <Input
-        id="email"
-        type="email"
+        id='email'
+        type='email'
         value={value}
         onChange={onChange}
-        placeholder={placeholder || "olivia@email.com"}
-        autoComplete="email"
-        className={error ? "border-destructive" : ""}
+        placeholder={placeholder || 'olivia@email.com'}
+        autoComplete='email'
+        className={error ? 'border-destructive' : ''}
       />
-      {error && <p className="text-destructive text-xs mt-1">{error}</p>}
+      {error && <p className='text-destructive text-xs mt-1'>{error}</p>}
     </div>
   );
 }

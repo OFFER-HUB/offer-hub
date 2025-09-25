@@ -79,10 +79,10 @@ export function DisputeCreationForm({ onSubmit }: DisputeCreationFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className='space-y-6'>
       {/* Reason for dispute */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-700'>
           Reason for dispute
         </label>
         <DisputeReasonSelector
@@ -93,8 +93,8 @@ export function DisputeCreationForm({ onSubmit }: DisputeCreationFormProps) {
       </div>
 
       {/* Which client do you have dispute with */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-700'>
           Which client do you have dispute with?
         </label>
         <ProjectSelector
@@ -105,54 +105,54 @@ export function DisputeCreationForm({ onSubmit }: DisputeCreationFormProps) {
       </div>
 
       {/* Dispute description */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-700'>
           Dispute description
         </label>
         <Textarea
-          placeholder="Enter a full description of the dispute"
+          placeholder='Enter a full description of the dispute'
           value={formData.description}
           onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
           className={`min-h-[120px] resize-none ${errors.description ? 'border-red-500' : ''}`}
         />
         {errors.description && (
-          <p className="text-sm text-red-500">{errors.description}</p>
+          <p className='text-sm text-red-500'>{errors.description}</p>
         )}
       </div>
 
       {/* Upload evidence */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-700'>
           Upload evidence (Optional)
         </label>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-          <div className="flex flex-col items-center gap-2">
-            <Upload className="h-8 w-8 text-gray-400" />
-            <div className="text-gray-600">
-              <span className="font-medium">Drag your file(s) or </span>
-              <label className="text-blue-600 hover:text-blue-700 cursor-pointer underline">
+        <div className='border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors'>
+          <div className='flex flex-col items-center gap-2'>
+            <Upload className='h-8 w-8 text-gray-400' />
+            <div className='text-gray-600'>
+              <span className='font-medium'>Drag your file(s) or </span>
+              <label className='text-blue-600 hover:text-blue-700 cursor-pointer underline'>
                 browse
                 <input
-                  type="file"
+                  type='file'
                   multiple
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                  accept='.pdf,.doc,.docx,.jpg,.jpeg,.png'
                   onChange={handleFileUpload}
-                  className="hidden"
+                  className='hidden'
                 />
               </label>
             </div>
-            <p className="text-sm text-gray-500">Max 10 MB files are allowed</p>
+            <p className='text-sm text-gray-500'>Max 10 MB files are allowed</p>
           </div>
         </div>
         
         {/* Display uploaded files */}
         {formData.evidence && formData.evidence.length > 0 && (
-          <div className="space-y-2">
+          <div className='space-y-2'>
             {formData.evidence.map((file, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                <Paperclip className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-700">{file.name}</span>
-                <span className="text-xs text-gray-500">
+              <div key={index} className='flex items-center gap-2 p-2 bg-gray-50 rounded'>
+                <Paperclip className='h-4 w-4 text-gray-500' />
+                <span className='text-sm text-gray-700'>{file.name}</span>
+                <span className='text-xs text-gray-500'>
                   ({(file.size / 1024 / 1024).toFixed(2)} MB)
                 </span>
               </div>
@@ -163,9 +163,9 @@ export function DisputeCreationForm({ onSubmit }: DisputeCreationFormProps) {
 
       {/* Submit button */}
       <Button
-        type="submit"
+        type='submit'
         disabled={isSubmitting}
-        className="w-full bg-[#1e293b] hover:bg-[#334155] text-white py-3 rounded-lg font-medium"
+        className='w-full bg-[#1e293b] hover:bg-[#334155] text-white py-3 rounded-lg font-medium'
       >
         {isSubmitting ? 'Submitting...' : 'Submit'}
       </Button>

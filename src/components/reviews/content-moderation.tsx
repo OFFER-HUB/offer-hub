@@ -199,15 +199,15 @@ export default function ContentModeration({
   const getStatusIcon = (status: ModerationStatus) => {
     switch (status) {
       case 'approved':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
+        return <CheckCircle className='w-4 h-4 text-green-600' />;
       case 'rejected':
-        return <XCircle className="w-4 h-4 text-red-600" />;
+        return <XCircle className='w-4 h-4 text-red-600' />;
       case 'flagged':
-        return <Flag className="w-4 h-4 text-orange-600" />;
+        return <Flag className='w-4 h-4 text-orange-600' />;
       case 'escalated':
-        return <TrendingUp className="w-4 h-4 text-purple-600" />;
+        return <TrendingUp className='w-4 h-4 text-purple-600' />;
       default:
-        return <Clock className="w-4 h-4 text-yellow-600" />;
+        return <Clock className='w-4 h-4 text-yellow-600' />;
     }
   };
 
@@ -225,53 +225,53 @@ export default function ContentModeration({
   };
 
   const QueuePanel = () => (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Filters and Actions */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="flex flex-wrap gap-3">
+        <CardContent className='p-4'>
+          <div className='flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between'>
+            <div className='flex flex-wrap gap-3'>
               <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Filter by status" />
+                <SelectTrigger className='w-40'>
+                  <SelectValue placeholder='Filter by status' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="flagged">Flagged</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                  <SelectItem value="escalated">Escalated</SelectItem>
+                  <SelectItem value='all'>All Status</SelectItem>
+                  <SelectItem value='pending'>Pending</SelectItem>
+                  <SelectItem value='flagged'>Flagged</SelectItem>
+                  <SelectItem value='approved'>Approved</SelectItem>
+                  <SelectItem value='rejected'>Rejected</SelectItem>
+                  <SelectItem value='escalated'>Escalated</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={filterPriority} onValueChange={(value: any) => setFilterPriority(value)}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Filter by priority" />
+                <SelectTrigger className='w-40'>
+                  <SelectValue placeholder='Filter by priority' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Priority</SelectItem>
-                  <SelectItem value="urgent">Urgent</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value='all'>All Priority</SelectItem>
+                  <SelectItem value='urgent'>Urgent</SelectItem>
+                  <SelectItem value='high'>High</SelectItem>
+                  <SelectItem value='medium'>Medium</SelectItem>
+                  <SelectItem value='low'>Low</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               {selectedItems.length > 0 && (
                 <>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => handleBulkAction('approve')}
                   >
                     Approve ({selectedItems.length})
                   </Button>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => handleBulkAction('reject')}
                   >
                     Reject ({selectedItems.length})
@@ -279,11 +279,11 @@ export default function ContentModeration({
                 </>
               )}
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => window.location.reload()}
               >
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className='w-4 h-4' />
               </Button>
             </div>
           </div>
@@ -291,59 +291,59 @@ export default function ContentModeration({
       </Card>
 
       {/* Queue Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className='p-4'>
+            <div className='flex items-center justify-between'>
               <div>
-                <p className="text-sm text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">
+                <p className='text-sm text-gray-600'>Pending</p>
+                <p className='text-2xl font-bold text-yellow-600'>
                   {moderationQueue.filter(i => i.status === 'pending').length}
                 </p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-600" />
+              <Clock className='w-8 h-8 text-yellow-600' />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className='p-4'>
+            <div className='flex items-center justify-between'>
               <div>
-                <p className="text-sm text-gray-600">Flagged</p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className='text-sm text-gray-600'>Flagged</p>
+                <p className='text-2xl font-bold text-orange-600'>
                   {moderationQueue.filter(i => i.status === 'flagged').length}
                 </p>
               </div>
-              <Flag className="w-8 h-8 text-orange-600" />
+              <Flag className='w-8 h-8 text-orange-600' />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className='p-4'>
+            <div className='flex items-center justify-between'>
               <div>
-                <p className="text-sm text-gray-600">Approved</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className='text-sm text-gray-600'>Approved</p>
+                <p className='text-2xl font-bold text-green-600'>
                   {moderationQueue.filter(i => i.status === 'approved').length}
                 </p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className='w-8 h-8 text-green-600' />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className='p-4'>
+            <div className='flex items-center justify-between'>
               <div>
-                <p className="text-sm text-gray-600">Rejected</p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className='text-sm text-gray-600'>Rejected</p>
+                <p className='text-2xl font-bold text-red-600'>
                   {moderationQueue.filter(i => i.status === 'rejected').length}
                 </p>
               </div>
-              <XCircle className="w-8 h-8 text-red-600" />
+              <XCircle className='w-8 h-8 text-red-600' />
             </div>
           </CardContent>
         </Card>
@@ -352,19 +352,19 @@ export default function ContentModeration({
       {/* Moderation Queue */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <Shield className='w-5 h-5' />
             Moderation Queue ({filteredQueue.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {filteredQueue.map((item) => (
-              <div key={item.id} className="border rounded-lg p-4 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
+              <div key={item.id} className='border rounded-lg p-4 space-y-3'>
+                <div className='flex items-start justify-between'>
+                  <div className='flex items-start gap-3'>
                     <input
-                      type="checkbox"
+                      type='checkbox'
                       checked={selectedItems.includes(item.id)}
                       onChange={(e) => {
                         if (e.target.checked) {
@@ -373,12 +373,12 @@ export default function ContentModeration({
                           setSelectedItems(prev => prev.filter(id => id !== item.id));
                         }
                       }}
-                      className="mt-1"
+                      className='mt-1'
                     />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
+                    <div className='flex-1'>
+                      <div className='flex items-center gap-2 mb-2'>
                         {getStatusIcon(item.status)}
-                        <span className="font-medium text-gray-900">
+                        <span className='font-medium text-gray-900'>
                           Review from {item.author.name}
                         </span>
                         <Badge className={`text-xs ${getPriorityColor(item.priority)}`}>
@@ -386,11 +386,11 @@ export default function ContentModeration({
                         </Badge>
                       </div>
 
-                      <div className="bg-gray-50 p-3 rounded-md mb-3">
-                        <p className="text-sm text-gray-700">{item.content}</p>
+                      <div className='bg-gray-50 p-3 rounded-md mb-3'>
+                        <p className='text-sm text-gray-700'>{item.content}</p>
                       </div>
 
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className='flex items-center gap-4 text-sm text-gray-600'>
                         <span>Flagged: {item.flaggedReason}</span>
                         <span>•</span>
                         <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -399,42 +399,42 @@ export default function ContentModeration({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t">
-                  <div className="flex items-center gap-2">
+                <div className='flex items-center justify-between pt-3 border-t'>
+                  <div className='flex items-center gap-2'>
                     <Badge
-                      variant="outline"
+                      variant='outline'
                       className={`text-xs ${getModerationStatusColor(item.status)}`}
                     >
                       {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                     </Badge>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => handleModerationAction(item.id, 'approve', 'Approved after review')}
                       disabled={loading.decisions}
                     >
-                      <CheckCircle className="w-4 h-4" />
+                      <CheckCircle className='w-4 h-4' />
                       Approve
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => handleModerationAction(item.id, 'flag', 'Flagged for additional review')}
                       disabled={loading.decisions}
                     >
-                      <Flag className="w-4 h-4" />
+                      <Flag className='w-4 h-4' />
                       Flag
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={() => handleModerationAction(item.id, 'reject', 'Rejected due to policy violation')}
                       disabled={loading.decisions}
                     >
-                      <XCircle className="w-4 h-4" />
+                      <XCircle className='w-4 h-4' />
                       Reject
                     </Button>
                   </div>
@@ -443,10 +443,10 @@ export default function ContentModeration({
             ))}
 
             {filteredQueue.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                <Shield className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p className="text-lg font-medium mb-2">No items in queue</p>
-                <p className="text-sm">
+              <div className='text-center py-8 text-gray-500'>
+                <Shield className='w-12 h-12 mx-auto mb-4 text-gray-300' />
+                <p className='text-lg font-medium mb-2'>No items in queue</p>
+                <p className='text-sm'>
                   {filterStatus !== 'all' || filterPriority !== 'all'
                     ? 'No items match the current filters'
                     : 'All content has been moderated'
@@ -461,45 +461,45 @@ export default function ContentModeration({
   );
 
   const TestPanel = () => (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="w-5 h-5" />
+          <CardTitle className='flex items-center gap-2'>
+            <MessageSquare className='w-5 h-5' />
             Content Testing
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
+              <label className='text-sm font-medium text-gray-700 mb-2 block'>
                 Test Content
               </label>
               <Textarea
-                placeholder="Enter content to test moderation rules..."
+                placeholder='Enter content to test moderation rules...'
                 value={testContent}
                 onChange={(e) => setTestContent(e.target.value)}
                 rows={4}
-                className="w-full"
+                className='w-full'
               />
             </div>
 
             <Button
               onClick={handleTestContent}
               disabled={!testContent.trim() || loading.moderation}
-              className="w-full"
+              className='w-full'
             >
               {loading.moderation ? (
-                <RefreshCw className="w-4 h-4 animate-spin mr-2" />
+                <RefreshCw className='w-4 h-4 animate-spin mr-2' />
               ) : (
-                <Eye className="w-4 h-4 mr-2" />
+                <Eye className='w-4 h-4 mr-2' />
               )}
               Test Content
             </Button>
 
             {errors.moderation && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-600">{errors.moderation}</p>
+              <div className='p-3 bg-red-50 border border-red-200 rounded-lg'>
+                <p className='text-sm text-red-600'>{errors.moderation}</p>
               </div>
             )}
           </div>
@@ -509,20 +509,20 @@ export default function ContentModeration({
       {testResult && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <Shield className='w-5 h-5' />
               Moderation Result
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Overall Assessment:</span>
-                <div className="flex items-center gap-2">
+            <div className='space-y-4'>
+              <div className='flex items-center justify-between'>
+                <span className='text-sm font-medium text-gray-700'>Overall Assessment:</span>
+                <div className='flex items-center gap-2'>
                   {testResult.passed ? (
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <CheckCircle className='w-5 h-5 text-green-600' />
                   ) : (
-                    <XCircle className="w-5 h-5 text-red-600" />
+                    <XCircle className='w-5 h-5 text-red-600' />
                   )}
                   <span className={`font-semibold ${testResult.passed ? 'text-green-600' : 'text-red-600'}`}>
                     {testResult.passed ? 'Passed' : 'Failed'}
@@ -530,18 +530,18 @@ export default function ContentModeration({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Moderation Score:</span>
-                <div className="flex items-center gap-2">
-                  <Progress value={testResult.score} className="w-24 h-2" />
-                  <span className="text-sm font-medium">{testResult.score.toFixed(1)}</span>
+              <div className='flex items-center justify-between'>
+                <span className='text-sm font-medium text-gray-700'>Moderation Score:</span>
+                <div className='flex items-center gap-2'>
+                  <Progress value={testResult.score} className='w-24 h-2' />
+                  <span className='text-sm font-medium'>{testResult.score.toFixed(1)}</span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Suggested Action:</span>
+              <div className='flex items-center justify-between'>
+                <span className='text-sm font-medium text-gray-700'>Suggested Action:</span>
                 <Badge
-                  variant="outline"
+                  variant='outline'
                   className={`text-xs ${
                     testResult.suggestedAction === 'approve' ? 'border-green-500 text-green-700' :
                     testResult.suggestedAction === 'reject' ? 'border-red-500 text-red-700' :
@@ -554,13 +554,13 @@ export default function ContentModeration({
 
               {testResult.flags.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Flags Detected:</h4>
-                  <div className="space-y-2">
+                  <h4 className='text-sm font-medium text-gray-700 mb-2'>Flags Detected:</h4>
+                  <div className='space-y-2'>
                     {testResult.flags.map((flag, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-red-50 border border-red-200 rounded">
+                      <div key={index} className='flex items-center justify-between p-2 bg-red-50 border border-red-200 rounded'>
                         <div>
-                          <span className="text-sm font-medium text-red-800">{flag.type}</span>
-                          <p className="text-xs text-red-600">{flag.description}</p>
+                          <span className='text-sm font-medium text-red-800'>{flag.type}</span>
+                          <p className='text-xs text-red-600'>{flag.description}</p>
                         </div>
                         <Badge className={`text-xs ${
                           flag.severity === 'critical' ? 'bg-red-500' :
@@ -578,11 +578,11 @@ export default function ContentModeration({
 
               {testResult.reasoning.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Reasoning:</h4>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                  <h4 className='text-sm font-medium text-gray-700 mb-2'>Reasoning:</h4>
+                  <ul className='text-sm text-gray-600 space-y-1'>
                     {testResult.reasoning.map((reason, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-gray-400">•</span>
+                      <li key={index} className='flex items-start gap-2'>
+                        <span className='text-gray-400'>•</span>
                         <span>{reason}</span>
                       </li>
                     ))}
@@ -599,35 +599,35 @@ export default function ContentModeration({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Content Moderation</h1>
-          <p className="text-gray-600">Monitor and moderate review content for quality and compliance</p>
+          <h1 className='text-2xl font-bold text-gray-900'>Content Moderation</h1>
+          <p className='text-gray-600'>Monitor and moderate review content for quality and compliance</p>
         </div>
         <Button
-          variant="outline"
+          variant='outline'
           onClick={() => actions.refreshData()}
         >
-          <Settings className="w-4 h-4 mr-2" />
+          <Settings className='w-4 h-4 mr-2' />
           Settings
         </Button>
       </div>
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="queue">Moderation Queue</TabsTrigger>
-          <TabsTrigger value="test" disabled={!showTestArea}>
+        <TabsList className='grid w-full grid-cols-2'>
+          <TabsTrigger value='queue'>Moderation Queue</TabsTrigger>
+          <TabsTrigger value='test' disabled={!showTestArea}>
             Content Testing
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="queue" className="space-y-6">
+        <TabsContent value='queue' className='space-y-6'>
           <QueuePanel />
         </TabsContent>
 
         {showTestArea && (
-          <TabsContent value="test" className="space-y-6">
+          <TabsContent value='test' className='space-y-6'>
             <TestPanel />
           </TabsContent>
         )}

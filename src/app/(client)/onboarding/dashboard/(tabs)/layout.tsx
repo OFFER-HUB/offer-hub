@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { ReactNode, useMemo } from "react";
-import PillTabs from "@/components/tabs/pill-tabs";
-import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useMemo } from 'react';
+import PillTabs from '@/components/tabs/pill-tabs';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function TabsLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
   const current = useMemo(() => {
-    if (pathname?.endsWith("/active")) return "active";
-    if (pathname?.endsWith("/completed")) return "completed";
-    if (pathname?.endsWith("/analytics")) return "analytics";
-    if (pathname?.endsWith("/dispute")) return "dispute";
-    return "active-project";
+    if (pathname?.endsWith('/active')) return 'active';
+    if (pathname?.endsWith('/completed')) return 'completed';
+    if (pathname?.endsWith('/analytics')) return 'analytics';
+    if (pathname?.endsWith('/dispute')) return 'dispute';
+    return 'active-project';
   }, [pathname]);
 
   const tabs = [
@@ -40,8 +40,8 @@ export default function TabsLayout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <h1 className="text-sm text-gray-700 bg-white p-4 rounded-lg text-center mb-6 font-semibold">{sectionTitle}</h1>
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg overflow-hidden">
+      <h1 className='text-sm text-gray-700 bg-white p-4 rounded-lg text-center mb-6 font-semibold'>{sectionTitle}</h1>
+      <div className='max-w-2xl mx-auto bg-white p-8 rounded-lg overflow-hidden'>
         <PillTabs
           tabs={tabs}
           value={current}
@@ -50,12 +50,12 @@ export default function TabsLayout({ children }: { children: ReactNode }) {
             if (target) router.push(target);
           }}
           renderContent={false}
-          tabsListclassName="bg-[#002333] rounded-[8px] px-1 py-6 text-white"
-          triggerClassName="text-white"
-          activeTriggerClassName="data-[state=active]:bg-[#15949C] data-[state=active]:text-white"
-          inactiveTriggerClassName="data-[state=inactive]:text-white/90"
+          tabsListclassName='bg-[#002333] rounded-[8px] px-1 py-6 text-white'
+          triggerClassName='text-white'
+          activeTriggerClassName='data-[state=active]:bg-[#15949C] data-[state=active]:text-white'
+          inactiveTriggerClassName='data-[state=inactive]:text-white/90'
         />
-        <div className="mt-8 max-h-[70vh] overflow-y-auto no-scrollbar pr-1">{children}</div>
+        <div className='mt-8 max-h-[70vh] overflow-y-auto no-scrollbar pr-1'>{children}</div>
       </div>
     </>
   );

@@ -456,7 +456,7 @@ export const useApplicationAnalytics = (
       const blob = await ApplicationAnalyticsService.exportData(options);
       await ApplicationAnalyticsService.downloadExport(
         blob,
-        `application_analytics_export`,
+        'application_analytics_export',
         options.format
       );
     } catch (err) {

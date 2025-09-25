@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from '@/lib/supabase/supabase';
 import { 
   ReviewResponse, 
   CreateReviewResponseDTO, 
@@ -11,8 +11,8 @@ import {
   ReviewResponseErrorCodes,
   RESPONSE_VALIDATION,
   MODERATION_CRITERIA
-} from "../types/review-responses.types";
-import { AppError } from "../utils/AppError";
+} from '../types/review-responses.types';
+import { AppError } from '../utils/AppError';
 
 export class ReviewResponseService {
   /**
@@ -462,10 +462,10 @@ export class ReviewResponseService {
     const auto_approve = score >= MODERATION_CRITERIA.auto_approve_threshold;
 
     const suggestions: string[] = [];
-    if (factors.length_score < 70) suggestions.push("Consider adding more detail to your response");
-    if (factors.professionalism_score < 70) suggestions.push("Use more professional language");
-    if (factors.relevance_score < 70) suggestions.push("Address specific points from the review");
-    if (factors.tone_score < 70) suggestions.push("Maintain a constructive and positive tone");
+    if (factors.length_score < 70) suggestions.push('Consider adding more detail to your response');
+    if (factors.professionalism_score < 70) suggestions.push('Use more professional language');
+    if (factors.relevance_score < 70) suggestions.push('Address specific points from the review');
+    if (factors.tone_score < 70) suggestions.push('Maintain a constructive and positive tone');
 
     return {
       score,
@@ -531,7 +531,7 @@ export class ReviewResponseService {
 
   private handleDbError(error: any): never {
     console.error('Database error:', error);
-    throw new AppError("Database_Error", 500);
+    throw new AppError('Database_Error', 500);
   }
 }
 

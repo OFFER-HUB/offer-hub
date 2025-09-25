@@ -1,5 +1,5 @@
-import { supabase } from "@/lib/supabase/supabase";
-import { AppError } from "@/utils/AppError";
+import { supabase } from '@/lib/supabase/supabase';
+import { AppError } from '@/utils/AppError';
 import {
   hashToken,
   verifyAccessToken,
@@ -9,18 +9,18 @@ import {
   isTokenExpired,
   isTokenNearExpiration,
   getTokenExpiration,
-} from "@/utils/jwt.utils";
-import { NextFunction, Request, Response } from "express";
+} from '@/utils/jwt.utils';
+import { NextFunction, Request, Response } from 'express';
 import { 
   AuthenticatedRequest, 
   AuthMiddlewareOptions, 
   SecurityContext,
   AuthAttemptLog,
   TokenValidationResult 
-} from "@/types/middleware.types";
-import { authConfig, isPublicRoute } from "@/config/auth.config";
-import { UserRole, AuthUser } from "@/types/auth.types";
-import { v4 as uuidv4 } from "uuid";
+} from '@/types/middleware.types';
+import { authConfig, isPublicRoute } from '@/config/auth.config';
+import { UserRole, AuthUser } from '@/types/auth.types';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Enhanced authentication middleware with comprehensive security features
@@ -80,11 +80,11 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
         await logAuthAttempt({
           ...securityContext,
           success: false,
-          errorMessage: "No token provided",
+          errorMessage: 'No token provided',
         });
         
         return next(new AppError(
-          options.authErrorMessage || "Authentication required. Please provide a valid token.",
+          options.authErrorMessage || 'Authentication required. Please provide a valid token.',
           401
         ));
       }
@@ -94,10 +94,10 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
         await logAuthAttempt({
           ...securityContext,
           success: false,
-          errorMessage: "Invalid token format",
+          errorMessage: 'Invalid token format',
         });
         
-        return next(new AppError("Invalid token format", 401));
+        return next(new AppError('Invalid token format', 401));
       }
 
       // Check if token is expired
@@ -105,14 +105,14 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
         await logAuthAttempt({
           ...securityContext,
           success: false,
-          errorMessage: "Token expired",
+          errorMessage: 'Token expired',
           tokenInfo: {
             isExpired: true,
             needsRefresh: false,
           },
         });
         
-        return next(new AppError("Token has expired. Please login again.", 401));
+        return next(new AppError('Token has expired. Please login again.', 401));
       }
 
       // Verify token signature and decode payload
@@ -123,17 +123,17 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
         await logAuthAttempt({
           ...securityContext,
           success: false,
-          errorMessage: "Invalid token signature",
+          errorMessage: 'Invalid token signature',
         });
         
-        return next(new AppError("Invalid token signature", 401));
+        return next(new AppError('Invalid token signature', 401));
       }
 
       // Fetch user from database
       const { data: user, error: userError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", decoded.user_id)
+        .from('users')
+        .select('*')
+        .eq('id', decoded.user_id)
         .single();
 
       if (userError || !user) {
@@ -141,10 +141,10 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
           ...securityContext,
           userId: decoded.user_id,
           success: false,
-          errorMessage: "User not found",
+          errorMessage: 'User not found',
         });
         
-        return next(new AppError("User associated with this token does not exist", 401));
+        return next(new AppError('User associated with this token does not exist', 401));
       }
 
       // Check if token needs refresh
@@ -202,10 +202,10 @@ export const authenticateToken = (options: AuthMiddlewareOptions = {}) => {
       await logAuthAttempt({
         ...securityContext,
         success: false,
-        errorMessage: error instanceof Error ? error.message : "Unknown error",
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
       });
       
-      return next(new AppError("Authentication failed", 401));
+      return next(new AppError('Authentication failed', 401));
     }
   };
 };
@@ -258,7 +258,7 @@ export const verifyToken = authenticateToken();
 export function authorizeRoles(...roles: UserRole[]) {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return next(new AppError("Authentication required", 401));
+      return next(new AppError('Authentication required', 401));
     }
 
     if (!roles.includes(req.user.role)) {
@@ -405,7 +405,7 @@ export function validateToken(token: string): TokenValidationResult {
         isValid: false,
         isExpired: false,
         needsRefresh: false,
-        error: "Invalid token format",
+        error: 'Invalid token format',
       };
     }
 
@@ -417,7 +417,7 @@ export function validateToken(token: string): TokenValidationResult {
         isValid: false,
         isExpired: true,
         needsRefresh: false,
-        error: "Token has expired",
+        error: 'Token has expired',
       };
     }
 
@@ -434,7 +434,7 @@ export function validateToken(token: string): TokenValidationResult {
       isValid: false,
       isExpired: false,
       needsRefresh: false,
-      error: error instanceof Error ? error.message : "Token validation failed",
+      error: error instanceof Error ? error.message : 'Token validation failed',
     };
   }
 }
@@ -482,7 +482,7 @@ export const validateRefreshToken = async (
   const { refreshToken } = req.body;
 
   if (!refreshToken) {
-    return next(new AppError("Refresh token is required", 400));
+    return next(new AppError('Refresh token is required', 400));
   }
 
   const refreshTokenHash = hashToken(refreshToken);
@@ -491,34 +491,34 @@ export const validateRefreshToken = async (
     const decoded = verifyRefreshToken(refreshToken);
 
     const { data: tokenRecord, error } = await supabase
-      .from("refresh_tokens")
-      .select("*")
-      .eq("token_hash", refreshTokenHash)
+      .from('refresh_tokens')
+      .select('*')
+      .eq('token_hash', refreshTokenHash)
       .single();
 
     if (error || !tokenRecord) {
       return next(
-        new AppError("Invalid refresh token. Please log in again", 403)
+        new AppError('Invalid refresh token. Please log in again', 403)
       );
     }
 
     // Verify user ID matches between token and record
     if (tokenRecord.user_id !== decoded.user_id) {
-      return next(new AppError("Refresh token does not match the user", 403));
+      return next(new AppError('Refresh token does not match the user', 403));
     }
 
     req.refreshTokenRecord = tokenRecord;
     next();
   } catch (err) {
-    if ((err as Error).name === "TokenExpiredError") {
+    if ((err as Error).name === 'TokenExpiredError') {
       // Clean up expired refresh token
       await supabase
-        .from("refresh_tokens")
+        .from('refresh_tokens')
         .delete()
-        .eq("token_hash", refreshTokenHash);
-      return next(new AppError("Refresh token has expired", 403));
+        .eq('token_hash', refreshTokenHash);
+      return next(new AppError('Refresh token has expired', 403));
     }
 
-    return next(new AppError("Invalid refresh token", 403));
+    return next(new AppError('Invalid refresh token', 403));
   }
 };

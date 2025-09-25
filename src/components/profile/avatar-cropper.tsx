@@ -28,7 +28,7 @@ export default function AvatarCropper({
 }: AvatarCropperProps) {
   // No ref needed for Cropper
   return (
-    <div className="relative w-full h-80 bg-black/80">
+    <div className='relative w-full h-80 bg-black/80'>
       <Cropper
         image={image}
         crop={crop}
@@ -41,7 +41,7 @@ export default function AvatarCropper({
         onCropComplete={(_, croppedAreaPixels) =>
           onCropComplete({ ...croppedAreaPixels, aspect, rotation })
         }
-        cropShape="round"
+        cropShape='round'
         showGrid={false}
   // no ref
       />

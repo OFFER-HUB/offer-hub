@@ -11,7 +11,7 @@ import {
   UpdateWebhookDTO,
   WebhookDeliveryAttempt,
   WebhookEndpoint,
-} from "@/types/integration.types";
+} from '@/types/integration.types';
 import {
   buildQuery,
   getErrorMessage,
@@ -21,9 +21,9 @@ import {
   httpPost,
   httpPut,
   retry,
-} from "@/utils/api-helpers";
+} from '@/utils/api-helpers';
 
-const BASE = "/integrations";
+const BASE = '/integrations';
 
 class IntegrationService {
   async listProviders(): Promise<IntegrationProvider[]> {

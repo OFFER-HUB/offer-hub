@@ -1,4 +1,4 @@
-import PlatformMonitoring from "@/components/admin/monitoring/platform-monitoring";
+import PlatformMonitoring from '@/components/admin/monitoring/platform-monitoring';
 
 const MonitoringPage = () => {
   return <PlatformMonitoring />;

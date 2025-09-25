@@ -8,10 +8,10 @@ import UnassignedDispute from '@/components/dispute-resolution/views/unassigned-
 
 export default function DisputeResolutionPage() {
   return (
-    <div className="p-0">
+    <div className='p-0'>
       <DisputeTabs
-        defaultValue="unassigned"
-        tabsListclassName="!bg-white !rounded-none !p-4 !h-auto border-b"
+        defaultValue='unassigned'
+        tabsListclassName='!bg-white !rounded-none !p-4 !h-auto border-b'
         tabs={[
           {
             label: 'Unassigned dispute',

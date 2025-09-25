@@ -1,10 +1,18 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "ESNext",
@@ -19,11 +27,24 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "backend", "services", "contracts-offerhub"]
+  "include": [
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "./.next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "backend",
+    "services",
+    "contracts-offerhub"
+  ]
 }

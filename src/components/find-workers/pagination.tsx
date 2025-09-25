@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 
 interface PaginationProps {
   currentPage: number
@@ -62,37 +62,37 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
+    <div className='flex flex-col sm:flex-row items-center justify-between gap-4 py-6'>
       {/* Results info */}
-      <div className="text-sm text-gray-600">
+      <div className='text-sm text-gray-600'>
         Showing {startItem} to {endItem} of {totalItems} results
       </div>
 
       {/* Pagination controls */}
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Button
-          variant="outline"
-          size="sm"
+          variant='outline'
+          size='sm'
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1 || isLoading}
-          className="h-8 w-8 p-0"
+          className='h-8 w-8 p-0'
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className='h-4 w-4' />
         </Button>
 
         {getPageNumbers().map((page, index) => (
           <div key={index}>
             {page === 'ellipsis' ? (
-              <div className="flex items-center justify-center h-8 w-8">
-                <MoreHorizontal className="h-4 w-4 text-gray-400" />
+              <div className='flex items-center justify-center h-8 w-8'>
+                <MoreHorizontal className='h-4 w-4 text-gray-400' />
               </div>
             ) : (
               <Button
-                variant={currentPage === page ? "default" : "outline"}
-                size="sm"
+                variant={currentPage === page ? 'default' : 'outline'}
+                size='sm'
                 onClick={() => onPageChange(page as number)}
                 disabled={isLoading}
-                className="h-8 w-8 p-0"
+                className='h-8 w-8 p-0'
               >
                 {page}
               </Button>
@@ -101,13 +101,13 @@ export default function Pagination({
         ))}
 
         <Button
-          variant="outline"
-          size="sm"
+          variant='outline'
+          size='sm'
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages || isLoading}
-          className="h-8 w-8 p-0"
+          className='h-8 w-8 p-0'
         >
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight className='h-4 w-4' />
         </Button>
       </div>
     </div>

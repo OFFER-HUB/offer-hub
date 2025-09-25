@@ -1,4 +1,4 @@
-import { UserRole } from "@/types/auth.types";
+import { UserRole } from '@/types/auth.types';
 
 /**
  * Authentication and security configuration
@@ -8,18 +8,18 @@ export const authConfig = {
   // JWT Configuration
   jwt: {
     secret: process.env.JWT_SECRET as string,
-    accessTokenExpiry: process.env.JWT_EXPIRES_IN || "24h",
-    refreshTokenExpiry: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+    accessTokenExpiry: process.env.JWT_EXPIRES_IN || '24h',
+    refreshTokenExpiry: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
     refreshThreshold: 5 * 60 * 1000, // 5 minutes in milliseconds
   },
 
   // Security Headers Configuration
   securityHeaders: {
-    xFrameOptions: "DENY",
-    xContentTypeOptions: "nosniff",
-    xXSSProtection: "1; mode=block",
-    strictTransportSecurity: "max-age=31536000; includeSubDomains",
-    contentSecurityPolicy: "default-src 'self'",
+    xFrameOptions: 'DENY',
+    xContentTypeOptions: 'nosniff',
+    xXSSProtection: '1; mode=block',
+    strictTransportSecurity: 'max-age=31536000; includeSubDomains',
+    contentSecurityPolicy: 'default-src \'self\'',
   },
 
   // Rate Limiting Configuration
@@ -43,24 +43,24 @@ export const authConfig = {
 
   // Public routes that don't require authentication
   publicRoutes: [
-    "/api/auth/login",
-    "/api/auth/register",
-    "/api/auth/refresh",
-    "/api/health",
-    "/api/docs",
-    "/api/public",
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/refresh',
+    '/api/health',
+    '/api/docs',
+    '/api/public',
   ],
 
   // Routes that require specific roles
   roleBasedRoutes: {
     admin: [
-      "/api/admin",
-      "/api/users/delete",
-      "/api/system",
+      '/api/admin',
+      '/api/users/delete',
+      '/api/system',
     ],
     moderator: [
-      "/api/moderate",
-      "/api/reports",
+      '/api/moderate',
+      '/api/reports',
     ],
     // Freelancer and client routes are handled by business logic
   },
@@ -129,11 +129,11 @@ export function getRequiredRole(path: string): UserRole | null {
  */
 export function validateAuthConfig(): void {
   if (!authConfig.jwt.secret) {
-    throw new Error("JWT_SECRET is not defined in environment variables");
+    throw new Error('JWT_SECRET is not defined in environment variables');
   }
   
   if (authConfig.jwt.secret.length < 32) {
-    throw new Error("JWT_SECRET must be at least 32 characters long for security");
+    throw new Error('JWT_SECRET must be at least 32 characters long for security');
   }
 }
 

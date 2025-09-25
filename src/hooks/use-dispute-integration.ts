@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
-import { integrationService } from "@/services/integration.service";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { integrationService } from '@/services/integration.service';
 import type {
   CreateIntegrationInstanceDTO,
   CreateWebhookDTO,
@@ -14,8 +14,8 @@ import type {
   UpdateWebhookDTO,
   WebhookDeliveryAttempt,
   WebhookEndpoint,
-} from "@/types/integration.types";
-import { getErrorMessage } from "@/utils/api-helpers";
+} from '@/types/integration.types';
+import { getErrorMessage } from '@/utils/api-helpers';
 
 export interface UseDisputeIntegrationReturn {
   providers: IntegrationProvider[];
@@ -102,7 +102,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
       try {
         const created = await integrationService.createInstance(dto);
         setInstances((prev) => [created, ...prev]);
-        toast.success("Integration created");
+        toast.success('Integration created');
         return created;
       } catch (err) {
         const msg = getErrorMessage(err);
@@ -119,7 +119,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
       try {
         const updated = await integrationService.updateInstance(id, dto);
         setInstances((prev) => prev.map((i) => (i.id === id ? updated : i)));
-        toast.success("Integration updated");
+        toast.success('Integration updated');
         return updated;
       } catch (err) {
         const msg = getErrorMessage(err);
@@ -135,7 +135,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
     try {
       await integrationService.deleteInstance(id);
       setInstances((prev) => prev.filter((i) => i.id !== id));
-      toast.success("Integration deleted");
+      toast.success('Integration deleted');
     } catch (err) {
       const msg = getErrorMessage(err);
       setError(msg);
@@ -156,7 +156,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
     try {
       const created = await integrationService.createWebhook(dto);
       setWebhooks((prev) => [created, ...prev]);
-      toast.success("Webhook created");
+      toast.success('Webhook created');
       return created;
     } catch (err) {
       const msg = getErrorMessage(err);
@@ -171,7 +171,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
       try {
         const updated = await integrationService.updateWebhook(id, dto);
         setWebhooks((prev) => prev.map((w) => (w.id === id ? updated : w)));
-        toast.success("Webhook updated");
+        toast.success('Webhook updated');
         return updated;
       } catch (err) {
         const msg = getErrorMessage(err);
@@ -187,7 +187,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
     try {
       await integrationService.deleteWebhook(id);
       setWebhooks((prev) => prev.filter((w) => w.id !== id));
-      toast.success("Webhook deleted");
+      toast.success('Webhook deleted');
     } catch (err) {
       const msg = getErrorMessage(err);
       setError(msg);
@@ -217,7 +217,7 @@ export function useDisputeIntegration(): UseDisputeIntegrationReturn {
           webhookId,
           deliveryId
         );
-        toast.success("Delivery resent");
+        toast.success('Delivery resent');
         return delivery;
       } catch (err) {
         const msg = getErrorMessage(err);

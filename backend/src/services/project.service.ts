@@ -1,6 +1,6 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from '@/lib/supabase/supabase';
 import { CreateProjectDTO } from '@/types/project.type';
-import { InternalServerError } from "@/utils/AppError";
+import { InternalServerError } from '@/utils/AppError';
 export const createProject = async (data: CreateProjectDTO) => {
   const { data: project, error } = await supabase
     .from('projects')
@@ -29,7 +29,7 @@ export const getAllProjects = async (filters: any) => {
 export const getProjectById = async (id: string) => {
   const { data: project, error } = await supabase
     .from('projects')
-    .select(`*, users!projects_client_id_fkey(name)`)
+    .select('*, users!projects_client_id_fkey(name)')
     .eq('id', id)
     .single();
 

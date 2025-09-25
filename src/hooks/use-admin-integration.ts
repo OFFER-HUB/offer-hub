@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { toast } from "sonner";
+import { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 import {
   AdminApiKey,
   CreateAdminApiKeyDTO,
@@ -22,7 +22,7 @@ import {
   AdminAuditLogFilters,
   PaginationMeta,
   WebhookEventType,
-} from "@/types/admin-integration.types";
+} from '@/types/admin-integration.types';
 
 interface UseAdminIntegrationReturn {
   // API Keys
@@ -80,11 +80,11 @@ interface UseAdminIntegrationReturn {
   error: string | null;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export function useAdminIntegration(): UseAdminIntegrationReturn {
   const authHeaders = (): Record<string, string> => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
   // State for API Keys
@@ -141,9 +141,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       });
 
       const response = await fetch(`${API_BASE_URL}/api/admin/api-keys?${queryParams}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -156,12 +156,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setApiKeys(data.data.apiKeys || []);
       } else {
-        throw new Error(data.message || "Failed to fetch API keys");
+        throw new Error(data.message || 'Failed to fetch API keys');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch API keys";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch API keys';
       setErrorApiKeys(errorMessage);
-      console.error("Error fetching API keys:", err);
+      console.error('Error fetching API keys:', err);
     } finally {
       setIsLoadingApiKeys(false);
     }
@@ -170,9 +170,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const createApiKey = useCallback(async (data: CreateAdminApiKeyDTO) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/api-keys`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify(data),
@@ -186,10 +186,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchApiKeys(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to create API key");
+        throw new Error(result.message || 'Failed to create API key');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to create API key";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create API key';
       throw new Error(errorMessage);
     }
   }, [fetchApiKeys]);
@@ -197,9 +197,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const updateApiKey = useCallback(async (id: string, data: UpdateAdminApiKeyDTO) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/api-keys/${id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify(data),
@@ -213,10 +213,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchApiKeys(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to update API key");
+        throw new Error(result.message || 'Failed to update API key');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to update API key";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update API key';
       throw new Error(errorMessage);
     }
   }, [fetchApiKeys]);
@@ -224,9 +224,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const revokeApiKey = useCallback(async (id: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/api-keys/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -239,10 +239,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchApiKeys(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to revoke API key");
+        throw new Error(result.message || 'Failed to revoke API key');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to revoke API key";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to revoke API key';
       throw new Error(errorMessage);
     }
   }, [fetchApiKeys]);
@@ -268,9 +268,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       });
 
       const response = await fetch(`${API_BASE_URL}/api/admin/webhooks?${queryParams}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -283,12 +283,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setWebhooks(data.data.webhooks || []);
       } else {
-        throw new Error(data.message || "Failed to fetch webhooks");
+        throw new Error(data.message || 'Failed to fetch webhooks');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch webhooks";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch webhooks';
       setErrorWebhooks(errorMessage);
-      console.error("Error fetching webhooks:", err);
+      console.error('Error fetching webhooks:', err);
     } finally {
       setIsLoadingWebhooks(false);
     }
@@ -297,9 +297,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const createWebhook = useCallback(async (data: CreateWebhookDTO) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/webhooks`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify(data),
@@ -313,10 +313,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchWebhooks(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to create webhook");
+        throw new Error(result.message || 'Failed to create webhook');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to create webhook";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create webhook';
       throw new Error(errorMessage);
     }
   }, [fetchWebhooks]);
@@ -324,9 +324,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const updateWebhook = useCallback(async (id: string, data: UpdateWebhookDTO) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/webhooks/${id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify(data),
@@ -340,10 +340,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchWebhooks(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to update webhook");
+        throw new Error(result.message || 'Failed to update webhook');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to update webhook";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update webhook';
       throw new Error(errorMessage);
     }
   }, [fetchWebhooks]);
@@ -351,9 +351,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const deleteWebhook = useCallback(async (id: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/webhooks/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -366,10 +366,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchWebhooks(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to delete webhook");
+        throw new Error(result.message || 'Failed to delete webhook');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to delete webhook";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete webhook';
       throw new Error(errorMessage);
     }
   }, [fetchWebhooks]);
@@ -377,9 +377,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const testWebhook = useCallback(async (webhookId: string, eventType: string, testData: any) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/webhooks/${webhookId}/test`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify({ event_type: eventType, data: testData }),
@@ -391,10 +391,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
 
       const result = await response.json();
       if (!result.success) {
-        throw new Error(result.message || "Failed to test webhook");
+        throw new Error(result.message || 'Failed to test webhook');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to test webhook";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to test webhook';
       throw new Error(errorMessage);
     }
   }, []);
@@ -413,9 +413,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/integrations/providers`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -428,12 +428,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setIntegrationProviders(data.data || []);
       } else {
-        throw new Error(data.message || "Failed to fetch integration providers");
+        throw new Error(data.message || 'Failed to fetch integration providers');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch integration providers";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch integration providers';
       setErrorProviders(errorMessage);
-      console.error("Error fetching integration providers:", err);
+      console.error('Error fetching integration providers:', err);
     } finally {
       setIsLoadingProviders(false);
     }
@@ -460,9 +460,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       });
 
       const response = await fetch(`${API_BASE_URL}/api/admin/integrations/instances?${queryParams}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -475,12 +475,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setIntegrationInstances(data.data.instances || []);
       } else {
-        throw new Error(data.message || "Failed to fetch integration instances");
+        throw new Error(data.message || 'Failed to fetch integration instances');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch integration instances";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch integration instances';
       setErrorInstances(errorMessage);
-      console.error("Error fetching integration instances:", err);
+      console.error('Error fetching integration instances:', err);
     } finally {
       setIsLoadingInstances(false);
     }
@@ -489,9 +489,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const createIntegrationInstance = useCallback(async (data: CreateIntegrationInstanceDTO) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/integrations/instances`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify(data),
@@ -505,10 +505,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchIntegrationInstances(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to create integration instance");
+        throw new Error(result.message || 'Failed to create integration instance');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to create integration instance";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create integration instance';
       throw new Error(errorMessage);
     }
   }, [fetchIntegrationInstances]);
@@ -516,9 +516,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const updateIntegrationInstance = useCallback(async (id: string, data: UpdateIntegrationInstanceDTO) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/integrations/instances/${id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
         body: JSON.stringify(data),
@@ -532,10 +532,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchIntegrationInstances(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to update integration instance");
+        throw new Error(result.message || 'Failed to update integration instance');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to update integration instance";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update integration instance';
       throw new Error(errorMessage);
     }
   }, [fetchIntegrationInstances]);
@@ -543,9 +543,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
   const deleteIntegrationInstance = useCallback(async (id: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/integrations/instances/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -558,10 +558,10 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (result.success) {
         await fetchIntegrationInstances(); // Refresh the list
       } else {
-        throw new Error(result.message || "Failed to delete integration instance");
+        throw new Error(result.message || 'Failed to delete integration instance');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to delete integration instance";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete integration instance';
       throw new Error(errorMessage);
     }
   }, [fetchIntegrationInstances]);
@@ -581,14 +581,14 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
     try {
       const queryParams = new URLSearchParams();
       if (timeRange) {
-        queryParams.append("start_date", timeRange.start);
-        queryParams.append("end_date", timeRange.end);
+        queryParams.append('start_date', timeRange.start);
+        queryParams.append('end_date', timeRange.end);
       }
 
       const response = await fetch(`${API_BASE_URL}/api/admin/metrics/api?${queryParams}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -601,12 +601,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setApiMetrics(data.data);
       } else {
-        throw new Error(data.message || "Failed to fetch API metrics");
+        throw new Error(data.message || 'Failed to fetch API metrics');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch API metrics";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch API metrics';
       setErrorMetrics(errorMessage);
-      console.error("Error fetching API metrics:", err);
+      console.error('Error fetching API metrics:', err);
     } finally {
       setIsLoadingMetrics(false);
     }
@@ -618,9 +618,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/health`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -633,12 +633,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setSystemHealth(data.data);
       } else {
-        throw new Error(data.message || "Failed to fetch system health");
+        throw new Error(data.message || 'Failed to fetch system health');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch system health";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch system health';
       setErrorHealth(errorMessage);
-      console.error("Error fetching system health:", err);
+      console.error('Error fetching system health:', err);
     } finally {
       setIsLoadingHealth(false);
     }
@@ -669,9 +669,9 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       });
 
       const response = await fetch(`${API_BASE_URL}/api/admin/audit-logs?${queryParams}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...authHeaders(),
         },
       });
@@ -684,12 +684,12 @@ export function useAdminIntegration(): UseAdminIntegrationReturn {
       if (data.success) {
         setAuditLogs(data.data.logs || []);
       } else {
-        throw new Error(data.message || "Failed to fetch audit logs");
+        throw new Error(data.message || 'Failed to fetch audit logs');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch audit logs";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch audit logs';
       setErrorAuditLogs(errorMessage);
-      console.error("Error fetching audit logs:", err);
+      console.error('Error fetching audit logs:', err);
     } finally {
       setIsLoadingAuditLogs(false);
     }

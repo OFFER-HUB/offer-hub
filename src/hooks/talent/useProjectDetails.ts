@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { type ProjectDetail, projectDetailsData } from "@/lib/mockData/project-details-mock-data"
+import { useState, useEffect } from 'react'
+import { type ProjectDetail, projectDetailsData } from '@/lib/mockData/project-details-mock-data'
 
 interface UseProjectDetailsReturn {
   projects: ProjectDetail[];

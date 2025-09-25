@@ -1,100 +1,85 @@
-"use client"
+'use client'
 
-import { useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
-import { MapPin, Star, MessageSquare, Heart, Check, Maximize2, Minimize2, Filter, Users } from "lucide-react"
-import { LocationData } from "@/types/location.types"
-import { calculateDistance } from "@/utils/geographic-calculations"
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Star, MapPin } from 'lucide-react'
 
-// Updated freelancer data with coordinates and timezone
+// Sample freelancer data with coordinates
 const freelancers = [
   {
-    id: "f1",
-    name: "Alex Johnson",
-    title: "Full Stack Developer",
-    avatar: "",
+    id: 'f1',
+    name: 'Alex Johnson',
+    title: 'Full Stack Developer',
+    avatar: '',
     rating: 4.9,
-    reviewCount: 127,
     hourlyRate: 65,
-    skills: ["React", "Node.js", "TypeScript"],
-    location: "San Francisco, USA",
+    skills: ['React', 'Node.js', 'TypeScript'],
+    location: 'San Francisco, USA',
     coordinates: { lat: 37.7749, lng: -122.4194 },
-    timezone: "America/Los_Angeles",
     isTopRated: true,
   },
   {
-    id: "f2",
-    name: "Sarah Williams",
-    title: "UI/UX Designer",
-    avatar: "",
+    id: 'f2',
+    name: 'Sarah Williams',
+    title: 'UI/UX Designer',
+    avatar: '',
     rating: 4.8,
-    reviewCount: 93,
     hourlyRate: 55,
-    skills: ["Figma", "Adobe XD", "UI Design"],
-    location: "London, UK",
+    skills: ['Figma', 'Adobe XD', 'UI Design'],
+    location: 'London, UK',
     coordinates: { lat: 51.5074, lng: -0.1278 },
-    timezone: "Europe/London",
     isTopRated: false,
   },
   {
-    id: "f3",
-    name: "Michael Chen",
-    title: "Mobile App Developer",
-    avatar: "",
+    id: 'f3',
+    name: 'Michael Chen',
+    title: 'Mobile App Developer',
+    avatar: '',
     rating: 4.7,
-    reviewCount: 78,
     hourlyRate: 60,
-    skills: ["React Native", "Swift", "Kotlin"],
-    location: "Toronto, Canada",
+    skills: ['React Native', 'Swift', 'Kotlin'],
+    location: 'Toronto, Canada',
     coordinates: { lat: 43.6532, lng: -79.3832 },
-    timezone: "America/Toronto",
     isTopRated: false,
   },
   {
-    id: "f4",
-    name: "Emily Rodriguez",
-    title: "Content Writer & SEO Specialist",
-    avatar: "",
+    id: 'f4',
+    name: 'Emily Rodriguez',
+    title: 'Content Writer & SEO Specialist',
+    avatar: '',
     rating: 4.9,
-    reviewCount: 112,
     hourlyRate: 45,
-    skills: ["Content Writing", "SEO", "Copywriting"],
-    location: "Madrid, Spain",
+    skills: ['Content Writing', 'SEO', 'Copywriting'],
+    location: 'Madrid, Spain',
     coordinates: { lat: 40.4168, lng: -3.7038 },
-    timezone: "Europe/Madrid",
     isTopRated: true,
   },
   {
-    id: "f5",
-    name: "David Kim",
-    title: "DevOps Engineer",
-    avatar: "",
+    id: 'f5',
+    name: 'David Kim',
+    title: 'DevOps Engineer',
+    avatar: '',
     rating: 4.6,
-    reviewCount: 64,
     hourlyRate: 70,
-    skills: ["Docker", "Kubernetes", "AWS"],
-    location: "Seoul, South Korea",
+    skills: ['Docker', 'Kubernetes', 'AWS'],
+    location: 'Seoul, South Korea',
     coordinates: { lat: 37.5665, lng: 126.978 },
-    timezone: "Asia/Seoul",
     isTopRated: false,
   },
   {
-    id: "f6",
-    name: "Olivia Patel",
-    title: "Graphic Designer",
-    avatar: "",
+    id: 'f6',
+    name: 'Olivia Patel',
+    title: 'Graphic Designer',
+    avatar: '',
     rating: 4.8,
-    reviewCount: 89,
     hourlyRate: 50,
-    skills: ["Photoshop", "Illustrator", "Branding"],
-    location: "Mumbai, India",
+    skills: ['Photoshop', 'Illustrator', 'Branding'],
+    location: 'Mumbai, India',
     coordinates: { lat: 19.076, lng: 72.8777 },
-    timezone: "Asia/Kolkata",
     isTopRated: true,
   },
 ]
@@ -103,38 +88,14 @@ interface TalentMapViewProps {
   selectedFreelancers: string[]
   toggleFreelancerSelection: (id: string) => void
   openFreelancerDetail: (freelancer: any) => void
-  selectedLocation?: LocationData | null
-  searchRadius?: number
-  className?: string
 }
 
 export default function TalentMapView({
   selectedFreelancers,
   toggleFreelancerSelection,
   openFreelancerDetail,
-  selectedLocation,
-  searchRadius = 50,
-  className = ""
 }: TalentMapViewProps) {
   const [selectedMarker, setSelectedMarker] = useState<string | null>(null)
-  const [isFullScreen, setIsFullScreen] = useState(false)
-  const [showFilters, setShowFilters] = useState(false)
-  const [clusteredView, setClusteredView] = useState(true)
-  const mapRef = useRef<HTMLDivElement>(null)
-
-  // Filter freelancers within radius if location is selected
-  const filteredFreelancers = selectedLocation 
-    ? freelancers.filter(freelancer => {
-        if (!freelancer.coordinates) return false
-        const distance = calculateDistance(
-          selectedLocation.coordinates.lat,
-          selectedLocation.coordinates.lng,
-          freelancer.coordinates.lat,
-          freelancer.coordinates.lng
-        )
-        return distance <= searchRadius
-      })
-    : freelancers
 
   const renderStars = (rating: number) => {
     return Array(5)
@@ -142,302 +103,113 @@ export default function TalentMapView({
       .map((_, i) => (
         <Star
           key={i}
-          className={`h-3 w-3 ${i < Math.floor(rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+          className={`h-3 w-3 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
         />
       ))
   }
 
-  const generateMapPosition = (index: number, total: number) => {
-    // Generate positions in a more organized grid pattern
-    const cols = Math.ceil(Math.sqrt(total))
-    const row = Math.floor(index / cols)
-    const col = index % cols
-    
-    const padding = 15
-    const width = 100 - (2 * padding)
-    const height = 100 - (2 * padding)
-    
-    const top = padding + (row * (height / Math.ceil(total / cols)))
-    const left = padding + (col * (width / cols))
-    
-    return { top: `${Math.min(top, 85)}%`, left: `${Math.min(left, 85)}%` }
-  }
-
   return (
-    <div className={`relative ${className}`}>
-      <Card className={`overflow-hidden transition-all duration-300 ${isFullScreen ? 'fixed inset-4 z-50' : 'h-[600px]'}`}>
-        <CardContent className="p-0 h-full">
-          {/* Map Header */}
-          <div className="absolute top-0 left-0 right-0 z-20 p-4 bg-white/95 backdrop-blur-sm border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-[#15949C]" />
-                <div>
-                  <h3 className="font-medium text-[#002333]">
-                    {selectedLocation ? selectedLocation.name : "Global Map"}
-                  </h3>
-                  <p className="text-sm text-[#002333]/70">
-                    {filteredFreelancers.length} freelancers
-                    {selectedLocation && searchRadius && ` within ${searchRadius}km`}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setClusteredView(!clusteredView)}
-                  className="h-8"
-                >
-                  <Users className="h-4 w-4 mr-1" />
-                  {clusteredView ? "Uncluster" : "Cluster"}
-                </Button>
-                <Button
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="h-8"
-                >
-                  <Filter className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsFullScreen(!isFullScreen)}
-                  className="h-8 w-8 p-0"
-                >
-                  {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-                </Button>
-              </div>
-            </div>
-          </div>
+    <div className='relative h-[600px] rounded-lg overflow-hidden border'>
+      {/* This would be replaced with an actual map component in a real implementation */}
+      <div className='absolute inset-0 bg-gray-100 flex items-center justify-center'>
+        <div className='text-center'>
+          <p className='text-[#002333]/70 mb-2'>World Map Visualization</p>
+          <p className='text-sm text-[#002333]/50'>
+            In a real implementation, this would be an interactive map showing freelancer locations
+          </p>
+        </div>
 
-          {/* Map Container */}
-          <div ref={mapRef} className="relative w-full h-full bg-gradient-to-br from-blue-50 to-green-50">
-            {/* Map Background Info */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center opacity-30">
-                <p className="text-[#002333]/70 mb-2">Interactive Map Visualization</p>
-                <p className="text-sm text-[#002333]/50">
-                  Freelancers positioned based on their locations
-                </p>
-              </div>
-            </div>
+        {/* Simulated map markers */}
+        {freelancers.map((freelancer) => {
+          // These positions are just for demonstration
+          const top = `${20 + Math.random() * 60}%`
+          const left = `${20 + Math.random() * 60}%`
 
-            {/* Selected Location Center */}
-            {selectedLocation && (
+          return (
+            <div key={freelancer.id} className='absolute' style={{ top, left }}>
               <div
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 z-10"
-                style={{ top: '50%', left: '50%' }}
+                className={`h-10 w-10 rounded-full flex items-center justify-center cursor-pointer transition-all
+                  ${selectedMarker === freelancer.id ? 'bg-[#15949C] scale-110' : 'bg-[#15949C]/70 hover:bg-[#15949C]'}
+                  ${selectedFreelancers.includes(freelancer.id) ? 'ring-2 ring-white' : ''}
+                `}
+                onClick={() => setSelectedMarker(freelancer.id)}
               >
-                <div className="relative">
-                  <div className="h-6 w-6 rounded-full bg-[#15949C] border-2 border-white shadow-lg flex items-center justify-center">
-                    <MapPin className="h-3 w-3 text-white" />
-                  </div>
-                  {searchRadius && (
-                    <div 
-                      className="absolute rounded-full border-2 border-[#15949C]/30 bg-[#15949C]/10 transform -translate-x-1/2 -translate-y-1/2"
-                      style={{
-                        width: `${Math.min(searchRadius * 2, 200)}px`,
-                        height: `${Math.min(searchRadius * 2, 200)}px`,
-                        top: '50%',
-                        left: '50%'
-                      }}
-                    />
-                  )}
-                </div>
+                <span className='text-white font-medium text-sm'>${freelancer.hourlyRate}</span>
               </div>
-            )}
 
-            {/* Freelancer Markers */}
-            {filteredFreelancers.map((freelancer, index) => {
-              const position = generateMapPosition(index, filteredFreelancers.length)
-              const isSelected = selectedMarker === freelancer.id
-              const isChosenFreelancer = selectedFreelancers.includes(freelancer.id)
+              {selectedMarker === freelancer.id && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className='absolute z-10 w-64 -translate-x-1/2 translate-y-2'
+                >
+                  <Card className='shadow-lg'>
+                    <CardContent className='p-4'>
+                      <div className='flex items-start gap-3'>
+                        <Avatar className='h-10 w-10'>
+                          <AvatarImage src={freelancer.avatar} alt={freelancer.name} />
+                          <AvatarFallback className='bg-[#15949C]/20 text-[#15949C]'>
+                            {freelancer.name
+                              .split(' ')
+                              .map((n) => n[0])
+                              .join('')}
+                          </AvatarFallback>
+                        </Avatar>
 
-              return (
-                <div key={freelancer.id}>
-                  <motion.div
-                    className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-15"
-                    style={position}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedMarker(isSelected ? null : freelancer.id)}
-                  >
-                    <div className="relative">
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-medium shadow-lg transition-all
-                        ${isSelected ? 'bg-[#15949C] scale-110' : 'bg-[#15949C]/80 hover:bg-[#15949C]'}
-                        ${isChosenFreelancer ? 'ring-2 ring-yellow-400' : ''}
-                      `}>
-                        ${freelancer.hourlyRate}
-                      </div>
-                      
-                      {freelancer.rating >= 4.5 && (
-                        <div className="absolute -top-1 -right-1">
-                          <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
+                        <div className='flex-1'>
+                          <div className='flex items-center justify-between'>
+                            <h4 className='font-medium text-[#002333]'>{freelancer.name}</h4>
+                            <span className='font-bold text-[#002333]'>${freelancer.hourlyRate}/hr</span>
+                          </div>
+
+                          <p className='text-xs text-[#002333]/70'>{freelancer.title}</p>
+
+                          <div className='flex items-center mt-1'>
+                            <div className='flex mr-1'>{renderStars(freelancer.rating)}</div>
+                            <span className='text-xs text-[#002333]'>{freelancer.rating}</span>
+                          </div>
+
+                          <div className='flex items-center mt-1 text-xs text-[#002333]/70'>
+                            <MapPin className='h-3 w-3 mr-1' />
+                            {freelancer.location}
+                          </div>
+
+                          <div className='mt-2 flex flex-wrap gap-1'>
+                            {freelancer.skills.map((skill) => (
+                              <Badge key={skill} variant='outline' className='text-xs py-0'>
+                                {skill}
+                              </Badge>
+                            ))}
+                          </div>
+
+                          <div className='mt-3 flex gap-2'>
+                            <Button
+                              size='sm'
+                              className='flex-1 h-8 text-xs bg-[#15949C] hover:bg-[#15949C]/90'
+                              onClick={() => openFreelancerDetail(freelancer)}
+                            >
+                              View Profile
+                            </Button>
+                            <Button
+                              size='sm'
+                              variant='outline'
+                              className='h-8 text-xs'
+                              onClick={() => toggleFreelancerSelection(freelancer.id)}
+                            >
+                              {selectedFreelancers.includes(freelancer.id) ? 'Selected' : 'Select'}
+                            </Button>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </motion.div>
-
-                  {/* Freelancer Details Popup */}
-                  <AnimatePresence>
-                    {isSelected && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute z-30 w-80"
-                        style={{
-                          top: position.top,
-                          left: position.left,
-                          transform: 'translate(-50%, calc(-100% - 10px))'
-                        }}
-                      >
-                        <Card className="shadow-xl border-2 border-[#15949C]/20">
-                          <CardContent className="p-4">
-                            <div className="flex items-start gap-3">
-                              <Avatar className="h-12 w-12 border-2 border-[#15949C]/20">
-                                <AvatarImage src={freelancer.avatar} alt={freelancer.name} />
-                                <AvatarFallback className="bg-[#15949C]/20 text-[#15949C]">
-                                  {freelancer.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
-                                </AvatarFallback>
-                              </Avatar>
-
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between mb-1">
-                                  <h4 className="font-semibold text-[#002333] truncate">
-                                    {freelancer.name}
-                                  </h4>
-                                  <span className="font-bold text-[#15949C] text-lg">
-                                    ${freelancer.hourlyRate}/hr
-                                  </span>
-                                </div>
-
-                                <p className="text-sm text-[#002333]/70 mb-2 truncate">
-                                  {freelancer.title}
-                                </p>
-
-                                <div className="flex items-center mb-2">
-                                  <div className="flex mr-1">{renderStars(freelancer.rating)}</div>
-                                  <span className="text-sm text-[#002333] mr-1">{freelancer.rating}</span>
-                                  <span className="text-sm text-[#002333]/70">
-                                    ({freelancer.reviewCount} reviews)
-                                  </span>
-                                </div>
-
-                                <div className="flex items-center mb-3 text-sm text-[#002333]/70">
-                                  <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
-                                  <span className="truncate">{freelancer.location}</span>
-                                  {freelancer.timezone && (
-                                    <Badge variant="outline" className="ml-2 text-xs">
-                                      {freelancer.timezone.split('/')[1]?.replace('_', ' ')}
-                                    </Badge>
-                                  )}
-                                </div>
-
-                                <div className="flex flex-wrap gap-1 mb-3">
-                                  {freelancer.skills.slice(0, 3).map((skill) => (
-                                    <Badge 
-                                      key={skill} 
-                                      variant="outline" 
-                                      className="text-xs py-0"
-                                    >
-                                      {skill}
-                                    </Badge>
-                                  ))}
-                                  {freelancer.skills.length > 3 && (
-                                    <Badge variant="outline" className="text-xs py-0">
-                                      +{freelancer.skills.length - 3}
-                                    </Badge>
-                                  )}
-                                </div>
-
-                                <div className="flex gap-2">
-                                  <Button
-                                    size="sm"
-                                    className="flex-1 h-8 text-xs bg-[#15949C] hover:bg-[#15949C]/90"
-                                    onClick={() => openFreelancerDetail(freelancer)}
-                                  >
-                                    View Profile
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 px-2"
-                                    onClick={() => toggleFreelancerSelection(freelancer.id)}
-                                  >
-                                    {isChosenFreelancer ? (
-                                      <Check className="h-3 w-3" />
-                                    ) : (
-                                      <Heart className="h-3 w-3" />
-                                    )}
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 px-2"
-                                  >
-                                    <MessageSquare className="h-3 w-3" />
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )
-            })}
-          </div>
-
-          {/* Map Stats */}
-          <div className="absolute bottom-4 left-4 right-4 z-20">
-            <div className="flex items-center justify-between">
-              <div className="bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm">
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-1">
-                    <div className="h-2 w-2 rounded-full bg-[#15949C]"></div>
-                    <span className="text-[#002333]/70">
-                      {filteredFreelancers.length} freelancers
-                    </span>
-                  </div>
-                  {selectedFreelancers.length > 0 && (
-                    <div className="flex items-center gap-1">
-                      <div className="h-2 w-2 rounded-full bg-yellow-400"></div>
-                      <span className="text-[#002333]/70">
-                        {selectedFreelancers.length} selected
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {selectedLocation && (
-                <div className="bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm">
-                  <div className="text-sm text-[#002333]/70">
-                    Within {searchRadius}km of {selectedLocation.name}
-                  </div>
-                </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               )}
             </div>
-          </div>
-
-          {/* Click outside to close popup */}
-          {selectedMarker && (
-            <div 
-              className="absolute inset-0 z-10"
-              onClick={() => setSelectedMarker(null)}
-            />
-          )}
-        </CardContent>
-      </Card>
+          )
+        })}
+      </div>
     </div>
   )
 }
+

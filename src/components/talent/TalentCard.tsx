@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use client";
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -47,9 +47,9 @@ const TalentCard: React.FC<TalentCardProps> = ({
 
   const getActionLink = () => {
     switch (actionText.toLowerCase()) {
-      case "message":
+      case 'message':
         return `/talent/${id}/messages`;
-      case "hire now":
+      case 'hire now':
         return `/talent/${id}/send-offer`;
       default:
         return `/talent/${id}`;
@@ -91,7 +91,7 @@ const TalentCard: React.FC<TalentCardProps> = ({
         {skills.map((skill, index) => (
           <span
             key={index}
-            className={`px-3 py-1 rounded-full text-sm font-medium text-white ${skill.color} ${index === 0 && "bg-slate-500"}`}
+            className={`px-3 py-1 rounded-full text-sm font-medium text-white ${skill.color} ${index === 0 && 'bg-slate-500'}`}
           >
             {skill.name}
           </span>

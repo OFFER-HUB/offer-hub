@@ -3,9 +3,9 @@
  * @author Offer Hub Team
  */
 
-"use client"
+'use client'
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from 'react'
 import type {
   FinancialMetrics,
   RevenueStream,
@@ -14,8 +14,8 @@ import type {
   Expense,
   PaymentProcessingMetrics,
   ProfitabilityAnalysis,
-} from "@/types/financial.types"
-import { financialService } from "@/components/admin/financial/financial_service"
+} from '@/types/financial.types'
+import { financialService } from '@/components/admin/financial/financial_service'
 import {
   mockRevenueStreams,
   mockExpenseBreakdownData,
@@ -25,7 +25,7 @@ import {
   mockFinancialMetrics,
   mockPaymentMetrics,
   mockProfitabilityAnalysis,
-} from "@/data/mock-financial-data"
+} from '@/data/mock-financial-data'
 
 interface UseFinancialManagementReturn {
   // State
@@ -44,7 +44,7 @@ interface UseFinancialManagementReturn {
   refreshData: () => Promise<void>
   updateFee: (feeId: string, updates: Partial<Fee>) => Promise<void>
   generateReport: (type: string, period: { start: Date; end: Date }) => Promise<void>
-  exportData: (format: "csv" | "pdf", additionalData?: any) => Promise<void>
+  exportData: (format: 'csv' | 'pdf', additionalData?: any) => Promise<void>
   setDateRange: (range: { start: Date; end: Date }) => void
 }
 
@@ -80,7 +80,7 @@ export function useFinancialManagement(): UseFinancialManagementReturn {
       setPaymentMetrics(mockPaymentMetrics)
       setProfitabilityAnalysis(mockProfitabilityAnalysis)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setLoading(false)
     }
@@ -91,7 +91,7 @@ export function useFinancialManagement(): UseFinancialManagementReturn {
       const updatedFee = await financialService.updateFee(feeId, updates)
       setFees((prev) => prev.map((fee) => (fee.id === feeId ? updatedFee : fee)))
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update fee")
+      setError(err instanceof Error ? err.message : 'Failed to update fee')
     }
   }, [])
 
@@ -100,12 +100,12 @@ export function useFinancialManagement(): UseFinancialManagementReturn {
       await financialService.generateReport(type, period)
       // In a real app, this would trigger a download or show the report
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate report")
+      setError(err instanceof Error ? err.message : 'Failed to generate report')
     }
   }, [])
 
   const exportData = useCallback(
-    async (format: "csv" | "pdf", additionalData?: any) => {
+    async (format: 'csv' | 'pdf', additionalData?: any) => {
       try {
         const exportPayload = {
           ...metrics,
@@ -113,22 +113,22 @@ export function useFinancialManagement(): UseFinancialManagementReturn {
           revenueStreams: mockRevenueStreams, // Use centralized mock data
           expenseBreakdownData: mockExpenseBreakdownData,
           exportDate: new Date().toISOString(),
-          reportType: "Financial Analysis",
+          reportType: 'Financial Analysis',
         }
 
-        console.log("[v0] Exporting data:", exportPayload)
+        console.log('[v0] Exporting data:', exportPayload)
         const blob = await financialService.exportData(format, exportPayload)
 
         if (!blob || blob.size === 0) {
-          throw new Error("Export service returned invalid blob")
+          throw new Error('Export service returned invalid blob')
         }
 
         const url = URL.createObjectURL(blob)
-        const a = document.createElement("a")
+        const a = document.createElement('a')
         a.href = url
 
-        const timestamp = new Date().toISOString().split("T")[0]
-        const fileExtensions = { csv: "csv", pdf: "pdf" }
+        const timestamp = new Date().toISOString().split('T')[0]
+        const fileExtensions = { csv: 'csv', pdf: 'pdf' }
         a.download = `financial-report-${timestamp}.${fileExtensions[format]}`
 
         document.body.appendChild(a)
@@ -136,8 +136,8 @@ export function useFinancialManagement(): UseFinancialManagementReturn {
         document.body.removeChild(a)
         URL.revokeObjectURL(url)
       } catch (err) {
-        console.error("[v0] Export error:", err)
-        setError(err instanceof Error ? err.message : "Failed to export data")
+        console.error('[v0] Export error:', err)
+        setError(err instanceof Error ? err.message : 'Failed to export data')
       }
     },
     [metrics],

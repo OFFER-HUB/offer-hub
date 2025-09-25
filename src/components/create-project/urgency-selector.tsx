@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 interface UrgencySelectorProps {
   urgency: string;
@@ -10,21 +10,21 @@ interface UrgencySelectorProps {
 }
 
 const urgencyOptions = [
-  { value: "low", label: "Low - Flexible timeline" },
-  { value: "medium", label: "Medium - Standard timeline" },
-  { value: "high", label: "High - Urgent delivery needed" },
-  { value: "critical", label: "Critical - ASAP delivery required" },
+  { value: 'low', label: 'Low - Flexible timeline' },
+  { value: 'medium', label: 'Medium - Standard timeline' },
+  { value: 'high', label: 'High - Urgent delivery needed' },
+  { value: 'critical', label: 'Critical - ASAP delivery required' },
 ];
 
-export function UrgencySelector({ urgency, onUrgencyChange, label = "Project Urgency" }: UrgencySelectorProps) {
+export function UrgencySelector({ urgency, onUrgencyChange, label = 'Project Urgency' }: UrgencySelectorProps) {
   return (
-    <div className="space-y-2">
-      <Label htmlFor="urgency" className="text-sm font-medium text-gray-700">
+    <div className='space-y-2'>
+      <Label htmlFor='urgency' className='text-sm font-medium text-gray-700'>
         {label}
       </Label>
       <Select value={urgency} onValueChange={onUrgencyChange}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select project urgency" />
+        <SelectTrigger className='w-full'>
+          <SelectValue placeholder='Select project urgency' />
         </SelectTrigger>
         <SelectContent>
           {urgencyOptions.map((option) => (

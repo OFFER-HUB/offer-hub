@@ -148,14 +148,14 @@ export function ResolutionTemplates({
 
   const getTemplateIcon = (type: TemplateType) => {
     switch (type) {
-      case 'communication': return <Users className="h-4 w-4" />;
-      case 'evidence_request': return <FileText className="h-4 w-4" />;
-      case 'mediation_proposal': return <Users className="h-4 w-4" />;
-      case 'resolution_proposal': return <CheckCircle className="h-4 w-4" />;
-      case 'decision_notification': return <AlertCircle className="h-4 w-4" />;
-      case 'escalation_notice': return <TrendingUp className="h-4 w-4" />;
-      case 'closure_notification': return <CheckCircle className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+      case 'communication': return <Users className='h-4 w-4' />;
+      case 'evidence_request': return <FileText className='h-4 w-4' />;
+      case 'mediation_proposal': return <Users className='h-4 w-4' />;
+      case 'resolution_proposal': return <CheckCircle className='h-4 w-4' />;
+      case 'decision_notification': return <AlertCircle className='h-4 w-4' />;
+      case 'escalation_notice': return <TrendingUp className='h-4 w-4' />;
+      case 'closure_notification': return <CheckCircle className='h-4 w-4' />;
+      default: return <FileText className='h-4 w-4' />;
     }
   };
 
@@ -181,9 +181,9 @@ export function ResolutionTemplates({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="flex items-center space-x-2">
-          <FileText className="h-5 w-5 animate-pulse" />
+      <div className='flex items-center justify-center p-8'>
+        <div className='flex items-center space-x-2'>
+          <FileText className='h-5 w-5 animate-pulse' />
           <span>Loading templates...</span>
         </div>
       </div>
@@ -192,13 +192,13 @@ export function ResolutionTemplates({
 
   if (error) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6 text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Error Loading Templates</h3>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={() => actions.getTemplates()} variant="outline">
+      <div className='flex items-center justify-center p-8'>
+        <Card className='w-full max-w-md'>
+          <CardContent className='p-6 text-center'>
+            <AlertCircle className='h-12 w-12 text-red-500 mx-auto mb-4' />
+            <h3 className='text-lg font-semibold mb-2'>Error Loading Templates</h3>
+            <p className='text-gray-600 mb-4'>{error}</p>
+            <Button onClick={() => actions.getTemplates()} variant='outline'>
               Retry
             </Button>
           </CardContent>
@@ -208,20 +208,20 @@ export function ResolutionTemplates({
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Resolution Templates</h2>
-          <p className="text-gray-600">Manage and apply standardized dispute resolution templates</p>
+          <h2 className='text-2xl font-bold text-gray-900'>Resolution Templates</h2>
+          <p className='text-gray-600'>Manage and apply standardized dispute resolution templates</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button size="sm" variant="outline" onClick={() => setShowFilters(!showFilters)}>
-            <Filter className="h-4 w-4 mr-2" />
+        <div className='flex items-center space-x-2'>
+          <Button size='sm' variant='outline' onClick={() => setShowFilters(!showFilters)}>
+            <Filter className='h-4 w-4 mr-2' />
             Filters
           </Button>
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-2" />
+          <Button size='sm'>
+            <Plus className='h-4 w-4 mr-2' />
             New Template
           </Button>
         </div>
@@ -229,48 +229,48 @@ export function ResolutionTemplates({
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-col lg:flex-row gap-4">
+        <CardContent className='p-4'>
+          <div className='flex flex-col lg:flex-row gap-4'>
             {/* Search */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <div className='flex-1'>
+              <div className='relative'>
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
                 <Input
-                  placeholder="Search templates..."
+                  placeholder='Search templates...'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className='pl-10'
                 />
               </div>
             </div>
 
             {/* Quick Filters */}
-            <div className="flex flex-wrap gap-2">
+            <div className='flex flex-wrap gap-2'>
               <Select value={selectedType} onValueChange={(value: TemplateType | 'all') => setSelectedType(value)}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="All Types" />
+                <SelectTrigger className='w-40'>
+                  <SelectValue placeholder='All Types' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="communication">Communication</SelectItem>
-                  <SelectItem value="evidence_request">Evidence Request</SelectItem>
-                  <SelectItem value="mediation_proposal">Mediation Proposal</SelectItem>
-                  <SelectItem value="resolution_proposal">Resolution Proposal</SelectItem>
-                  <SelectItem value="decision_notification">Decision Notification</SelectItem>
-                  <SelectItem value="escalation_notice">Escalation Notice</SelectItem>
-                  <SelectItem value="closure_notification">Closure Notification</SelectItem>
+                  <SelectItem value='all'>All Types</SelectItem>
+                  <SelectItem value='communication'>Communication</SelectItem>
+                  <SelectItem value='evidence_request'>Evidence Request</SelectItem>
+                  <SelectItem value='mediation_proposal'>Mediation Proposal</SelectItem>
+                  <SelectItem value='resolution_proposal'>Resolution Proposal</SelectItem>
+                  <SelectItem value='decision_notification'>Decision Notification</SelectItem>
+                  <SelectItem value='escalation_notice'>Escalation Notice</SelectItem>
+                  <SelectItem value='closure_notification'>Closure Notification</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="Sort by" />
+                <SelectTrigger className='w-40'>
+                  <SelectValue placeholder='Sort by' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="usage">Most Used</SelectItem>
-                  <SelectItem value="success_rate">Success Rate</SelectItem>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="last_modified">Recently Modified</SelectItem>
+                  <SelectItem value='usage'>Most Used</SelectItem>
+                  <SelectItem value='success_rate'>Success Rate</SelectItem>
+                  <SelectItem value='name'>Name</SelectItem>
+                  <SelectItem value='last_modified'>Recently Modified</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -283,49 +283,49 @@ export function ResolutionTemplates({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 pt-4 border-t space-y-4"
+                className='mt-4 pt-4 border-t space-y-4'
               >
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                   <Select value={selectedCategory} onValueChange={(value: any) => setSelectedCategory(value)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="All Categories" />
+                      <SelectValue placeholder='All Categories' />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      <SelectItem value="payment_dispute">Payment Dispute</SelectItem>
-                      <SelectItem value="quality_dispute">Quality Dispute</SelectItem>
-                      <SelectItem value="scope_dispute">Scope Dispute</SelectItem>
-                      <SelectItem value="deadline_dispute">Deadline Dispute</SelectItem>
-                      <SelectItem value="communication_issue">Communication Issue</SelectItem>
-                      <SelectItem value="contract_breach">Contract Breach</SelectItem>
-                      <SelectItem value="intellectual_property">Intellectual Property</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value='all'>All Categories</SelectItem>
+                      <SelectItem value='payment_dispute'>Payment Dispute</SelectItem>
+                      <SelectItem value='quality_dispute'>Quality Dispute</SelectItem>
+                      <SelectItem value='scope_dispute'>Scope Dispute</SelectItem>
+                      <SelectItem value='deadline_dispute'>Deadline Dispute</SelectItem>
+                      <SelectItem value='communication_issue'>Communication Issue</SelectItem>
+                      <SelectItem value='contract_breach'>Contract Breach</SelectItem>
+                      <SelectItem value='intellectual_property'>Intellectual Property</SelectItem>
+                      <SelectItem value='other'>Other</SelectItem>
                     </SelectContent>
                   </Select>
 
                   <Select value={selectedStatus} onValueChange={(value: any) => setSelectedStatus(value)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="All Statuses" />
+                      <SelectValue placeholder='All Statuses' />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Statuses</SelectItem>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="archived">Archived</SelectItem>
+                      <SelectItem value='all'>All Statuses</SelectItem>
+                      <SelectItem value='active'>Active</SelectItem>
+                      <SelectItem value='inactive'>Inactive</SelectItem>
+                      <SelectItem value='draft'>Draft</SelectItem>
+                      <SelectItem value='archived'>Archived</SelectItem>
                     </SelectContent>
                   </Select>
 
-                  <div className="flex space-x-2">
+                  <div className='flex space-x-2'>
                     <Button
-                      size="sm"
+                      size='sm'
                       variant={viewMode === 'grid' ? 'default' : 'outline'}
                       onClick={() => setViewMode('grid')}
                     >
                       Grid
                     </Button>
                     <Button
-                      size="sm"
+                      size='sm'
                       variant={viewMode === 'list' ? 'default' : 'outline'}
                       onClick={() => setViewMode('list')}
                     >
@@ -340,9 +340,9 @@ export function ResolutionTemplates({
       </Card>
 
       {/* Results Summary */}
-      <div className="flex items-center justify-between text-sm text-gray-600">
+      <div className='flex items-center justify-between text-sm text-gray-600'>
         <span>{filteredTemplates.length} templates found</span>
-        <div className="flex items-center space-x-4">
+        <div className='flex items-center space-x-4'>
           <span>Showing {filteredTemplates.length} of {templates.length}</span>
         </div>
       </div>
@@ -364,35 +364,35 @@ export function ResolutionTemplates({
               <Card className={`hover:shadow-lg transition-shadow cursor-pointer ${
                 selectedTemplate?.id === template.id ? 'ring-2 ring-blue-500' : ''
               }`}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-3">
+                <CardHeader className='pb-3'>
+                  <div className='flex items-start justify-between'>
+                    <div className='flex items-center space-x-3'>
                       <div className={`p-2 rounded-lg ${getStatusColor(template.status)} text-white`}>
                         {getTemplateIcon(template.type)}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 truncate">{template.name}</h3>
-                        <p className="text-sm text-gray-600 truncate">{template.description}</p>
+                      <div className='flex-1 min-w-0'>
+                        <h3 className='font-semibold text-gray-900 truncate'>{template.name}</h3>
+                        <p className='text-sm text-gray-600 truncate'>{template.description}</p>
                       </div>
                     </div>
                     {allowQuickActions && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button variant='ghost' size='sm'>
+                            <MoreHorizontal className='h-4 w-4' />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align='end'>
                           <DropdownMenuItem onClick={() => handleQuickAction('preview', template)}>
-                            <Eye className="h-4 w-4 mr-2" />
+                            <Eye className='h-4 w-4 mr-2' />
                             Preview
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleQuickAction('duplicate', template)}>
-                            <Copy className="h-4 w-4 mr-2" />
+                            <Copy className='h-4 w-4 mr-2' />
                             Duplicate
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleQuickAction('export', template)}>
-                            <Download className="h-4 w-4 mr-2" />
+                            <Download className='h-4 w-4 mr-2' />
                             Export
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -401,57 +401,57 @@ export function ResolutionTemplates({
                   </div>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
+                <CardContent className='space-y-4'>
                   {/* Template Info */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Success Rate</span>
-                      <span className="font-medium">{template.metadata.successRate}%</span>
+                  <div className='space-y-2'>
+                    <div className='flex items-center justify-between text-sm'>
+                      <span className='text-gray-600'>Success Rate</span>
+                      <span className='font-medium'>{template.metadata.successRate}%</span>
                     </div>
-                    <Progress value={template.metadata.successRate} className="h-2" />
+                    <Progress value={template.metadata.successRate} className='h-2' />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <Users className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-600">{template.metadata.usageCount} uses</span>
+                  <div className='grid grid-cols-2 gap-4 text-sm'>
+                    <div className='flex items-center space-x-2'>
+                      <Users className='h-4 w-4 text-gray-400' />
+                      <span className='text-gray-600'>{template.metadata.usageCount} uses</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-600">{template.metadata.averageResolutionTime}h avg</span>
+                    <div className='flex items-center space-x-2'>
+                      <Clock className='h-4 w-4 text-gray-400' />
+                      <span className='text-gray-600'>{template.metadata.averageResolutionTime}h avg</span>
                     </div>
                   </div>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-1">
+                  <div className='flex flex-wrap gap-1'>
                     {template.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
+                      <Badge key={tag} variant='secondary' className='text-xs'>
                         {tag}
                       </Badge>
                     ))}
                     {template.tags.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant='secondary' className='text-xs'>
                         +{template.tags.length - 3}
                       </Badge>
                     )}
                   </div>
 
                   {/* Quality Indicators */}
-                  <div className="flex items-center justify-between pt-2 border-t">
-                    <div className="flex items-center space-x-2">
+                  <div className='flex items-center justify-between pt-2 border-t'>
+                    <div className='flex items-center space-x-2'>
                       <div className={`h-2 w-2 rounded-full ${getStatusColor(template.status)}`} />
-                      <span className="text-xs text-gray-600 capitalize">{template.status}</span>
+                      <span className='text-xs text-gray-600 capitalize'>{template.status}</span>
                     </div>
-                    <div className="flex items-center space-x-1">
+                    <div className='flex items-center space-x-1'>
                       {template.isDefault && (
-                        <Badge variant="outline" className="text-xs">
-                          <Star className="h-3 w-3 mr-1" />
+                        <Badge variant='outline' className='text-xs'>
+                          <Star className='h-3 w-3 mr-1' />
                           Default
                         </Badge>
                       )}
                       {template.mobileOptimized && (
-                        <Badge variant="outline" className="text-xs">
-                          <Zap className="h-3 w-3 mr-1" />
+                        <Badge variant='outline' className='text-xs'>
+                          <Zap className='h-3 w-3 mr-1' />
                           Mobile
                         </Badge>
                       )}
@@ -461,8 +461,8 @@ export function ResolutionTemplates({
                   {/* Action Button */}
                   <Button
                     onClick={() => handleTemplateSelect(template)}
-                    className="w-full"
-                    size="sm"
+                    className='w-full'
+                    size='sm'
                   >
                     Use Template
                   </Button>
@@ -475,14 +475,14 @@ export function ResolutionTemplates({
 
       {/* Empty State */}
       {filteredTemplates.length === 0 && (
-        <div className="text-center py-12">
-          <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No templates found</h3>
-          <p className="text-gray-600 mb-4">
+        <div className='text-center py-12'>
+          <FileText className='h-12 w-12 text-gray-400 mx-auto mb-4' />
+          <h3 className='text-lg font-semibold text-gray-900 mb-2'>No templates found</h3>
+          <p className='text-gray-600 mb-4'>
             Try adjusting your search or filters to find templates.
           </p>
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className='h-4 w-4 mr-2' />
             Create New Template
           </Button>
         </div>
@@ -490,42 +490,42 @@ export function ResolutionTemplates({
 
       {/* Template Preview Dialog */}
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className='max-w-4xl max-h-[80vh] overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Template Preview: {selectedTemplate?.name}</DialogTitle>
           </DialogHeader>
           {selectedTemplate && (
-            <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2">Template Information</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className='space-y-4'>
+              <div className='bg-gray-50 p-4 rounded-lg'>
+                <h4 className='font-semibold mb-2'>Template Information</h4>
+                <div className='grid grid-cols-2 gap-4 text-sm'>
                   <div>
-                    <span className="font-medium">Type:</span> {selectedTemplate.type}
+                    <span className='font-medium'>Type:</span> {selectedTemplate.type}
                   </div>
                   <div>
-                    <span className="font-medium">Category:</span> {selectedTemplate.category}
+                    <span className='font-medium'>Category:</span> {selectedTemplate.category}
                   </div>
                   <div>
-                    <span className="font-medium">Success Rate:</span> {selectedTemplate.metadata.successRate}%
+                    <span className='font-medium'>Success Rate:</span> {selectedTemplate.metadata.successRate}%
                   </div>
                   <div>
-                    <span className="font-medium">Usage:</span> {selectedTemplate.metadata.usageCount} times
+                    <span className='font-medium'>Usage:</span> {selectedTemplate.metadata.usageCount} times
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <h4 className="font-semibold">Template Sections</h4>
+              <div className='space-y-3'>
+                <h4 className='font-semibold'>Template Sections</h4>
                 {selectedTemplate.sections.map((section) => (
-                  <div key={section.id} className="border rounded-lg p-4">
-                    <h5 className="font-medium mb-2">{section.title}</h5>
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{section.content}</p>
+                  <div key={section.id} className='border rounded-lg p-4'>
+                    <h5 className='font-medium mb-2'>{section.title}</h5>
+                    <p className='text-sm text-gray-700 whitespace-pre-wrap'>{section.content}</p>
                     {section.variables.length > 0 && (
-                      <div className="mt-3">
-                        <span className="text-xs font-medium text-gray-600">Variables:</span>
-                        <div className="flex flex-wrap gap-1 mt-1">
+                      <div className='mt-3'>
+                        <span className='text-xs font-medium text-gray-600'>Variables:</span>
+                        <div className='flex flex-wrap gap-1 mt-1'>
                           {section.variables.map((variable) => (
-                            <Badge key={variable.id} variant="outline" className="text-xs">
+                            <Badge key={variable.id} variant='outline' className='text-xs'>
                               {variable.name}
                             </Badge>
                           ))}

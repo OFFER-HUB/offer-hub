@@ -10,7 +10,7 @@ export interface AuthValidationState {
   password: FieldValidation;
   formValid: boolean;
   loading: boolean;
-  errorCategory?: "validation" | "auth" | "network" | "server";
+  errorCategory?: 'validation' | 'auth' | 'network' | 'server';
   errorMessage?: string;
   rateLimit?: {
     attempts: number;

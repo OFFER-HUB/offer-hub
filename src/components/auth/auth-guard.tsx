@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useAuthGuard } from "@/hooks/use-auth-guard";
-import { ReactNode } from "react"
-import { LoadingSpinner } from "../LoadingSpinner";
-import { AccessDenied } from "./AccessDenied";
+import { useAuthGuard } from '@/hooks/use-auth-guard';
+import { ReactNode } from 'react'
+import { LoadingSpinner } from '../LoadingSpinner';
+import { AccessDenied } from './AccessDenied';
 
 
 
@@ -21,10 +21,10 @@ export const AuthGuard = ({ children, roles }: AuthGuardProps) => {
 
     if (isLoading) {
         return (
-            <div className="w-full h-screen flex items-center flex-col justify-center gap-3 " >
+            <div className='w-full h-screen flex items-center flex-col justify-center gap-3 ' >
 
                 <LoadingSpinner />
-                <span className=" text-teal-600">Verifying access…</span>
+                <span className=' text-teal-600'>Verifying access…</span>
             </div>
         )
     }
@@ -32,14 +32,14 @@ export const AuthGuard = ({ children, roles }: AuthGuardProps) => {
 
     if (error) {
         return (
-            <div className="w-full h-screen flex items-center justify-center gap-3 ">
-                <p className="text-red-600 font-medium">{error}</p>
+            <div className='w-full h-screen flex items-center justify-center gap-3 '>
+                <p className='text-red-600 font-medium'>{error}</p>
             </div>
         )
     }
 
     if (!isAuthenticated) {
-        return "Please get authenticated"
+        return 'Please get authenticated'
     }
 
     if (!hasAccess) {

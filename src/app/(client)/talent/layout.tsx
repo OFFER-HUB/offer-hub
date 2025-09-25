@@ -1,6 +1,6 @@
-import Header from "@/components/client-dashboard/Header";
-import { ClientSidebar } from "@/components/client-dashboard/Sidebar";
-import { Metadata } from "next";
+import Header from '@/components/client-dashboard/Header';
+import { ClientSidebar } from '@/components/client-dashboard/Sidebar';
+import { Metadata } from 'next';
 
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
             <section className='flex pt-16'>
                 <ClientSidebar />
 
-                <div className="flex-1">
+                <div className='flex-1'>
                     {children}
                 </div>
             </section>

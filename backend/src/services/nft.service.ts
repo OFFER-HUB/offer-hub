@@ -1,46 +1,46 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from '@/lib/supabase/supabase';
 import {
   CreateNFTAwardedDTO,
   NFTAwarded,
   NFTAwardedWithUser,
-} from "@/types/nft.types";
-import { InternalServerError,ConflictError, NotFoundError, ValidationError } from "@/utils/AppError";
+} from '@/types/nft.types';
+import { InternalServerError,ConflictError, NotFoundError, ValidationError } from '@/utils/AppError';
 class NFTService {
   async registerMintedNFT(nftData: CreateNFTAwardedDTO): Promise<NFTAwarded> {
     const { user_id, nft_type, token_id_on_chain } = nftData;
 
     // First, verify that the user exists
     const { data: user, error: userError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("id", user_id)
+      .from('users')
+      .select('id')
+      .eq('id', user_id)
       .single();
 
     if (userError || !user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     // Check if this NFT has already been registered for this user
     const { data: existingNFT, error: checkError } = await supabase
-      .from("nfts_awarded")
-      .select("id")
-      .eq("user_id", user_id)
-      .eq("nft_type", nft_type)
-      .eq("token_id_on_chain", token_id_on_chain)
+      .from('nfts_awarded')
+      .select('id')
+      .eq('user_id', user_id)
+      .eq('nft_type', nft_type)
+      .eq('token_id_on_chain', token_id_on_chain)
       .single();
 
-    if (checkError && checkError.code !== "PGRST116") {
+    if (checkError && checkError.code !== 'PGRST116') {
       // PGRST116 is "not found" error, which is expected
       throw new InternalServerError(`Failed to check existing NFT: ${checkError.message}`);
     }
 
     if (existingNFT) {
-      throw new ConflictError("This NFT has already been registered for this user");
+      throw new ConflictError('This NFT has already been registered for this user');
     }
 
     // Register the NFT
     const { data: nft, error } = await supabase
-      .from("nfts_awarded")
+      .from('nfts_awarded')
       .insert({
         user_id,
         nft_type: nft_type.trim(),
@@ -70,23 +70,23 @@ class NFTService {
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(userId)) {
-      throw new ValidationError("Invalid user ID format");
+      throw new ValidationError('Invalid user ID format');
     }
 
     // First, verify that the user exists
     const { data: user, error: userError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("id", userId)
+      .from('users')
+      .select('id')
+      .eq('id', userId)
       .single();
 
     if (userError || !user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     // Get all NFTs for the user with user information
     const { data: nfts, error } = await supabase
-      .from("nfts_awarded")
+      .from('nfts_awarded')
       .select(
         `
         id,
@@ -102,8 +102,8 @@ class NFTService {
         )
       `
       )
-      .eq("user_id", userId)
-      .order("minted_at", { ascending: false });
+      .eq('user_id', userId)
+      .order('minted_at', { ascending: false });
 
     if (error) {
       throw new InternalServerError(`Failed to fetch user NFTs: ${error.message}`);
@@ -137,11 +137,11 @@ class NFTService {
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(nftId)) {
-      throw new ValidationError("Invalid NFT ID format");
+      throw new ValidationError('Invalid NFT ID format');
     }
 
     const { data: nft, error } = await supabase
-      .from("nfts_awarded")
+      .from('nfts_awarded')
       .select(
         `
         id,
@@ -157,7 +157,7 @@ class NFTService {
         )
       `
       )
-      .eq("id", nftId)
+      .eq('id', nftId)
       .single();
 
     if (error || !nft) {
@@ -185,7 +185,7 @@ class NFTService {
   // Additional utility methods
   async getNFTsByType(nftType: string): Promise<NFTAwardedWithUser[]> {
     const { data: nfts, error } = await supabase
-      .from("nfts_awarded")
+      .from('nfts_awarded')
       .select(
         `
         id,
@@ -201,8 +201,8 @@ class NFTService {
         )
       `
       )
-      .eq("nft_type", nftType)
-      .order("minted_at", { ascending: false });
+      .eq('nft_type', nftType)
+      .order('minted_at', { ascending: false });
 
     if (error) {
       throw new InternalServerError(`Failed to fetch NFTs by type: ${error.message}`);
@@ -233,8 +233,8 @@ class NFTService {
 
   async getNFTTypes(): Promise<string[]> {
     const { data: types, error } = await supabase
-      .from("nfts_awarded")
-      .select("nft_type");
+      .from('nfts_awarded')
+      .select('nft_type');
 
     if (error) {
       throw new InternalServerError(`Failed to fetch NFT types: ${error.message}`);

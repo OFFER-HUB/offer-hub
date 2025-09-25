@@ -8,11 +8,11 @@ interface TalentLayoutProps {
 
 const TalentLayout = ({
   children,
-  padding = "p-8",       
-  borderRadius = "rounded-none", 
+  padding = 'p-8',       
+  borderRadius = 'rounded-none', 
 }: Readonly<TalentLayoutProps>) => {
   return (
-    <section className="px-6 py-6">
+    <section className='px-6 py-6'>
       <div className={`bg-white ${borderRadius} ${padding} max-w-2xl mx-auto`}>
         {children}
       </div>

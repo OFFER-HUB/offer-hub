@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { UserAnalyticsCardView, UserAnalyticsModal, UserAnalyticsTableView, UserFilters } from "./components"
-import { useFilteredUsers } from "@/hooks/useFilteredUsers"
-import { User } from "@/interfaces/user.interface"
+import { useState } from 'react'
+import { UserAnalyticsCardView, UserAnalyticsModal, UserAnalyticsTableView, UserFilters } from './components'
+import { useFilteredUsers } from '@/hooks/useFilteredUsers'
+import { User } from '@/interfaces/user.interface'
 
 export default function UserAnalyticsTable() {
   const {
@@ -32,7 +32,7 @@ export default function UserAnalyticsTable() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 mb-3">
+    <div className='space-y-4 md:space-y-6 mb-3'>
       <UserFilters
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}

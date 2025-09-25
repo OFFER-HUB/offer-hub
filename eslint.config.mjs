@@ -28,6 +28,10 @@ const eslintConfig = [
       "@next/next/no-async-client-component": "warn", // Temporarily changed to warn
       "react-hooks/rules-of-hooks": "error", // Keep this as error since it's critical
       "@next/next/no-html-link-for-pages": "error", // Keep this as error since it's important
+      // Quote consistency rules
+      "quotes": ["error", "single"],
+      "quote-props": ["error", "as-needed"],
+      "jsx-quotes": ["error", "prefer-single"]
     }
   }
 ];

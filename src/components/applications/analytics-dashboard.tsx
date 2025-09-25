@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import {
@@ -123,19 +123,19 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-lg">Filters</CardTitle>
-          <div className="space-x-2">
+        <div className='flex justify-between items-center'>
+          <CardTitle className='text-lg'>Filters</CardTitle>
+          <div className='space-x-2'>
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={() => setFiltersOpen(!filtersOpen)}
             >
               {filtersOpen ? 'Hide' : 'Show'} Filters
             </Button>
             <Button
-              variant="outline"
-              size="sm"
+              variant='outline'
+              size='sm'
               onClick={onClearFilters}
             >
               Clear All
@@ -144,16 +144,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </CardHeader>
       {filtersOpen && (
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+        <CardContent className='space-y-4'>
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='space-y-2'>
               <Label>From Date</Label>
               <DatePicker
                 date={filters.dateRange.from}
                 onSelect={(date) => updateDateRange('from', date)}
               />
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <Label>To Date</Label>
               <DatePicker
                 date={filters.dateRange.to}
@@ -162,17 +162,17 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Label>Application Status</Label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className='grid grid-cols-3 gap-2'>
               {Object.values(ApplicationStatus).map(status => (
-                <div key={status} className="flex items-center space-x-2">
+                <div key={status} className='flex items-center space-x-2'>
                   <Checkbox
                     id={`status-${status}`}
                     checked={filters.status?.includes(status) || false}
                     onCheckedChange={() => toggleStatus(status)}
                   />
-                  <Label htmlFor={`status-${status}`} className="text-sm">
+                  <Label htmlFor={`status-${status}`} className='text-sm'>
                     {status.replace(/_/g, ' ')}
                   </Label>
                 </div>
@@ -180,17 +180,17 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Label>Application Source</Label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className='grid grid-cols-3 gap-2'>
               {Object.values(ApplicationSource).map(source => (
-                <div key={source} className="flex items-center space-x-2">
+                <div key={source} className='flex items-center space-x-2'>
                   <Checkbox
                     id={`source-${source}`}
                     checked={filters.source?.includes(source) || false}
                     onCheckedChange={() => toggleSource(source)}
                   />
-                  <Label htmlFor={`source-${source}`} className="text-sm">
+                  <Label htmlFor={`source-${source}`} className='text-sm'>
                     {source.replace(/_/g, ' ')}
                   </Label>
                 </div>
@@ -198,12 +198,12 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='space-y-2'>
               <Label>Min Project Value</Label>
               <Input
-                type="number"
-                placeholder="0"
+                type='number'
+                placeholder='0'
                 value={filters.projectValueRange?.min || ''}
                 onChange={(e) => onFiltersChange({
                   ...filters,
@@ -214,11 +214,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 })}
               />
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <Label>Max Project Value</Label>
               <Input
-                type="number"
-                placeholder="100000"
+                type='number'
+                placeholder='100000'
                 value={filters.projectValueRange?.max || ''}
                 onChange={(e) => onFiltersChange({
                   ...filters,
@@ -231,13 +231,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Label>Success Rate Threshold (%)</Label>
             <Input
-              type="number"
-              min="0"
-              max="100"
-              placeholder="Enter minimum success rate"
+              type='number'
+              min='0'
+              max='100'
+              placeholder='Enter minimum success rate'
               value={filters.successRate || ''}
               onChange={(e) => onFiltersChange({
                 ...filters,
@@ -258,11 +258,11 @@ const KPIGrid: React.FC<KPIGridProps> = ({
 }) => {
   if (loading || !performanceMetrics) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
         {[1, 2, 3, 4].map(i => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="h-16 bg-gray-200 rounded"></div>
+          <Card key={i} className='animate-pulse'>
+            <CardContent className='p-6'>
+              <div className='h-16 bg-gray-200 rounded'></div>
             </CardContent>
           </Card>
         ))}
@@ -281,34 +281,34 @@ const KPIGrid: React.FC<KPIGridProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
       <MetricCard
-        title="Total Applications"
+        title='Total Applications'
         value={ApplicationAnalyticsCalculator.formatNumber(performanceMetrics.totalApplications)}
         change={getTrendValue('applications')}
         trend={getTrendDirection(getTrendValue('applications'))}
-        description="Applications received"
+        description='Applications received'
       />
       <MetricCard
-        title="Success Rate"
+        title='Success Rate'
         value={ApplicationAnalyticsCalculator.formatPercentage(performanceMetrics.successRate)}
         change={getTrendValue('successRate')}
         trend={getTrendDirection(getTrendValue('successRate'))}
-        description="Applications accepted"
+        description='Applications accepted'
       />
       <MetricCard
-        title="Avg Decision Time"
+        title='Avg Decision Time'
         value={ApplicationAnalyticsCalculator.formatDuration(performanceMetrics.averageDecisionTime)}
         change={getTrendValue('decisionTime')}
         trend={getTrendDirection(-getTrendValue('decisionTime'))} // Negative because lower is better
-        description="Time to make decision"
+        description='Time to make decision'
       />
       <MetricCard
-        title="Avg Project Value"
+        title='Avg Project Value'
         value={ApplicationAnalyticsCalculator.formatCurrency(performanceMetrics.averageProjectValue)}
         change={getTrendValue('projectValue')}
         trend={getTrendDirection(getTrendValue('projectValue'))}
-        description="Average project worth"
+        description='Average project worth'
       />
     </div>
   );
@@ -319,22 +319,22 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   predictiveAnalytics,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
       <Card>
         <CardHeader>
           <CardTitle>Key Insights</CardTitle>
           <CardDescription>AI-generated insights from your application data</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {insights.length > 0 ? (
               insights.map((insight, index) => (
-                <div key={index} className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                  <p className="text-sm text-blue-800">{insight}</p>
+                <div key={index} className='p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500'>
+                  <p className='text-sm text-blue-800'>{insight}</p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No insights available. Try adjusting your filters or date range.</p>
+              <p className='text-gray-500'>No insights available. Try adjusting your filters or date range.</p>
             )}
           </div>
         </CardContent>
@@ -347,34 +347,34 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
             <CardDescription>ML-powered application success forecasting</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">
+            <div className='space-y-4'>
+              <div className='text-center'>
+                <div className='text-3xl font-bold text-green-600'>
                   {predictiveAnalytics.applicationSuccessPrediction.successProbability.toFixed(1)}%
                 </div>
-                <p className="text-sm text-gray-600">Predicted Success Rate</p>
+                <p className='text-sm text-gray-600'>Predicted Success Rate</p>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="font-medium">Top Success Factors:</h4>
+              <div className='space-y-2'>
+                <h4 className='font-medium'>Top Success Factors:</h4>
                 {predictiveAnalytics.applicationSuccessPrediction.factors
                   .filter((f: any) => f.impact === 'positive')
                   .slice(0, 3)
                   .map((factor: any, index: number) => (
-                    <div key={index} className="flex justify-between items-center text-sm">
+                    <div key={index} className='flex justify-between items-center text-sm'>
                       <span>{factor.name}</span>
-                      <Badge variant="outline">{(factor.weight * 100).toFixed(0)}%</Badge>
+                      <Badge variant='outline'>{(factor.weight * 100).toFixed(0)}%</Badge>
                     </div>
                   ))}
               </div>
 
               {predictiveAnalytics.applicationSuccessPrediction.recommendations.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="font-medium">Recommendations:</h4>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                <div className='space-y-2'>
+                  <h4 className='font-medium'>Recommendations:</h4>
+                  <ul className='text-sm text-gray-600 space-y-1'>
                     {predictiveAnalytics.applicationSuccessPrediction.recommendations.slice(0, 3).map((rec: string, index: number) => (
-                      <li key={index} className="flex items-start">
-                        <span className="mr-2">•</span>
+                      <li key={index} className='flex items-start'>
+                        <span className='mr-2'>•</span>
                         <span>{rec}</span>
                       </li>
                     ))}
@@ -479,12 +479,12 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   if (error) {
     return (
       <Card className={className}>
-        <CardContent className="p-6">
-          <div className="text-center text-red-600">
-            <p className="text-lg font-medium">Error loading analytics data</p>
+        <CardContent className='p-6'>
+          <div className='text-center text-red-600'>
+            <p className='text-lg font-medium'>Error loading analytics data</p>
             <p>{error}</p>
             <Button
-              className="mt-4"
+              className='mt-4'
               onClick={() => window.location.reload()}
             >
               Retry
@@ -497,19 +497,19 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      <div className="flex justify-between items-center">
+      <div className='flex justify-between items-center'>
         <div>
-          <h1 className="text-3xl font-bold">Application Analytics Dashboard</h1>
-          <p className="text-gray-600">
+          <h1 className='text-3xl font-bold'>Application Analytics Dashboard</h1>
+          <p className='text-gray-600'>
             Comprehensive insights into application performance and user behavior
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Badge variant="secondary">
+        <div className='flex items-center space-x-2'>
+          <Badge variant='secondary'>
             {applications.length} Applications
           </Badge>
           {loading.lastUpdated && (
-            <Badge variant="outline">
+            <Badge variant='outline'>
               Updated: {loading.lastUpdated.toLocaleTimeString()}
             </Badge>
           )}
@@ -523,34 +523,34 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
-          <TabsTrigger value="users">Users</TabsTrigger>
-          <TabsTrigger value="predictive">Predictive</TabsTrigger>
-          <TabsTrigger value="mobile">Mobile</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
+        <TabsList className='grid w-full grid-cols-6'>
+          <TabsTrigger value='overview'>Overview</TabsTrigger>
+          <TabsTrigger value='trends'>Trends</TabsTrigger>
+          <TabsTrigger value='users'>Users</TabsTrigger>
+          <TabsTrigger value='predictive'>Predictive</TabsTrigger>
+          <TabsTrigger value='mobile'>Mobile</TabsTrigger>
+          <TabsTrigger value='reports'>Reports</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value='overview' className='space-y-6'>
           <KPIGrid
             performanceMetrics={performanceMetrics}
             trends={trends}
             loading={loading.isLoading}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-medium">Applications by {chartType}</h3>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+            <div className='space-y-4'>
+              <div className='flex justify-between items-center'>
+                <h3 className='text-lg font-medium'>Applications by {chartType}</h3>
                 <Select value={chartType} onValueChange={(value: any) => setChartType(value)}>
-                  <SelectTrigger className="w-32">
+                  <SelectTrigger className='w-32'>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="status">Status</SelectItem>
-                    <SelectItem value="source">Source</SelectItem>
-                    <SelectItem value="projectType">Project Type</SelectItem>
+                    <SelectItem value='status'>Status</SelectItem>
+                    <SelectItem value='source'>Source</SelectItem>
+                    <SelectItem value='projectType'>Project Type</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -561,8 +561,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               />
             </div>
 
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Application Timeline</h3>
+            <div className='space-y-4'>
+              <h3 className='text-lg font-medium'>Application Timeline</h3>
               <AnalyticsVisualization
                 data={timeSeriesData}
                 type={VisualizationType.LINE_CHART}
@@ -577,44 +577,44 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           />
         </TabsContent>
 
-        <TabsContent value="trends" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Application Trends</h2>
-            <div className="flex space-x-2">
+        <TabsContent value='trends' className='space-y-6'>
+          <div className='flex justify-between items-center'>
+            <h2 className='text-2xl font-bold'>Application Trends</h2>
+            <div className='flex space-x-2'>
               <Select value={trendsPeriod} onValueChange={(value: any) => setTrendsPeriod(value)}>
-                <SelectTrigger className="w-32">
+                <SelectTrigger className='w-32'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value='daily'>Daily</SelectItem>
+                  <SelectItem value='weekly'>Weekly</SelectItem>
+                  <SelectItem value='monthly'>Monthly</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={trendsMetric} onValueChange={(value: any) => setTrendsMetric(value)}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className='w-40'>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="count">Application Count</SelectItem>
-                  <SelectItem value="success_rate">Success Rate</SelectItem>
-                  <SelectItem value="average_value">Average Value</SelectItem>
+                  <SelectItem value='count'>Application Count</SelectItem>
+                  <SelectItem value='success_rate'>Success Rate</SelectItem>
+                  <SelectItem value='average_value'>Average Value</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <AnalyticsVisualization
               data={trends.map(t => ({ name: t.period, value: t.applications }))}
               type={VisualizationType.AREA_CHART}
-              title="Applications Over Time"
+              title='Applications Over Time'
               height={400}
             />
             <AnalyticsVisualization
               data={trends.map(t => ({ name: t.period, value: t.successRate }))}
               type={VisualizationType.LINE_CHART}
-              title="Success Rate Trend"
+              title='Success Rate Trend'
               height={400}
             />
           </div>
@@ -626,24 +626,24 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 value: skill.count,
               }))}
               type={VisualizationType.BAR_CHART}
-              title="Most In-Demand Skills"
+              title='Most In-Demand Skills'
               height={300}
             />
           )}
         </TabsContent>
 
-        <TabsContent value="users" className="space-y-6">
-          <h2 className="text-2xl font-bold">User Behavior Analytics</h2>
+        <TabsContent value='users' className='space-y-6'>
+          <h2 className='text-2xl font-bold'>User Behavior Analytics</h2>
 
           {userPatterns && userPatterns.length > 0 && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               <AnalyticsVisualization
                 data={userPatterns.slice(0, 10).map(pattern => ({
                   name: `User ${pattern.userId.slice(-4)}`,
                   value: pattern.engagementScore,
                 }))}
                 type={VisualizationType.BAR_CHART}
-                title="Top User Engagement Scores"
+                title='Top User Engagement Scores'
                 height={300}
               />
               <AnalyticsVisualization
@@ -652,7 +652,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   value: pattern.successPrediction,
                 }))}
                 type={VisualizationType.SCATTER_PLOT}
-                title="Success Prediction vs Users"
+                title='Success Prediction vs Users'
                 height={300}
               />
             </div>
@@ -678,17 +678,17 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   type={VisualizationType.TABLE}
                 />
               ) : (
-                <p className="text-gray-500">Loading user patterns...</p>
+                <p className='text-gray-500'>Loading user patterns...</p>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="predictive" className="space-y-6">
-          <h2 className="text-2xl font-bold">Predictive Analytics</h2>
+        <TabsContent value='predictive' className='space-y-6'>
+          <h2 className='text-2xl font-bold'>Predictive Analytics</h2>
 
           {predictiveAnalytics ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               <Card>
                 <CardHeader>
                   <CardTitle>Success Prediction Model</CardTitle>
@@ -718,25 +718,25 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 </CardContent>
               </Card>
 
-              <Card className="lg:col-span-2">
+              <Card className='lg:col-span-2'>
                 <CardHeader>
                   <CardTitle>Platform Optimization Recommendations</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className='space-y-4'>
                     {predictiveAnalytics.platformOptimization.map((rec: any, index: number) => (
-                      <div key={index} className="p-4 border rounded-lg">
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-medium">{rec.area}</h4>
-                          <div className="flex space-x-2">
+                      <div key={index} className='p-4 border rounded-lg'>
+                        <div className='flex justify-between items-start mb-2'>
+                          <h4 className='font-medium'>{rec.area}</h4>
+                          <div className='flex space-x-2'>
                             <Badge variant={rec.impact === 'high' ? 'destructive' : rec.impact === 'medium' ? 'secondary' : 'outline'}>
                               {rec.impact} impact
                             </Badge>
-                            <Badge variant="outline">{rec.effort} effort</Badge>
+                            <Badge variant='outline'>{rec.effort} effort</Badge>
                           </div>
                         </div>
-                        <p className="text-gray-600 text-sm mb-2">{rec.description}</p>
-                        <div className="flex justify-between text-sm">
+                        <p className='text-gray-600 text-sm mb-2'>{rec.description}</p>
+                        <div className='flex justify-between text-sm'>
                           <span>Expected improvement: {rec.expectedImprovement}%</span>
                           <span>Timeframe: {rec.timeframe}</span>
                         </div>
@@ -748,25 +748,25 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             </div>
           ) : (
             <Card>
-              <CardContent className="p-12 text-center">
-                <p className="text-gray-500">Loading predictive analytics...</p>
+              <CardContent className='p-12 text-center'>
+                <p className='text-gray-500'>Loading predictive analytics...</p>
               </CardContent>
             </Card>
           )}
         </TabsContent>
 
-        <TabsContent value="mobile" className="space-y-6">
-          <h2 className="text-2xl font-bold">Mobile Analytics</h2>
+        <TabsContent value='mobile' className='space-y-6'>
+          <h2 className='text-2xl font-bold'>Mobile Analytics</h2>
 
           {mobileAnalytics && mobileAnalytics.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               <AnalyticsVisualization
                 data={mobileAnalytics.map((mobile, index) => ({
                   name: mobile.deviceType,
                   value: mobile.performanceMetrics.appLaunchTime,
                 }))}
                 type={VisualizationType.BAR_CHART}
-                title="App Launch Time by Device"
+                title='App Launch Time by Device'
                 height={300}
               />
               <AnalyticsVisualization
@@ -775,20 +775,20 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   value: mobile.performanceMetrics.screenLoadTime,
                 }))}
                 type={VisualizationType.PIE_CHART}
-                title="Screen Load Time by OS"
+                title='Screen Load Time by OS'
                 height={300}
               />
             </div>
           ) : (
             <Card>
-              <CardContent className="p-12 text-center">
-                <p className="text-gray-500">No mobile analytics data available</p>
+              <CardContent className='p-12 text-center'>
+                <p className='text-gray-500'>No mobile analytics data available</p>
               </CardContent>
             </Card>
           )}
         </TabsContent>
 
-        <TabsContent value="reports" className="space-y-6">
+        <TabsContent value='reports' className='space-y-6'>
           <ApplicationReports />
         </TabsContent>
       </Tabs>

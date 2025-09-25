@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { AppError, ValidationError, DatabaseError, BusinessLogicError, AuthenticationError, AuthorizationError } from "@/utils/AppError";
-import { ErrorCodes, ErrorSeverity, ErrorContext, ErrorLogEntry } from "@/types/errors.types";
+import { Request, Response, NextFunction } from 'express';
+import { AppError, ValidationError, DatabaseError, BusinessLogicError, AuthenticationError, AuthorizationError } from '@/utils/AppError';
+import { ErrorCodes, ErrorSeverity, ErrorContext, ErrorLogEntry } from '@/types/errors.types';
 
 // Enhanced error handler middleware
 export class ErrorHandlerMiddleware {
@@ -23,7 +23,7 @@ export class ErrorHandlerMiddleware {
     next: NextFunction
   ): void {
     let statusCode = 500;
-    let message = "Internal server error";
+    let message = 'Internal server error';
     let errorCode = ErrorCodes.INTERNAL_SERVER_ERROR;
     let details: any = undefined;
     let severity = ErrorSeverity.HIGH;

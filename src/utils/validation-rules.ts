@@ -6,9 +6,9 @@ export function isValidEmail(email: string): boolean {
   // Basic format check
   if (!emailRegex.test(email)) return false;
   // Additional domain structure check
-  const [, domain] = email.split("@");
-  if (!domain || domain.startsWith("-") || domain.endsWith("-")) return false;
-  if (domain.split(".").some((part) => part.length < 2)) return false;
+  const [, domain] = email.split('@');
+  if (!domain || domain.startsWith('-') || domain.endsWith('-')) return false;
+  if (domain.split('.').some((part) => part.length < 2)) return false;
   return true;
 }
 

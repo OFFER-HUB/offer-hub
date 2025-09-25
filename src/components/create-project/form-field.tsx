@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 interface FormFieldProps {
   label: string;
@@ -7,7 +7,7 @@ interface FormFieldProps {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
-  type?: "text" | "textarea";
+  type?: 'text' | 'textarea';
   textareaRows?: number;
 }
 
@@ -17,31 +17,31 @@ export function FormField({
   placeholder,
   value,
   onChange,
-  type = "text",
+  type = 'text',
   textareaRows = 5
 }: FormFieldProps) {
   return (
-    <div className="space-y-2">
-      <label htmlFor={id} className="text-sm font-medium text-gray-700">
+    <div className='space-y-2'>
+      <label htmlFor={id} className='text-sm font-medium text-gray-700'>
         {label}
       </label>
-      {type === "textarea" ? (
+      {type === 'textarea' ? (
         <Textarea
           id={id}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full min-h-[120px] resize-none rounded-lg border border-gray-300"
+          className='w-full min-h-[120px] resize-none rounded-lg border border-gray-300'
           rows={textareaRows}
         />
       ) : (
         <Input
           id={id}
-          type="text"
+          type='text'
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-lg border border-gray-300"
+          className='w-full rounded-lg border border-gray-300'
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -11,7 +11,7 @@ export interface IntegrationProvider {
   id: string;
   name: string;
   description?: string;
-  category: "project_management" | "crm" | "communication" | "custom" | "other";
+  category: 'project_management' | 'crm' | 'communication' | 'custom' | 'other';
   logoUrl?: string;
   websiteUrl?: string;
   supportsWebhooks: boolean;
@@ -21,7 +21,7 @@ export interface IntegrationProvider {
 export interface IntegrationConfigField {
   key: string;
   label: string;
-  type: "string" | "number" | "boolean" | "secret" | "select" | "json" | "url";
+  type: 'string' | 'number' | 'boolean' | 'secret' | 'select' | 'json' | 'url';
   required?: boolean;
   options?: { label: string; value: string }[];
   placeholder?: string;
@@ -31,15 +31,15 @@ export interface IntegrationConfigField {
 export interface IntegrationDefinition {
   providerId: string;
   version: string;
-  authType: "api_key" | "oauth2" | "webhook_only" | "none";
+  authType: 'api_key' | 'oauth2' | 'webhook_only' | 'none';
   configSchema: IntegrationConfigField[];
   capabilities: Array<
-    | "create_dispute"
-    | "update_status"
-    | "sync_data"
-    | "webhook_events"
-    | "list_disputes"
-    | "mobile_ready"
+    | 'create_dispute'
+    | 'update_status'
+    | 'sync_data'
+    | 'webhook_events'
+    | 'list_disputes'
+    | 'mobile_ready'
   >;
 }
 
@@ -66,13 +66,13 @@ export interface WebhookEndpoint {
 }
 
 export type DisputeEventType =
-  | "dispute.created"
-  | "dispute.updated"
-  | "dispute.resolved"
-  | "dispute.escalated"
-  | "evidence.added"
-  | "mediation.started"
-  | "arbitration.started";
+  | 'dispute.created'
+  | 'dispute.updated'
+  | 'dispute.resolved'
+  | 'dispute.escalated'
+  | 'evidence.added'
+  | 'mediation.started'
+  | 'arbitration.started';
 
 export interface WebhookDeliveryAttempt {
   id: string;

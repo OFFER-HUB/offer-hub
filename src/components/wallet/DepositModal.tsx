@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -119,18 +119,18 @@ function DepositModal({ isOpen, onClose }: DepositModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[30.625rem]">
+      <DialogContent className='sm:max-w-[30.625rem]'>
         <DialogHeader>
-          <DialogTitle className="text-lg font-medium text-gray-700">
+          <DialogTitle className='text-lg font-medium text-gray-700'>
             Select coin
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Coin Selection */}
-          <div className="space-y-2">
+          <div className='space-y-2'>
             <Select value={selectedCoin} onValueChange={handleCoinChange}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className='w-full'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -144,12 +144,12 @@ function DepositModal({ isOpen, onClose }: DepositModalProps) {
           </div>
 
           {/* Network Selection */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
+          <div className='space-y-2'>
+            <label className='text-sm font-medium text-gray-700'>
               Network
             </label>
             <Select value={selectedNetwork} onValueChange={setSelectedNetwork}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className='w-full'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -174,27 +174,27 @@ function DepositModal({ isOpen, onClose }: DepositModalProps) {
 
           {/* Wallet Address */}
           {walletAddress && (
-            <div className="bg-[#F0F3FF] rounded-lg p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-600 break-all font-mono">
+            <div className='bg-[#F0F3FF] rounded-lg p-4 space-y-3'>
+              <div className='flex items-center justify-between'>
+                <div className='flex-1 min-w-0'>
+                  <p className='text-sm text-gray-600 break-all font-mono'>
                     {walletAddress}
                   </p>
                 </div>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={handleCopyAddress}
-                  className="ml-2 text-[#516AE4] hover:text-purple-700 hover:bg-transparent"
+                  className='ml-2 text-[#516AE4] hover:text-purple-700 hover:bg-transparent'
                 >
                   {copied ? (
                     <>
-                      <Check className="h-4 w-4 mr-1" />
+                      <Check className='h-4 w-4 mr-1' />
                       Copied
                     </>
                   ) : (
                     <>
-                      <Copy className="h-4 w-4 mr-1" />
+                      <Copy className='h-4 w-4 mr-1' />
                       Copy
                     </>
                   )}
@@ -204,9 +204,9 @@ function DepositModal({ isOpen, onClose }: DepositModalProps) {
           )}
 
           {/* Warning Text */}
-          <div className="text-center">
-            <p className="text-base text-gray-600 font-bold">
-              {getNetworkWarning().split(" is ")[0]} is <span className='text-[#516AE4]'>{getNetworkWarning().split(" is ")[1]}</span>
+          <div className='text-center'>
+            <p className='text-base text-gray-600 font-bold'>
+              {getNetworkWarning().split(' is ')[0]} is <span className='text-[#516AE4]'>{getNetworkWarning().split(' is ')[1]}</span>
             </p>
           </div>
 
@@ -214,7 +214,7 @@ function DepositModal({ isOpen, onClose }: DepositModalProps) {
           <Button
             onClick={handleDeposited}
             disabled={deposited}
-            className="w-full bg-[#19213D] hover:bg-[#101527] text-white rounded-[2rem] h-[2.75rem] flex items-center justify-center"
+            className='w-full bg-[#19213D] hover:bg-[#101527] text-white rounded-[2rem] h-[2.75rem] flex items-center justify-center'
           >
             {deposited ? 'Confirmed!' : 'Deposited'}
           </Button>

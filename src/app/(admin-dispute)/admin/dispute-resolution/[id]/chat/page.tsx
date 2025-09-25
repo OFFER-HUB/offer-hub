@@ -66,7 +66,7 @@ export default function DisputeChat() {
 
   const closeDisputeButton = (
     <Button
-      className="py-5 text-white rounded-full bg-secondary-500"
+      className='py-5 text-white rounded-full bg-secondary-500'
       disabled={dispute.status === 'resolved'}
       onClick={handleOpenModal}
     >
@@ -76,19 +76,19 @@ export default function DisputeChat() {
 
   return (
     <>
-      <div className="inline-flex items-center justify-start w-full gap-2 p-4 mb-6 bg-transparent bg-white border-b">
+      <div className='inline-flex items-center justify-start w-full gap-2 p-4 mb-6 bg-transparent bg-white border-b'>
         <Link
-          href="/admin/dispute-resolution"
-          className="flex items-center gap-x-2"
+          href='/admin/dispute-resolution'
+          className='flex items-center gap-x-2'
         >
-          <FaChevronLeft size={12} className="text-gray-400" /> Back
+          <FaChevronLeft size={12} className='text-gray-400' /> Back
         </Link>
 
-        <div className="px-4 py-1 text-white rounded-full bg-secondary-500">
+        <div className='px-4 py-1 text-white rounded-full bg-secondary-500'>
           {types[dispute.status!]}
         </div>
       </div>
-      <div className="flex h-full w-full lg:w-[714px] mx-auto bg-white rounded-lg">
+      <div className='flex h-full w-full lg:w-[714px] mx-auto bg-white rounded-lg'>
         <MessagesMainPlus
           activeConversation={convertConversation(activeConversation)}
           messages={convertMessages(messages)}

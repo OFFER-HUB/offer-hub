@@ -3,9 +3,9 @@
  * @author Offer Hub Team
  */
 
-import { NextFunction, Request, Response } from "express";
-import * as authService from "@/services/auth.service";
-import { DeviceInfo, EmailLoginDTO } from "@/types/auth.types";
+import { NextFunction, Request, Response } from 'express';
+import * as authService from '@/services/auth.service';
+import { DeviceInfo, EmailLoginDTO } from '@/types/auth.types';
 
 export async function getNonce(
   req: Request,
@@ -15,11 +15,11 @@ export async function getNonce(
   try {
     const { wallet_address } = req.body;
     if (!wallet_address) {
-      return res.status(400).json({ message: "wallet_address is required" });
+      return res.status(400).json({ message: 'wallet_address is required' });
     }
     const nonce = await authService.getNonce(wallet_address);
     res.status(200).json({
-      success: "success",
+      success: 'success',
       nonce,
     });
   } catch (err) {
@@ -73,7 +73,7 @@ export async function register(
   try {
     const { user, tokens } = await authService.signup(req.body);
     res.status(201).json({
-      status: "success",
+      status: 'success',
       user,
       tokens,
     });
@@ -110,7 +110,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const { user, tokens } = await authService.login(req.body);
     res.status(200).json({
-      status: "success",
+      status: 'success',
       user,
       tokens,
     });
@@ -125,7 +125,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
       req.refreshTokenRecord
     );
     res.status(200).json({
-      status: "success",
+      status: 'success',
       tokens: {
         accessToken,
         refreshToken,
@@ -140,7 +140,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await authService.getMe(req.user.id);
     res.status(200).json({
-      status: "success",
+      status: 'success',
       user,
     });
   } catch (err) {

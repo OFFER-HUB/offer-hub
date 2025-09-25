@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -89,8 +89,8 @@ export default function DatabaseSeedingPage() {
 
   if (isProduction) {
     return (
-      <div className="p-8">
-        <Alert className="max-w-2xl">
+      <div className='p-8'>
+        <Alert className='max-w-2xl'>
           <AlertDescription>
             ⚠️ La funcionalidad de seeding no está disponible en producción por seguridad.
           </AlertDescription>
@@ -100,31 +100,31 @@ export default function DatabaseSeedingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">🌱 Database Seeding</h1>
-          <p className="text-gray-600">Poblar la base de datos con datos de prueba realistas</p>
+    <div className='min-h-screen bg-gray-50 p-8'>
+      <div className='max-w-4xl mx-auto'>
+        <div className='mb-8'>
+          <h1 className='text-3xl font-bold text-gray-900 mb-2'>🌱 Database Seeding</h1>
+          <p className='text-gray-600'>Poblar la base de datos con datos de prueba realistas</p>
           
-          <div className="mt-4">
-            <Badge variant="outline" className="mr-2">🔧 Development Only</Badge>
-            <Badge variant={config.dryRun ? "secondary" : "destructive"}>
-              {config.dryRun ? "🔒 Safe Mode" : "⚠️ Will Modify Database"}
+          <div className='mt-4'>
+            <Badge variant='outline' className='mr-2'>🔧 Development Only</Badge>
+            <Badge variant={config.dryRun ? 'secondary' : 'destructive'}>
+              {config.dryRun ? '🔒 Safe Mode' : '⚠️ Will Modify Database'}
             </Badge>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
           {/* Panel de Configuración */}
           <Card>
             <CardHeader>
               <CardTitle>Configuración</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className='space-y-6'>
               {/* Presets */}
               <div>
-                <Label className="text-base font-medium mb-3 block">Presets Rápidos</Label>
-                <div className="grid grid-cols-1 gap-2">
+                <Label className='text-base font-medium mb-3 block'>Presets Rápidos</Label>
+                <div className='grid grid-cols-1 gap-2'>
                   {Object.entries(PRESETS).map(([name, preset]) => (
                     <button
                       key={name}
@@ -135,9 +135,9 @@ export default function DatabaseSeedingPage() {
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      <div className="font-medium capitalize">{name.replace('-', ' ')}</div>
-                      <div className="text-sm text-gray-600">{preset.description}</div>
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div className='font-medium capitalize'>{name.replace('-', ' ')}</div>
+                      <div className='text-sm text-gray-600'>{preset.description}</div>
+                      <div className='text-xs text-gray-500 mt-1'>
                         {preset.users} usuarios • {preset.dryRun ? 'Dry run' : 'Real'} • {preset.clearExisting ? 'Clear first' : 'Keep existing'}
                       </div>
                     </button>
@@ -149,14 +149,14 @@ export default function DatabaseSeedingPage() {
 
               {/* Configuración Manual */}
               <div>
-                <Label className="text-base font-medium mb-3 block">Configuración Manual</Label>
+                <Label className='text-base font-medium mb-3 block'>Configuración Manual</Label>
                 
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   <div>
-                    <Label htmlFor="users">Número de usuarios</Label>
+                    <Label htmlFor='users'>Número de usuarios</Label>
                     <Input
-                      id="users"
-                      type="number"
+                      id='users'
+                      type='number'
                       value={config.users}
                       onChange={(e) => {
                         setConfig({...config, users: parseInt(e.target.value) || 0});
@@ -165,15 +165,15 @@ export default function DatabaseSeedingPage() {
                       min={1}
                       max={500}
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className='text-xs text-gray-500 mt-1'>
                       Se crearán ~40% freelancers y ~60% clientes
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className='flex items-center justify-between'>
                     <div>
                       <Label>Dry Run (Solo simulación)</Label>
-                      <p className="text-xs text-gray-500">No modificará la base de datos</p>
+                      <p className='text-xs text-gray-500'>No modificará la base de datos</p>
                     </div>
                     <Switch
                       checked={config.dryRun}
@@ -184,10 +184,10 @@ export default function DatabaseSeedingPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className='flex items-center justify-between'>
                     <div>
                       <Label>Limpiar datos existentes</Label>
-                      <p className="text-xs text-gray-500">⚠️ Eliminará datos de prueba recientes</p>
+                      <p className='text-xs text-gray-500'>⚠️ Eliminará datos de prueba recientes</p>
                     </div>
                     <Switch
                       checked={config.clearExisting}
@@ -201,9 +201,9 @@ export default function DatabaseSeedingPage() {
               </div>
 
               {/* Estimaciones */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Estimaciones</h4>
-                <div className="text-sm space-y-1">
+              <div className='bg-gray-50 p-4 rounded-lg'>
+                <h4 className='font-medium mb-2'>Estimaciones</h4>
+                <div className='text-sm space-y-1'>
                   <div>Freelancers: ~{Math.floor(config.users * 0.4)}</div>
                   <div>Clientes: ~{Math.floor(config.users * 0.6)}</div>
                   <div>Contratos: ~{Math.floor(config.users * 0.4 * 8)}</div>
@@ -214,12 +214,12 @@ export default function DatabaseSeedingPage() {
               <Button 
                 onClick={handleSeed}
                 disabled={isSeeding || config.users === 0}
-                className="w-full"
-                size="lg"
+                className='w-full'
+                size='lg'
               >
                 {isSeeding ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                    <div className='animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2' />
                     Seeding en progreso...
                   </>
                 ) : (
@@ -238,7 +238,7 @@ export default function DatabaseSeedingPage() {
             </CardHeader>
             <CardContent>
               {result ? (
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   <Alert className={result.success ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}>
                     <AlertDescription className={result.success ? 'text-green-800' : 'text-red-800'}>
                       {result.success ? '✅' : '❌'} {result.message}
@@ -246,28 +246,28 @@ export default function DatabaseSeedingPage() {
                   </Alert>
 
                   {result.success && result.data && (
-                    <div className="space-y-4">
+                    <div className='space-y-4'>
                       {/* Estadísticas principales */}
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center p-3 bg-blue-50 rounded-lg">
-                          <div className="text-2xl font-bold text-blue-600">{result.data.usersCreated}</div>
-                          <div className="text-sm text-blue-800">Usuarios</div>
+                      <div className='grid grid-cols-3 gap-4'>
+                        <div className='text-center p-3 bg-blue-50 rounded-lg'>
+                          <div className='text-2xl font-bold text-blue-600'>{result.data.usersCreated}</div>
+                          <div className='text-sm text-blue-800'>Usuarios</div>
                         </div>
-                        <div className="text-center p-3 bg-green-50 rounded-lg">
-                          <div className="text-2xl font-bold text-green-600">{result.data.contractsCreated}</div>
-                          <div className="text-sm text-green-800">Contratos</div>
+                        <div className='text-center p-3 bg-green-50 rounded-lg'>
+                          <div className='text-2xl font-bold text-green-600'>{result.data.contractsCreated}</div>
+                          <div className='text-sm text-green-800'>Contratos</div>
                         </div>
-                        <div className="text-center p-3 bg-purple-50 rounded-lg">
-                          <div className="text-2xl font-bold text-purple-600">{result.data.reviewsCreated}</div>
-                          <div className="text-sm text-purple-800">Reviews</div>
+                        <div className='text-center p-3 bg-purple-50 rounded-lg'>
+                          <div className='text-2xl font-bold text-purple-600'>{result.data.reviewsCreated}</div>
+                          <div className='text-sm text-purple-800'>Reviews</div>
                         </div>
                       </div>
 
                       {/* Estadísticas detalladas */}
                       {result.data.config && (
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <h4 className="font-medium mb-2">Detalles</h4>
-                          <div className="text-sm space-y-1">
+                        <div className='bg-gray-50 p-4 rounded-lg'>
+                          <h4 className='font-medium mb-2'>Detalles</h4>
+                          <div className='text-sm space-y-1'>
                             <div>Freelancers creados: {result.data.config.freelancersCreated}</div>
                             <div>Clientes creados: {result.data.config.clientsCreated}</div>
                             <div>Promedio contratos/freelancer: {result.data.config.averageContractsPerFreelancer}</div>
@@ -279,15 +279,15 @@ export default function DatabaseSeedingPage() {
                       {/* Errores */}
                       {result.data.errors && result.data.errors.length > 0 && (
                         <div>
-                          <h4 className="font-medium mb-2 text-orange-600">
+                          <h4 className='font-medium mb-2 text-orange-600'>
                             ⚠️ Errores ({result.data.errors.length})
                           </h4>
-                          <div className="max-h-32 overflow-y-auto bg-orange-50 p-3 rounded text-sm">
+                          <div className='max-h-32 overflow-y-auto bg-orange-50 p-3 rounded text-sm'>
                             {result.data.errors.slice(0, 10).map((error, i) => (
-                              <div key={i} className="text-orange-800">{error}</div>
+                              <div key={i} className='text-orange-800'>{error}</div>
                             ))}
                             {result.data.errors.length > 10 && (
-                              <div className="text-orange-600">... y {result.data.errors.length - 10} más</div>
+                              <div className='text-orange-600'>... y {result.data.errors.length - 10} más</div>
                             )}
                           </div>
                         </div>
@@ -295,13 +295,13 @@ export default function DatabaseSeedingPage() {
                     </div>
                   )}
 
-                  <div className="text-xs text-gray-500">
+                  <div className='text-xs text-gray-500'>
                     Completado: {new Date(result.timestamp).toLocaleString()}
                   </div>
                 </div>
               ) : (
-                <div className="text-center text-gray-500 py-8">
-                  <div className="text-4xl mb-2">📊</div>
+                <div className='text-center text-gray-500 py-8'>
+                  <div className='text-4xl mb-2'>📊</div>
                   <p>Los resultados aparecerán aquí después del seeding</p>
                 </div>
               )}
@@ -310,15 +310,15 @@ export default function DatabaseSeedingPage() {
         </div>
 
         {/* Información adicional */}
-        <Card className="mt-6">
+        <Card className='mt-6'>
           <CardHeader>
             <CardTitle>ℹ️ Información</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 text-sm'>
               <div>
-                <h4 className="font-medium mb-2">Datos Generados</h4>
-                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <h4 className='font-medium mb-2'>Datos Generados</h4>
+                <ul className='list-disc list-inside space-y-1 text-gray-600'>
                   <li>Usuarios realistas con nombres y emails</li>
                   <li>Contratos con estado "released" para reviews</li>
                   <li>Reviews con distribución realista de ratings</li>
@@ -327,8 +327,8 @@ export default function DatabaseSeedingPage() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-medium mb-2">Seguridad</h4>
-                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <h4 className='font-medium mb-2'>Seguridad</h4>
+                <ul className='list-disc list-inside space-y-1 text-gray-600'>
                   <li>Solo disponible en desarrollo</li>
                   <li>Modo Dry Run por defecto</li>
                   <li>Los wallets incluyen "_seed_" para identificación</li>

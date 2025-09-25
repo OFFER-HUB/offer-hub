@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ValidationErrorProps {
   error: string | null;
@@ -10,9 +10,9 @@ const ValidationError: React.FC<ValidationErrorProps> = ({ error, id }) => {
   return (
     <div
       id={id}
-      role="alert"
-      aria-live="assertive"
-      className="text-red-600 text-sm mt-1"
+      role='alert'
+      aria-live='assertive'
+      className='text-red-600 text-sm mt-1'
       tabIndex={-1}
     >
       {error}

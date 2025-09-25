@@ -1,5 +1,5 @@
-import { DisputeRow, User } from "@/types";
-import { format, subHours } from "date-fns";
+import { DisputeRow, User } from '@/types';
+import { format, subHours } from 'date-fns';
 import { useState, useEffect } from 'react'
 import avatarGroup from '../../public/maskGroup.svg';
 import { faker } from '@faker-js/faker';

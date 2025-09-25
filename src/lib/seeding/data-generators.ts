@@ -5,75 +5,75 @@ const REALISTIC_REVIEWS = [
   {
     rating: 5,
     comments: [
-      "Excelente trabajo! Muy profesional y entregó a tiempo. Definitivamente lo recomiendo.",
-      "Trabajo excepcional, superó mis expectativas. Comunicación fluida durante todo el proyecto.",
-      "Perfecto! Entrega impecable y atención al detalle. Volveré a trabajar con él sin duda.",
-      "Increíble freelancer, muy talentoso y responsable. 100% recomendado.",
-      "Outstanding work! Professional, on-time, and exceeded expectations. Will hire again!"
+      'Excelente trabajo! Muy profesional y entregó a tiempo. Definitivamente lo recomiendo.',
+      'Trabajo excepcional, superó mis expectativas. Comunicación fluida durante todo el proyecto.',
+      'Perfecto! Entrega impecable y atención al detalle. Volveré a trabajar con él sin duda.',
+      'Increíble freelancer, muy talentoso y responsable. 100% recomendado.',
+      'Outstanding work! Professional, on-time, and exceeded expectations. Will hire again!'
     ]
   },
   {
     rating: 4,
     comments: [
-      "Muy buen trabajo, aunque hubo algunos retrasos menores. En general satisfecho.",
-      "Buen freelancer, entrega de calidad pero la comunicación podría mejorar un poco.",
-      "Trabajo sólido y profesional. Algunas revisiones menores pero nada crítico.",
-      "Good work overall, minor revisions needed but delivered as promised.",
-      "Satisfied with the work quality. Could be more responsive but delivered well."
+      'Muy buen trabajo, aunque hubo algunos retrasos menores. En general satisfecho.',
+      'Buen freelancer, entrega de calidad pero la comunicación podría mejorar un poco.',
+      'Trabajo sólido y profesional. Algunas revisiones menores pero nada crítico.',
+      'Good work overall, minor revisions needed but delivered as promised.',
+      'Satisfied with the work quality. Could be more responsive but delivered well.'
     ]
   },
   {
     rating: 3,
     comments: [
-      "Trabajo aceptable pero necesitó varias revisiones. Cumplió al final.",
-      "Entrega dentro del plazo pero la calidad no fue excepcional.",
-      "Average work, met basic requirements but lacked attention to detail.",
-      "Decent freelancer but communication could be better. Got the job done.",
-      "Fair work, some issues that were resolved after feedback."
+      'Trabajo aceptable pero necesitó varias revisiones. Cumplió al final.',
+      'Entrega dentro del plazo pero la calidad no fue excepcional.',
+      'Average work, met basic requirements but lacked attention to detail.',
+      'Decent freelancer but communication could be better. Got the job done.',
+      'Fair work, some issues that were resolved after feedback.'
     ]
   },
   {
     rating: 2,
     comments: [
-      "Trabajo por debajo de las expectativas. Requirió muchas correcciones.",
-      "No muy satisfecho con la entrega. Calidad mejorable.",
-      "Work quality was below expectations. Required multiple revisions.",
-      "Not satisfied with the delivery. Communication was poor."
+      'Trabajo por debajo de las expectativas. Requirió muchas correcciones.',
+      'No muy satisfecho con la entrega. Calidad mejorable.',
+      'Work quality was below expectations. Required multiple revisions.',
+      'Not satisfied with the delivery. Communication was poor.'
     ]
   },
   {
     rating: 1,
     comments: [
-      "Muy decepcionante. No cumplió con lo acordado.",
-      "Poor work quality and missed deadlines. Would not recommend.",
-      "Terrible experience. Did not deliver as promised."
+      'Muy decepcionante. No cumplió con lo acordado.',
+      'Poor work quality and missed deadlines. Would not recommend.',
+      'Terrible experience. Did not deliver as promised.'
     ]
   }
 ];
 
 const CLIENT_NAMES = [
-  "María González", "Carlos Rodríguez", "Ana Martínez", "Diego López", "Sofia Herrera",
-  "Miguel Sánchez", "Lucía Pérez", "Andrés García", "Elena Morales", "Roberto Silva",
-  "John Smith", "Sarah Johnson", "Michael Brown", "Emily Davis", "David Wilson",
-  "Lisa Anderson", "Chris Taylor", "Jessica Martinez", "Daniel Garcia", "Ashley Rodriguez"
+  'María González', 'Carlos Rodríguez', 'Ana Martínez', 'Diego López', 'Sofia Herrera',
+  'Miguel Sánchez', 'Lucía Pérez', 'Andrés García', 'Elena Morales', 'Roberto Silva',
+  'John Smith', 'Sarah Johnson', 'Michael Brown', 'Emily Davis', 'David Wilson',
+  'Lisa Anderson', 'Chris Taylor', 'Jessica Martinez', 'Daniel Garcia', 'Ashley Rodriguez'
 ];
 
 const FREELANCER_NAMES = [
-  "Alex Entwickler", "Sam Designer", "Jordan Coder", "Casey Developer", "Taylor Creator",
-  "Morgan Builder", "Riley Programmer", "Avery Architect", "Quinn Engineer", "Sage Developer"
+  'Alex Entwickler', 'Sam Designer', 'Jordan Coder', 'Casey Developer', 'Taylor Creator',
+  'Morgan Builder', 'Riley Programmer', 'Avery Architect', 'Quinn Engineer', 'Sage Developer'
 ];
 
 const PROJECT_TYPES = [
-  "Desarrollo de aplicación web", "Diseño de logo y branding", "Desarrollo móvil iOS/Android",
-  "Sitio web corporativo", "E-commerce platform", "Dashboard administrativo", "Landing page",
-  "API REST development", "Database optimization", "UI/UX design", "Frontend development",
-  "Backend integration", "Full-stack application", "WordPress site", "React application"
+  'Desarrollo de aplicación web', 'Diseño de logo y branding', 'Desarrollo móvil iOS/Android',
+  'Sitio web corporativo', 'E-commerce platform', 'Dashboard administrativo', 'Landing page',
+  'API REST development', 'Database optimization', 'UI/UX design', 'Frontend development',
+  'Backend integration', 'Full-stack application', 'WordPress site', 'React application'
 ];
 
 // Función para generar un comentario aleatorio basado en el rating
 export function generateRealisticComment(rating: number): string {
   const ratingComments = REALISTIC_REVIEWS.find(r => r.rating === rating);
-  if (!ratingComments) return "Great work!";
+  if (!ratingComments) return 'Great work!';
   
   const randomIndex = Math.floor(Math.random() * ratingComments.comments.length);
   return ratingComments.comments[randomIndex];

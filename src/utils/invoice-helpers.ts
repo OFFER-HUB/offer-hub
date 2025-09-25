@@ -1,4 +1,4 @@
-import type { Invoice, InvoiceItem, InvoiceStatus } from "@/types/invoice.types"
+import type { Invoice, InvoiceItem, InvoiceStatus } from '@/types/invoice.types'
 
 export const calculateItemTotal = (quantity: number, unitPrice: number): number => {
   return Math.round(quantity * unitPrice * 100) / 100
@@ -16,57 +16,57 @@ export const calculateInvoiceTotal = (subtotal: number, taxAmount: number): numb
   return Math.round((subtotal + taxAmount) * 100) / 100
 }
 
-export const generateInvoiceNumber = (prefix = "INV"): string => {
+export const generateInvoiceNumber = (prefix = 'INV'): string => {
   const timestamp = Date.now().toString().slice(-6)
   const random = Math.floor(Math.random() * 1000)
     .toString()
-    .padStart(3, "0")
+    .padStart(3, '0')
   return `${prefix}-${timestamp}-${random}`
 }
 
-export const formatCurrency = (amount: number, currency = "USD"): string => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
+export const formatCurrency = (amount: number, currency = 'USD'): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
     currency: currency,
   }).format(amount)
 }
 
 export const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   }).format(date)
 }
 
 export const getInvoiceStatusColor = (status: InvoiceStatus): string => {
   const statusColors = {
-    draft: "bg-gray-100 text-gray-800",
-    sent: "bg-blue-100 text-blue-800",
-    viewed: "bg-yellow-100 text-yellow-800",
-    paid: "bg-green-100 text-green-800",
-    overdue: "bg-red-100 text-red-800",
-    cancelled: "bg-gray-100 text-gray-800",
-    refunded: "bg-purple-100 text-purple-800",
+    draft: 'bg-gray-100 text-gray-800',
+    sent: 'bg-blue-100 text-blue-800',
+    viewed: 'bg-yellow-100 text-yellow-800',
+    paid: 'bg-green-100 text-green-800',
+    overdue: 'bg-red-100 text-red-800',
+    cancelled: 'bg-gray-100 text-gray-800',
+    refunded: 'bg-purple-100 text-purple-800',
   }
   return statusColors[status]
 }
 
 export const getInvoiceStatusLabel = (status: InvoiceStatus): string => {
   const statusLabels = {
-    draft: "Draft",
-    sent: "Sent",
-    viewed: "Viewed",
-    paid: "Paid",
-    overdue: "Overdue",
-    cancelled: "Cancelled",
-    refunded: "Refunded",
+    draft: 'Draft',
+    sent: 'Sent',
+    viewed: 'Viewed',
+    paid: 'Paid',
+    overdue: 'Overdue',
+    cancelled: 'Cancelled',
+    refunded: 'Refunded',
   }
   return statusLabels[status]
 }
 
 export const isInvoiceOverdue = (invoice: Invoice): boolean => {
-  if (invoice.status === "paid" || invoice.status === "cancelled") {
+  if (invoice.status === 'paid' || invoice.status === 'cancelled') {
     return false
   }
   return new Date() > invoice.dueDate
@@ -82,15 +82,15 @@ export const validateInvoiceData = (invoice: Partial<Invoice>): string[] => {
   const errors: string[] = []
 
   if (!invoice.customer?.name) {
-    errors.push("Customer name is required")
+    errors.push('Customer name is required')
   }
 
   if (!invoice.customer?.email) {
-    errors.push("Customer email is required")
+    errors.push('Customer email is required')
   }
 
   if (!invoice.items || invoice.items.length === 0) {
-    errors.push("At least one invoice item is required")
+    errors.push('At least one invoice item is required')
   }
 
   if (invoice.items) {
@@ -108,7 +108,7 @@ export const validateInvoiceData = (invoice: Partial<Invoice>): string[] => {
   }
 
   if (!invoice.dueDate) {
-    errors.push("Due date is required")
+    errors.push('Due date is required')
   }
 
   return errors
@@ -135,21 +135,21 @@ export const convertCurrency = async (amount: number, fromCurrency: string, toCu
 
     return Math.round((amount / fromRate) * toRate * 100) / 100
   } catch (error) {
-    console.error("Currency conversion failed:", error)
+    console.error('Currency conversion failed:', error)
     return amount
   }
 }
 
-export const exportInvoiceData = (invoices: Invoice[], format: "csv" | "json"): string => {
-  if (format === "json") {
+export const exportInvoiceData = (invoices: Invoice[], format: 'csv' | 'json'): string => {
+  if (format === 'json') {
     return JSON.stringify(invoices, null, 2)
   }
 
   // CSV export
-  const headers = ["Invoice Number", "Customer Name", "Status", "Issue Date", "Due Date", "Total", "Currency"]
+  const headers = ['Invoice Number', 'Customer Name', 'Status', 'Issue Date', 'Due Date', 'Total', 'Currency']
 
   const csvRows = [
-    headers.join(","),
+    headers.join(','),
     ...invoices.map((invoice) =>
       [
         invoice.invoiceNumber,
@@ -159,9 +159,9 @@ export const exportInvoiceData = (invoices: Invoice[], format: "csv" | "json"): 
         formatDate(invoice.dueDate),
         invoice.total,
         invoice.currency,
-      ].join(","),
+      ].join(','),
     ),
   ]
 
-  return csvRows.join("\n")
+  return csvRows.join('\n')
 }

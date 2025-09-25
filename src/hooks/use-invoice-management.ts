@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from 'react'
 import type {
   Invoice,
   InvoiceFilters,
@@ -8,7 +8,7 @@ import type {
   UpdateInvoiceRequest,
   InvoiceAnalytics,
   InvoiceItem,
-} from "@/types/invoice.types"
+} from '@/types/invoice.types'
 import {
   generateInvoiceNumber,
   calculateItemTotal,
@@ -16,8 +16,8 @@ import {
   calculateTaxAmount,
   calculateInvoiceTotal,
   isInvoiceOverdue,
-} from "@/utils/invoice-helpers"
-import { generateMockInvoices } from "@/data/mock-invoice-data"
+} from '@/utils/invoice-helpers'
+import { generateMockInvoices } from '@/data/mock-invoice-data'
 
 export const useInvoiceManagement = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([])
@@ -37,16 +37,16 @@ export const useInvoiceManagement = () => {
     const startDate = new Date(now)
 
     switch (timeRange) {
-      case "1month":
+      case '1month':
         startDate.setMonth(now.getMonth() - 1)
         break
-      case "3months":
+      case '3months':
         startDate.setMonth(now.getMonth() - 3)
         break
-      case "6months":
+      case '6months':
         startDate.setMonth(now.getMonth() - 6)
         break
-      case "1year":
+      case '1year':
         startDate.setFullYear(now.getFullYear() - 1)
         break
       default:
@@ -87,28 +87,28 @@ export const useInvoiceManagement = () => {
       const newInvoice: Invoice = {
         id: Math.random().toString(36).substr(2, 9),
         invoiceNumber: generateInvoiceNumber(),
-        status: "draft",
+        status: 'draft',
         customer: {
           id: request.customerId,
-          name: "Customer Name", // Would be fetched from customer service
-          email: "customer@example.com",
+          name: 'Customer Name', // Would be fetched from customer service
+          email: 'customer@example.com',
           address: {
-            street: "",
-            city: "",
-            state: "",
-            zipCode: "",
-            country: "",
+            street: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            country: '',
           },
         },
         company: {
-          name: "Offer Hub",
-          email: "billing@offerhub.com",
+          name: 'Offer Hub',
+          email: 'billing@offerhub.com',
           address: {
-            street: "456 Business Ave",
-            city: "San Francisco",
-            state: "CA",
-            zipCode: "94105",
-            country: "USA",
+            street: '456 Business Ave',
+            city: 'San Francisco',
+            state: 'CA',
+            zipCode: '94105',
+            country: 'USA',
           },
         },
         items: itemsWithTotals,
@@ -129,7 +129,7 @@ export const useInvoiceManagement = () => {
       setInvoices((prev) => [...prev, newInvoice])
       return newInvoice
     } catch (err) {
-      setError("Failed to create invoice")
+      setError('Failed to create invoice')
       throw err
     } finally {
       setLoading(false)
@@ -183,7 +183,7 @@ export const useInvoiceManagement = () => {
         setInvoices(updatedInvoices)
         return updatedInvoices.find((inv) => inv.id === id)!
       } catch (err) {
-        setError("Failed to update invoice")
+        setError('Failed to update invoice')
         throw err
       } finally {
         setLoading(false)
@@ -199,7 +199,7 @@ export const useInvoiceManagement = () => {
     try {
       setInvoices((prev) => prev.filter((invoice) => invoice.id !== id))
     } catch (err) {
-      setError("Failed to delete invoice")
+      setError('Failed to delete invoice')
       throw err
     } finally {
       setLoading(false)
@@ -248,15 +248,15 @@ export const useInvoiceManagement = () => {
     const filteredInvoices = timeRange ? getInvoicesInTimeRange(timeRange) : invoices
     
     const totalInvoices = filteredInvoices.length
-    const paidInvoices = filteredInvoices.filter((inv) => inv.status === "paid").length
-    const pendingInvoices = filteredInvoices.filter((inv) => ["sent", "viewed"].includes(inv.status)).length
+    const paidInvoices = filteredInvoices.filter((inv) => inv.status === 'paid').length
+    const pendingInvoices = filteredInvoices.filter((inv) => ['sent', 'viewed'].includes(inv.status)).length
     const overdueInvoices = filteredInvoices.filter((inv) => isInvoiceOverdue(inv)).length
-    const totalRevenue = filteredInvoices.filter((inv) => inv.status === "paid").reduce((sum, inv) => sum + inv.total, 0)
+    const totalRevenue = filteredInvoices.filter((inv) => inv.status === 'paid').reduce((sum, inv) => sum + inv.total, 0)
 
     const paymentRate = totalInvoices > 0 ? (paidInvoices / totalInvoices) * 100 : 0
 
     // Calculate average payment time
-    const paidInvoicesWithPaymentDate = filteredInvoices.filter((inv) => inv.status === "paid" && inv.paymentDate)
+    const paidInvoicesWithPaymentDate = filteredInvoices.filter((inv) => inv.status === 'paid' && inv.paymentDate)
     const averagePaymentTime =
       paidInvoicesWithPaymentDate.length > 0
         ? paidInvoicesWithPaymentDate.reduce((sum, inv) => {
@@ -270,12 +270,12 @@ export const useInvoiceManagement = () => {
       if (!timeRange) {
         // Default mock data when no time range is specified
         return [
-          { month: "Jan", revenue: 15000, invoiceCount: 12 },
-          { month: "Feb", revenue: 18000, invoiceCount: 15 },
-          { month: "Mar", revenue: 22000, invoiceCount: 18 },
-          { month: "Apr", revenue: 19000, invoiceCount: 16 },
-          { month: "May", revenue: 25000, invoiceCount: 20 },
-          { month: "Jun", revenue: 28000, invoiceCount: 22 },
+          { month: 'Jan', revenue: 15000, invoiceCount: 12 },
+          { month: 'Feb', revenue: 18000, invoiceCount: 15 },
+          { month: 'Mar', revenue: 22000, invoiceCount: 18 },
+          { month: 'Apr', revenue: 19000, invoiceCount: 16 },
+          { month: 'May', revenue: 25000, invoiceCount: 20 },
+          { month: 'Jun', revenue: 28000, invoiceCount: 22 },
         ]
       }
 
@@ -284,7 +284,7 @@ export const useInvoiceManagement = () => {
       const monthlyData: { [key: string]: { revenue: number; count: number } } = {}
 
       filteredInvoices.forEach(invoice => {
-        if (invoice.status === "paid") {
+        if (invoice.status === 'paid') {
           const monthKey = invoice.issueDate.toLocaleDateString('en-US', { 
             month: 'short',
             year: startDate.getFullYear() !== new Date().getFullYear() ? '2-digit' : undefined 

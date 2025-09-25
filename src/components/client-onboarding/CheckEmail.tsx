@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import OnboardingHeader from '@/components/layout/OnboardingHeader';
 
@@ -12,11 +12,11 @@ const CheckEmail: React.FC<CheckEmailProps> = ({
   onBackToSignIn
 }) => {
   return (
-    <div className="min-h-screen bg-[#f6f6f6]">
+    <div className='min-h-screen bg-[#f6f6f6]'>
       <OnboardingHeader hideSignIn={true} />
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-8">
+      <div className='flex items-center justify-center min-h-[calc(100vh-80px)] p-8'>
         <div
-          className="bg-white"
+          className='bg-white'
           style={{
             width: '714px',
             height: '450px',
@@ -30,10 +30,10 @@ const CheckEmail: React.FC<CheckEmailProps> = ({
             justifyContent: 'center'
           }}
         >
-          <div className="inline-block">
+          <div className='inline-block'>
             <img
-              src="/emailicon.jpg"
-              alt="Email icon"
+              src='/emailicon.jpg'
+              alt='Email icon'
               style={{
                 width: '155px',
                 height: '155px',
@@ -42,18 +42,18 @@ const CheckEmail: React.FC<CheckEmailProps> = ({
             />
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 text-center">
+          <h1 className='text-2xl font-bold text-gray-900 text-center'>
             Check your email
           </h1>
 
-          <p className="text-gray-600 text-center">
+          <p className='text-gray-600 text-center'>
             We've sent an email with the next steps, check your inbox and follow along.
           </p>
 
-          <div className="flex justify-center">
+          <div className='flex justify-center'>
             <button
               onClick={onBackToSignIn}
-              className="text-white font-medium hover:bg-teal-600 transition-colors flex items-center justify-center"
+              className='text-white font-medium hover:bg-teal-600 transition-colors flex items-center justify-center'
               style={{
                 width: '361px',
                 height: '44px',

@@ -1,10 +1,10 @@
  
-import { CreateProjectDTO, ProjectDraft, ProjectResponse } from "@/types/project.types";
-import axios, { AxiosError } from "axios";
-import { isApiError } from "@/utils/type-guards";
+import { CreateProjectDTO, ProjectDraft, ProjectResponse } from '@/types/project.types';
+import axios, { AxiosError } from 'axios';
+import { isApiError } from '@/utils/type-guards';
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000',
     headers: {
         'Content-Type': 'application/json'
     },
@@ -52,7 +52,7 @@ export const useProjectsApi = () => {
 
 type MinimalUser = { id: string };
 export const mapData = (projectData: ProjectDraft, authenticatedUser: MinimalUser | string): CreateProjectDTO => ({
-    client_id: typeof authenticatedUser === "string" ? authenticatedUser : authenticatedUser.id,
+    client_id: typeof authenticatedUser === 'string' ? authenticatedUser : authenticatedUser.id,
     title: projectData.title,
     description: projectData.description,
     category: projectData.category,

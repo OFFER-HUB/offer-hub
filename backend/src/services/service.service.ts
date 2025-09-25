@@ -1,12 +1,12 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from '@/lib/supabase/supabase';
 import {
   CreateServiceDTO,
   UpdateServiceDTO,
   ServiceFilters,
   Service,
   ServiceWithFreelancer,
-} from "@/types/service.types";
-import { BadRequestError, ForbiddenError, NotFoundError ,InternalServerError} from "@/utils/AppError";
+} from '@/types/service.types';
+import { BadRequestError, ForbiddenError, NotFoundError ,InternalServerError} from '@/utils/AppError';
 class ServiceService {
   async createService(serviceData: CreateServiceDTO): Promise<Service> {
     const { user_id, title, description, category, min_price, max_price } =
@@ -14,22 +14,22 @@ class ServiceService {
 
     // First, verify that the user exists and is a freelancer
     const { data: user, error: userError } = await supabase
-      .from("users")
-      .select("id, is_freelancer")
-      .eq("id", user_id)
+      .from('users')
+      .select('id, is_freelancer')
+      .eq('id', user_id)
       .single();
 
     if (userError || !user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     if (!user.is_freelancer) {
-      throw new ForbiddenError("User is not a freelancer");
+      throw new ForbiddenError('User is not a freelancer');
     }
 
     // Create the service
     const { data: service, error } = await supabase
-      .from("services")
+      .from('services')
       .insert({
         user_id,
         title: title.trim(),
@@ -77,7 +77,7 @@ class ServiceService {
     } = filters;
 
     let query = supabase
-      .from("services")
+      .from('services')
       .select(
         `
         id,
@@ -98,21 +98,21 @@ class ServiceService {
         is_freelancer
       )
       `,
-        { count: "exact" }
+        { count: 'exact' }
       )
-      .eq("is_active", true);
+      .eq('is_active', true);
 
     // Apply filters
     if (category) {
-      query = query.ilike("category", `%${category}%`);
+      query = query.ilike('category', `%${category}%`);
     }
 
     if (min_price !== undefined) {
-      query = query.gte("min_price", min_price);
+      query = query.gte('min_price', min_price);
     }
 
     if (max_price !== undefined) {
-      query = query.lte("max_price", max_price);
+      query = query.lte('max_price', max_price);
     }
 
     if (keyword) {
@@ -126,7 +126,7 @@ class ServiceService {
     query = query.range(offset, offset + limit - 1);
 
     // Order by creation date (newest first)
-    query = query.order("created_at", { ascending: false });
+    query = query.order('created_at', { ascending: false });
 
     const { data: services, error, count } = await query;
 
@@ -173,7 +173,7 @@ class ServiceService {
     serviceId: string
   ): Promise<ServiceWithFreelancer | null> {
     const { data: service, error } = await supabase
-      .from("services")
+      .from('services')
       .select(
         `
         id,
@@ -196,8 +196,8 @@ class ServiceService {
       )
       `
       )
-      .eq("id", serviceId)
-      .eq("is_active", true)
+      .eq('id', serviceId)
+      .eq('is_active', true)
       .single();
 
     if (error || !service) {
@@ -237,9 +237,9 @@ class ServiceService {
   ): Promise<Service | null> {
     // First, check if the service exists and get the owner
     const { data: existingService, error: fetchError } = await supabase
-      .from("services")
-      .select("id, user_id")
-      .eq("id", serviceId)
+      .from('services')
+      .select('id, user_id')
+      .eq('id', serviceId)
       .single();
 
     if (fetchError || !existingService) {
@@ -248,7 +248,7 @@ class ServiceService {
 
     // If userId is provided, check ownership
     if (userId && existingService.user_id !== userId) {
-      throw new ForbiddenError("Unauthorized: You can only update your own services");
+      throw new ForbiddenError('Unauthorized: You can only update your own services');
     }
 
     // Prepare update data
@@ -272,9 +272,9 @@ class ServiceService {
       updatedData.category = updatedData.category.trim();
 
     const { data: service, error } = await supabase
-      .from("services")
+      .from('services')
       .update(updatedData)
-      .eq("id", serviceId)
+      .eq('id', serviceId)
       .select(
         `
         id,
@@ -301,9 +301,9 @@ class ServiceService {
   async deleteService(serviceId: string, userId?: string): Promise<boolean> {
     // First, check if the service exists and get the owner
     const { data: existingService, error: fetchError } = await supabase
-      .from("services")
-      .select("id, user_id")
-      .eq("id", serviceId)
+      .from('services')
+      .select('id, user_id')
+      .eq('id', serviceId)
       .single();
 
     if (fetchError || !existingService) {
@@ -312,17 +312,17 @@ class ServiceService {
 
     // If userId is provided, check ownership
     if (userId && existingService.user_id !== userId) {
-      throw new ForbiddenError("Unauthorized: You can only delete your own services");
+      throw new ForbiddenError('Unauthorized: You can only delete your own services');
     }
 
     // Soft delete by setting is_active to false
     const { error } = await supabase
-      .from("services")
+      .from('services')
       .update({
         is_active: false,
         updated_at: new Date().toISOString(), // Make sure this column exists now
       })
-      .eq("id", serviceId);
+      .eq('id', serviceId);
 
     if (error) {
       throw new InternalServerError(`Failed to delete service: ${error.message}`);
@@ -334,7 +334,7 @@ class ServiceService {
   // Additional utility methods
   async getServicesByUserId(userId: string): Promise<Service[]> {
     const { data: services, error } = await supabase
-      .from("services")
+      .from('services')
       .select(
         `
         id,
@@ -349,8 +349,8 @@ class ServiceService {
         updated_at
       `
       )
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
     if (error) {
       throw new InternalServerError(`Failed to fetch user services: ${error.message}`);
@@ -361,9 +361,9 @@ class ServiceService {
 
   async getServiceCategories(): Promise<string[]> {
     const { data: categories, error } = await supabase
-      .from("services")
-      .select("category")
-      .eq("is_active", true);
+      .from('services')
+      .select('category')
+      .eq('is_active', true);
 
     if (error) {
       throw new InternalServerError(`Failed to fetch categories: ${error.message}`);

@@ -3,7 +3,7 @@ import {
   CacheItem,
   Review,
   ReviewQueryKey,
-} from "@/types/reviews.types";
+} from '@/types/reviews.types';
 
 /**
  * Default cache configuration values
@@ -36,7 +36,7 @@ class ReviewCacheManager {
   private config: CacheConfig;
   private cleanupIntervalId: NodeJS.Timeout | null = null;
   private subscribers: Set<(key: string) => void>;
-  private storageKeyPrefix = "offerhub_review_cache_";
+  private storageKeyPrefix = 'offerhub_review_cache_';
 
   /**
    * Private constructor to enforce singleton pattern
@@ -75,13 +75,13 @@ class ReviewCacheManager {
       }
 
       console.info(
-        "ReviewCacheManager configuration updated for existing instance."
+        'ReviewCacheManager configuration updated for existing instance.'
       );
     } else {
       // Store config to be applied when instance is created
       ReviewCacheManager._config = { ...DEFAULT_CACHE_CONFIG, ...config };
       console.info(
-        "ReviewCacheManager configuration stored for future initialization."
+        'ReviewCacheManager configuration stored for future initialization.'
       );
     }
   }
@@ -104,9 +104,9 @@ class ReviewCacheManager {
       ReviewCacheManager.instance
     ) {
       throw new Error(
-        "Cannot provide configuration to getInstance() after the instance has been created.\n" +
-          "To configure before creation, call getInstance(config) only on first use.\n" +
-          "To modify existing configuration, use ReviewCacheManager.configure(config) instead."
+        'Cannot provide configuration to getInstance() after the instance has been created.\n' +
+          'To configure before creation, call getInstance(config) only on first use.\n' +
+          'To modify existing configuration, use ReviewCacheManager.configure(config) instead.'
       );
     }
 
@@ -169,7 +169,7 @@ class ReviewCacheManager {
     const stringKey = this.generateKey(key);
     const item = this.cache.get(stringKey);
 
-    if (!item && typeof window !== "undefined") {
+    if (!item && typeof window !== 'undefined') {
       // Try local storage
       return this.hasValidLocalStorageItem(stringKey);
     }
@@ -202,7 +202,7 @@ class ReviewCacheManager {
     }
 
     // Delete from local storage
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key?.startsWith(this.storageKeyPrefix + pattern)) {
@@ -220,7 +220,7 @@ class ReviewCacheManager {
   public clear(): void {
     this.cache.clear();
     this.clearLocalStorage();
-    this.notifySubscribers("*");
+    this.notifySubscribers('*');
   }
 
   /**
@@ -316,7 +316,7 @@ class ReviewCacheManager {
    * Generate a consistent string key from various input types
    */
   private generateKey(key: string | ReviewQueryKey | any): string {
-    if (typeof key === "string") {
+    if (typeof key === 'string') {
       return key;
     }
 
@@ -324,11 +324,11 @@ class ReviewCacheManager {
     if (Array.isArray(key)) {
       return key
         .map((k) =>
-          k !== null && typeof k === "object"
+          k !== null && typeof k === 'object'
             ? this.deterministicStringify(k)
             : String(k)
         )
-        .join(":");
+        .join(':');
     }
 
     // Handle object keys
@@ -348,16 +348,16 @@ class ReviewCacheManager {
     }
 
     // Handle primitive types
-    if (typeof obj !== "object") {
+    if (typeof obj !== 'object') {
       return String(obj);
     }
 
     // Handle arrays (preserve order but process elements recursively)
     if (Array.isArray(obj)) {
       return (
-        "[" +
-        obj.map((item) => this.deterministicStringify(item)).join(",") +
-        "]"
+        '[' +
+        obj.map((item) => this.deterministicStringify(item)).join(',') +
+        ']'
       );
     }
 
@@ -368,7 +368,7 @@ class ReviewCacheManager {
       return `"${key}":${this.deterministicStringify(value)}`;
     });
 
-    return "{" + parts.join(",") + "}";
+    return '{' + parts.join(',') + '}';
   }
 
   /**
@@ -382,7 +382,7 @@ class ReviewCacheManager {
    * Start the interval to clean up expired items
    */
   private startCleanupInterval(): void {
-    if (typeof window !== "undefined" && !this.cleanupIntervalId) {
+    if (typeof window !== 'undefined' && !this.cleanupIntervalId) {
       this.cleanupIntervalId = setInterval(() => {
         this.cleanup();
       }, this.config.cleanupInterval);
@@ -433,7 +433,7 @@ class ReviewCacheManager {
       try {
         callback(key);
       } catch (error) {
-        console.error("Error in cache subscriber callback:", error);
+        console.error('Error in cache subscriber callback:', error);
       }
     });
   }
@@ -442,7 +442,7 @@ class ReviewCacheManager {
    * Save item to localStorage for cross-tab synchronization
    */
   private saveToLocalStorage<T>(key: string, item: CacheItem<T>): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       // We don't need deterministic ordering for localStorage values since they're
@@ -453,7 +453,7 @@ class ReviewCacheManager {
       );
     } catch (e) {
       // Handle localStorage errors (e.g., quota exceeded)
-      console.warn("Failed to save cache item to localStorage:", e);
+      console.warn('Failed to save cache item to localStorage:', e);
     }
   }
 
@@ -461,7 +461,7 @@ class ReviewCacheManager {
    * Get item from localStorage
    */
   private getFromLocalStorage<T>(key: string): T | null {
-    if (typeof window === "undefined") return null;
+    if (typeof window === 'undefined') return null;
 
     try {
       const itemJson = localStorage.getItem(this.storageKeyPrefix + key);
@@ -486,7 +486,7 @@ class ReviewCacheManager {
    * Check if localStorage has a valid item
    */
   private hasValidLocalStorageItem(key: string): boolean {
-    if (typeof window === "undefined") return false;
+    if (typeof window === 'undefined') return false;
 
     try {
       const itemJson = localStorage.getItem(this.storageKeyPrefix + key);
@@ -503,12 +503,12 @@ class ReviewCacheManager {
    * Remove item from localStorage
    */
   private removeFromLocalStorage(key: string): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       localStorage.removeItem(this.storageKeyPrefix + key);
     } catch (e) {
-      console.warn("Failed to remove cache item from localStorage:", e);
+      console.warn('Failed to remove cache item from localStorage:', e);
     }
   }
 
@@ -516,7 +516,7 @@ class ReviewCacheManager {
    * Clear all cache items from localStorage
    */
   private clearLocalStorage(): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -526,7 +526,7 @@ class ReviewCacheManager {
         }
       }
     } catch (e) {
-      console.warn("Failed to clear cache from localStorage:", e);
+      console.warn('Failed to clear cache from localStorage:', e);
     }
   }
 
@@ -534,7 +534,7 @@ class ReviewCacheManager {
    * Clean up expired items from localStorage
    */
   private cleanupLocalStorage(): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       const now = Date.now();
@@ -557,7 +557,7 @@ class ReviewCacheManager {
         }
       }
     } catch (e) {
-      console.warn("Error during localStorage cleanup:", e);
+      console.warn('Error during localStorage cleanup:', e);
     }
   }
 
@@ -565,9 +565,9 @@ class ReviewCacheManager {
    * Set up listener for storage events from other tabs
    */
   private setupStorageEventListener(): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
-    window.addEventListener("storage", (event) => {
+    window.addEventListener('storage', (event) => {
       if (!event.key?.startsWith(this.storageKeyPrefix)) return;
 
       const cacheKey = event.key.substring(this.storageKeyPrefix.length);
@@ -594,7 +594,7 @@ class ReviewCacheManager {
    * Synchronize with localStorage on initialization
    */
   private syncWithLocalStorage(): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       for (let i = 0; i < localStorage.length; i++) {
@@ -605,7 +605,7 @@ class ReviewCacheManager {
         this.getFromLocalStorage(cacheKey);
       }
     } catch (e) {
-      console.warn("Error syncing with localStorage:", e);
+      console.warn('Error syncing with localStorage:', e);
     }
   }
 }

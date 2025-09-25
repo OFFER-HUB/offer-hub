@@ -11,10 +11,10 @@ import {
   BulkUserAction,
   AnalyticsReport,
   PlatformConfiguration,
-} from "@/types/admin.types";
+} from '@/types/admin.types';
 
 // Base API configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 class AdminService {
   private async apiCall<T>(
@@ -23,7 +23,7 @@ class AdminService {
   ): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...options.headers,
       },
       ...options,
@@ -38,11 +38,11 @@ class AdminService {
 
   // Platform Statistics
   async getPlatformStatistics(): Promise<PlatformStatistics> {
-    return this.apiCall<PlatformStatistics>("/admin/statistics");
+    return this.apiCall<PlatformStatistics>('/admin/statistics');
   }
 
   async getSystemHealth(): Promise<SystemHealthMetrics> {
-    return this.apiCall<SystemHealthMetrics>("/admin/system-health");
+    return this.apiCall<SystemHealthMetrics>('/admin/system-health');
   }
 
   // User Management
@@ -61,7 +61,7 @@ class AdminService {
       page: page.toString(),
       limit: limit.toString(),
       ...Object.entries(filters).reduce((acc, [key, value]) => {
-        if (value !== undefined && value !== "") {
+        if (value !== undefined && value !== '') {
           acc[key] = String(value);
         }
         return acc;
@@ -86,7 +86,7 @@ class AdminService {
     updates: Partial<PlatformUser>,
   ): Promise<PlatformUser> {
     return this.apiCall<PlatformUser>(`/admin/users/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(updates),
     });
   }
@@ -95,9 +95,9 @@ class AdminService {
     action: BulkUserAction,
   ): Promise<{ success: boolean; message: string }> {
     return this.apiCall<{ success: boolean; message: string }>(
-      "/admin/users/bulk-action",
+      '/admin/users/bulk-action',
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(action),
       },
     );
@@ -109,14 +109,14 @@ class AdminService {
     duration?: Date,
   ): Promise<{ success: boolean }> {
     return this.apiCall<{ success: boolean }>(`/admin/users/${id}/suspend`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ reason, duration }),
     });
   }
 
   async activateUser(id: string): Promise<{ success: boolean }> {
     return this.apiCall<{ success: boolean }>(`/admin/users/${id}/activate`, {
-      method: "POST",
+      method: 'POST',
     });
   }
 
@@ -143,7 +143,7 @@ class AdminService {
     updates: Partial<SecurityEvent>,
   ): Promise<SecurityEvent> {
     return this.apiCall<SecurityEvent>(`/admin/security/events/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(updates),
     });
   }
@@ -155,7 +155,7 @@ class AdminService {
   }): Promise<FinancialMetrics> {
     const queryParams = dateRange
       ? `?from=${dateRange.from.toISOString()}&to=${dateRange.to.toISOString()}`
-      : "";
+      : '';
     return this.apiCall<FinancialMetrics>(
       `/admin/financial/metrics${queryParams}`,
     );
@@ -205,11 +205,11 @@ class AdminService {
 
   async moderateContent(
     id: string,
-    action: "approve" | "reject",
+    action: 'approve' | 'reject',
     reason?: string,
   ): Promise<{ success: boolean }> {
     return this.apiCall<{ success: boolean }>(`/admin/moderation/items/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify({ action, reason }),
     });
   }
@@ -271,26 +271,26 @@ class AdminService {
     return this.apiCall<{ success: boolean }>(
       `/admin/notifications/${id}/read`,
       {
-        method: "PUT",
+        method: 'PUT',
       },
     );
   }
 
   async markAllNotificationsAsRead(): Promise<{ success: boolean }> {
-    return this.apiCall<{ success: boolean }>("/admin/notifications/read-all", {
-      method: "PUT",
+    return this.apiCall<{ success: boolean }>('/admin/notifications/read-all', {
+      method: 'PUT',
     });
   }
 
   // Analytics and Reporting
   async generateReport(config: {
-    type: AnalyticsReport["type"];
+    type: AnalyticsReport['type'];
     dateRange: { from: Date; to: Date };
     filters: Record<string, string | number | boolean>;
-    format: "json" | "csv" | "pdf";
+    format: 'json' | 'csv' | 'pdf';
   }): Promise<AnalyticsReport> {
-    return this.apiCall<AnalyticsReport>("/admin/analytics/generate-report", {
-      method: "POST",
+    return this.apiCall<AnalyticsReport>('/admin/analytics/generate-report', {
+      method: 'POST',
       body: JSON.stringify(config),
     });
   }
@@ -324,7 +324,7 @@ class AdminService {
 
   // Configuration Management
   async getConfigurations(): Promise<PlatformConfiguration[]> {
-    return this.apiCall<PlatformConfiguration[]>("/admin/configuration");
+    return this.apiCall<PlatformConfiguration[]>('/admin/configuration');
   }
 
   async updateConfiguration(
@@ -332,7 +332,7 @@ class AdminService {
     value: string | number | boolean | Record<string, unknown>,
   ): Promise<PlatformConfiguration> {
     return this.apiCall<PlatformConfiguration>(`/admin/configuration/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify({ value }),
     });
   }
@@ -351,7 +351,7 @@ class AdminService {
       recentActivities: AuditLog[];
       pendingModerations: number;
       unreadNotifications: number;
-    }>("/admin/dashboard");
+    }>('/admin/dashboard');
   }
 
   // Search functionality

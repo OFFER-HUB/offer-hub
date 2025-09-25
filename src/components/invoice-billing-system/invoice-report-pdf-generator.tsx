@@ -1,7 +1,7 @@
-import React from "react"
-import { Document, Page, Text, View, pdf, StyleSheet } from "@react-pdf/renderer"
-import type { Invoice } from "@/types/invoice.types"
-import { formatCurrency, formatDate } from "@/utils/invoice-helpers"
+import React from 'react'
+import { Document, Page, Text, View, pdf, StyleSheet } from '@react-pdf/renderer'
+import type { Invoice } from '@/types/invoice.types'
+import { formatCurrency, formatDate } from '@/utils/invoice-helpers'
 
 // PDF Styles for the report
 const reportStyles = StyleSheet.create({
@@ -139,17 +139,17 @@ interface ReportData {
 
 export async function generateInvoiceReportPDF(invoices: Invoice[]): Promise<Blob> {
   const reportData: ReportData = {
-    title: "Invoice Report",
+    title: 'Invoice Report',
     generatedAt: new Date().toISOString(),
     totalInvoices: invoices.length,
     totalRevenue: invoices
-      .filter((inv) => inv.status === "paid")
+      .filter((inv) => inv.status === 'paid')
       .reduce((sum, inv) => sum + inv.total, 0),
     pendingAmount: invoices
-      .filter((inv) => inv.status === "sent")
+      .filter((inv) => inv.status === 'sent')
       .reduce((sum, inv) => sum + inv.total, 0),
     overdueAmount: invoices
-      .filter((inv) => inv.status === "overdue")
+      .filter((inv) => inv.status === 'overdue')
       .reduce((sum, inv) => sum + inv.total, 0),
     invoices: invoices
   }
@@ -173,7 +173,7 @@ export async function generateInvoiceReportPDF(invoices: Invoice[]): Promise<Blo
       null,
       React.createElement(
         Page,
-        { size: "A4", style: reportStyles.page },
+        { size: 'A4', style: reportStyles.page },
 
         // Header
         React.createElement(
@@ -194,25 +194,25 @@ export async function generateInvoiceReportPDF(invoices: Invoice[]): Promise<Blo
           React.createElement(
             View,
             { style: reportStyles.summaryItem },
-            React.createElement(Text, { style: reportStyles.summaryLabel }, "TOTAL INVOICES"),
+            React.createElement(Text, { style: reportStyles.summaryLabel }, 'TOTAL INVOICES'),
             React.createElement(Text, { style: reportStyles.summaryValue }, reportData.totalInvoices.toString()),
           ),
           React.createElement(
             View,
             { style: reportStyles.summaryItem },
-            React.createElement(Text, { style: reportStyles.summaryLabel }, "TOTAL REVENUE"),
+            React.createElement(Text, { style: reportStyles.summaryLabel }, 'TOTAL REVENUE'),
             React.createElement(Text, { style: reportStyles.summaryValue }, formatCurrency(reportData.totalRevenue)),
           ),
           React.createElement(
             View,
             { style: reportStyles.summaryItem },
-            React.createElement(Text, { style: reportStyles.summaryLabel }, "PENDING"),
+            React.createElement(Text, { style: reportStyles.summaryLabel }, 'PENDING'),
             React.createElement(Text, { style: reportStyles.summaryValue }, formatCurrency(reportData.pendingAmount)),
           ),
           React.createElement(
             View,
             { style: reportStyles.summaryItem },
-            React.createElement(Text, { style: reportStyles.summaryLabel }, "OVERDUE"),
+            React.createElement(Text, { style: reportStyles.summaryLabel }, 'OVERDUE'),
             React.createElement(Text, { style: reportStyles.summaryValue }, formatCurrency(reportData.overdueAmount)),
           ),
         ),
@@ -224,32 +224,32 @@ export async function generateInvoiceReportPDF(invoices: Invoice[]): Promise<Blo
           React.createElement(
             Text,
             { style: [reportStyles.tableHeaderText, reportStyles.invoiceNumberCell] },
-            "Invoice #"
+            'Invoice #'
           ),
           React.createElement(
             Text,
             { style: [reportStyles.tableHeaderText, reportStyles.customerCell] },
-            "Customer"
+            'Customer'
           ),
           React.createElement(
             Text,
             { style: [reportStyles.tableHeaderText, reportStyles.statusCell] },
-            "Status"
+            'Status'
           ),
           React.createElement(
             Text,
             { style: [reportStyles.tableHeaderText, reportStyles.dateCell] },
-            "Issue Date"
+            'Issue Date'
           ),
           React.createElement(
             Text,
             { style: [reportStyles.tableHeaderText, reportStyles.dateCell] },
-            "Due Date"
+            'Due Date'
           ),
           React.createElement(
             Text,
             { style: [reportStyles.tableHeaderText, reportStyles.amountCell] },
-            "Amount"
+            'Amount'
           ),
         ),
 

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 import {
   CacheConfig,
   CacheItem,
   Review,
   ReviewMutationEvent,
   ReviewQueryKey,
-} from "@/types/reviews.types";
-import ReviewCacheManager from "@/utils/review-cache-manager";
+} from '@/types/reviews.types';
+import ReviewCacheManager from '@/utils/review-cache-manager';
 
 interface UseReviewCacheOptions extends Partial<CacheConfig> {
   onCacheUpdate?: (key: string) => void;
@@ -104,7 +104,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
       if (debugMode) {
         console.log(
           `[Review Cache] Cached: ${
-            typeof key === "string" ? key : JSON.stringify(key)
+            typeof key === 'string' ? key : JSON.stringify(key)
           }`
         );
       }
@@ -117,7 +117,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
   const getCachedReviews = useCallback(
     <T extends Review | Review[]>(key: string | ReviewQueryKey): T | null => {
       const data = cacheManager.get<T>(key);
-      const keyString = typeof key === "string" ? key : JSON.stringify(key);
+      const keyString = typeof key === 'string' ? key : JSON.stringify(key);
 
       if (data) {
         setCacheStats((prev) => ({
@@ -164,7 +164,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
       if (debugMode) {
         console.log(
           `[Review Cache] Invalidated: ${
-            typeof key === "string" ? key : JSON.stringify(key)
+            typeof key === 'string' ? key : JSON.stringify(key)
           }`
         );
       }
@@ -183,7 +183,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
       if (debugMode) {
         console.log(
           `[Review Cache] Invalidated pattern: ${
-            typeof pattern === "string" ? pattern : JSON.stringify(pattern)
+            typeof pattern === 'string' ? pattern : JSON.stringify(pattern)
           }`
         );
       }
@@ -196,7 +196,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
    */
   const invalidateUserCache = useCallback(
     (userId: string) => {
-      const keyPattern: ReviewQueryKey = ["reviews", userId];
+      const keyPattern: ReviewQueryKey = ['reviews', userId];
       cacheManager.invalidatePattern(keyPattern);
 
       if (debugMode) {
@@ -214,7 +214,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
     setCacheStats({ hits: 0, misses: 0, size: 0 });
 
     if (debugMode) {
-      console.log("[Review Cache] Cleared all cache");
+      console.log('[Review Cache] Cleared all cache');
     }
   }, [cacheManager, debugMode]);
 
@@ -228,7 +228,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
       if (debugMode && result) {
         console.log(
           `[Review Cache] Refreshed: ${
-            typeof key === "string" ? key : JSON.stringify(key)
+            typeof key === 'string' ? key : JSON.stringify(key)
           }`
         );
       }
@@ -253,10 +253,10 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
    */
   const broadcastMutation = useCallback(
     (event: ReviewMutationEvent) => {
-      if (!syncAcrossTabs || typeof window === "undefined") return;
+      if (!syncAcrossTabs || typeof window === 'undefined') return;
 
       try {
-        const eventKey = "offerhub_review_mutation";
+        const eventKey = 'offerhub_review_mutation';
         const eventData = JSON.stringify(event);
 
         localStorage.setItem(eventKey, eventData);
@@ -270,7 +270,7 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
           console.log(`[Review Cache] Broadcast mutation: ${event.type}`);
         }
       } catch (e) {
-        console.error("Failed to broadcast mutation event:", e);
+        console.error('Failed to broadcast mutation event:', e);
       }
     },
     [syncAcrossTabs, debugMode]
@@ -280,24 +280,24 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
    * Listen for mutation events from other tabs
    */
   useEffect(() => {
-    if (!syncAcrossTabs || typeof window === "undefined") return;
+    if (!syncAcrossTabs || typeof window === 'undefined') return;
 
     const handleStorage = (event: StorageEvent) => {
-      if (event.key !== "offerhub_review_mutation" || !event.newValue) return;
+      if (event.key !== 'offerhub_review_mutation' || !event.newValue) return;
 
       try {
         const mutation = JSON.parse(event.newValue) as ReviewMutationEvent;
 
         // Handle mutation based on type
         switch (mutation.type) {
-          case "create":
-            invalidatePattern(["reviews", mutation.payload.to_id]);
+          case 'create':
+            invalidatePattern(['reviews', mutation.payload.to_id]);
             break;
 
-          case "update":
-          case "delete":
-            invalidatePattern(["reviews", mutation.payload.to_id]);
-            invalidateCache(["review", mutation.payload.id]);
+          case 'update':
+          case 'delete':
+            invalidatePattern(['reviews', mutation.payload.to_id]);
+            invalidateCache(['review', mutation.payload.id]);
             break;
         }
 
@@ -305,14 +305,14 @@ export function useReviewCache(options: UseReviewCacheOptions = {}): UseReviewCa
           console.log(`[Review Cache] Received mutation: ${mutation.type}`);
         }
       } catch (e) {
-        console.error("Failed to process mutation event:", e);
+        console.error('Failed to process mutation event:', e);
       }
     };
 
-    window.addEventListener("storage", handleStorage);
+    window.addEventListener('storage', handleStorage);
 
     return () => {
-      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener('storage', handleStorage);
     };
   }, [syncAcrossTabs, debugMode, invalidatePattern, invalidateCache]);
 

@@ -3,22 +3,22 @@
  * @author Offer Hub Team
  */
 
-"use client";
+'use client';
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from 'react';
 import {
   Review,
   ReviewFilterOptions,
   ReviewSortField,
   SortDirection,
   ReviewSearchResult,
-} from "@/types/reviews.types";
+} from '@/types/reviews.types';
 import {
   applyFilters,
   haveFiltersChanged,
   searchReviews,
   sortReviews,
-} from "@/utils/review-helpers";
+} from '@/utils/review-helpers';
 
 /**
  * Configuration options for useReviewFilters hook
@@ -176,12 +176,12 @@ export function useReviewFilters({
       return sortReviews(
         filtered,
         filters.sortBy,
-        filters.sortDirection || "desc"
+        filters.sortDirection || 'desc'
       );
     }
 
     // Default sort by date
-    return sortReviews(filtered, "created_at", "desc");
+    return sortReviews(filtered, 'created_at', 'desc');
   }, [reviews, filters, enableSearchScoring]);
 
   // Get search results with scores
@@ -223,7 +223,7 @@ export function useReviewFilters({
       filters.dateRange?.from !== undefined ||
       filters.dateRange?.to !== undefined ||
       (filters.projectTypes && filters.projectTypes.length > 0) ||
-      (filters.search && filters.search.trim() !== "")
+      (filters.search && filters.search.trim() !== '')
     );
   }, [filters]);
 
@@ -243,10 +243,10 @@ export function useReviewFilters({
     if (filters.dateRange?.from || filters.dateRange?.to) {
       const from = filters.dateRange.from
         ? filters.dateRange.from.toLocaleDateString()
-        : "Any";
+        : 'Any';
       const to = filters.dateRange.to
         ? filters.dateRange.to.toLocaleDateString()
-        : "Now";
+        : 'Now';
       summary.push(`Date: ${from} to ${to}`);
     }
 
@@ -258,18 +258,18 @@ export function useReviewFilters({
       }
     }
 
-    if (filters.search && filters.search.trim() !== "") {
+    if (filters.search && filters.search.trim() !== '') {
       summary.push(`Search: "${filters.search}"`);
     }
 
     if (filters.sortBy) {
       const direction =
-        filters.sortDirection === "asc" ? "ascending" : "descending";
+        filters.sortDirection === 'asc' ? 'ascending' : 'descending';
       const fieldMap: Record<ReviewSortField, string> = {
-        rating: "Rating",
-        created_at: "Date",
-        project_title: "Project Name",
-        project_value: "Project Value",
+        rating: 'Rating',
+        created_at: 'Date',
+        project_title: 'Project Name',
+        project_value: 'Project Value',
       };
 
       summary.push(`Sort: ${fieldMap[filters.sortBy]} (${direction})`);

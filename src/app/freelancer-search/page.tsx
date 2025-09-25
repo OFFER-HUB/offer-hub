@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { useState, useEffect, Suspense } from "react"
-import SearchBar from "@/components/freelancer-search/search-bar"
-import FiltersSection from "@/components/freelancer-search/filters-section"
-import FreelancerCard from "@/components/freelancer-search/freelancer-card"
-import SortingOptions from "@/components/freelancer-search/sorting-options"
-import Pagination from "@/components/find-workers/pagination"
-import { Header } from "@/components/freelancer-search/header"
-import { useServicesApi } from "@/hooks/api-connections/use-services-api"
-import { ServiceFilters, FreelancerDisplay } from "@/types/service.types"
-import { useSearchParams } from "next/navigation"
+import { useState, useEffect, Suspense } from 'react'
+import SearchBar from '@/components/freelancer-search/search-bar'
+import FiltersSection from '@/components/freelancer-search/filters-section'
+import FreelancerCard from '@/components/freelancer-search/freelancer-card'
+import SortingOptions from '@/components/freelancer-search/sorting-options'
+import Pagination from '@/components/find-workers/pagination'
+import { Header } from '@/components/freelancer-search/header'
+import { useServicesApi } from '@/hooks/api-connections/use-services-api'
+import { ServiceFilters, FreelancerDisplay } from '@/types/service.types'
+import { useSearchParams } from 'next/navigation'
 
 export interface Freelancer {
   id: number
@@ -29,8 +29,8 @@ export interface Freelancer {
 function FreelancerSearchContent() {
   // Get URL parameters for initial state
   const searchParams = useSearchParams()
-  const initialSearchQuery = searchParams.get('q') || ""
-  const initialCategory = searchParams.get('category') || ""
+  const initialSearchQuery = searchParams.get('q') || ''
+  const initialCategory = searchParams.get('category') || ''
   const initialMinPrice = searchParams.get('min') ? parseFloat(searchParams.get('min')!) : undefined
   const initialMaxPrice = searchParams.get('max') ? parseFloat(searchParams.get('max')!) : undefined
   
@@ -43,8 +43,8 @@ function FreelancerSearchContent() {
     oneStar: false,
   })
   const [hourlyRate, setHourlyRate] = useState(50)
-  const [selectedLocation, setSelectedLocation] = useState("Any location")
-  const [sortBy, setSortBy] = useState("Recommended")
+  const [selectedLocation, setSelectedLocation] = useState('Any location')
+  const [sortBy, setSortBy] = useState('Recommended')
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const [currentFilters, setCurrentFilters] = useState<ServiceFilters>({
     page: parseInt(searchParams.get('page') || '1'),
@@ -95,18 +95,18 @@ function FreelancerSearchContent() {
     const sorted = [...freelancers]
     
     switch (sortOption) {
-      case "Most Recent":
+      case 'Most Recent':
         return sorted.sort((a, b) => b.id.localeCompare(a.id))
-      case "Highest Rated":
+      case 'Highest Rated':
         return sorted.sort((a, b) => {
             if (b.rating === a.rating) {
             return b.reviewCount - a.reviewCount
           }
           return b.rating - a.rating
         })
-      case "Lowest Rate":
+      case 'Lowest Rate':
         return sorted.sort((a, b) => a.hourlyRate - b.hourlyRate)
-      case "Highest Rate":
+      case 'Highest Rate':
         return sorted.sort((a, b) => b.hourlyRate - a.hourlyRate)
       default:
         return sorted.sort((a, b) => {
@@ -118,7 +118,7 @@ function FreelancerSearchContent() {
   }
 
   const resetAllFilters = () => {
-    setSelectedCategory("")
+    setSelectedCategory('')
     setRatingFilters({
       fiveStars: false,
       fourStars: false,
@@ -127,7 +127,7 @@ function FreelancerSearchContent() {
       oneStar: false,
     })
     setHourlyRate(50)
-    setSelectedLocation("Any location")
+    setSelectedLocation('Any location')
   }
 
   const handleSearch = (query: string) => {
@@ -137,16 +137,16 @@ function FreelancerSearchContent() {
   // Apply additional filters to services
   const filteredServices = services.filter((service) => {
     // Location filter
-    if (selectedLocation !== "Any location") {
+    if (selectedLocation !== 'Any location') {
       const normalizedLocation = service.location.toLowerCase();
       const normalizedSelection = selectedLocation.toLowerCase()
-        .replace("united kingdom", "uk")
-        .replace("united states", "usa");
+        .replace('united kingdom', 'uk')
+        .replace('united states', 'usa');
         
       if (!normalizedLocation.includes(normalizedSelection) && 
-          !(normalizedSelection === "usa" && normalizedLocation.includes("us")) &&
-          !(normalizedSelection === "europe" && 
-            ["germany", "spain", "france", "italy", "russia", "uk"].some(country => 
+          !(normalizedSelection === 'usa' && normalizedLocation.includes('us')) &&
+          !(normalizedSelection === 'europe' && 
+            ['germany', 'spain', 'france', 'italy', 'russia', 'uk'].some(country => 
               normalizedLocation.includes(country)
             ))
          ) {
@@ -171,22 +171,22 @@ function FreelancerSearchContent() {
   const sortedAndFiltered = sortFreelancers(filteredServices, sortBy)
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className='min-h-screen flex flex-col'>
       <Header />
 
-      <div className="bg-gradient-to-r from-slate-900 to-teal-700 py-12 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col items-center">
-          <div className="w-full max-w-4xl">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 text-left">Find Talented Freelancers</h1>
+      <div className='bg-gradient-to-r from-slate-900 to-teal-700 py-12 px-6'>
+        <div className='max-w-7xl mx-auto flex flex-col items-center'>
+          <div className='w-full max-w-4xl'>
+            <h1 className='text-3xl md:text-4xl font-bold text-white mb-6 text-left'>Find Talented Freelancers</h1>
             <SearchBar onSearch={handleSearch} />
           </div>
         </div>
       </div>
 
-      <main className="flex-1 bg-gray-50 px-6 py-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-full md:w-64 shrink-0">
+      <main className='flex-1 bg-gray-50 px-6 py-8'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='flex flex-col md:flex-row gap-8'>
+            <div className='w-full md:w-64 shrink-0'>
               <FiltersSection
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
@@ -200,10 +200,10 @@ function FreelancerSearchContent() {
               />
             </div>
 
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-medium">
-                  {isLoading ? "Loading..." : `${pagination?.total_services || matchingCount} freelancers available`}
+            <div className='flex-1'>
+              <div className='flex justify-between items-center mb-6'>
+                <h2 className='text-lg font-medium'>
+                  {isLoading ? 'Loading...' : `${pagination?.total_services || matchingCount} freelancers available`}
                 </h2>
                 <SortingOptions
                   sortOption={sortBy}
@@ -212,43 +212,43 @@ function FreelancerSearchContent() {
               </div>
 
               {isLoading ? (
-                <div className="space-y-6">
+                <div className='space-y-6'>
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index} className="animate-pulse">
-                      <div className="bg-white rounded-lg p-6">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
-                          <div className="flex-1">
-                            <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-                            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    <div key={index} className='animate-pulse'>
+                      <div className='bg-white rounded-lg p-6'>
+                        <div className='flex items-center space-x-4'>
+                          <div className='w-12 h-12 bg-gray-200 rounded-full'></div>
+                          <div className='flex-1'>
+                            <div className='h-4 bg-gray-200 rounded w-1/4 mb-2'></div>
+                            <div className='h-3 bg-gray-200 rounded w-1/2'></div>
                           </div>
                         </div>
-                        <div className="mt-4 space-y-2">
-                          <div className="h-3 bg-gray-200 rounded"></div>
-                          <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                        <div className='mt-4 space-y-2'>
+                          <div className='h-3 bg-gray-200 rounded'></div>
+                          <div className='h-3 bg-gray-200 rounded w-3/4'></div>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : error ? (
-                <div className="text-center py-12">
-                  <h3 className="text-lg font-medium text-red-600 mb-2">Error loading services</h3>
-                  <p className="text-gray-500">{error}</p>
+                <div className='text-center py-12'>
+                  <h3 className='text-lg font-medium text-red-600 mb-2'>Error loading services</h3>
+                  <p className='text-gray-500'>{error}</p>
                   <button 
                     onClick={() => searchServices({ page: 1, limit: 10 })}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    className='mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
                   >
                     Try Again
                   </button>
                 </div>
               ) : sortedAndFiltered.length === 0 ? (
-                <div className="text-center py-12">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No services found</h3>
-                  <p className="text-gray-500">Try adjusting your search criteria or filters.</p>
+                <div className='text-center py-12'>
+                  <h3 className='text-lg font-medium text-gray-900 mb-2'>No services found</h3>
+                  <p className='text-gray-500'>Try adjusting your search criteria or filters.</p>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className='space-y-6'>
                   {sortedAndFiltered.map((service) => (
                     <FreelancerCard 
                       key={service.id} 

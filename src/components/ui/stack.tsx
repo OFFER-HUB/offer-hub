@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 export function Stack({
   children,
-  className = "",
+  className = '',
 }: {
   children: ReactNode;
   className?: string;

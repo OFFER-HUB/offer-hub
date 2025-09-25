@@ -1,9 +1,9 @@
-import { useFilteredUsers } from "@/hooks/useFilteredUsers";
-import { useState } from "react";
-import { AccountTable, UserFilters } from "./components";
-import { RestrictAccountDialog } from "./restrict-account-dialog";
-import { UserChat } from "./user-chat";
-import UserProfile from "./user-profile";
+import { useFilteredUsers } from '@/hooks/useFilteredUsers';
+import { useState } from 'react';
+import { AccountTable, UserFilters } from './components';
+import { RestrictAccountDialog } from './restrict-account-dialog';
+import { UserChat } from './user-chat';
+import UserProfile from './user-profile';
 
 
 export default function AccountManagementTable() {
@@ -50,7 +50,7 @@ export default function AccountManagementTable() {
       return <UserChat onBack={handleBack} />;
     } else {
       return (
-        <div className="p-6">
+        <div className='p-6'>
           <UserProfile
             onBack={handleBack}
             onMessage={handleMessage}
@@ -65,7 +65,7 @@ export default function AccountManagementTable() {
     }
   }
   return (
-    <div className="flex flex-col space-y-4">
+    <div className='flex flex-col space-y-4'>
       <UserFilters
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -76,10 +76,10 @@ export default function AccountManagementTable() {
         date={date}
         setDate={setDate}
         handleExport={handleExport}
-        userType="Freelancer"
+        userType='Freelancer'
       />
 
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <AccountTable users={filteredUsers} onViewProfile={handleViewProfile} />
       </div>
     </div>

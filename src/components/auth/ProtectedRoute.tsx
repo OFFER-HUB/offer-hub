@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { ReactNode } from "react"
-import { AuthGuard } from "./auth-guard"
+import { ReactNode } from 'react'
+import { AuthGuard } from './auth-guard'
 
 interface ProtectedRouteProps {
   children: ReactNode
