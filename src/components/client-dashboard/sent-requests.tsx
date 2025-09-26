@@ -14,12 +14,27 @@ const SentRequestsList: React.FC<SentRequestsListProps> = ({ clientId }) => {
 
   useEffect(() => {
     if (!clientId) return;
+    let mounted = true;
+    const controller = new AbortController();
     setFetching(true);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/service-requests/${clientId}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "/api"}/service-requests/${clientId}`, { signal: controller.signal })
       .then(res => res.json())
-      .then(result => setRequests(result.data || []))
-      .catch(() => setRequests([]))
-      .finally(() => setFetching(false));
+      .then(result => {
+        if (!mounted) return;
+        setRequests(result.data || []);
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        if (!mounted) setRequests([]);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setFetching(false);
+      });
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
   }, [clientId]);
 
   if ((loading || fetching) && requests.length === 0) return <div>Loading sent requests...</div>;

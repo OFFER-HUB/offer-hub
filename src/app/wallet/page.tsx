@@ -1,3 +1,5 @@
+"use client"
+
 import { PublicRoute } from "@/components/auth/public-route";
 import WalletConnectPage from "../../components/onboarding/ConnectWalletPage";
 

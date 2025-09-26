@@ -12,7 +12,7 @@ export function useServiceRequestsApi() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
 
-  const createServiceRequest = async (data: CreateServiceRequestDTO) => {
+  const createServiceRequest = async (data: CreateServiceRequestDTO, signal?: AbortSignal) => {
     setLoading(true);
     setError(null);
 
@@ -33,7 +33,7 @@ export function useServiceRequestsApi() {
     }
   };
 
-  const getFreelancerRequests = async (freelancerId: string) => {
+  const getFreelancerRequests = async (freelancerId: string, signal?: AbortSignal) => {
     setLoading(true);
     setError(null);
     try {
@@ -49,7 +49,7 @@ export function useServiceRequestsApi() {
     }
   };
 
-  const updateServiceRequestStatus = async (id: string, status: RequestStatus, freelancerId: string) => {
+  const updateServiceRequestStatus = async (id: string, status: RequestStatus, freelancerId: string, signal?: AbortSignal) => {
     setLoading(true);
     setError(null);
     try {

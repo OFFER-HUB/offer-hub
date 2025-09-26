@@ -43,14 +43,27 @@ export function useMessages(userId?: string): UseMessagesResult {
 
   useEffect(() => {
     if (!userId) return;
+    let mounted = true;
+    const controller = new AbortController();
     setLoadingConversations(true);
-    getUserConversations(userId)
+    getUserConversations(userId, controller.signal)
       .then((res) => {
-        if (res.error) setErrorConversations(res.error);
-        else setConversations(res.data || []);
+        if (!mounted) return;
+        if (res.error && res.error !== 'request-aborted') setErrorConversations(res.error);
+        else if (!res.error) setConversations(res.data || []);
       })
-      .catch((e) => setErrorConversations(e.message))
-      .finally(() => setLoadingConversations(false));
+      .catch((e) => {
+        if (!mounted) return;
+        setErrorConversations(e.message);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoadingConversations(false);
+      });
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
   }, [userId]);
 
 
@@ -67,36 +80,47 @@ export function useMessages(userId?: string): UseMessagesResult {
 
   useEffect(() => {
     if (!activeConversationId) return;
+    let mounted = true;
+    const controller = new AbortController();
     setLoadingMessages(true);
-    getConversationMessages(activeConversationId)
+    getConversationMessages(activeConversationId, controller.signal)
       .then(async (res) => {
-        if (res.error) {
+        if (!mounted) return;
+        if (res.error && res.error !== 'request-aborted') {
           setErrorMessages(res.error);
-        } else {
+        } else if (!res.error) {
           const msgs = res.data || [];
           setMessages(msgs);
 
           if (userId) {
-            const readRes = await markAsRead(activeConversationId, userId);
-            if (!readRes.success && readRes.error) {
-
-              setErrorMessages((prev) => prev || readRes.error || null);
+            const readRes = await markAsRead(activeConversationId, userId, controller.signal);
+            if (!readRes.success && readRes.error && readRes.error !== 'request-aborted') {
+              setErrorMessages((prev: string | null) => prev || readRes.error || null);
             } else {
-             
-              setConversations((prev) =>
-                prev.map((c) =>
+              setConversations((prev: Conversation[]) =>
+                prev.map((c: Conversation) =>
                   c.id === activeConversationId
                     ? { ...c, unread_count: 0, last_message: c.last_message ? { ...c.last_message, is_read: true } : c.last_message }
                     : c
                 )
               );
-              setMessages((prev) => prev.map((m) => (m.sender_id !== userId ? { ...m, is_read: true } : m)));
+              setMessages((prev: Message[]) => prev.map((m: Message) => (m.sender_id !== userId ? { ...m, is_read: true } : m)));
             }
           }
         }
       })
-      .catch((e) => setErrorMessages(e.message))
-      .finally(() => setLoadingMessages(false));
+      .catch((e) => {
+        if (!mounted) return;
+        setErrorMessages(e.message);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoadingMessages(false);
+      });
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
   }, [activeConversationId, userId]);
 
   // Simple polling for new messages and conversation updates
@@ -105,13 +129,14 @@ export function useMessages(userId?: string): UseMessagesResult {
   useEffect(() => {
     if (!userId) return;
     const interval = setInterval(() => {
+      const controller = new AbortController();
 
-      getUserConversations(userId).then((res) => {
+      getUserConversations(userId, controller.signal).then((res) => {
         if (!res.error && res.data) setConversations(res.data);
       });
 
       if (activeConversationId) {
-        getConversationMessages(activeConversationId).then((res) => {
+        getConversationMessages(activeConversationId, controller.signal).then((res) => {
           if (!res.error && res.data) setMessages(res.data);
         });
       }
@@ -122,7 +147,7 @@ export function useMessages(userId?: string): UseMessagesResult {
   const handleSendMessage = useCallback(
     async (content: string, file?: File) => {
       if (!activeConversationId || !userId) return;
-      setSendingMessage(true);
+  setSendingMessage(true);
       setErrorSend(null);
       let fileUrl, fileName, fileSize;
       if (file) {
@@ -143,7 +168,7 @@ export function useMessages(userId?: string): UseMessagesResult {
         is_read: false,
         created_at: new Date().toISOString(),
       };
-      setMessages((prev) => [...prev, optimisticMsg]);
+  setMessages((prev: Message[]) => [...prev, optimisticMsg]);
       try {
         const dto: CreateMessageDTO = {
           conversation_id: activeConversationId,
@@ -154,20 +179,17 @@ export function useMessages(userId?: string): UseMessagesResult {
           file_name: fileName,
           file_size: fileSize,
         };
+        // allow sendMessage to be cancellable in future; fire without a signal for optimistic send
         const res = await sendMessage(dto);
         if (res.error || !res.data) {
           setErrorSend(res.error || 'Failed to send message');
-          
-          setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
+          setMessages((prev: Message[]) => prev.filter((m: Message) => m.id !== optimisticMsg.id));
         } else {
-          
-          setMessages((prev) =>
-            prev.map((m) => (m.id === optimisticMsg.id ? res.data! : m))
-          );
+          setMessages((prev: Message[]) => prev.map((m: Message) => (m.id === optimisticMsg.id ? res.data! : m)));
         }
       } catch (e: any) {
         setErrorSend(e.message);
-        setMessages((prev) => prev.filter((m) => m.id !== optimisticMsg.id));
+  setMessages((prev: Message[]) => prev.filter((m: Message) => m.id !== optimisticMsg.id));
       } finally {
         setSendingMessage(false);
       }

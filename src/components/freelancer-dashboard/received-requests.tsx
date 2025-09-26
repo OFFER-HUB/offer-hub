@@ -15,9 +15,20 @@ const ReceivedRequestsList: React.FC<ReceivedRequestsListProps> = ({ freelancerI
 
   useEffect(() => {
     if (!freelancerId) return;
-    getFreelancerRequests(freelancerId)
-      .then(setRequests)
-      .catch(() => {});
+    let mounted = true;
+    const controller = new AbortController();
+    getFreelancerRequests(freelancerId, controller.signal)
+      .then((res) => {
+        if (!mounted) return;
+        setRequests(res || []);
+      })
+      .catch(() => {
+        // ignore errors here — component can show empty state or global error
+      });
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
   }, [freelancerId, refresh]);
 
   const handleAction = async (id: string, status: "accepted" | "rejected") => {

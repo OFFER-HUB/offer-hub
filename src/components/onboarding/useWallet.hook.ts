@@ -1,11 +1,32 @@
 import { useWalletContext } from "./WalletContext";
-import {
-	FREIGHTER_ID,
-	LOBSTR_ID,
-	WalletNetwork,
-} from "@creit.tech/stellar-wallets-kit";
 import { useState } from "react";
-import { kit } from "./wallet-kit.constant";
+
+type WalletKitModule = {
+	StellarWalletsKit: any;
+	WalletNetwork: { TESTNET: string };
+	FREIGHTER_ID: string;
+	LOBSTR_ID: string;
+	allowAllModules: () => any;
+};
+
+let cachedKit: InstanceType<any> | null = null;
+let kitModule: WalletKitModule | null = null;
+
+async function getKitInstance() {
+	if (cachedKit && kitModule) return { kit: cachedKit, mod: kitModule };
+
+	// Dynamically import the browser-dependent wallet kit at runtime (client-side only)
+	const mod = await import("@creit.tech/stellar-wallets-kit");
+	const kit = new mod.StellarWalletsKit({
+		network: mod.WalletNetwork.TESTNET,
+		selectedWalletId: mod.FREIGHTER_ID,
+		modules: mod.allowAllModules(),
+	});
+
+	cachedKit = kit;
+	kitModule = mod;
+	return { kit, mod };
+}
 
 export const useWallet = () => {
 	const walletState = useWalletContext();
@@ -17,14 +38,16 @@ export const useWallet = () => {
 			setIsConnecting(true);
 			setError(null);
 
+			const { kit, mod } = await getKitInstance();
+
 			kit.setWallet(walletId);
 
 			const { address } = await kit.getAddress();
 
 			const walletName =
-				walletId === FREIGHTER_ID
+				walletId === mod.FREIGHTER_ID
 					? "Freighter"
-					: walletId === LOBSTR_ID
+					: walletId === mod.LOBSTR_ID
 						? "LOBSTR"
 						: "Unknown Wallet";
 
@@ -45,6 +68,7 @@ export const useWallet = () => {
 	const disconnectWallet = async () => {
 		try {
 			setError(null);
+			const { kit } = await getKitInstance();
 			await kit.disconnect();
 			walletState.disconnect();
 			return { success: true };
@@ -64,9 +88,11 @@ export const useWallet = () => {
 				throw new Error("No wallet connected");
 			}
 
+			const { kit, mod } = await getKitInstance();
+
 			const { signedTxXdr } = await kit.signTransaction(xdr, {
 				address: walletState.address,
-				networkPassphrase: WalletNetwork.TESTNET,
+				networkPassphrase: mod.WalletNetwork.TESTNET,
 			});
 
 			return { success: true, signedTxXdr };
