@@ -12,7 +12,7 @@ import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
 import { TrustlessWorkProvider } from '@/providers/TrustlessWorkProvider';
 import { WalletProvider } from '@/components/onboarding/WalletContext';
-import ErrorBoundary from '@/components/shared/ErrorBoundary';
+import ErrorBoundary from '@/components/common/error-boundary';
 import { NotificationProvider } from '@/lib/contexts/NotificatonContext';
 import { TalentProvider } from '@/lib/contexts/TalentContext';
 import { OfferProvider } from '@/lib/contexts/OfferContext';
