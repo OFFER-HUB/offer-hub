@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import withErrorBoundary from "@/components/shared/WithErrorBoundary";
+import { useConfirmation } from '@/hooks/use-confirmation';
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -71,7 +73,13 @@ function UserRow({
 }: UserRowProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const [showStatusConfirmation, setShowStatusConfirmation] = useState(false);
+
   const handleStatusToggle = async () => {
+    setShowStatusConfirmation(true);
+  };
+
+  const executeStatusChange = async () => {
     setIsUpdating(true);
     try {
       if (user.isActive) {
@@ -84,6 +92,7 @@ function UserRow({
       console.error('Failed to update user status:', error);
     } finally {
       setIsUpdating(false);
+      setShowStatusConfirmation(false);
     }
   };
 
@@ -185,6 +194,18 @@ function UserRow({
           </DropdownMenuContent>
         </DropdownMenu>
       </TableCell>
+      <ConfirmationDialog
+        isOpen={showStatusConfirmation}
+        onClose={() => setShowStatusConfirmation(false)}
+        onConfirm={executeStatusChange}
+        title={user.isActive ? 'Suspend User' : 'Activate User'}
+        description={user.isActive 
+          ? `Are you sure you want to suspend ${user.firstName} ${user.lastName}? This will prevent them from accessing the platform.`
+          : `Are you sure you want to activate ${user.firstName} ${user.lastName}? This will restore their access to the platform.`
+        }
+        confirmText={user.isActive ? 'Suspend' : 'Activate'}
+        variant={user.isActive ? 'destructive' : 'default'}
+      />
     </TableRow>
   );
 }
@@ -209,7 +230,13 @@ function BulkActionDialog({
   const [message, setMessage] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
 
-  const handleExecute = async () => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleExecute = () => {
+    setShowConfirmation(true);
+  };
+
+  const executeAction = async () => {
     setIsExecuting(true);
     try {
       await onExecute({
@@ -225,6 +252,7 @@ function BulkActionDialog({
       console.error('Bulk action failed:', error);
     } finally {
       setIsExecuting(false);
+      setShowConfirmation(false);
     }
   };
 
