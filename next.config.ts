@@ -1,12 +1,6 @@
-/**
- * @fileoverview Next.js configuration file for build and runtime settings
- * @author Offer Hub Team
- */
-
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

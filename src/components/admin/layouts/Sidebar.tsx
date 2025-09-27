@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpIcon, UsersIcon } from "lucide-react";
+import { ArrowUpIcon, UsersIcon, Settings } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import NavItem from "../components/NavItems";
@@ -28,6 +28,11 @@ const navItems = [
     path: "/dispute-resolution",
     icon: <LuFolderPen className="h-5 w-5" />,
     label: "Dispute resolution",
+  },
+  {
+    path: "/admin/configuration",
+    icon: <Settings className="h-5 w-5" />,
+    label: "Configuration",
   },
   {
     path: "/profile",

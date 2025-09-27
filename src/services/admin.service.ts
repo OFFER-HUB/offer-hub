@@ -337,6 +337,307 @@ class AdminService {
     });
   }
 
+  // Enhanced Configuration Management
+  async getConfigurationById(id: string): Promise<PlatformConfiguration> {
+    return this.apiCall<PlatformConfiguration>(`/admin/configuration/${id}`);
+  }
+
+  async createConfiguration(
+    config: Omit<PlatformConfiguration, 'id' | 'createdAt' | 'updatedAt' | 'version'>
+  ): Promise<PlatformConfiguration> {
+    return this.apiCall<PlatformConfiguration>("/admin/configuration", {
+      method: "POST",
+      body: JSON.stringify(config),
+    });
+  }
+
+  async deleteConfiguration(id: string): Promise<void> {
+    await this.apiCall<void>(`/admin/configuration/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  async validateConfiguration(
+    id: string,
+    value: unknown
+  ): Promise<{ isValid: boolean; errors: string[]; warnings: string[] }> {
+    return this.apiCall<{ isValid: boolean; errors: string[]; warnings: string[] }>(
+      `/admin/configuration/${id}/validate`,
+      {
+        method: "POST",
+        body: JSON.stringify({ value }),
+      }
+    );
+  }
+
+  async getConfigurationHistory(
+    id: string,
+    page = 1,
+    limit = 20
+  ): Promise<{
+    history: Array<{
+      id: string;
+      version: number;
+      value: unknown;
+      changedBy: string;
+      changedAt: Date;
+      changeType: string;
+    }>;
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+    return this.apiCall<{
+      history: Array<{
+        id: string;
+        version: number;
+        value: unknown;
+        changedBy: string;
+        changedAt: Date;
+        changeType: string;
+      }>;
+      total: number;
+      page: number;
+      limit: number;
+    }>(`/admin/configuration/${id}/history?${queryParams}`);
+  }
+
+  async rollbackConfiguration(
+    id: string,
+    version: number
+  ): Promise<PlatformConfiguration> {
+    return this.apiCall<PlatformConfiguration>(`/admin/configuration/${id}/rollback`, {
+      method: "POST",
+      body: JSON.stringify({ version }),
+    });
+  }
+
+  // Policy Management
+  async getPolicies(
+    page = 1,
+    limit = 20,
+    filters?: {
+      category?: string;
+      status?: string;
+      environment?: string;
+      search?: string;
+    }
+  ): Promise<{
+    policies: Array<{
+      id: string;
+      name: string;
+      description: string;
+      category: string;
+      status: string;
+      priority: string;
+      isActive: boolean;
+      createdBy: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }>;
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...Object.entries(filters || {}).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== '') {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>),
+    });
+
+    return this.apiCall<{
+      policies: Array<{
+        id: string;
+        name: string;
+        description: string;
+        category: string;
+        status: string;
+        priority: string;
+        isActive: boolean;
+        createdBy: string;
+        createdAt: Date;
+        updatedAt: Date;
+      }>;
+      total: number;
+      page: number;
+      limit: number;
+    }>(`/admin/policies?${queryParams}`);
+  }
+
+  async createPolicy(
+    policy: {
+      name: string;
+      description: string;
+      category: string;
+      type: string;
+      priority: string;
+      rules: Array<{
+        name: string;
+        type: string;
+        operator: string;
+        value: unknown;
+        field: string;
+      }>;
+      actions: Array<{
+        name: string;
+        type: string;
+        parameters: Record<string, unknown>;
+      }>;
+      environment: string;
+    }
+  ): Promise<{
+    id: string;
+    name: string;
+    description: string;
+    category: string;
+    status: string;
+    priority: string;
+    isActive: boolean;
+    createdBy: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }> {
+    return this.apiCall<{
+      id: string;
+      name: string;
+      description: string;
+      category: string;
+      status: string;
+      priority: string;
+      isActive: boolean;
+      createdBy: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }>("/admin/policies", {
+      method: "POST",
+      body: JSON.stringify(policy),
+    });
+  }
+
+  // Feature Toggle Management
+  async getFeatureToggles(
+    page = 1,
+    limit = 20,
+    filters?: {
+      category?: string;
+      status?: string;
+      environment?: string;
+      isActive?: boolean;
+      search?: string;
+    }
+  ): Promise<{
+    featureToggles: Array<{
+      id: string;
+      key: string;
+      name: string;
+      description: string;
+      category: string;
+      status: string;
+      isActive: boolean;
+      rolloutStrategy: string;
+      rolloutPercentage: number;
+      createdBy: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }>;
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...Object.entries(filters || {}).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== '') {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>),
+    });
+
+    return this.apiCall<{
+      featureToggles: Array<{
+        id: string;
+        key: string;
+        name: string;
+        description: string;
+        category: string;
+        status: string;
+        isActive: boolean;
+        rolloutStrategy: string;
+        rolloutPercentage: number;
+        createdBy: string;
+        createdAt: Date;
+        updatedAt: Date;
+      }>;
+      total: number;
+      page: number;
+      limit: number;
+    }>(`/admin/feature-toggles?${queryParams}`);
+  }
+
+  async createFeatureToggle(
+    featureToggle: {
+      key: string;
+      name: string;
+      description: string;
+      category: string;
+      type: string;
+      environment: string;
+      rolloutStrategy: string;
+      rolloutPercentage: number;
+      targetAudience: {
+        name: string;
+        type: string;
+        criteria: Array<{
+          field: string;
+          operator: string;
+          value: unknown;
+        }>;
+      };
+    }
+  ): Promise<{
+    id: string;
+    key: string;
+    name: string;
+    description: string;
+    category: string;
+    status: string;
+    isActive: boolean;
+    rolloutStrategy: string;
+    rolloutPercentage: number;
+    createdBy: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }> {
+    return this.apiCall<{
+      id: string;
+      key: string;
+      name: string;
+      description: string;
+      category: string;
+      status: string;
+      isActive: boolean;
+      rolloutStrategy: string;
+      rolloutPercentage: number;
+      createdBy: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }>("/admin/feature-toggles", {
+      method: "POST",
+      body: JSON.stringify(featureToggle),
+    });
+  }
+
   // Dashboard Data
   async getDashboardData(): Promise<{
     statistics: PlatformStatistics;

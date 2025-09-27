@@ -235,14 +235,33 @@ export interface AnalyticsReport {
 
 export interface PlatformConfiguration {
   id: string;
-  category: 'general' | 'security' | 'payments' | 'features' | 'notifications';
+  category: 'general' | 'security' | 'payments' | 'features' | 'notifications' | 'ui' | 'performance' | 'integration' | 'analytics' | 'maintenance';
   key: string;
   value: string | number | boolean | Record<string, unknown>;
   description: string;
-  dataType: 'string' | 'number' | 'boolean' | 'json';
+  dataType: 'string' | 'number' | 'boolean' | 'json' | 'array' | 'object';
   isEditable: boolean;
+  isRequired: boolean;
+  defaultValue?: string | number | boolean | Record<string, unknown>;
+  validationRules?: Array<{
+    id: string;
+    type: string;
+    value?: unknown;
+    message: string;
+    isActive: boolean;
+  }>;
+  environment: 'development' | 'staging' | 'production' | 'testing';
   updatedBy: string;
   updatedAt: Date;
+  createdAt: Date;
+  version: number;
+  tags?: string[];
+  dependencies?: Array<{
+    id: string;
+    configurationKey: string;
+    condition: string;
+    message: string;
+  }>;
 }
 
 export const mapBackendUserToAdmin = (backendUser: BackendUser): AdminUser => ({
