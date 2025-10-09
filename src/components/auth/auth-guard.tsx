@@ -1,54 +1,42 @@
-"use client"
+"use client";
 
 import { useAuthGuard } from "@/hooks/use-auth-guard";
-import { ReactNode } from "react"
-import { LoadingSpinner } from "../LoadingSpinner";
+import { ReactNode } from "react";
+import LoadingSpinner from "../ui/loading-spinner";
 import { AccessDenied } from "./AccessDenied";
 
-
-
-
 interface AuthGuardProps {
-    children: ReactNode;
-    roles?: string[]
+  children: ReactNode;
+  roles?: string[];
 }
-
 
 export const AuthGuard = ({ children, roles }: AuthGuardProps) => {
+  const { isLoading, hasAccess, error, isAuthenticated } = useAuthGuard(roles);
 
-    const { isLoading, hasAccess, error, isAuthenticated } = useAuthGuard(roles)
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen flex items-center flex-col justify-center gap-3 ">
+        <LoadingSpinner />
+        <span className=" text-teal-600">Verifying access…</span>
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center gap-3 ">
+        <p className="text-red-600 font-medium">{error}</p>
+      </div>
+    );
+  }
 
-    if (isLoading) {
-        return (
-            <div className="w-full h-screen flex items-center flex-col justify-center gap-3 " >
+  if (!isAuthenticated) {
+    return "Please get authenticated";
+  }
 
-                <LoadingSpinner />
-                <span className=" text-teal-600">Verifying access…</span>
-            </div>
-        )
-    }
+  if (!hasAccess) {
+    return <AccessDenied />;
+  }
 
-
-    if (error) {
-        return (
-            <div className="w-full h-screen flex items-center justify-center gap-3 ">
-                <p className="text-red-600 font-medium">{error}</p>
-            </div>
-        )
-    }
-
-    if (!isAuthenticated) {
-        return "Please get authenticated"
-    }
-
-    if (!hasAccess) {
-        return <AccessDenied/>
-    }
-
-
-
-    return <> {children} </>
-}
-
-
+  return <> {children} </>;
+};
