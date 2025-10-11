@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Dialog, DialogContent } from "./dialog";
+import { Dialog, DialogContent, DialogTitle } from "./dialog";
 
 export interface ModalProps {
   /** Whether the modal is open */
@@ -62,6 +61,7 @@ export const Modal: React.FC<ModalProps> = ({
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
         className={cn("relative w-full", sizeClasses[size], className)}
+        showCloseButton={showCloseButton}
         // Prevent closing via Escape when disabled
         onEscapeKeyDown={(e) => {
           if (!closeOnEscape) {
@@ -79,9 +79,9 @@ export const Modal: React.FC<ModalProps> = ({
           <div className="flex items-center justify-between border-b pb-4 mb-4">
             <div className="flex-1">
               {title && (
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {title}
-                </h2>
+                </DialogTitle>
               )}
               {description && (
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -89,15 +89,6 @@ export const Modal: React.FC<ModalProps> = ({
                 </p>
               )}
             </div>
-            {showCloseButton && (
-              <button
-                onClick={onClose}
-                className="ml-4 p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            )}
           </div>
         )}
 
