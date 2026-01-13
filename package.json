@@ -15,8 +15,8 @@
     "dev:worker": "npm run dev -w @offerhub/worker",
     "build": "npm run build -ws",
     "lint": "echo \"No lint configured\"",
-    "prisma:generate": "npm run prisma:generate -w @offerhub/database",
-    "prisma:migrate": "npm run prisma:migrate -w @offerhub/database"
+    "prisma:generate": "npx prisma generate --schema packages/database/prisma/schema.prisma",
+    "prisma:migrate": "npx prisma migrate dev --schema packages/database/prisma/schema.prisma"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",

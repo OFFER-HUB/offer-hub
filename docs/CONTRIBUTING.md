@@ -11,15 +11,31 @@ cd OFFER-HUB-Orchestrator
 ```
 
 ### Installation
-Ensure you have **Node.js 20+** and **npm 9+**.
+Ensure you have **Node.js 20+** and **npm 10+**.
 ```bash
 npm install
+```
+
+### Infrastructure (PostgreSQL & Redis)
+This project requires PostgreSQL and Redis. We provide a Docker setup for local development:
+```bash
+docker compose up -d
 ```
 
 ### Configuration
 Copy the example file and fill in the variables:
 ```bash
 cp .env.example .env
+```
+
+### Database Setup (Prisma)
+Once your database is running, apply the migrations and generate the client:
+```bash
+# 1. Apply migrations to the DB
+npm run prisma:migrate
+
+# 2. Generate Prisma Client
+npm run prisma:generate
 ```
 
 ## 🚀 Development Commands
@@ -29,7 +45,6 @@ The project uses **npm Workspaces**. You can run the services from the root:
 - **Both Services (Concurrent)**: `npm run dev` (Starts API and Worker together)
 - **API Server Only**: `npm run dev:api`
 - **Worker Process Only**: `npm run dev:worker`
-- **Generate Prisma Client**: `npm run prisma:generate`
 
 ### Running Separately
 If you prefer to see logs in separate terminals, you can open two windows and run:
@@ -72,6 +87,11 @@ Before submitting a change, ensure you:
 4. Open a PR using our Pull Request template.
 5. Wait for a maintainer's review.
 
+## 🗺️ Roadmap & Tasks
+
+This project follows a strict 0-100% execution plan. Before picking up a task, check the:
+- [**ROADMAP.md**](../ROADMAP.md): Our master development checklist.
+
 ---
 
-Questions? Consult the [AI Agent Guide](./docs/AI.md).
+Questions? Consult the [AI Agent Guide](./AI.md) or open an issue.
