@@ -1,0 +1,22 @@
+/**
+ * Withdrawal Status Enum
+ * @see docs/architecture/state-machines.md
+ */
+export enum WithdrawalStatus {
+    WITHDRAWAL_CREATED = 'WITHDRAWAL_CREATED',
+    WITHDRAWAL_COMMITTED = 'WITHDRAWAL_COMMITTED',
+    WITHDRAWAL_PENDING = 'WITHDRAWAL_PENDING',
+    WITHDRAWAL_PENDING_USER_ACTION = 'WITHDRAWAL_PENDING_USER_ACTION',
+    WITHDRAWAL_COMPLETED = 'WITHDRAWAL_COMPLETED',
+    WITHDRAWAL_FAILED = 'WITHDRAWAL_FAILED',
+    WITHDRAWAL_CANCELED = 'WITHDRAWAL_CANCELED',
+}
+
+/**
+ * Terminal states for Withdrawal
+ */
+export const WITHDRAWAL_TERMINAL_STATES: WithdrawalStatus[] = [
+    WithdrawalStatus.WITHDRAWAL_COMPLETED,
+    WithdrawalStatus.WITHDRAWAL_FAILED,
+    WithdrawalStatus.WITHDRAWAL_CANCELED,
+];
