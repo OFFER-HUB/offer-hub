@@ -1,0 +1,191 @@
+# 🗺️ Master Roadmap: OFFER-HUB Orchestrator (100% Granular)
+
+This roadmap is the definitive guide to building the Orchestrator. It maps 100% of the requirements from `/docs` into atomic, testable units of work.
+
+---
+
+## 🏗️ Phase 0: Project Foundation (COMPLETED)
+- [x] Initial monorepo scaffolding (Apps, Packages).
+- [x] Professional Documentation & English Translation.
+- [x] Workflow improvements (Concurrent execution, Docker, Scripts).
+- [x] Root configuration (.gitignore, tsconfig.json, docker-compose.yml).
+- [x] AI Development Standards (`AI.md`).
+
+---
+
+## 🧬 Phase 1: Shared Domain & Types
+*Goal: Define the schema and common logic used by both API and Worker.*
+
+- [ ] **Issue 1.1: Database Schema (Prisma)**
+    - [ ] 1.1.1: Core Identity: `User`, `ApiKey`, `Balance`.
+    - [ ] 1.1.2: Financials: `TopUp`, `Order`, `Escrow`, `Withdrawal`.
+    - [ ] 1.1.3: Details: `Milestone`, `Dispute`, `AuditLog`, `IdempotencyKey`.
+    - [ ] 1.1.4: Infrastructure: `WebhookEvent` (deduplication).
+    - [ ] 1.1.5: Performance: Add composite indexes for `user_id`, `status`, `external_id`.
+
+- [ ] **Issue 1.2: Domain Constants & Enums**
+    - [ ] 1.2.1: Enums: Implement all status enums from `docs/architecture/state-machines.md`.
+    - [ ] 1.2.2: ID Prefixes: Implement `usr_`, `ord_`, `topup_`, `esc_`, `dsp_`, `wd_`, `evt_`, `aud_`.
+    - [ ] 1.2.3: Error Codes: Implement full catalog from `docs/api/errors.md` with HTTP mappings.
+
+- [ ] **Issue 1.4: Logic Helpers**
+    - [ ] 1.4.1: Prefixed NanoID generator.
+    - [ ] 1.4.2: Financial arithmetic library integration (`Big.js` or `Decimal.js`).
+    - [ ] 1.4.3: Amount validator (`^\d+\.\d{2}$`).
+    - [ ] 1.4.4: State machine validator engine (enforcing `ORDER_TRANSITIONS`).
+
+---
+
+## 🔐 Phase 2: Security & Infrastructure
+*Goal: Build the protective shell and the core request handlers.*
+
+- [ ] **Issue 2.1: Auth System**
+    - [ ] 2.1.1: API Key hashing logic (SHA-256 + salt).
+    - [ ] 2.1.2: `ApiKeyGuard` (Authenticates `ohk_` keys).
+    - [ ] 2.1.3: `ScopeGuard` (Enforces `read`, `write`, `support`).
+    - [ ] 2.1.4: Short-lived token logic (`ohk_tok_`) for frontend use.
+
+- [ ] **Issue 2.2: Idempotency System (Redis)**
+    - [ ] 2.2.1: `IdempotencyGuard`: Intercepts `Idempotency-Key` headers.
+    - [ ] 2.2.2: In-progress locking: Prevents concurrent requests with the same key.
+    - [ ] 2.2.3: Comparison logic: Ensures request hash matches the stored key body.
+    - [ ] 2.2.4: TTL Logic: 24h for payouts/topups, 7 days for orders, indefinite for disputes.
+
+- [ ] **Issue 2.3: Request/Response Pipeline**
+    - [ ] 2.3.1: Global Error Filter: Transform all exceptions to `docs/api/errors.md` format.
+    - [ ] 2.3.2: Standard Response Interceptor: Wrap all success responses.
+    - [ ] 2.3.3: Correlation ID Middleware: Handle `X-Request-ID` headers.
+    - [ ] 2.3.4: Global Rate Limiter: Implement Redis-based rate limiting (100 req/min general).
+
+---
+
+## 🔌 Phase 3: External Providers
+*Goal: Implement the "Dialects" to talk to Airtm and Trustless Work.*
+
+- [ ] **Issue 3.1: Airtm Integration**
+    - [ ] 3.1.1: Payin flow (Top-up): URI generation and status check client.
+    - [ ] 3.1.2: Payout flow (Withdrawal): Create and Commit client.
+    - [ ] 3.1.3: User verification client (KYC/Country checks).
+    - [ ] 3.1.4: HMAC Signature verification logic for Airtm webhooks.
+
+- [ ] **Issue 3.2: Trustless Work Integration**
+    - [ ] 3.2.1: Stellar wallet logic (Balance projection).
+    - [ ] 3.2.2: Escrow contract creation client.
+    - [ ] 3.2.3: Partial Release / Partial Refund logic.
+    - [ ] 3.2.4: HMAC Signature verification logic for TW webhooks.
+
+---
+
+## 💰 Phase 4: Core Services (Business Logic)
+*Goal: The heart of the Orchestrator - State & Money management.*
+
+- [ ] **Issue 4.1: Balance Orchestrator**
+    - [ ] 4.1.1: Implement atomic `available` vs `reserved` updates (Prisma Transactions).
+    - [ ] 4.1.2: Implement `MIRROR` logic: ensuring local balance reflects provider state.
+
+- [ ] **Issue 4.2: Top-Up Orchestrator**
+    - [ ] 4.2.1: Flow orchestration: `CREATED` -> `AWAITING_CONFIRMATION` -> `PROCESSING` -> `SUCCEEDED`.
+    - [ ] 4.2.2: Success/Cancel URL redirection and state logic.
+
+- [ ] **Issue 4.3: Order & Escrow Orchestrator**
+    - [ ] 4.3.1: Funds reservation logic (`available` -= amount, `reserved` += amount).
+    - [ ] 4.3.2: Escrow Bridge: Triggering move to Stellar wallet when funding escrow.
+    - [ ] 4.3.3: Milestones flow: handling partial completions.
+
+- [ ] **Issue 4.4: Resolution Orchestrator**
+    - [ ] 4.4.1: Release flow: Funds to seller `available` balance.
+    - [ ] 4.4.2: Refund flow: Funds back to buyer `available` balance.
+    - [ ] 4.4.3: Dispute Split flow: Fractional distribution of escrow.
+
+---
+
+## 📡 Phase 5: API Endpoints (The Surface)
+*Goal: Implement every endpoint documented in /docs/api/endpoints.*
+
+- [ ] **Issue 5.1: Auth & Config Endpoints**
+    - [ ] 5.1.1: `POST /auth/api-keys` and `GET /auth/api-keys`.
+    - [ ] 5.1.2: `POST /auth/token` (Short-lived tokens).
+    - [ ] 5.1.3: `GET /me` and `GET /config`.
+    - [ ] 5.1.4: `GET /health` (Aggregated health check for DB, Redis, Airtm, TW).
+
+- [ ] **Issue 5.2: Users & Balances**
+    - [ ] 5.2.1: `POST /users` (Marketplace registration).
+    - [ ] 5.2.2: `POST /users/{id}/airtm/link`.
+    - [ ] 5.2.3: `GET /users/{id}/balance` (Full available/reserved breakdown).
+
+- [ ] **Issue 5.3: Top-Ups Endpoints**
+    - [ ] 5.3.1: `POST /topups` (Payin start).
+    - [ ] 5.3.2: `POST /topups/{id}/refresh` (Manual poll sync).
+
+- [ ] **Issue 5.4: Orders & Escrow Endpoints**
+    - [ ] 5.4.1: `POST /orders`, `GET /orders`, `GET /orders/{id}`.
+    - [ ] 5.4.2: `POST /orders/{id}/reserve` and `/cancel`.
+    - [ ] 5.4.3: `POST /orders/{id}/escrow` and `/escrow/fund`.
+    - [ ] 5.4.4: `POST /orders/{id}/milestones/{ref}/complete`.
+
+- [ ] **Issue 5.5: Settlement Endpoints**
+    - [ ] 5.5.1: `POST /orders/{id}/release` and `/refund`.
+    - [ ] 5.5.2: `POST /orders/{id}/disputes` and `/disputes/{id}/resolve`.
+
+- [ ] **Issue 5.6: Withdrawals Endpoints**
+    - [ ] 5.6.1: `POST /withdrawals` and `/withdrawals/{id}/commit`.
+    - [ ] 5.6.2: `POST /withdrawals/{id}/refresh`.
+
+---
+
+## 📝 Phase 6: Observability (Events & Logs)
+*Goal: Implement 100% traceability for events and audit.*
+
+- [ ] **Issue 6.1: Internal Event System**
+    - [ ] 6.1.1: Event Bus implementation.
+    - [ ] 6.1.2: Event Catalog implementation (mapping every event in `docs/events/catalog.md`).
+
+- [ ] **Issue 6.2: Real-time SSE**
+    - [ ] 6.2.1: `GET /events` endpoint with user-filtering.
+    - [ ] 6.2.2: SSE Heartbeat (ping) mechanism.
+    - [ ] 6.2.3: Reconnection logic (backlog replay from cursor).
+
+- [ ] **Issue 6.3: Audit System**
+    - [ ] 6.3.1: `AuditService`: Save `aud_` records for every mutation.
+    - [ ] 6.3.2: Data Redaction logic: mask sensitive fields in audit records.
+    - [ ] 6.3.3: `GET /audit/logs` with resource-type filters.
+
+---
+
+## 👷 Phase 7: Background Worker (BullMQ)
+*Goal: Handle asynchronicity, retries, and scheduled health.*
+
+- [ ] **Issue 7.1: Infrastructure**
+    - [ ] 7.1.1: Redis/BullMQ setup in `@offerhub/worker`.
+    - [ ] 7.1.2: Dead Letter Queue (DLQ) for failed jobs.
+
+- [ ] **Issue 7.2: Webhook Processing**
+    - [ ] 7.2.1: Airtm webhook processor (Payin/Payout updates).
+    - [ ] 7.2.2: Trustless Work webhook processor (Escrow status updates).
+    - [ ] 7.2.3: Deduplication logic using `WebhookEvent` table.
+
+- [ ] **Issue 7.3: Scheduled Jobs**
+    - [ ] 7.3.1: Reconciliation Job: Cross-check every pending TopUp/Withdrawal with Airtm API.
+    - [ ] 7.3.2: Escrow Watcher: Verify Stellar contract state periodic sync.
+
+---
+
+## 📦 Phase 8: SDK & Developer Experience
+*Goal: Provide the "Magic" for marketplace developers.*
+
+- [ ] **Issue 8.1: NPM Package `@offerhub/sdk`**
+    - [ ] 8.1.1: Base Ky-powered client with retry logic.
+    - [ ] 8.1.2: Resource mapping (Users, Orders, TopUps, etc.).
+    - [ ] 8.1.3: Error typing (Proper instance checking for `InsufficientFundsError`, etc.).
+
+- [ ] **Issue 8.2: Tooling**
+    - [ ] 8.2.1: CLI tool for API Key management.
+    - [ ] 8.2.2: Maintenance mode toggle script.
+
+---
+
+## 🏁 Phase 9: Final Polish & QA
+- [ ] 9.1: Comprehensive E2E test suite (API -> DB -> Worker).
+- [ ] 9.2: 100 req/min rate limit load test.
+- [ ] 9.3: Installer script `npm create offer-hub-orchestrator@latest`.
+- [ ] 9.4: Production deployment guide finalized.
