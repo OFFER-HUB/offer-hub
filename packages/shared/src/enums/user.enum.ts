@@ -12,7 +12,7 @@ export enum UserStatus {
  * User Type Enum
  */
 export enum UserType {
-  BUYER = 'buyer',
-  SELLER = 'seller',
-  BOTH = 'both',
+  BUYER = 'BUYER',
+  SELLER = 'SELLER',
+  BOTH = 'BOTH',
 }
