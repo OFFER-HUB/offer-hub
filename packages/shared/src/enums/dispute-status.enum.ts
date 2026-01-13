@@ -7,3 +7,12 @@ export enum DisputeStatus {
     UNDER_REVIEW = 'UNDER_REVIEW',
     RESOLVED = 'RESOLVED',
 }
+
+/**
+ * Resolution Decision Enum
+ */
+export enum ResolutionDecision {
+    FULL_RELEASE = 'FULL_RELEASE',
+    FULL_REFUND = 'FULL_REFUND',
+    SPLIT = 'SPLIT',
+}
