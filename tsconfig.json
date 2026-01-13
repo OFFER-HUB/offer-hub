@@ -1,0 +1,21 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@offerhub/shared": [
+                "packages/shared/src/index.ts"
+            ],
+            "@offerhub/database": [
+                "packages/database/src/index.ts"
+            ],
+            "@offerhub/sdk": [
+                "packages/sdk/src/index.ts"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

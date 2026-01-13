@@ -1,0 +1,27 @@
+{
+  "name": "offer-hub-orchestrator",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:worker\"",
+    "dev:api": "npm run dev -w @offerhub/api",
+    "dev:worker": "npm run dev -w @offerhub/worker",
+    "build": "npm run build -ws",
+    "lint": "echo \"No lint configured\"",
+    "prisma:generate": "npm run prisma:generate -w @offerhub/database",
+    "prisma:migrate": "npm run prisma:migrate -w @offerhub/database"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5"
+  }
+}
