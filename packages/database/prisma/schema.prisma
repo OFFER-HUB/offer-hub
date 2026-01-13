@@ -8,7 +8,316 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Healthcheck {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+// --- Enums ---
+
+enum UserType {
+  BUYER
+  SELLER
+  BOTH
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum TopUpStatus {
+  TOPUP_CREATED
+  TOPUP_AWAITING_USER_CONFIRMATION
+  TOPUP_PROCESSING
+  TOPUP_SUCCEEDED
+  TOPUP_FAILED
+  TOPUP_CANCELED
+}
+
+enum OrderStatus {
+  ORDER_CREATED
+  FUNDS_RESERVED
+  ESCROW_CREATING
+  ESCROW_FUNDING
+  ESCROW_FUNDED
+  IN_PROGRESS
+  RELEASE_REQUESTED
+  RELEASED
+  REFUND_REQUESTED
+  REFUNDED
+  DISPUTED
+  CLOSED
+}
+
+enum WithdrawalStatus {
+  WITHDRAWAL_CREATED
+  WITHDRAWAL_COMMITTED
+  WITHDRAWAL_PENDING
+  WITHDRAWAL_PENDING_USER_ACTION
+  WITHDRAWAL_COMPLETED
+  WITHDRAWAL_FAILED
+  WITHDRAWAL_CANCELED
+}
+
+enum EscrowStatus {
+  CREATING
+  CREATED
+  FUNDING
+  FUNDED
+  RELEASING
+  RELEASED
+  REFUNDING
+  REFUNDED
+  DISPUTED
+}
+
+enum MilestoneStatus {
+  OPEN
+  COMPLETED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
+enum ResolutionDecision {
+  FULL_RELEASE
+  FULL_REFUND
+  SPLIT
+}
+
+enum Provider {
+  AIRTM
+  TRUSTLESS_WORK
+}
+
+enum WebhookStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
+  IGNORED
+}
+
+enum IdempotencyStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+// --- Models ---
+
+model User {
+  id             String     @id @default(dbgenerated()) // Prefixed ID: usr_
+  externalUserId String     @unique @map("external_user_id")
+  email          String?
+  type           UserType   @default(BOTH)
+  status         UserStatus @default(ACTIVE)
+
+  // Airtm linkage
+  airtmUserId   String?   @map("airtm_user_id")
+  airtmLinkedAt DateTime? @map("airtm_linked_at")
+
+  // Relations
+  balance     Balance?
+  topUps      TopUp[]
+  withdrawals Withdrawal[]
+  buyerOrders Order[]      @relation("BuyerOrders")
+  sellerOrders Order[]     @relation("SellerOrders")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("users")
+}
+
+model Balance {
+  id        String @id @default(cuid())
+  userId    String @unique @map("user_id")
+  user      User   @relation(fields: [userId], references: [id])
+  available String @default("0.00") // Decimal string
+  reserved  String @default("0.00") // Decimal string
+  currency  String @default("USD")
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("balances")
+}
+
+model ApiKey {
+  id        String   @id @default(dbgenerated()) // Prefixed ID: key_
+  name      String
+  hashedKey String   @unique @map("hashed_key")
+  scopes    String[] // e.g. ["read", "write"]
+  
+  lastUsedAt DateTime? @map("last_used_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@map("api_keys")
+}
+
+model TopUp {
+  id              String      @id @default(dbgenerated()) // Prefixed ID: topup_
+  userId          String      @map("user_id")
+  user            User        @relation(fields: [userId], references: [id])
+  amount          String
+  currency        String      @default("USD")
+  status          TopUpStatus @default(TOPUP_CREATED)
+  confirmationUri String?     @map("confirmation_uri")
+  airtmPayinId    String?     @map("airtm_payin_id")
+  metadata        Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([airtmPayinId])
+  @@map("topups")
+}
+
+model Order {
+  id             String      @id @default(dbgenerated()) // Prefixed ID: ord_
+  clientOrderRef String?     @unique @map("client_order_ref")
+  buyerId        String      @map("buyer_id")
+  buyer          User        @relation("BuyerOrders", fields: [buyerId], references: [id])
+  sellerId       String      @map("seller_id")
+  seller         User        @relation("SellerOrders", fields: [sellerId], references: [id])
+  amount         String
+  currency       String      @default("USD")
+  status         OrderStatus @default(ORDER_CREATED)
+  title          String
+  description    String?
+  metadata       Json?
+
+  // Relations
+  escrow     Escrow?
+  dispute    Dispute?
+  milestones Milestone[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@map("orders")
+}
+
+model Escrow {
+  id                    String       @id @default(dbgenerated()) // Prefixed ID: esc_
+  orderId               String       @unique @map("order_id")
+  order                 Order        @relation(fields: [orderId], references: [id])
+  trustlessContractId   String?      @map("trustless_contract_id")
+  status                EscrowStatus @default(CREATING)
+  terms                 Json?        // e.g. { milestones_required: true }
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("escrows")
+}
+
+model Milestone {
+  id           String          @id @default(cuid())
+  orderId      String          @map("order_id")
+  order        Order           @relation(fields: [orderId], references: [id])
+  milestoneRef String          @map("milestone_ref")
+  title        String
+  amount       String
+  status       MilestoneStatus @default(OPEN)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([orderId, milestoneRef])
+  @@map("milestones")
+}
+
+model Withdrawal {
+  id             String           @id @default(dbgenerated()) // Prefixed ID: wd_
+  userId         String           @map("user_id")
+  user           User             @relation(fields: [userId], references: [id])
+  amount         String
+  currency       String           @default("USD")
+  status         WithdrawalStatus @default(WITHDRAWAL_CREATED)
+  destinationType String          @map("destination_type") // bank | crypto
+  destinationRef String           @map("destination_ref")
+  airtmPayoutId  String?          @map("airtm_payout_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([airtmPayoutId])
+  @@map("withdrawals")
+}
+
+model Dispute {
+  id                 String             @id @default(dbgenerated()) // Prefixed ID: dsp_
+  orderId            String             @unique @map("order_id")
+  order              Order              @relation(fields: [orderId], references: [id])
+  openedBy           String             @map("opened_by") // e.g. "buyer"
+  reason             String
+  evidence           Json?              // Array of URLs
+  status             DisputeStatus      @default(OPEN)
+  resolutionDecision ResolutionDecision? @map("resolution_decision")
+  decisionNote       String?            @map("decision_note")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("disputes")
+}
+
+model AuditLog {
+  id            String   @id @default(dbgenerated()) // Prefixed ID: aud_
+  occurredAt    DateTime @default(now()) @map("occurred_at")
+  marketplaceId String   @map("marketplace_id")
+  action        String
+  actorType     String   @map("actor_type")
+  actorId       String?  @map("actor_id")
+  resourceType  String   @map("resource_type")
+  resourceId    String   @map("resource_id")
+  result        String
+  error         Json?
+  idempotencyKey String?  @map("idempotency_key")
+  correlationId String?  @map("correlation_id")
+  payloadBefore Json?    @map("payload_before")
+  payloadAfter  Json?    @map("payload_after")
+  ip            String?
+  userAgent     String?  @map("user_agent")
+
+  @@index([marketplaceId])
+  @@index([resourceId])
+  @@index([occurredAt])
+  @@map("audit_logs")
+}
+
+model WebhookEvent {
+  id              String        @id @default(cuid())
+  provider        Provider
+  providerEventId String        @map("provider_event_id")
+  status          WebhookStatus @default(RECEIVED)
+  processedAt     DateTime?     @map("processed_at")
+  payload         Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([provider, providerEventId])
+  @@map("webhook_events")
+}
+
+model IdempotencyKey {
+  id             String            @id @default(uuid())
+  key            String
+  marketplaceId  String            @map("marketplace_id")
+  requestHash    String            @map("request_hash")
+  status         IdempotencyStatus @default(PROCESSING)
+  responseStatus Int?              @map("response_status")
+  responseBody   Json?             @map("response_body")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+
+  @@unique([key, marketplaceId])
+  @@index([expiresAt])
+  @@map("idempotency_keys")
 }
