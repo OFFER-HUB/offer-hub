@@ -85,6 +85,17 @@ enum ResolutionDecision {
   SPLIT
 }
 
+enum DisputeReason {
+  NOT_DELIVERED
+  QUALITY_ISSUE
+  OTHER
+}
+
+enum DisputeOpenedBy {
+  BUYER
+  SELLER
+}
+
 enum Provider {
   AIRTM
   TRUSTLESS_WORK
@@ -254,8 +265,8 @@ model Dispute {
   id                 String             @id @default(dbgenerated()) // Prefixed ID: dsp_
   orderId            String             @unique @map("order_id")
   order              Order              @relation(fields: [orderId], references: [id])
-  openedBy           String             @map("opened_by") // e.g. "buyer"
-  reason             String
+  openedBy           DisputeOpenedBy    @map("opened_by")
+  reason             DisputeReason
   evidence           Json?              // Array of URLs
   status             DisputeStatus      @default(OPEN)
   resolutionDecision ResolutionDecision? @map("resolution_decision")

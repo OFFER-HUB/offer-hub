@@ -16,3 +16,20 @@ export enum ResolutionDecision {
     FULL_REFUND = 'FULL_REFUND',
     SPLIT = 'SPLIT',
 }
+
+/**
+ * Dispute Reason Enum
+ */
+export enum DisputeReason {
+    NOT_DELIVERED = 'NOT_DELIVERED',
+    QUALITY_ISSUE = 'QUALITY_ISSUE',
+    OTHER = 'OTHER',
+}
+
+/**
+ * Dispute Opened By Enum
+ */
+export enum DisputeOpenedBy {
+    BUYER = 'BUYER',
+    SELLER = 'SELLER',
+}
