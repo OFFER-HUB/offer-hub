@@ -282,23 +282,27 @@ model AuditLog {
   id            String   @id @default(dbgenerated()) // Prefixed ID: aud_
   occurredAt    DateTime @default(now()) @map("occurred_at")
   marketplaceId String   @map("marketplace_id")
+  userId        String?  @map("user_id")
   action        String
-  actorType     String   @map("actor_type")
-  actorId       String?  @map("actor_id")
   resourceType  String   @map("resource_type")
   resourceId    String   @map("resource_id")
-  result        String
+  payloadBefore Json?    @map("payload_before")
+  payloadAfter  Json?    @map("payload_after")
+  
+  // Advanced traceability (extra fields kept for robustness)
+  actorType     String?  @map("actor_type")
+  actorId       String?  @map("actor_id")
+  result        String?
   error         Json?
   idempotencyKey String?  @map("idempotency_key")
   correlationId String?  @map("correlation_id")
-  payloadBefore Json?    @map("payload_before")
-  payloadAfter  Json?    @map("payload_after")
   ip            String?
   userAgent     String?  @map("user_agent")
 
   @@index([marketplaceId])
   @@index([resourceId])
   @@index([occurredAt])
+  @@index([userId])
   @@map("audit_logs")
 }
 
