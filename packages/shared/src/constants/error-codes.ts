@@ -116,3 +116,55 @@ export const ERROR_HTTP_STATUS: Record<ErrorCode, number> = {
 
     [ERROR_CODES.INTERNAL_ERROR]: 500,
 };
+
+/**
+ * Human-readable error messages (English)
+ */
+export const ERROR_MESSAGES: Record<ErrorCode, string> = {
+    [ERROR_CODES.UNAUTHORIZED]: 'No token provided',
+    [ERROR_CODES.INVALID_API_KEY]: 'API key invalid or expired',
+    [ERROR_CODES.INSUFFICIENT_SCOPE]: 'Scope does not allow this operation',
+
+    [ERROR_CODES.VALIDATION_ERROR]: 'General validation error',
+    [ERROR_CODES.INVALID_AMOUNT_FORMAT]: 'Amount is not a valid decimal string',
+    [ERROR_CODES.INVALID_CURRENCY]: 'Unsupported currency',
+    [ERROR_CODES.MISSING_REQUIRED_FIELD]: 'Required field missing',
+
+    [ERROR_CODES.USER_NOT_FOUND]: 'User does not exist',
+    [ERROR_CODES.USER_ALREADY_EXISTS]: 'User already exists',
+    [ERROR_CODES.AIRTM_USER_NOT_LINKED]: 'User must link Airtm account before top-ups',
+    [ERROR_CODES.AIRTM_USER_INVALID]: 'Invalid airtm_user_id',
+    [ERROR_CODES.AIRTM_USER_ALREADY_LINKED]: 'Airtm account already linked',
+
+    [ERROR_CODES.INSUFFICIENT_FUNDS]: 'Available balance is less than requested amount',
+    [ERROR_CODES.FUNDS_ALREADY_RESERVED]: 'Funds already reserved for this order',
+    [ERROR_CODES.RESERVE_NOT_FOUND]: 'No active reservation',
+    [ERROR_CODES.RESERVE_MISMATCH_AMOUNT]: 'Reservation amount does not match',
+
+    [ERROR_CODES.ORDER_NOT_FOUND]: 'Order does not exist',
+    [ERROR_CODES.INVALID_STATE]: 'Invalid state transition',
+    [ERROR_CODES.ESCROW_ALREADY_EXISTS]: 'Escrow already exists for this order',
+    [ERROR_CODES.ESCROW_NOT_READY]: 'Escrow not in the correct state',
+    [ERROR_CODES.DISPUTE_ALREADY_OPEN]: 'A dispute is already open',
+
+    [ERROR_CODES.PROVIDER_ERROR]: 'External provider error',
+    [ERROR_CODES.PROVIDER_TIMEOUT]: 'Timeout waiting for provider',
+    [ERROR_CODES.PROVIDER_RATE_LIMITED]: 'Provider rate limited',
+    [ERROR_CODES.WEBHOOK_SIGNATURE_INVALID]: 'Invalid webhook signature',
+    [ERROR_CODES.WEBHOOK_DUPLICATE_IGNORED]: 'Duplicate webhook (OK but ignored)',
+
+    [ERROR_CODES.WITHDRAWAL_NOT_FOUND]: 'Withdrawal does not exist',
+    [ERROR_CODES.WITHDRAWAL_NOT_COMMITTABLE]: 'Cannot commit withdrawal',
+    [ERROR_CODES.WITHDRAWAL_DESTINATION_INVALID]: 'Invalid destination',
+
+    [ERROR_CODES.TOPUP_NOT_FOUND]: 'Top-up not found',
+
+    [ERROR_CODES.DISPUTE_NOT_FOUND]: 'Dispute not found',
+
+    [ERROR_CODES.IDEMPOTENCY_KEY_REUSED]: 'This idempotency key was used with a different request body',
+    [ERROR_CODES.IDEMPOTENCY_KEY_IN_PROGRESS]: 'Original request still processing',
+
+    [ERROR_CODES.RATE_LIMITED]: 'Too many requests, please retry later',
+
+    [ERROR_CODES.INTERNAL_ERROR]: 'Internal server error',
+};
