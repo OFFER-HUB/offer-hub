@@ -8,6 +8,10 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "big.js": "^7.0.1",
     "nanoid": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.2.2"
   }
 }
