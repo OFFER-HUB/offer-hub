@@ -8,9 +8,9 @@ import { ID_PREFIXES, IdPrefix } from '../constants/id-prefixes';
 const NANOID_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
- * Generate a 21-character nanoid
+ * Generate a 32-character nanoid
  */
-const nanoid = customAlphabet(NANOID_ALPHABET, 21);
+const nanoid = customAlphabet(NANOID_ALPHABET, 32);
 
 /**
  * Generate a prefixed ID for a resource
