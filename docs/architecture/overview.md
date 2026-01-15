@@ -104,14 +104,14 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph "Orchestrator"
-        API[API Server<br/>NestJS]
-        WORKER[Worker<br/>BullMQ]
+    subgraph Orchestrator
+        API["API Server<br/>NestJS"]
+        WORKER["Worker<br/>BullMQ"]
         DB[(PostgreSQL)]
         REDIS[(Redis)]
     end
 
-    SDK[@offerhub/sdk] --> API
+    SDK["@offerhub/sdk"] --> API
     API --> DB
     API --> REDIS
     WORKER --> DB
