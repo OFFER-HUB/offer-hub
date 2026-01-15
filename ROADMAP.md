@@ -16,17 +16,17 @@ This roadmap is the definitive guide to building the Orchestrator. It maps 100% 
 ## 🧬 Phase 1: Shared Domain & Types
 *Goal: Define the schema and common logic used by both API and Worker.*
 
-- [ ] **Issue 1.1: Database Schema (Prisma)**
-    - [ ] 1.1.1: Core Identity: `User`, `ApiKey`, `Balance`.
-    - [ ] 1.1.2: Financials: `TopUp`, `Order`, `Escrow`, `Withdrawal`.
-    - [ ] 1.1.3: Details: `Milestone`, `Dispute`, `AuditLog`, `IdempotencyKey`.
-    - [ ] 1.1.4: Infrastructure: `WebhookEvent` (deduplication).
-    - [ ] 1.1.5: Performance: Add composite indexes for `user_id`, `status`, `external_id`.
+- [x] **Issue 1.1: Database Schema (Prisma)**
+    - [x] 1.1.1: Core Identity: `User`, `ApiKey`, `Balance`.
+    - [x] 1.1.2: Financials: `TopUp`, `Order`, `Escrow`, `Withdrawal`.
+    - [x] 1.1.3: Details: `Milestone`, `Dispute`, `AuditLog`, `IdempotencyKey`.
+    - [x] 1.1.4: Infrastructure: `WebhookEvent` (deduplication).
+    - [x] 1.1.5: Performance: Add composite indexes for `user_id`, `status`, `external_id`.
 
-- [ ] **Issue 1.2: Domain Constants & Enums**
-    - [ ] 1.2.1: Enums: Implement all status enums from `docs/architecture/state-machines.md`.
-    - [ ] 1.2.2: ID Prefixes: Implement `usr_`, `ord_`, `topup_`, `esc_`, `dsp_`, `wd_`, `evt_`, `aud_`.
-    - [ ] 1.2.3: Error Codes: Implement full catalog from `docs/api/errors.md` with HTTP mappings.
+- [x] **Issue 1.2: Domain Constants & Enums**
+    - [x] 1.2.1: Enums: Implement all status enums from `docs/architecture/state-machines.md`.
+    - [x] 1.2.2: ID Prefixes: Implement `usr_`, `ord_`, `topup_`, `esc_`, `dsp_`, `wd_`, `evt_`, `aud_`.
+    - [x] 1.2.3: Error Codes: Implement full catalog from `docs/api/errors.md` with HTTP mappings.
 
 - [ ] **Issue 1.4: Logic Helpers**
     - [ ] 1.4.1: Prefixed NanoID generator.
