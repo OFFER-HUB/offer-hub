@@ -35,8 +35,9 @@ export class IdempotencyFilter implements ExceptionFilter {
                     const body = exception.getResponse ? exception.getResponse() : exception;
                     await this.idempotencyService.complete(key, marketplaceId, status, body);
                 }
-            } catch (e) {
-                this.logger.error(`Error during idempotency cleanup: ${e.message}`);
+            } catch (e: unknown) {
+                const message = e instanceof Error ? e.message : 'Unknown error';
+                this.logger.error(`Error during idempotency cleanup: ${message}`);
             }
         }
 
