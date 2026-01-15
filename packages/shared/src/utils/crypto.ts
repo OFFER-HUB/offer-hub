@@ -30,3 +30,26 @@ export function generateApiKey(env: 'live' | 'test' = 'live'): { key: string; ha
     const hashedKey = hashApiKey(key, salt);
     return { key, hashedKey, salt, id };
 }
+/**
+ * Hashes a request payload using SHA-256.
+ * 
+ * @param payload The payload to hash
+ * @returns The hex-encoded hash
+ */
+export function hashPayload(payload: any): string {
+    const data = typeof payload === 'string' ? payload : JSON.stringify(payload || {});
+    return createHash('sha256')
+        .update(data)
+        .digest('hex');
+}
+
+/**
+ * Validates if a string is a valid UUID v4.
+ * 
+ * @param uuid The string to validate
+ * @returns True if valid UUID v4
+ */
+export function isValidUuidV4(uuid: string): boolean {
+    const uuidV4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidV4Regex.test(uuid);
+}
