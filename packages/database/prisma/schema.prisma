@@ -155,9 +155,10 @@ model Balance {
 }
 
 model ApiKey {
-  id        String   @id @default(dbgenerated()) // Prefixed ID: key_
+  id        String   @id // Prefixed ID: key_
   name      String
   hashedKey String   @unique @map("hashed_key")
+  salt      String
   scopes    String[] // e.g. ["read", "write"]
   
   lastUsedAt DateTime? @map("last_used_at")
@@ -167,7 +168,7 @@ model ApiKey {
 }
 
 model TopUp {
-  id              String      @id @default(dbgenerated()) // Prefixed ID: topup_
+  id              String      @id // Prefixed ID: topup_
   userId          String      @map("user_id")
   user            User        @relation(fields: [userId], references: [id])
   amount          String
@@ -186,7 +187,7 @@ model TopUp {
 }
 
 model Order {
-  id             String      @id @default(dbgenerated()) // Prefixed ID: ord_
+  id             String      @id // Prefixed ID: ord_
   clientOrderRef String?     @unique @map("client_order_ref")
   buyerId        String      @map("buyer_id")
   buyer          User        @relation("BuyerOrders", fields: [buyerId], references: [id])
@@ -214,7 +215,7 @@ model Order {
 }
 
 model Escrow {
-  id                    String       @id @default(dbgenerated()) // Prefixed ID: esc_
+  id                    String       @id // Prefixed ID: esc_
   orderId               String       @unique @map("order_id")
   order                 Order        @relation(fields: [orderId], references: [id])
   trustlessContractId   String?      @map("trustless_contract_id")
@@ -243,7 +244,7 @@ model Milestone {
 }
 
 model Withdrawal {
-  id             String           @id @default(dbgenerated()) // Prefixed ID: wd_
+  id             String           @id // Prefixed ID: wd_
   userId         String           @map("user_id")
   user           User             @relation(fields: [userId], references: [id])
   amount         String
@@ -262,7 +263,7 @@ model Withdrawal {
 }
 
 model Dispute {
-  id                 String             @id @default(dbgenerated()) // Prefixed ID: dsp_
+  id                 String             @id // Prefixed ID: dsp_
   orderId            String             @unique @map("order_id")
   order              Order              @relation(fields: [orderId], references: [id])
   openedBy           DisputeOpenedBy    @map("opened_by")
@@ -279,7 +280,7 @@ model Dispute {
 }
 
 model AuditLog {
-  id            String   @id @default(dbgenerated()) // Prefixed ID: aud_
+  id            String   @id // Prefixed ID: aud_
   occurredAt    DateTime @default(now()) @map("occurred_at")
   marketplaceId String   @map("marketplace_id")
   userId        String?  @map("user_id")
