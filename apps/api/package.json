@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "main": "dist/main.js",
   "scripts": {
-    "dev": "tsx src/main.ts",
+    "dev": "tsx watch src/main.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js"
   },
@@ -16,7 +16,12 @@
     "@offerhub/database": "*",
     "@offerhub/shared": "*",
     "dotenv": "^16.4.5",
+    "ioredis": "^5.9.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/ioredis": "^4.28.10"
   }
 }
