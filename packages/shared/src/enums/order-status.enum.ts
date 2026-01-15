@@ -1,7 +1,4 @@
-/**
- * Order Status Enum
- * @see docs/architecture/state-machines.md
- */
+/** @see docs/architecture/state-machines.md */
 export enum OrderStatus {
     ORDER_CREATED = 'ORDER_CREATED',
     FUNDS_RESERVED = 'FUNDS_RESERVED',
@@ -17,10 +14,6 @@ export enum OrderStatus {
     CLOSED = 'CLOSED',
 }
 
-/**
- * Valid state transitions for Orders
- * @see docs/architecture/state-machines.md
- */
 export const ORDER_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
     [OrderStatus.ORDER_CREATED]: [OrderStatus.FUNDS_RESERVED, OrderStatus.CLOSED],
     [OrderStatus.FUNDS_RESERVED]: [OrderStatus.ESCROW_CREATING, OrderStatus.CLOSED],
@@ -40,9 +33,6 @@ export const ORDER_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
     [OrderStatus.CLOSED]: [],
 };
 
-/**
- * States where order can be cancelled
- */
 export const CANCELLABLE_ORDER_STATES: OrderStatus[] = [
     OrderStatus.ORDER_CREATED,
     OrderStatus.FUNDS_RESERVED,

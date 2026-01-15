@@ -1,14 +1,10 @@
-/**
- * Enums barrel export
- * @see docs/CLAUDE.md for usage guidelines
- */
-export * from './user.enum';
-export * from './topup-status.enum';
-export * from './order-status.enum';
-export * from './escrow-status.enum';
-export * from './withdrawal-status.enum';
-export * from './dispute-status.enum';
-export * from './provider.enum';
-export * from './webhook.enum';
-export * from './idempotency.enum';
-export * from './milestone-status.enum';
+export * from './dispute-status.enum.js';
+export * from './escrow-status.enum.js';
+export * from './idempotency.enum.js';
+export * from './milestone-status.enum.js';
+export * from './order-status.enum.js';
+export * from './provider.enum.js';
+export * from './topup-status.enum.js';
+export * from './user.enum.js';
+export * from './webhook.enum.js';
+export * from './withdrawal-status.enum.js';
