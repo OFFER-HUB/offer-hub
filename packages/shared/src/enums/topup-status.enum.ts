@@ -1,7 +1,4 @@
-/**
- * TopUp Status Enum
- * @see docs/architecture/state-machines.md
- */
+/** @see docs/architecture/state-machines.md */
 export enum TopUpStatus {
     TOPUP_CREATED = 'TOPUP_CREATED',
     TOPUP_AWAITING_USER_CONFIRMATION = 'TOPUP_AWAITING_USER_CONFIRMATION',
@@ -11,11 +8,17 @@ export enum TopUpStatus {
     TOPUP_CANCELED = 'TOPUP_CANCELED',
 }
 
-/**
- * Terminal states for TopUp - no further transitions allowed
- */
-export const TOPUP_TERMINAL_STATES: TopUpStatus[] = [
-    TopUpStatus.TOPUP_SUCCEEDED,
-    TopUpStatus.TOPUP_FAILED,
-    TopUpStatus.TOPUP_CANCELED,
-];
+export const TOPUP_TRANSITIONS: Record<TopUpStatus, TopUpStatus[]> = {
+    [TopUpStatus.TOPUP_CREATED]: [TopUpStatus.TOPUP_AWAITING_USER_CONFIRMATION],
+    [TopUpStatus.TOPUP_AWAITING_USER_CONFIRMATION]: [
+        TopUpStatus.TOPUP_PROCESSING,
+        TopUpStatus.TOPUP_CANCELED,
+    ],
+    [TopUpStatus.TOPUP_PROCESSING]: [
+        TopUpStatus.TOPUP_SUCCEEDED,
+        TopUpStatus.TOPUP_FAILED,
+    ],
+    [TopUpStatus.TOPUP_SUCCEEDED]: [],
+    [TopUpStatus.TOPUP_FAILED]: [],
+    [TopUpStatus.TOPUP_CANCELED]: [],
+};

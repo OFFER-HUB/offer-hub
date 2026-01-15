@@ -1,7 +1,4 @@
-/**
- * Escrow Status Enum (internal mirror of Trustless Work states)
- * @see docs/architecture/state-machines.md
- */
+/** @see docs/architecture/state-machines.md */
 export enum EscrowStatus {
     CREATING = 'CREATING',
     CREATED = 'CREATED',
@@ -14,10 +11,18 @@ export enum EscrowStatus {
     DISPUTED = 'DISPUTED',
 }
 
-/**
- * Terminal states for Escrow
- */
-export const ESCROW_TERMINAL_STATES: EscrowStatus[] = [
-    EscrowStatus.RELEASED,
-    EscrowStatus.REFUNDED,
-];
+export const ESCROW_TRANSITIONS: Record<EscrowStatus, EscrowStatus[]> = {
+    [EscrowStatus.CREATING]: [EscrowStatus.CREATED],
+    [EscrowStatus.CREATED]: [EscrowStatus.FUNDING],
+    [EscrowStatus.FUNDING]: [EscrowStatus.FUNDED],
+    [EscrowStatus.FUNDED]: [
+        EscrowStatus.RELEASING,
+        EscrowStatus.REFUNDING,
+        EscrowStatus.DISPUTED,
+    ],
+    [EscrowStatus.RELEASING]: [EscrowStatus.RELEASED],
+    [EscrowStatus.REFUNDING]: [EscrowStatus.REFUNDED],
+    [EscrowStatus.DISPUTED]: [EscrowStatus.RELEASED, EscrowStatus.REFUNDED],
+    [EscrowStatus.RELEASED]: [],
+    [EscrowStatus.REFUNDED]: [],
+};
