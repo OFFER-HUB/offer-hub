@@ -5,6 +5,7 @@ import { DatabaseModule } from './modules/database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { IdempotencyModule } from './modules/idempotency/idempotency.module';
+import { TrustlessWorkModule } from './providers/trustless-work/trustless-work.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
 
@@ -13,6 +14,7 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     DatabaseModule,
     RedisModule,
     IdempotencyModule,
+    TrustlessWorkModule,
     HealthModule,
     AuthModule,
   ],
