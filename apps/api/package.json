@@ -15,6 +15,7 @@
     "@nestjs/platform-express": "^10.4.5",
     "@offerhub/database": "*",
     "@offerhub/shared": "*",
+    "@stellar/stellar-sdk": "^14.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "dotenv": "^16.4.5",
