@@ -50,3 +50,4 @@ temp/
 
 # Claude Code
 .claude/
+.turbo/
