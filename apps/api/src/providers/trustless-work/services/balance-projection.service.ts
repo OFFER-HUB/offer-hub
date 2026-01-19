@@ -18,7 +18,7 @@ export class BalanceProjectionService {
 
     constructor(
         @Inject(PrismaService) private readonly prisma: PrismaService,
-        private readonly walletClient: WalletClient,
+        @Inject(WalletClient) private readonly walletClient: WalletClient,
     ) {}
 
     /**
