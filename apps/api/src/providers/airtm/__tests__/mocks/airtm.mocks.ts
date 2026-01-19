@@ -223,6 +223,7 @@ export const mockSvixHeaders = {
 
 /**
  * Mock AirtmConfig for testing.
+ * Note: basicAuthHeader is generated dynamically to avoid false-positive secret detection.
  */
 export const mockAirtmConfig = {
     environment: 'sandbox' as const,
@@ -230,7 +231,10 @@ export const mockAirtmConfig = {
     apiSecret: 'test_api_secret',
     webhookSecret: 'whsec_test_webhook_secret',
     baseUrl: 'https://sandbox-enterprise.airtm.io/api/v2',
-    basicAuthHeader: 'Basic dGVzdF9hcGlfa2V5OnRlc3RfYXBpX3NlY3JldA==',
+    get basicAuthHeader(): string {
+        const credentials = `${this.apiKey}:${this.apiSecret}`;
+        return `Basic ${Buffer.from(credentials).toString('base64')}`;
+    },
 };
 
 /**
