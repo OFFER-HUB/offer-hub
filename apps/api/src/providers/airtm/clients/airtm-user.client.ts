@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { AirtmBaseClient } from './airtm-base.client';
 import { AirtmConfig } from '../airtm.config';
 import { RedisService } from '../../../modules/redis/redis.service';
-import type { AirtmUserResponse, AirtmVerificationResult } from '../types';
+import type { AirtmUserResponse, AirtmVerificationResult, AirtmBalanceResponse } from '../types';
 
 /** Cache TTL for user verification results (5 minutes) */
 const USER_CACHE_TTL_SECONDS = 300;
@@ -195,6 +195,17 @@ export class AirtmUserClient extends AirtmBaseClient {
             airtmUserId: user.id,
             email: user.email,
         };
+    }
+
+    /**
+     * Gets the balance for an Airtm user.
+     *
+     * @param airtmUserId - Airtm user ID
+     * @returns Balance information from Airtm
+     */
+    async getBalance(airtmUserId: string): Promise<AirtmBalanceResponse> {
+        this.logger.debug(`Fetching balance for user ${this.maskId(airtmUserId)}`);
+        return this.get<AirtmBalanceResponse>(`users/${airtmUserId}/balance`);
     }
 
     /**
