@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { Horizon } from '@stellar/stellar-sdk';
 import { TrustlessWorkConfig } from '../trustless-work.config';
 import { StellarWalletBalance } from '../types/trustless-work.types';
@@ -13,7 +13,7 @@ export class WalletClient {
     private readonly logger = new Logger(WalletClient.name);
     private readonly server: Horizon.Server;
 
-    constructor(private readonly config: TrustlessWorkConfig) {
+    constructor(@Inject(TrustlessWorkConfig) private readonly config: TrustlessWorkConfig) {
         this.server = new Horizon.Server(config.stellarHorizonUrl);
         this.logger.log(
             `Initialized Stellar wallet client for ${config.stellarNetwork} network`,
