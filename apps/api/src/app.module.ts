@@ -6,6 +6,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { IdempotencyModule } from './modules/idempotency/idempotency.module';
 import { TrustlessWorkModule } from './providers/trustless-work/trustless-work.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { TopUpsModule } from './modules/topups/topups.module';
+import { WithdrawalsModule } from './modules/withdrawals/withdrawals.module';
+import { AirtmModule } from './providers/airtm/airtm.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
 
@@ -17,6 +21,10 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     TrustlessWorkModule,
     HealthModule,
     AuthModule,
+    AirtmModule,
+    WebhooksModule,
+    TopUpsModule,
+    WithdrawalsModule,
   ],
   providers: [
     {
