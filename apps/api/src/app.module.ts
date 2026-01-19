@@ -5,6 +5,7 @@ import { DatabaseModule } from './modules/database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { IdempotencyModule } from './modules/idempotency/idempotency.module';
+import { TrustlessWorkModule } from './providers/trustless-work/trustless-work.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { TopUpsModule } from './modules/topups/topups.module';
 import { WithdrawalsModule } from './modules/withdrawals/withdrawals.module';
@@ -17,6 +18,7 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     DatabaseModule,
     RedisModule,
     IdempotencyModule,
+    TrustlessWorkModule,
     HealthModule,
     AuthModule,
     AirtmModule,
