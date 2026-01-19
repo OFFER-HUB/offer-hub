@@ -45,6 +45,7 @@ export class AirtmConfig {
     /**
      * Validates that all required environment variables are present.
      * Throws an error immediately if any are missing (fail fast).
+     * Note: AIRTM_WEBHOOK_SECRET is optional - webhook verification will be disabled if not provided.
      */
     private validate(): void {
         const missingVars: string[] = [];
@@ -55,8 +56,12 @@ export class AirtmConfig {
         if (!this.apiSecret) {
             missingVars.push('AIRTM_API_SECRET');
         }
+
+        // AIRTM_WEBHOOK_SECRET is optional - log warning but don't fail
         if (!this.webhookSecret) {
-            missingVars.push('AIRTM_WEBHOOK_SECRET');
+            this.logger.warn(
+                'AIRTM_WEBHOOK_SECRET not configured - webhook signature verification will be disabled',
+            );
         }
 
         if (missingVars.length > 0) {
@@ -64,6 +69,30 @@ export class AirtmConfig {
             this.logger.error(errorMsg);
             throw new Error(errorMsg);
         }
+    }
+
+    /**
+     * Check if webhook verification is enabled (webhook secret is properly configured).
+     * Returns false if webhook secret is empty, a placeholder, or not a valid base64 string.
+     */
+    get isWebhookVerificationEnabled(): boolean {
+        if (!this.webhookSecret) {
+            return false;
+        }
+
+        // Check for common placeholder values
+        const placeholders = ['...', 'your-webhook-secret', 'placeholder', 'TODO', 'xxx'];
+        if (placeholders.some((p) => this.webhookSecret === p || this.webhookSecret.includes(p))) {
+            return false;
+        }
+
+        // Svix webhook secrets should be base64 encoded and start with 'whsec_'
+        // If it doesn't look like a valid secret, disable verification
+        if (this.webhookSecret.length < 20) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
