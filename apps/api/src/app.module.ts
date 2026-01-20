@@ -11,6 +11,7 @@ import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { TopUpsModule } from './modules/topups/topups.module';
 import { WithdrawalsModule } from './modules/withdrawals/withdrawals.module';
 import { BalanceModule } from './modules/balance/balance.module';
+import { OrdersModule } from './modules/orders/orders.module';
 import { AirtmModule } from './providers/airtm/airtm.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
@@ -29,6 +30,7 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     TopUpsModule,
     WithdrawalsModule,
     BalanceModule,
+    OrdersModule,
   ],
   providers: [
     {
