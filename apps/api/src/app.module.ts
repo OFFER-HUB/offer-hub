@@ -12,6 +12,8 @@ import { TopUpsModule } from './modules/topups/topups.module';
 import { WithdrawalsModule } from './modules/withdrawals/withdrawals.module';
 import { BalanceModule } from './modules/balance/balance.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { ResolutionModule } from './modules/resolution/resolution.module';
+import { DisputesModule } from './modules/disputes/disputes.module';
 import { AirtmModule } from './providers/airtm/airtm.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
@@ -31,6 +33,8 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     WithdrawalsModule,
     BalanceModule,
     OrdersModule,
+    ResolutionModule,
+    DisputesModule,
   ],
   providers: [
     {

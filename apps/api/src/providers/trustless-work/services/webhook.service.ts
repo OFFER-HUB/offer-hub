@@ -1,5 +1,5 @@
-import { Injectable, Logger, UnauthorizedException, Inject } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Injectable, Logger, UnauthorizedException, Inject, forwardRef } from '@nestjs/common';
+import { Prisma, EscrowStatus } from '@prisma/client';
 import * as crypto from 'crypto';
 import { Provider, ERROR_CODES } from '@offerhub/shared';
 import { PrismaService } from '../../../modules/database/prisma.service';
@@ -19,11 +19,20 @@ import {
 export class WebhookService {
     private readonly logger = new Logger(WebhookService.name);
 
+    private resolutionService: any; // Lazy-loaded to avoid circular dependency
+
     constructor(
         @Inject(TrustlessWorkConfig) private readonly config: TrustlessWorkConfig,
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(WalletClient) private readonly walletClient: WalletClient,
     ) {}
+
+    /**
+     * Set ResolutionService (called after module initialization to avoid circular dependency)
+     */
+    setResolutionService(resolutionService: any): void {
+        this.resolutionService = resolutionService;
+    }
 
     /**
      * Verify webhook signature using HMAC-SHA256
@@ -249,18 +258,35 @@ export class WebhookService {
      * Handle escrow.released event.
      */
     private async handleEscrowReleased(event: TrustlessWebhookEvent): Promise<void> {
-        const { contract_id, status, transaction_hash } = event.data;
+        const { contract_id, transaction_hash } = event.data;
 
         await this.verifyTransactionIfPresent(transaction_hash);
 
+        const escrow = await this.prisma.escrow.findUnique({
+            where: { trustlessContractId: contract_id },
+            include: { order: true },
+        });
+
+        if (!escrow?.order) {
+            this.logger.warn(`No order found for escrow ${contract_id}`);
+            return;
+        }
+
+        // Update escrow status
         await this.prisma.escrow.updateMany({
             where: { trustlessContractId: contract_id },
             data: {
-                status: mapTrustlessStatus(status),
+                status: EscrowStatus.RELEASED,
                 releasedAt: new Date(),
-                updatedAt: new Date(),
             },
         });
+
+        // Call ResolutionService to complete release
+        if (this.resolutionService) {
+            await this.resolutionService.confirmRelease(escrow.order.id);
+        } else {
+            this.logger.error('ResolutionService not available for confirmRelease');
+        }
 
         this.logger.log(`Escrow released: ${contract_id} (tx: ${transaction_hash})`);
     }
@@ -269,18 +295,35 @@ export class WebhookService {
      * Handle escrow.refunded event.
      */
     private async handleEscrowRefunded(event: TrustlessWebhookEvent): Promise<void> {
-        const { contract_id, status, transaction_hash } = event.data;
+        const { contract_id, transaction_hash } = event.data;
 
         await this.verifyTransactionIfPresent(transaction_hash);
 
+        const escrow = await this.prisma.escrow.findUnique({
+            where: { trustlessContractId: contract_id },
+            include: { order: true },
+        });
+
+        if (!escrow?.order) {
+            this.logger.warn(`No order found for escrow ${contract_id}`);
+            return;
+        }
+
+        // Update escrow status
         await this.prisma.escrow.updateMany({
             where: { trustlessContractId: contract_id },
             data: {
-                status: mapTrustlessStatus(status),
+                status: EscrowStatus.REFUNDED,
                 refundedAt: new Date(),
-                updatedAt: new Date(),
             },
         });
+
+        // Call ResolutionService to complete refund
+        if (this.resolutionService) {
+            await this.resolutionService.confirmRefund(escrow.order.id);
+        } else {
+            this.logger.error('ResolutionService not available for confirmRefund');
+        }
 
         this.logger.log(`Escrow refunded: ${contract_id} (tx: ${transaction_hash})`);
     }
@@ -289,17 +332,14 @@ export class WebhookService {
      * Handle escrow.disputed event
      */
     private async handleEscrowDisputed(event: TrustlessWebhookEvent): Promise<void> {
-        const { contract_id, status } = event.data;
+        const { contract_id } = event.data;
 
         await this.prisma.escrow.updateMany({
             where: { trustlessContractId: contract_id },
-            data: {
-                status: mapTrustlessStatus(status),
-                updatedAt: new Date(),
-            },
+            data: { status: EscrowStatus.DISPUTED },
         });
 
-        this.logger.log(`Escrow disputed: ${contract_id}`);
+        this.logger.log(`Escrow ${contract_id} marked as DISPUTED via webhook`);
     }
 
     /**
