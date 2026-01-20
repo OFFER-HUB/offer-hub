@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, Matches, IsOptional, IsUUID } from 'class-validator';
+import { IsString, IsNotEmpty, Matches, IsOptional } from 'class-validator';
 import { AMOUNT_REGEX } from '@offerhub/shared';
 
 /**
@@ -15,99 +15,60 @@ export class BalanceOperationDto {
     @IsString()
     @IsOptional()
     currency?: string = 'USD';
+
+    @IsString()
+    @IsOptional()
+    description?: string;
+}
+
+/**
+ * Base DTO for operations that track an external reference.
+ */
+class ReferenceOperationDto extends BalanceOperationDto {
+    @IsString()
+    @IsOptional()
+    reference?: string;
+}
+
+/**
+ * Base DTO for order-related balance operations.
+ */
+class OrderOperationDto extends BalanceOperationDto {
+    @IsString()
+    @IsNotEmpty()
+    orderId!: string;
 }
 
 /**
  * DTO for credit operations (adding funds to available balance).
  */
-export class CreditAvailableDto extends BalanceOperationDto {
-    @IsString()
-    @IsOptional()
-    reference?: string;
-
-    @IsString()
-    @IsOptional()
-    description?: string;
-}
+export class CreditAvailableDto extends ReferenceOperationDto {}
 
 /**
  * DTO for debit operations (removing funds from available balance).
  */
-export class DebitAvailableDto extends BalanceOperationDto {
-    @IsString()
-    @IsOptional()
-    reference?: string;
-
-    @IsString()
-    @IsOptional()
-    description?: string;
-}
+export class DebitAvailableDto extends ReferenceOperationDto {}
 
 /**
  * DTO for reserve operations (moving funds from available to reserved).
  */
-export class ReserveDto extends BalanceOperationDto {
-    @IsString()
-    @IsNotEmpty()
-    orderId!: string;
-
-    @IsString()
-    @IsOptional()
-    description?: string;
-}
+export class ReserveDto extends OrderOperationDto {}
 
 /**
  * DTO for release operations (moving reserved funds to seller's available).
  */
-export class ReleaseDto extends BalanceOperationDto {
-    @IsString()
-    @IsNotEmpty()
-    orderId!: string;
-
+export class ReleaseDto extends OrderOperationDto {
     @IsString()
     @IsNotEmpty()
     sellerId!: string;
-
-    @IsString()
-    @IsOptional()
-    description?: string;
 }
 
 /**
  * DTO for cancel reservation operations (returning reserved to available).
  */
-export class CancelReservationDto extends BalanceOperationDto {
-    @IsString()
-    @IsNotEmpty()
-    orderId!: string;
-
-    @IsString()
-    @IsOptional()
-    description?: string;
-}
+export class CancelReservationDto extends OrderOperationDto {}
 
 /**
  * DTO for deduct reserved operations (removing from reserved balance).
  */
-export class DeductReservedDto extends BalanceOperationDto {
-    @IsString()
-    @IsNotEmpty()
-    orderId!: string;
-
-    @IsString()
-    @IsOptional()
-    description?: string;
-}
-
-/**
- * DTO for provider sync operations.
- */
-export class SyncBalanceDto {
-    @IsString()
-    @IsOptional()
-    providerBalance?: string;
-
-    @IsString()
-    @IsOptional()
-    currency?: string = 'USD';
-}
+export class DeductReservedDto extends OrderOperationDto {}
