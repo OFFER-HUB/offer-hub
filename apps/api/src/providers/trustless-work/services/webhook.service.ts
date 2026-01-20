@@ -1,4 +1,7 @@
 import { Injectable, Logger, UnauthorizedException, Inject } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import * as crypto from 'crypto';
+import { Provider, ERROR_CODES } from '@offerhub/shared';
 import { PrismaService } from '../../../modules/database/prisma.service';
 import { WalletClient } from '../clients/wallet.client';
 import { TrustlessWorkConfig } from '../trustless-work.config';
@@ -7,8 +10,6 @@ import {
     TrustlessWebhookEventType,
     mapTrustlessStatus,
 } from '../types/trustless-work.types';
-import { Provider, ERROR_CODES } from '@offerhub/shared';
-import * as crypto from 'crypto';
 
 /**
  * Trustless Work Webhook Service
@@ -118,15 +119,43 @@ export class WebhookService {
     private async handleEscrowCreated(event: TrustlessWebhookEvent): Promise<void> {
         const { contract_id, order_id, status } = event.data;
 
-        await this.prisma.escrow.updateMany({
-            where: {
-                order: { id: order_id },
-            },
-            data: {
-                trustlessContractId: contract_id,
-                status: mapTrustlessStatus(status),
-                updatedAt: new Date(),
-            },
+        await this.prisma.$transaction(async (tx) => {
+            // Update escrow with contract ID
+            await tx.escrow.updateMany({
+                where: {
+                    order: { id: order_id },
+                },
+                data: {
+                    trustlessContractId: contract_id,
+                    status: mapTrustlessStatus(status),
+                    updatedAt: new Date(),
+                },
+            });
+
+            // Transition order to ESCROW_FUNDING state
+            await tx.order.update({
+                where: { id: order_id },
+                data: {
+                    status: 'ESCROW_FUNDING',
+                    updatedAt: new Date(),
+                },
+            });
+
+            // Create audit log
+            await tx.auditLog.create({
+                data: {
+                    id: crypto.randomUUID(),
+                    marketplaceId: 'system',
+                    userId: 'system',
+                    action: 'ESCROW_CREATED',
+                    resourceType: 'escrow',
+                    resourceId: contract_id,
+                    payloadBefore: Prisma.JsonNull,
+                    payloadAfter: { contract_id, order_id, status },
+                    actorType: 'system',
+                    result: 'SUCCESS',
+                },
+            });
         });
 
         this.logger.log(`Escrow created: ${contract_id} for order ${order_id}`);
@@ -150,26 +179,56 @@ export class WebhookService {
     }
 
     /**
-     * Handle escrow.funded event
+     * Handle escrow.funded event.
      */
     private async handleEscrowFunded(event: TrustlessWebhookEvent): Promise<void> {
         const { contract_id, status, transaction_hash } = event.data;
 
-        // Verify transaction on Stellar
-        if (transaction_hash) {
-            const verified = await this.walletClient.verifyTransaction(transaction_hash);
-            if (!verified) {
-                throw new Error(`Failed to verify transaction: ${transaction_hash}`);
-            }
-        }
+        await this.verifyTransactionIfPresent(transaction_hash);
 
-        await this.prisma.escrow.updateMany({
-            where: { trustlessContractId: contract_id },
-            data: {
-                status: mapTrustlessStatus(status),
-                fundedAt: new Date(),
-                updatedAt: new Date(),
-            },
+        await this.prisma.$transaction(async (tx) => {
+            // Update escrow status
+            await tx.escrow.updateMany({
+                where: { trustlessContractId: contract_id },
+                data: {
+                    status: mapTrustlessStatus(status),
+                    fundedAt: new Date(),
+                    updatedAt: new Date(),
+                },
+            });
+
+            // Get escrow to find order ID
+            const escrow = await tx.escrow.findFirst({
+                where: { trustlessContractId: contract_id },
+                select: { orderId: true },
+            });
+
+            if (escrow) {
+                // Transition order to IN_PROGRESS state
+                await tx.order.update({
+                    where: { id: escrow.orderId },
+                    data: {
+                        status: 'IN_PROGRESS',
+                        updatedAt: new Date(),
+                    },
+                });
+
+                // Create audit log
+                await tx.auditLog.create({
+                    data: {
+                        id: crypto.randomUUID(),
+                        marketplaceId: 'system',
+                        userId: 'system',
+                        action: 'ESCROW_FUNDED',
+                        resourceType: 'escrow',
+                        resourceId: contract_id,
+                        payloadBefore: Prisma.JsonNull,
+                        payloadAfter: { contract_id, status, transaction_hash },
+                        actorType: 'system',
+                        result: 'SUCCESS',
+                    },
+                });
+            }
         });
 
         this.logger.log(`Escrow funded: ${contract_id} (tx: ${transaction_hash})`);
@@ -187,18 +246,12 @@ export class WebhookService {
     }
 
     /**
-     * Handle escrow.released event
+     * Handle escrow.released event.
      */
     private async handleEscrowReleased(event: TrustlessWebhookEvent): Promise<void> {
         const { contract_id, status, transaction_hash } = event.data;
 
-        // Verify transaction on Stellar
-        if (transaction_hash) {
-            const verified = await this.walletClient.verifyTransaction(transaction_hash);
-            if (!verified) {
-                throw new Error(`Failed to verify transaction: ${transaction_hash}`);
-            }
-        }
+        await this.verifyTransactionIfPresent(transaction_hash);
 
         await this.prisma.escrow.updateMany({
             where: { trustlessContractId: contract_id },
@@ -213,18 +266,12 @@ export class WebhookService {
     }
 
     /**
-     * Handle escrow.refunded event
+     * Handle escrow.refunded event.
      */
     private async handleEscrowRefunded(event: TrustlessWebhookEvent): Promise<void> {
         const { contract_id, status, transaction_hash } = event.data;
 
-        // Verify transaction on Stellar
-        if (transaction_hash) {
-            const verified = await this.walletClient.verifyTransaction(transaction_hash);
-            if (!verified) {
-                throw new Error(`Failed to verify transaction: ${transaction_hash}`);
-            }
-        }
+        await this.verifyTransactionIfPresent(transaction_hash);
 
         await this.prisma.escrow.updateMany({
             where: { trustlessContractId: contract_id },
@@ -256,7 +303,7 @@ export class WebhookService {
     }
 
     /**
-     * Check if webhook event is duplicate
+     * Check if webhook event is duplicate.
      */
     private async checkDuplicate(eventId: string): Promise<boolean> {
         const existing = await this.prisma.webhookEvent.findUnique({
@@ -269,6 +316,20 @@ export class WebhookService {
         });
 
         return existing !== null;
+    }
+
+    /**
+     * Verifies a Stellar transaction hash if provided.
+     */
+    private async verifyTransactionIfPresent(transactionHash?: string): Promise<void> {
+        if (!transactionHash) {
+            return;
+        }
+
+        const verified = await this.walletClient.verifyTransaction(transactionHash);
+        if (!verified) {
+            throw new Error(`Failed to verify transaction: ${transactionHash}`);
+        }
     }
 
     /**
