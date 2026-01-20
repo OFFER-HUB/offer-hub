@@ -5,7 +5,6 @@ import { AirtmUserClient } from '../../providers/airtm';
 import {
     ERROR_CODES,
     isValidAmount,
-    parseAmount,
     formatAmount,
     addAmounts,
     subtractAmounts,
@@ -19,7 +18,6 @@ import {
     BalanceDiscrepancyException,
     BalanceConcurrencyException,
     InvalidAmountException,
-    BalanceNotFoundException,
 } from './exceptions';
 import type {
     CreditAvailableDto,
@@ -212,9 +210,7 @@ export class BalanceService {
             `to seller ${dto.sellerId} for order ${dto.orderId}`,
         );
 
-        // Execute in a single transaction to ensure atomicity
         const result = await this.prisma.$transaction(async (tx) => {
-            // 1. Get buyer's balance and validate reserved funds
             const buyerBalance = await this.getOrCreateBalanceInTx(tx, buyerId);
 
             if (compareAmounts(buyerBalance.reserved, dto.amount) < 0) {
@@ -225,36 +221,26 @@ export class BalanceService {
                 );
             }
 
-            // 2. Get seller's balance (or create if doesn't exist)
             const sellerBalance = await this.getOrCreateBalanceInTx(tx, dto.sellerId);
 
-            // 3. Store previous balances for audit
-            const buyerPrevious = {
-                available: buyerBalance.available,
-                reserved: buyerBalance.reserved,
-            };
             const sellerPrevious = {
                 available: sellerBalance.available,
                 reserved: sellerBalance.reserved,
             };
 
-            // 4. Calculate new balances
             const buyerNewReserved = subtractAmounts(buyerBalance.reserved, dto.amount);
             const sellerNewAvailable = addAmounts(sellerBalance.available, dto.amount);
 
-            // 5. Update buyer's balance (deduct from reserved)
             await tx.balance.update({
                 where: { userId: buyerId },
                 data: { reserved: buyerNewReserved },
             });
 
-            // 6. Update seller's balance (credit to available)
             const updatedSellerBalance = await tx.balance.update({
                 where: { userId: dto.sellerId },
                 data: { available: sellerNewAvailable },
             });
 
-            // 7. Create audit logs for both operations
             const buyerAuditId = generateAuditLogId();
             const sellerAuditId = generateAuditLogId();
 
@@ -267,7 +253,7 @@ export class BalanceService {
                         action: 'RELEASE_DEDUCT_RESERVED',
                         resourceType: 'balance',
                         resourceId: buyerBalance.id,
-                        payloadBefore: buyerPrevious,
+                        payloadBefore: { available: buyerBalance.available, reserved: buyerBalance.reserved },
                         payloadAfter: { available: buyerBalance.available, reserved: buyerNewReserved },
                         actorType: 'system',
                         result: 'SUCCESS',
@@ -288,10 +274,8 @@ export class BalanceService {
             });
 
             return {
-                buyerAuditId,
                 sellerAuditId,
                 sellerBalance: updatedSellerBalance,
-                buyerPrevious,
                 sellerPrevious,
                 sellerNewAvailable,
             };
@@ -300,7 +284,6 @@ export class BalanceService {
             timeout: 10000,
         });
 
-        // Emit events for both balance changes
         this.eventEmitter.emit('balance.updated', {
             userId: buyerId,
             operation: 'RELEASE_DEDUCT_RESERVED',
@@ -314,8 +297,6 @@ export class BalanceService {
 
         this.logger.log(`Release completed: ${dto.amount} from buyer ${buyerId} to seller ${dto.sellerId}`);
 
-        const total = addAmounts(result.sellerNewAvailable, result.sellerBalance.reserved);
-
         return {
             success: true,
             balance: {
@@ -323,7 +304,7 @@ export class BalanceService {
                 available: result.sellerNewAvailable,
                 reserved: result.sellerBalance.reserved,
                 currency: result.sellerBalance.currency,
-                total,
+                total: addAmounts(result.sellerNewAvailable, result.sellerBalance.reserved),
                 updated_at: result.sellerBalance.updatedAt.toISOString(),
             },
             operation: 'RELEASE',
@@ -459,7 +440,6 @@ export class BalanceService {
     async syncBalanceFromProvider(userId: string): Promise<SyncResult> {
         this.logger.log(`Syncing balance from provider for user ${userId}`);
 
-        // 1. Get user to fetch Airtm ID
         const user = await this.prisma.user.findUnique({
             where: { id: userId },
         });
@@ -474,7 +454,6 @@ export class BalanceService {
         }
 
         if (!user.airtmUserId) {
-            // User has no Airtm account linked, nothing to sync
             return {
                 synced: false,
                 localBalance: '0.00',
@@ -484,10 +463,8 @@ export class BalanceService {
             };
         }
 
-        // 2. Get local balance
         const localBalance = await this.getBalance(userId);
 
-        // 3. Get provider balance (Airtm)
         let providerBalance: string;
         try {
             const airtmBalance = await this.airtmUser.getBalance(user.airtmUserId);
@@ -503,15 +480,13 @@ export class BalanceService {
             };
         }
 
-        // 4. Calculate discrepancy (only compare available balance)
         const discrepancy = subtractAmounts(providerBalance, localBalance.available);
         const discrepancyValue = parseFloat(discrepancy);
+        const hasDiscrepancy = discrepancyValue !== 0;
 
-        // 5. Log sync result
-        const auditId = generateAuditLogId();
         await this.prisma.auditLog.create({
             data: {
-                id: auditId,
+                id: generateAuditLogId(),
                 marketplaceId: 'system',
                 userId,
                 action: 'BALANCE_SYNC',
@@ -520,34 +495,25 @@ export class BalanceService {
                 payloadBefore: { localAvailable: localBalance.available },
                 payloadAfter: { providerAvailable: providerBalance, discrepancy },
                 actorType: 'system',
-                result: discrepancyValue === 0 ? 'SUCCESS' : 'DISCREPANCY_FOUND',
+                result: hasDiscrepancy ? 'DISCREPANCY_FOUND' : 'SUCCESS',
             },
         });
 
-        // 6. Determine action based on discrepancy
-        if (discrepancyValue === 0) {
+        if (hasDiscrepancy) {
+            this.logger.warn(
+                `Balance discrepancy detected for user ${userId}: ` +
+                `local=${localBalance.available}, provider=${providerBalance}, diff=${discrepancy}`,
+            );
+        } else {
             this.logger.log(`Balance sync complete for user ${userId}: No discrepancy`);
-            return {
-                synced: true,
-                localBalance: localBalance.available,
-                providerBalance,
-                discrepancy,
-                action: 'none',
-            };
         }
-
-        // Discrepancy detected - flag for manual review
-        this.logger.warn(
-            `Balance discrepancy detected for user ${userId}: ` +
-            `local=${localBalance.available}, provider=${providerBalance}, diff=${discrepancy}`,
-        );
 
         return {
             synced: true,
             localBalance: localBalance.available,
             providerBalance,
             discrepancy,
-            action: 'flagged',
+            action: hasDiscrepancy ? 'flagged' : 'none',
         };
     }
 
@@ -638,24 +604,19 @@ export class BalanceService {
 
         try {
             const result = await this.prisma.$transaction(async (tx) => {
-                // 1. Get or create balance with lock (serializable isolation ensures this)
                 const balance = await this.getOrCreateBalanceInTx(tx, userId);
 
-                // 2. Store previous balance for audit
                 const previousBalance = {
                     available: balance.available,
                     reserved: balance.reserved,
                 };
 
-                // 3. Calculate new balance
                 const newBalance = await calculateNewBalance(balance);
 
-                // 4. Validate invariants (non-negative balances)
                 if (parseFloat(newBalance.available) < 0 || parseFloat(newBalance.reserved) < 0) {
                     throw new BalanceConcurrencyException(userId, operation);
                 }
 
-                // 5. Update balance
                 const updatedBalance = await tx.balance.update({
                     where: { userId },
                     data: {
@@ -664,7 +625,6 @@ export class BalanceService {
                     },
                 });
 
-                // 6. Create audit log
                 await tx.auditLog.create({
                     data: {
                         id: auditId,
@@ -681,17 +641,12 @@ export class BalanceService {
                     },
                 });
 
-                return {
-                    balance: updatedBalance,
-                    previousBalance,
-                    newBalance,
-                };
+                return { balance: updatedBalance, previousBalance, newBalance };
             }, {
                 isolationLevel: 'Serializable',
                 timeout: 10000,
             });
 
-            // Emit balance updated event
             this.eventEmitter.emit('balance.updated', {
                 userId,
                 operation,
@@ -699,8 +654,6 @@ export class BalanceService {
                 previousBalance: result.previousBalance,
                 newBalance: result.newBalance,
             });
-
-            const total = addAmounts(result.newBalance.available, result.newBalance.reserved);
 
             this.logger.log(`${operation} completed for user ${userId}: ${amount}`);
 
@@ -711,7 +664,7 @@ export class BalanceService {
                     available: result.newBalance.available,
                     reserved: result.newBalance.reserved,
                     currency: result.balance.currency,
-                    total,
+                    total: addAmounts(result.newBalance.available, result.newBalance.reserved),
                     updated_at: result.balance.updatedAt.toISOString(),
                 },
                 operation,
@@ -721,7 +674,6 @@ export class BalanceService {
                 auditLogId: auditId,
             };
         } catch (error) {
-            // Log failed operation in audit
             await this.prisma.auditLog.create({
                 data: {
                     id: auditId,
