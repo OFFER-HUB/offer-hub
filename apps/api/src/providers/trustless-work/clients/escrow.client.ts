@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { TrustlessWorkConfig } from '../trustless-work.config';
 import {
     TrustlessInitializeEscrowResponse,
@@ -26,7 +26,7 @@ export class EscrowClient {
     private readonly baseUrl: string;
     private readonly headers: Record<string, string>;
 
-    constructor(private readonly config: TrustlessWorkConfig) {
+    constructor(@Inject(TrustlessWorkConfig) private readonly config: TrustlessWorkConfig) {
         this.baseUrl = config.apiUrl;
         this.headers = {
             'x-api-key': config.apiKey,

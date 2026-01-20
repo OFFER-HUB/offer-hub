@@ -19,9 +19,9 @@ export class WebhookService {
     private readonly logger = new Logger(WebhookService.name);
 
     constructor(
-        private readonly config: TrustlessWorkConfig,
+        @Inject(TrustlessWorkConfig) private readonly config: TrustlessWorkConfig,
         @Inject(PrismaService) private readonly prisma: PrismaService,
-        private readonly walletClient: WalletClient,
+        @Inject(WalletClient) private readonly walletClient: WalletClient,
     ) {}
 
     /**

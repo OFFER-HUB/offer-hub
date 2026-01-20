@@ -2,11 +2,13 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { config } from 'dotenv';
+import { resolve } from 'path';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
-config();
+// Load .env from monorepo root (works with tsx watch from apps/api/)
+config({ path: resolve(process.cwd(), '../../.env') });
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');

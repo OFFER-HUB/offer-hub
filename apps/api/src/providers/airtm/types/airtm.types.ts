@@ -149,3 +149,12 @@ export const DEFAULT_RETRY_OPTIONS: AirtmRetryOptions = {
 
 /** HTTP timeout in milliseconds */
 export const HTTP_TIMEOUT_MS = 30000;
+
+/** Airtm balance response from API */
+export interface AirtmBalanceResponse {
+    userId: string;
+    available: number;
+    pending: number;
+    currency: string;
+    updatedAt: string;
+}

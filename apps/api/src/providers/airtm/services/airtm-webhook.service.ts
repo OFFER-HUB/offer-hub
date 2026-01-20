@@ -29,28 +29,53 @@ import type { WebhookProcessResult, SanitizedWebhookPayload } from '../dto';
 /**
  * Service for processing Airtm webhooks.
  * Handles signature verification, deduplication, and status updates.
+ *
+ * Note: Webhook signature verification is optional and can be disabled
+ * if AIRTM_WEBHOOK_SECRET is not configured (useful for development).
  */
 @Injectable()
 export class AirtmWebhookService {
     private readonly logger = new Logger(AirtmWebhookService.name);
-    private readonly svixWebhook: Webhook;
+    private readonly svixWebhook: Webhook | null;
 
     constructor(
         @Inject(AirtmConfig) private readonly config: AirtmConfig,
         @Inject(PrismaService) private readonly prisma: PrismaService,
     ) {
-        this.svixWebhook = new Webhook(this.config.webhookSecret);
+        // Only initialize Svix if webhook secret is configured
+        if (this.config.isWebhookVerificationEnabled) {
+            this.svixWebhook = new Webhook(this.config.webhookSecret);
+            this.logger.log('Webhook signature verification enabled');
+        } else {
+            this.svixWebhook = null;
+            this.logger.warn(
+                'Webhook signature verification DISABLED - all webhooks will be accepted without verification',
+            );
+        }
     }
 
     /**
      * Verifies the webhook signature using Svix HMAC-SHA256.
      *
+     * If webhook secret is not configured, verification is skipped and
+     * the raw body is parsed directly (useful for development/testing).
+     *
      * @param rawBody - Raw request body as string
      * @param headers - Svix headers (svix-id, svix-timestamp, svix-signature)
      * @returns Parsed and verified webhook payload
-     * @throws AirtmWebhookSignatureException if signature is invalid
+     * @throws AirtmWebhookSignatureException if signature is invalid (when verification is enabled)
      */
     verifySignature(rawBody: string, headers: SvixWebhookHeaders): AirtmWebhookPayload {
+        // If webhook verification is disabled, parse directly without verification
+        if (!this.svixWebhook) {
+            this.logger.warn(`Webhook verification skipped (disabled): ${headers['svix-id']}`);
+            try {
+                return JSON.parse(rawBody) as AirtmWebhookPayload;
+            } catch {
+                throw new AirtmWebhookSignatureException(headers['svix-id']);
+            }
+        }
+
         try {
             const payload = this.svixWebhook.verify(rawBody, headers) as AirtmWebhookPayload;
             this.logger.debug(`Webhook signature verified: ${headers['svix-id']}`);
