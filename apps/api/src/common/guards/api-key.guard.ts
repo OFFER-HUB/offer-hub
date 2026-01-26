@@ -1,4 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { PrismaService } from '../../modules/database/prisma.service';
 import { AuthService } from '../../modules/auth/auth.service';
 import { hashApiKey } from '@offerhub/shared';
@@ -8,9 +9,20 @@ export class ApiKeyGuard implements CanActivate {
     constructor(
         @Inject(PrismaService) private prisma: PrismaService,
         private authService: AuthService,
+        private reflector: Reflector,
     ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
+        // Check if endpoint is marked as public
+        const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+
+        if (isPublic) {
+            return true;
+        }
+
         const request = context.switchToHttp().getRequest();
         const authHeader = request.headers['authorization'];
 
