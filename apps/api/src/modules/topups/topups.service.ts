@@ -1,4 +1,4 @@
-import { Injectable, Inject, Logger, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, Inject, Logger, NotFoundException, UnprocessableEntityException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { AirtmPayinClient, AirtmUserClient } from '../../providers/airtm';
 import {
@@ -9,6 +9,8 @@ import {
 } from '@offerhub/shared';
 import { mapAirtmPayinStatus } from '../../providers/airtm/mappers';
 import type { CreateTopUpDto } from './dto';
+import { BalanceService } from '../balance/balance.service';
+import { AirtmConfig } from '../../providers/airtm/airtm.config';
 
 /**
  * Response when creating a top-up.
@@ -51,6 +53,8 @@ export class TopUpsService {
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(AirtmPayinClient) private readonly airtmPayin: AirtmPayinClient,
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
+        @Inject(BalanceService) private readonly balanceService: BalanceService,
+        @Inject(AirtmConfig) private readonly airtmConfig: AirtmConfig,
     ) {}
 
     /**
@@ -126,6 +130,8 @@ export class TopUpsService {
                 currency: dto.currency,
                 destinationUserId: user.airtmUserId,
                 description: dto.description,
+                confirmationBaseUrl: `${this.airtmConfig.callbackBaseUrl}/${topupId}/callback`,
+                cancellationBaseUrl: `${this.airtmConfig.callbackBaseUrl}/${topupId}/callback`,
             });
 
             // 5. Update top-up with Airtm details
@@ -171,6 +177,37 @@ export class TopUpsService {
 
             throw error;
         }
+    }
+
+    /**
+     * Gets a top-up by ID without authentication (internal use).
+     * Used by callback endpoint.
+     *
+     * @param topupId - Top-up ID
+     * @returns Top-up details or null if not found
+     */
+    async getTopUpById(topupId: string): Promise<TopUpResponse | null> {
+        const topup = await this.prisma.topUp.findUnique({
+            where: { id: topupId },
+        });
+
+        if (!topup) {
+            return null;
+        }
+
+        const metadata = topup.metadata as Record<string, unknown> | null;
+        return {
+            id: topup.id,
+            userId: topup.userId,
+            amount: topup.amount,
+            currency: topup.currency,
+            status: topup.status as TopUpStatus,
+            airtmPayinId: topup.airtmPayinId || undefined,
+            confirmationUri: topup.confirmationUri || undefined,
+            failureReason: (metadata?.failureReason as string) || undefined,
+            createdAt: topup.createdAt.toISOString(),
+            updatedAt: topup.updatedAt.toISOString(),
+        };
     }
 
     /**
@@ -285,12 +322,18 @@ export class TopUpsService {
             return this.getTopUp(topupId, userId);
         }
 
+        // Skip if already in terminal state (prevents race condition with webhook)
+        const currentStatus = topup.status as TopUpStatus;
+        if (TopUpStateMachine.isTerminalState(currentStatus)) {
+            this.logger.debug(`TopUp ${topupId} already in terminal state ${currentStatus}, skipping refresh`);
+            return this.getTopUp(topupId, userId);
+        }
+
         // Fetch latest status from Airtm
         const payin = await this.airtmPayin.refreshPayinStatus(topup.airtmPayinId);
         const newStatus = mapAirtmPayinStatus(payin.status);
 
         // Validate state transition
-        const currentStatus = topup.status as TopUpStatus;
         if (TopUpStateMachine.canTransition(currentStatus, newStatus)) {
             if (payin.reasonDescription) {
                 const existingMetadata = (topup.metadata as Record<string, unknown>) ?? {};
@@ -311,8 +354,95 @@ export class TopUpsService {
             }
 
             this.logger.log(`TopUp ${topupId} refreshed: ${currentStatus} → ${newStatus}`);
+
+            // Credit balance if transitioned to SUCCEEDED
+            if (currentStatus !== TopUpStatus.TOPUP_SUCCEEDED &&
+                newStatus === TopUpStatus.TOPUP_SUCCEEDED) {
+                this.logger.log(`Crediting balance for TopUp ${topupId}: ${topup.amount} ${topup.currency}`);
+
+                try {
+                    await this.balanceService.creditAvailable(userId, {
+                        amount: topup.amount,
+                        currency: topup.currency,
+                        reference: topupId,
+                        description: `Top-up ${topupId} succeeded`,
+                    });
+                } catch (error) {
+                    this.logger.error(
+                        `Failed to credit balance for TopUp ${topupId}:`,
+                        error instanceof Error ? error.message : 'Unknown error',
+                    );
+                    // Don't throw - the topup status is already updated
+                    // Manual reconciliation may be needed
+                }
+            }
         }
 
+        return this.getTopUp(topupId, userId);
+    }
+
+    /**
+     * Cancels a top-up that is awaiting user confirmation.
+     *
+     * @param topupId - Top-up ID
+     * @param userId - User ID (for authorization)
+     * @returns Canceled top-up details
+     * @throws NotFoundException if top-up not found
+     * @throws ConflictException if top-up is not in cancellable state
+     */
+    async cancelTopUp(topupId: string, userId: string): Promise<TopUpResponse> {
+        // 1. Fetch and validate
+        const topup = await this.prisma.topUp.findFirst({
+            where: { id: topupId, userId },
+        });
+
+        if (!topup) {
+            throw new NotFoundException({
+                error: {
+                    code: ERROR_CODES.TOPUP_NOT_FOUND,
+                    message: 'Top-up not found',
+                },
+            });
+        }
+
+        // 2. Validate current status - can only cancel from AWAITING_USER_CONFIRMATION
+        const currentStatus = topup.status as TopUpStatus;
+        if (currentStatus !== TopUpStatus.TOPUP_AWAITING_USER_CONFIRMATION) {
+            throw new ConflictException({
+                error: {
+                    code: ERROR_CODES.INVALID_STATE,
+                    message: `Cannot cancel top-up in status ${currentStatus}`,
+                    details: {
+                        currentStatus,
+                        allowedStatuses: [TopUpStatus.TOPUP_AWAITING_USER_CONFIRMATION],
+                    },
+                },
+            });
+        }
+
+        // 3. Call Airtm API to cancel (if payin exists)
+        if (topup.airtmPayinId) {
+            try {
+                await this.airtmPayin.cancelPayin(topup.airtmPayinId);
+                this.logger.log(`Airtm payin ${topup.airtmPayinId} canceled via API`);
+            } catch (error) {
+                this.logger.warn(
+                    `Airtm cancel API failed for ${topup.airtmPayinId}, ` +
+                    `proceeding with local cancellation: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                );
+                // Continue with local cancellation even if Airtm API fails
+            }
+        }
+
+        // 4. Update local status to CANCELED
+        await this.prisma.topUp.update({
+            where: { id: topupId },
+            data: { status: TopUpStatus.TOPUP_CANCELED },
+        });
+
+        this.logger.log(`TopUp ${topupId} canceled by user ${userId}`);
+
+        // 5. Return updated top-up
         return this.getTopUp(topupId, userId);
     }
 }

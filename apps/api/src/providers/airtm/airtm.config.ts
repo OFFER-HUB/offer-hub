@@ -13,12 +13,18 @@ export class AirtmConfig {
     readonly apiKey: string;
     readonly apiSecret: string;
     readonly webhookSecret: string;
+    readonly callbackBaseUrl: string;
+    readonly successRedirectUrl: string;
+    readonly cancelRedirectUrl: string;
 
     constructor() {
         this.environment = (process.env.AIRTM_ENV as AirtmEnvironment) || 'sandbox';
         this.apiKey = process.env.AIRTM_API_KEY || '';
         this.apiSecret = process.env.AIRTM_API_SECRET || '';
         this.webhookSecret = process.env.AIRTM_WEBHOOK_SECRET || '';
+        this.callbackBaseUrl = process.env.TOPUP_CALLBACK_BASE_URL || 'http://localhost:3000/topups';
+        this.successRedirectUrl = process.env.TOPUP_SUCCESS_REDIRECT_URL || 'http://localhost:3001/topups/success';
+        this.cancelRedirectUrl = process.env.TOPUP_CANCEL_REDIRECT_URL || 'http://localhost:3001/topups/canceled';
 
         this.validate();
         this.logConfiguration();
