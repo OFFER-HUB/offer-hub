@@ -118,9 +118,9 @@ export class TopUpsController {
     @Public()
     async handleCallback(
         @Param('id') topupId: string,
+        @Res() res: Response,
         @Query('status') status?: string,
         @Query('code') code?: string,
-        @Res() res: Response,
     ): Promise<void> {
         // 1. Fetch topup (no userId required - public callback)
         const topup = await this.topupsService.getTopUpById(topupId);
