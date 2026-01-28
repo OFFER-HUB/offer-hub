@@ -62,74 +62,74 @@ This roadmap is the definitive guide to building the Orchestrator. It maps 100% 
 ## 🔌 Phase 3: External Providers
 *Goal: Implement the "Dialects" to talk to Airtm and Trustless Work.*
 
-- [ ] **Issue 3.1: Airtm Integration**
-    - [ ] 3.1.1: Payin flow (Top-up): URI generation and status check client.
-    - [ ] 3.1.2: Payout flow (Withdrawal): Create and Commit client.
-    - [ ] 3.1.3: User verification client (KYC/Country checks).
-    - [ ] 3.1.4: HMAC Signature verification logic for Airtm webhooks.
+- [x] **Issue 3.1: Airtm Integration** *(PR #21)*
+    - [x] 3.1.1: Payin flow (Top-up): URI generation and status check client.
+    - [x] 3.1.2: Payout flow (Withdrawal): Create and Commit client.
+    - [x] 3.1.3: User verification client (KYC/Country checks).
+    - [x] 3.1.4: HMAC Signature verification logic for Airtm webhooks (Svix).
 
-- [ ] **Issue 3.2: Trustless Work Integration**
-    - [ ] 3.2.1: Stellar wallet logic (Balance projection).
-    - [ ] 3.2.2: Escrow contract creation client.
-    - [ ] 3.2.3: Partial Release / Partial Refund logic.
-    - [ ] 3.2.4: HMAC Signature verification logic for TW webhooks.
+- [x] **Issue 3.2: Trustless Work Integration** *(PR #20)*
+    - [x] 3.2.1: Stellar wallet logic (Balance projection).
+    - [x] 3.2.2: Escrow contract creation client.
+    - [x] 3.2.3: Partial Release / Partial Refund logic.
+    - [x] 3.2.4: HMAC Signature verification logic for TW webhooks.
 
 ---
 
 ## 💰 Phase 4: Core Services (Business Logic)
 *Goal: The heart of the Orchestrator - State & Money management.*
 
-- [ ] **Issue 4.1: Balance Orchestrator**
-    - [ ] 4.1.1: Implement atomic `available` vs `reserved` updates (Prisma Transactions).
-    - [ ] 4.1.2: Implement `MIRROR` logic: ensuring local balance reflects provider state.
+- [x] **Issue 4.1: Balance Orchestrator** *(PR #29)*
+    - [x] 4.1.1: Implement atomic `available` vs `reserved` updates (Prisma Transactions).
+    - [x] 4.1.2: Implement `MIRROR` logic: ensuring local balance reflects provider state.
 
-- [ ] **Issue 4.2: Top-Up Orchestrator**
-    - [ ] 4.2.1: Flow orchestration: `CREATED` -> `AWAITING_CONFIRMATION` -> `PROCESSING` -> `SUCCEEDED`.
-    - [ ] 4.2.2: Success/Cancel URL redirection and state logic.
+- [x] **Issue 4.2: Top-Up Orchestrator** *(PR #21, #42)*
+    - [x] 4.2.1: Flow orchestration: `CREATED` -> `AWAITING_CONFIRMATION` -> `PROCESSING` -> `SUCCEEDED`.
+    - [x] 4.2.2: Success/Cancel URL redirection and state logic.
 
-- [ ] **Issue 4.3: Order & Escrow Orchestrator**
-    - [ ] 4.3.1: Funds reservation logic (`available` -= amount, `reserved` += amount).
-    - [ ] 4.3.2: Escrow Bridge: Triggering move to Stellar wallet when funding escrow.
-    - [ ] 4.3.3: Milestones flow: handling partial completions.
+- [x] **Issue 4.3: Order & Escrow Orchestrator** *(PR #30)*
+    - [x] 4.3.1: Funds reservation logic (`available` -= amount, `reserved` += amount).
+    - [x] 4.3.2: Escrow Bridge: Triggering move to Stellar wallet when funding escrow.
+    - [x] 4.3.3: Milestones flow: handling partial completions.
 
-- [ ] **Issue 4.4: Resolution Orchestrator**
-    - [ ] 4.4.1: Release flow: Funds to seller `available` balance.
-    - [ ] 4.4.2: Refund flow: Funds back to buyer `available` balance.
-    - [ ] 4.4.3: Dispute Split flow: Fractional distribution of escrow.
+- [x] **Issue 4.4: Resolution Orchestrator** *(PR #31)*
+    - [x] 4.4.1: Release flow: Funds to seller `available` balance.
+    - [x] 4.4.2: Refund flow: Funds back to buyer `available` balance.
+    - [x] 4.4.3: Dispute Split flow: Fractional distribution of escrow.
 
 ---
 
 ## 📡 Phase 5: API Endpoints (The Surface)
 *Goal: Implement every endpoint documented in /docs/api/endpoints.*
 
-- [ ] **Issue 5.1: Auth & Config Endpoints**
-    - [ ] 5.1.1: `POST /auth/api-keys` and `GET /auth/api-keys`.
-    - [ ] 5.1.2: `POST /auth/token` (Short-lived tokens).
+- [ ] **Issue 5.1: Auth & Config Endpoints** *(Partial)*
+    - [x] 5.1.1: `POST /auth/api-keys` *(PR #15)* — `GET /auth/api-keys` pending.
+    - [x] 5.1.2: `POST /auth/api-keys/:id/token` (Short-lived tokens). *(PR #15)*
     - [ ] 5.1.3: `GET /me` and `GET /config`.
-    - [ ] 5.1.4: `GET /health` (Aggregated health check for DB, Redis, Airtm, TW).
+    - [ ] 5.1.4: `GET /health` (Aggregated health check for DB, Redis, Airtm, TW) — Basic health exists.
 
 - [ ] **Issue 5.2: Users & Balances**
     - [ ] 5.2.1: `POST /users` (Marketplace registration).
     - [ ] 5.2.2: `POST /users/{id}/airtm/link`.
-    - [ ] 5.2.3: `GET /users/{id}/balance` (Full available/reserved breakdown).
+    - [x] 5.2.3: `GET /users/{id}/balance` (Full available/reserved breakdown). *(PR #29)*
 
-- [ ] **Issue 5.3: Top-Ups Endpoints**
-    - [ ] 5.3.1: `POST /topups` (Payin start).
-    - [ ] 5.3.2: `POST /topups/{id}/refresh` (Manual poll sync).
+- [x] **Issue 5.3: Top-Ups Endpoints** *(PR #21, #42)*
+    - [x] 5.3.1: `POST /topups` (Payin start).
+    - [x] 5.3.2: `POST /topups/{id}/refresh` (Manual poll sync).
 
-- [ ] **Issue 5.4: Orders & Escrow Endpoints**
-    - [ ] 5.4.1: `POST /orders`, `GET /orders`, `GET /orders/{id}`.
-    - [ ] 5.4.2: `POST /orders/{id}/reserve` and `/cancel`.
-    - [ ] 5.4.3: `POST /orders/{id}/escrow` and `/escrow/fund`.
-    - [ ] 5.4.4: `POST /orders/{id}/milestones/{ref}/complete`.
+- [x] **Issue 5.4: Orders & Escrow Endpoints** *(PR #30)*
+    - [x] 5.4.1: `POST /orders`, `GET /orders`, `GET /orders/{id}`.
+    - [x] 5.4.2: `POST /orders/{id}/reserve` and `/cancel`.
+    - [x] 5.4.3: `POST /orders/{id}/escrow` and `/escrow/fund`.
+    - [x] 5.4.4: `POST /orders/{id}/milestones/{ref}/complete`.
 
-- [ ] **Issue 5.5: Settlement Endpoints**
-    - [ ] 5.5.1: `POST /orders/{id}/release` and `/refund`.
-    - [ ] 5.5.2: `POST /orders/{id}/disputes` and `/disputes/{id}/resolve`.
+- [x] **Issue 5.5: Settlement Endpoints** *(PR #31)*
+    - [x] 5.5.1: `POST /orders/{id}/release` and `/refund`.
+    - [x] 5.5.2: `POST /orders/{id}/disputes` and `/disputes/{id}/resolve`.
 
-- [ ] **Issue 5.6: Withdrawals Endpoints**
-    - [ ] 5.6.1: `POST /withdrawals` and `/withdrawals/{id}/commit`.
-    - [ ] 5.6.2: `POST /withdrawals/{id}/refresh`.
+- [x] **Issue 5.6: Withdrawals Endpoints** *(PR #21)*
+    - [x] 5.6.1: `POST /withdrawals` and `/withdrawals/{id}/commit`.
+    - [x] 5.6.2: `POST /withdrawals/{id}/refresh`.
 
 ---
 
@@ -159,10 +159,10 @@ This roadmap is the definitive guide to building the Orchestrator. It maps 100% 
     - [ ] 7.1.1: Redis/BullMQ setup in `@offerhub/worker`.
     - [ ] 7.1.2: Dead Letter Queue (DLQ) for failed jobs.
 
-- [ ] **Issue 7.2: Webhook Processing**
-    - [ ] 7.2.1: Airtm webhook processor (Payin/Payout updates).
-    - [ ] 7.2.2: Trustless Work webhook processor (Escrow status updates).
-    - [ ] 7.2.3: Deduplication logic using `WebhookEvent` table.
+- [x] **Issue 7.2: Webhook Processing** *(PR #20, #21)*
+    - [x] 7.2.1: Airtm webhook processor (Payin/Payout updates).
+    - [x] 7.2.2: Trustless Work webhook processor (Escrow status updates).
+    - [x] 7.2.3: Deduplication logic using `WebhookEvent` table.
 
 - [ ] **Issue 7.3: Scheduled Jobs**
     - [ ] 7.3.1: Reconciliation Job: Cross-check every pending TopUp/Withdrawal with Airtm API.
