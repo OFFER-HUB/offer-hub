@@ -73,4 +73,59 @@ export class AuthService {
             throw new UnauthorizedException('Invalid or expired short-lived token');
         }
     }
+
+    /**
+     * Lists API keys with pagination.
+     * API key values are never returned (only shown once at creation).
+     */
+    async listApiKeys(options: { limit?: number; cursor?: string } = {}) {
+        const limit = Math.min(options.limit || 20, 100);
+
+        const apiKeys = await this.prisma.apiKey.findMany({
+            take: limit + 1,
+            ...(options.cursor && {
+                skip: 1,
+                cursor: { id: options.cursor },
+            }),
+            orderBy: { createdAt: 'desc' },
+            select: {
+                id: true,
+                name: true,
+                scopes: true,
+                lastUsedAt: true,
+                createdAt: true,
+            },
+        });
+
+        const hasMore = apiKeys.length > limit;
+        const data = apiKeys.slice(0, limit);
+
+        return {
+            data: data.map((key) => ({
+                id: key.id,
+                name: key.name,
+                scopes: key.scopes,
+                lastUsedAt: key.lastUsedAt?.toISOString() || null,
+                createdAt: key.createdAt.toISOString(),
+            })),
+            pagination: {
+                hasMore,
+                nextCursor: hasMore ? data[data.length - 1].id : null,
+            },
+        };
+    }
+
+    /**
+     * Gets API key by ID (for /me endpoint context).
+     */
+    async getApiKeyById(id: string) {
+        return this.prisma.apiKey.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                scopes: true,
+            },
+        });
+    }
 }

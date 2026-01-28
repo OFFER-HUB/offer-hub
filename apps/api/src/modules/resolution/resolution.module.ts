@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module, OnModuleInit, Inject } from '@nestjs/common';
 import { ResolutionService } from './resolution.service';
 import { ResolutionController } from './resolution.controller';
 import { DatabaseModule } from '../database/database.module';
@@ -22,8 +22,8 @@ import { WebhookService } from '../../providers/trustless-work/services/webhook.
 })
 export class ResolutionModule implements OnModuleInit {
     constructor(
-        private readonly resolutionService: ResolutionService,
-        private readonly webhookService: WebhookService,
+        @Inject(ResolutionService) private readonly resolutionService: ResolutionService,
+        @Inject(WebhookService) private readonly webhookService: WebhookService,
     ) {}
 
     onModuleInit() {
