@@ -8,8 +8,8 @@ import { hashApiKey } from '@offerhub/shared';
 export class ApiKeyGuard implements CanActivate {
     constructor(
         @Inject(PrismaService) private prisma: PrismaService,
-        private authService: AuthService,
-        private reflector: Reflector,
+        @Inject(AuthService) private authService: AuthService,
+        @Inject(Reflector) private reflector: Reflector,
     ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
