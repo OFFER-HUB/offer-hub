@@ -15,6 +15,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { ResolutionModule } from './modules/resolution/resolution.module';
 import { DisputesModule } from './modules/disputes/disputes.module';
 import { AirtmModule } from './providers/airtm/airtm.module';
+import { UsersModule } from './modules/users/users.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
 
@@ -29,6 +30,7 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     AuthModule,
     AirtmModule,
     WebhooksModule,
+    UsersModule,
     TopUpsModule,
     WithdrawalsModule,
     BalanceModule,
