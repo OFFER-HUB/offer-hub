@@ -28,6 +28,8 @@ export class ResolutionModule implements OnModuleInit {
 
     onModuleInit() {
         // Inject ResolutionService into WebhookService to avoid circular dependency
-        this.webhookService.setResolutionService(this.resolutionService);
+        if (this.webhookService) {
+            this.webhookService.setResolutionService(this.resolutionService);
+        }
     }
 }
