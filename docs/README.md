@@ -50,7 +50,13 @@ npm i @offerhub/sdk
 | Webhooks | [webhooks.md](./api/endpoints/webhooks.md) |
 | Audit Logs | [audit-logs.md](./api/endpoints/audit-logs.md) |
 
-### External Providers
+### Providers
+
+Internal integration guides:
+
+- [Airtm Integration Guide](./providers/airtm.md) - Setup, credentials, testing
+
+External documentation:
 
 - [Trustless Work MCP](https://docs.trustlesswork.com/trustless-work/~gitbook/mcp) - Official MCP documentation
 - [Airtm Enterprise API](https://api.enterprise.airtm.com/docs/#v2/description/introduction) - Official Airtm API docs
