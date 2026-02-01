@@ -4,6 +4,7 @@ import { UsersController } from './users.controller';
 import { DatabaseModule } from '../database/database.module';
 import { AirtmModule } from '../../providers/airtm/airtm.module';
 import { AuthModule } from '../auth/auth.module';
+import { EventsModule } from '../events/events.module';
 
 /**
  * Users Module
@@ -19,9 +20,10 @@ import { AuthModule } from '../auth/auth.module';
         DatabaseModule,
         AirtmModule,
         AuthModule,
+        EventsModule,
     ],
     controllers: [UsersController],
     providers: [UsersService],
     exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }
