@@ -4,6 +4,7 @@ import { BalanceController } from './balance.controller';
 import { DatabaseModule } from '../database/database.module';
 import { AirtmModule } from '../../providers/airtm/airtm.module';
 import { AuthModule } from '../auth/auth.module';
+import { EventsModule } from '../events/events.module';
 
 /**
  * Balance Module
@@ -28,9 +29,10 @@ import { AuthModule } from '../auth/auth.module';
         DatabaseModule,
         AirtmModule,
         AuthModule,
+        EventsModule,
     ],
     controllers: [BalanceController],
     providers: [BalanceService],
     exports: [BalanceService],
 })
-export class BalanceModule {}
+export class BalanceModule { }
