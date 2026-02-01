@@ -11,6 +11,15 @@ import { mapAirtmPayinStatus } from '../../providers/airtm/mappers';
 import type { CreateTopUpDto } from './dto';
 import { BalanceService } from '../balance/balance.service';
 import { AirtmConfig } from '../../providers/airtm/airtm.config';
+import { EventBusService, EVENT_CATALOG } from '../events';
+import {
+    TopUpCreatedPayload,
+    TopUpConfirmationRequiredPayload,
+    TopUpProcessingPayload,
+    TopUpSucceededPayload,
+    TopUpFailedPayload,
+    TopUpCanceledPayload
+} from '../events/types';
 
 /**
  * Response when creating a top-up.
@@ -55,7 +64,8 @@ export class TopUpsService {
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
         @Inject(BalanceService) private readonly balanceService: BalanceService,
         @Inject(AirtmConfig) private readonly airtmConfig: AirtmConfig,
-    ) {}
+        private readonly eventBus: EventBusService,
+    ) { }
 
     /**
      * Creates a new top-up for a user.
@@ -123,6 +133,19 @@ export class TopUpsService {
 
         this.logger.log(`TopUp created: ${topupId} for user ${userId}`);
 
+        // Emit TOPUP_CREATED event
+        this.eventBus.emit<TopUpCreatedPayload>({
+            eventType: EVENT_CATALOG.TOPUP_CREATED,
+            aggregateId: topupId,
+            aggregateType: 'TopUp',
+            payload: {
+                userId,
+                amount: dto.amount,
+                currency: dto.currency || 'USD',
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
+
         // 4. Create payin in Airtm
         try {
             const payin = await this.airtmPayin.createPayin({
@@ -153,6 +176,31 @@ export class TopUpsService {
                 `status=${updatedTopup.status}`,
             );
 
+            // Emit appropriate event based on status
+            if (updatedTopup.status === TopUpStatus.TOPUP_AWAITING_USER_CONFIRMATION) {
+                this.eventBus.emit<TopUpConfirmationRequiredPayload>({
+                    eventType: EVENT_CATALOG.TOPUP_CONFIRMATION_REQUIRED,
+                    aggregateId: topupId,
+                    aggregateType: 'TopUp',
+                    payload: {
+                        topupId,
+                        confirmationUri: payin.confirmationUri!,
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            } else if (updatedTopup.status === TopUpStatus.TOPUP_PROCESSING) {
+                this.eventBus.emit<TopUpProcessingPayload>({
+                    eventType: EVENT_CATALOG.TOPUP_PROCESSING,
+                    aggregateId: topupId,
+                    aggregateType: 'TopUp',
+                    payload: {
+                        topupId,
+                        airtmPayinId: payin.id,
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            }
+
             return {
                 id: updatedTopup.id,
                 amount: updatedTopup.amount,
@@ -164,19 +212,37 @@ export class TopUpsService {
             };
         } catch (error) {
             // Mark top-up as failed if Airtm call fails
-            await this.prisma.topUp.update({
-                where: { id: topupId },
-                data: {
-                    status: TopUpStatus.TOPUP_FAILED,
-                    metadata: {
-                        ...(typeof topup.metadata === 'object' && topup.metadata !== null ? topup.metadata : {}),
-                        failureReason: error instanceof Error ? error.message : 'Unknown error',
-                    },
-                },
-            });
-
+            await this.failTopUp(topupId, userId, dto.amount, error);
             throw error;
         }
+    }
+
+    /**
+     * Mark a top-up as failed and emit the event.
+     */
+    private async failTopUp(topupId: string, userId: string, amount: string, error: any) {
+        await this.prisma.topUp.update({
+            where: { id: topupId },
+            data: {
+                status: TopUpStatus.TOPUP_FAILED,
+                metadata: {
+                    failureReason: error instanceof Error ? error.message : 'Unknown error',
+                },
+            },
+        });
+
+        this.eventBus.emit<TopUpFailedPayload>({
+            eventType: EVENT_CATALOG.TOPUP_FAILED,
+            aggregateId: topupId,
+            aggregateType: 'TopUp',
+            payload: {
+                topupId,
+                userId,
+                amount,
+                reason: error instanceof Error ? error.message : 'Unknown error',
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
     }
 
     /**
@@ -355,17 +421,70 @@ export class TopUpsService {
 
             this.logger.log(`TopUp ${topupId} refreshed: ${currentStatus} → ${newStatus}`);
 
+            // Emit generic state change events (except SUCCEEDED which has special logic below)
+            if (newStatus === TopUpStatus.TOPUP_PROCESSING) {
+                this.eventBus.emit<TopUpProcessingPayload>({
+                    eventType: EVENT_CATALOG.TOPUP_PROCESSING,
+                    aggregateId: topupId,
+                    aggregateType: 'TopUp',
+                    payload: { topupId, airtmPayinId: topup.airtmPayinId },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            } else if (newStatus === TopUpStatus.TOPUP_FAILED) {
+                this.eventBus.emit<TopUpFailedPayload>({
+                    eventType: EVENT_CATALOG.TOPUP_FAILED,
+                    aggregateId: topupId,
+                    aggregateType: 'TopUp',
+                    payload: {
+                        topupId,
+                        userId,
+                        amount: topup.amount,
+                        reason: payin.reasonDescription || 'Transaction failed'
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            } else if (newStatus === TopUpStatus.TOPUP_CANCELED) {
+                this.eventBus.emit<TopUpCanceledPayload>({
+                    eventType: EVENT_CATALOG.TOPUP_CANCELED,
+                    aggregateId: topupId,
+                    aggregateType: 'TopUp',
+                    payload: {
+                        topupId,
+                        userId,
+                        amount: topup.amount,
+                        canceledBy: 'system'
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            }
+
             // Credit balance if transitioned to SUCCEEDED
             if (currentStatus !== TopUpStatus.TOPUP_SUCCEEDED &&
                 newStatus === TopUpStatus.TOPUP_SUCCEEDED) {
                 this.logger.log(`Crediting balance for TopUp ${topupId}: ${topup.amount} ${topup.currency}`);
 
                 try {
-                    await this.balanceService.creditAvailable(userId, {
+                    const balance = await this.balanceService.creditAvailable(userId, {
                         amount: topup.amount,
                         currency: topup.currency,
                         reference: topupId,
                         description: `Top-up ${topupId} succeeded`,
+                    });
+
+                    // Emit TOPUP_SUCCEEDED event
+                    this.eventBus.emit<TopUpSucceededPayload>({
+                        eventType: EVENT_CATALOG.TOPUP_SUCCEEDED,
+                        aggregateId: topupId,
+                        aggregateType: 'TopUp',
+                        payload: {
+                            topupId,
+                            userId,
+                            amount: topup.amount,
+                            currency: topup.currency,
+                            newAvailableBalance: balance.newBalance.available,
+                            airtmPayinId: topup.airtmPayinId!,
+                        },
+                        metadata: EventBusService.createMetadata({ userId }),
                     });
                 } catch (error) {
                     this.logger.error(
@@ -441,6 +560,20 @@ export class TopUpsService {
         });
 
         this.logger.log(`TopUp ${topupId} canceled by user ${userId}`);
+
+        // Emit TOPUP_CANCELED event
+        this.eventBus.emit<TopUpCanceledPayload>({
+            eventType: EVENT_CATALOG.TOPUP_CANCELED,
+            aggregateId: topupId,
+            aggregateType: 'TopUp',
+            payload: {
+                topupId,
+                userId,
+                amount: topup.amount,
+                canceledBy: 'user',
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
 
         // 5. Return updated top-up
         return this.getTopUp(topupId, userId);
