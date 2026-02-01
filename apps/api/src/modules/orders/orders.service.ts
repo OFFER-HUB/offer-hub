@@ -1,6 +1,13 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Prisma } from '@prisma/client';
+import { EventBusService, EVENT_CATALOG } from '../events';
+import {
+    OrderCreatedPayload,
+    OrderFundsReservedPayload,
+    OrderEscrowCreatingPayload,
+    OrderEscrowFundingPayload,
+    OrderCanceledPayload,
+} from '../events/types';
 import type { Order, Escrow, Milestone } from '@prisma/client';
 import {
     isValidAmount,
@@ -59,8 +66,8 @@ export class OrdersService {
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(BalanceService) private readonly balanceService: BalanceService,
         @Inject(EscrowClient) private readonly escrowClient: EscrowClient,
-        private readonly eventEmitter: EventEmitter2,
-    ) {}
+        private readonly eventBus: EventBusService,
+    ) { }
 
     /**
      * Creates a new order with optional milestones.
@@ -153,13 +160,19 @@ export class OrdersService {
             },
         );
 
-        this.eventEmitter.emit('order.created', {
-            orderId: order.id,
-            buyerId: dto.buyer_id,
-            sellerId: dto.seller_id,
-            amount: dto.amount,
-            status: OrderStatus.ORDER_CREATED,
-            milestoneCount: dto.milestones?.length || 0,
+        this.eventBus.emit<OrderCreatedPayload>({
+            eventType: EVENT_CATALOG.ORDER_CREATED,
+            aggregateId: order.id,
+            aggregateType: 'Order',
+            payload: {
+                orderId: order.id,
+                buyerId: dto.buyer_id,
+                sellerId: dto.seller_id,
+                amount: dto.amount,
+                currency: dto.currency || 'USD',
+                title: dto.title,
+            },
+            metadata: EventBusService.createMetadata({ userId: dto.buyer_id }),
         });
 
         this.logger.log(`Order created: ${order.id}`);
@@ -230,11 +243,19 @@ export class OrdersService {
             },
         );
 
-        this.eventEmitter.emit('order.funds_reserved', {
-            orderId,
-            buyerId: order.buyerId,
-            amount: order.amount,
-            status: OrderStatus.FUNDS_RESERVED,
+        this.eventBus.emit<OrderFundsReservedPayload>({
+            eventType: EVENT_CATALOG.ORDER_FUNDS_RESERVED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                amount: order.amount,
+                currency: order.currency,
+                buyerId: order.buyerId,
+                reservedBalance: 'unknown',
+                availableBalance: 'unknown',
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Funds reserved for order ${orderId}`);
@@ -298,10 +319,19 @@ export class OrdersService {
             },
         );
 
-        this.eventEmitter.emit('order.cancelled', {
-            orderId,
-            previousStatus: order.status,
-            reason,
+        this.eventBus.emit<OrderCanceledPayload>({
+            eventType: EVENT_CATALOG.ORDER_CANCELED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                buyerId: order.buyerId,
+                canceledBy: 'user',
+                canceledAt: new Date().toISOString(),
+                fundsReleased: order.status === OrderStatus.FUNDS_RESERVED,
+                reason,
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Order cancelled: ${orderId}`);
@@ -401,11 +431,16 @@ export class OrdersService {
                 },
             });
 
-            this.eventEmitter.emit('escrow.creating', {
-                orderId,
-                escrowId: escrow.id,
-                contractId: escrowResponse.contractId,
-                amount: order.amount,
+            this.eventBus.emit<OrderEscrowCreatingPayload>({
+                eventType: EVENT_CATALOG.ORDER_ESCROW_CREATING,
+                aggregateId: orderId,
+                aggregateType: 'Order',
+                payload: {
+                    orderId,
+                    escrowId: escrow.id,
+                    amount: order.amount,
+                },
+                metadata: EventBusService.createMetadata({ userId: order.buyerId }),
             });
 
             this.logger.log(`Escrow created for order ${orderId}: ${escrow.id}`);
@@ -517,10 +552,17 @@ export class OrdersService {
                 },
             );
 
-            this.eventEmitter.emit('escrow.funding', {
-                orderId,
-                escrowId: order.escrow.id,
-                amount: order.amount,
+            this.eventBus.emit<OrderEscrowFundingPayload>({
+                eventType: EVENT_CATALOG.ORDER_ESCROW_FUNDING,
+                aggregateId: orderId,
+                aggregateType: 'Order',
+                payload: {
+                    orderId,
+                    escrowId: order.escrow.id,
+                    amount: order.amount,
+                    trustlessContractId: order.escrow.trustlessContractId!,
+                },
+                metadata: EventBusService.createMetadata({ userId: order.buyerId }),
             });
 
             this.logger.log(`Escrow funded for order ${orderId}`);
@@ -658,10 +700,16 @@ export class OrdersService {
         ).length;
         const completionPercentage = Math.round((completedCount / milestones.length) * 100);
 
-        this.eventEmitter.emit('milestone.completed', {
-            orderId,
-            milestoneRef,
-            completionPercentage,
+        this.eventBus.emit({
+            eventType: EVENT_CATALOG.ESCROW_MILESTONE_COMPLETED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                escrowId: order.escrow?.id || 'unknown',
+                milestoneRef,
+                completedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: order.sellerId }),
         });
 
         this.logger.log(
