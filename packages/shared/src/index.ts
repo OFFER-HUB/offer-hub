@@ -12,6 +12,9 @@ export * from './constants';
 // Enums
 export * from './enums';
 
+// Events
+export * from './events';
+
 // Types
 export * from './types';
 

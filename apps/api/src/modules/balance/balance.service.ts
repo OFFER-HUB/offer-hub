@@ -1,5 +1,11 @@
 import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventBusService, EVENT_CATALOG } from '../events';
+import {
+    BalanceCreditedPayload,
+    BalanceDebitedPayload,
+    BalanceReservedPayload,
+    BalanceReleasedPayload
+} from '../events/types';
 import { PrismaService } from '../database/prisma.service';
 import { AirtmUserClient } from '../../providers/airtm';
 import {
@@ -91,8 +97,8 @@ export class BalanceService {
     constructor(
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
-        private readonly eventEmitter: EventEmitter2,
-    ) {}
+        private readonly eventBus: EventBusService,
+    ) { }
 
     /**
      * Credits funds to a user's available balance.
@@ -284,15 +290,38 @@ export class BalanceService {
             timeout: 10000,
         });
 
-        this.eventEmitter.emit('balance.updated', {
-            userId: buyerId,
-            operation: 'RELEASE_DEDUCT_RESERVED',
-            amount: dto.amount,
+        this.eventBus.emit<BalanceReleasedPayload>({
+            eventType: EVENT_CATALOG.BALANCE_RELEASED,
+            aggregateId: buyerId,
+            aggregateType: 'Balance',
+            payload: {
+                userId: buyerId,
+                amount: dto.amount,
+                currency: dto.currency || 'USD',
+                orderId: dto.orderId,
+                reason: 'other',
+                previousReservedBalance: 'unknown', // We don't have this easily here without more lookups
+                newReservedBalance: 'unknown',
+                previousAvailableBalance: 'unknown',
+                newAvailableBalance: 'unknown',
+            },
+            metadata: EventBusService.createMetadata({ userId: buyerId }),
         });
-        this.eventEmitter.emit('balance.updated', {
-            userId: dto.sellerId,
-            operation: 'RELEASE_CREDIT_AVAILABLE',
-            amount: dto.amount,
+
+        this.eventBus.emit<BalanceCreditedPayload>({
+            eventType: EVENT_CATALOG.BALANCE_CREDITED,
+            aggregateId: dto.sellerId,
+            aggregateType: 'Balance',
+            payload: {
+                userId: dto.sellerId,
+                amount: dto.amount,
+                currency: dto.currency || 'USD',
+                source: 'release',
+                sourceId: dto.orderId,
+                previousAvailableBalance: result.sellerPrevious.available,
+                newAvailableBalance: result.sellerNewAvailable,
+            },
+            metadata: EventBusService.createMetadata({ userId: dto.sellerId }),
         });
 
         this.logger.log(`Release completed: ${dto.amount} from buyer ${buyerId} to seller ${dto.sellerId}`);
@@ -647,13 +676,8 @@ export class BalanceService {
                 timeout: 10000,
             });
 
-            this.eventEmitter.emit('balance.updated', {
-                userId,
-                operation,
-                amount,
-                previousBalance: result.previousBalance,
-                newBalance: result.newBalance,
-            });
+            // Emit appropriate domain event
+            this.emitOperationEvent(userId, operation, amount, result.previousBalance, result.newBalance, metadata);
 
             this.logger.log(`${operation} completed for user ${userId}: ${amount}`);
 
@@ -694,6 +718,114 @@ export class BalanceService {
             });
 
             throw error;
+        }
+    }
+
+    /**
+     * Helper to emit appropriate domain event for a balance operation.
+     */
+    private emitOperationEvent(
+        userId: string,
+        operation: string,
+        amount: string,
+        previousBalance: { available: string; reserved: string },
+        newBalance: { available: string; reserved: string },
+        metadata: Record<string, unknown>,
+    ) {
+        const commonMetadata = EventBusService.createMetadata({ userId });
+        const currency = (metadata.currency as string) || 'USD';
+
+        switch (operation) {
+            case 'CREDIT_AVAILABLE':
+                this.eventBus.emit<BalanceCreditedPayload>({
+                    eventType: EVENT_CATALOG.BALANCE_CREDITED,
+                    aggregateId: userId,
+                    aggregateType: 'Balance',
+                    payload: {
+                        userId,
+                        amount,
+                        currency,
+                        source: (metadata.source as any) || 'other',
+                        sourceId: (metadata.sourceId as string) || (metadata.reference as string),
+                        previousAvailableBalance: previousBalance.available,
+                        newAvailableBalance: newBalance.available,
+                    },
+                    metadata: commonMetadata,
+                });
+                break;
+            case 'DEBIT_AVAILABLE':
+                this.eventBus.emit<BalanceDebitedPayload>({
+                    eventType: EVENT_CATALOG.BALANCE_DEBITED,
+                    aggregateId: userId,
+                    aggregateType: 'Balance',
+                    payload: {
+                        userId,
+                        amount,
+                        currency,
+                        destination: (metadata.destination as any) || 'other',
+                        destinationId: (metadata.destinationId as string) || (metadata.reference as string),
+                        previousAvailableBalance: previousBalance.available,
+                        newAvailableBalance: newBalance.available,
+                    },
+                    metadata: commonMetadata,
+                });
+                break;
+            case 'RESERVE':
+                this.eventBus.emit<BalanceReservedPayload>({
+                    eventType: EVENT_CATALOG.BALANCE_RESERVED,
+                    aggregateId: userId,
+                    aggregateType: 'Balance',
+                    payload: {
+                        userId,
+                        amount,
+                        currency,
+                        orderId: (metadata.orderId as string) || 'unknown',
+                        previousReservedBalance: previousBalance.reserved,
+                        newReservedBalance: newBalance.reserved,
+                        previousAvailableBalance: previousBalance.available,
+                        newAvailableBalance: newBalance.available,
+                    },
+                    metadata: commonMetadata,
+                });
+                break;
+            case 'CANCEL_RESERVATION':
+                this.eventBus.emit<BalanceReleasedPayload>({
+                    eventType: EVENT_CATALOG.BALANCE_RELEASED,
+                    aggregateId: userId,
+                    aggregateType: 'Balance',
+                    payload: {
+                        userId,
+                        amount,
+                        currency,
+                        orderId: (metadata.orderId as string) || 'unknown',
+                        reason: 'cancel',
+                        previousReservedBalance: previousBalance.reserved,
+                        newReservedBalance: newBalance.reserved,
+                        previousAvailableBalance: previousBalance.available,
+                        newAvailableBalance: newBalance.available,
+                    },
+                    metadata: commonMetadata,
+                });
+                break;
+            case 'DEDUCT_RESERVED':
+                this.eventBus.emit<BalanceReleasedPayload>({
+                    eventType: EVENT_CATALOG.BALANCE_RELEASED,
+                    aggregateId: userId,
+                    aggregateType: 'Balance',
+                    payload: {
+                        userId,
+                        amount,
+                        currency,
+                        orderId: (metadata.orderId as string) || 'unknown',
+                        reason: 'escrow_funded',
+                        previousReservedBalance: previousBalance.reserved,
+                        newReservedBalance: newBalance.reserved,
+                        previousAvailableBalance: previousBalance.available,
+                        newAvailableBalance: newBalance.available,
+                    },
+                    metadata: commonMetadata,
+                });
+                break;
         }
     }
 }

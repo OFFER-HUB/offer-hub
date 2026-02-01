@@ -15,6 +15,14 @@ import {
     generateWithdrawalId,
 } from '@offerhub/shared';
 import { mapAirtmPayoutStatus, canCommitPayout } from '../../providers/airtm/mappers';
+import { EventBusService, EVENT_CATALOG } from '../events';
+import {
+    WithdrawalCreatedPayload,
+    WithdrawalCommittedPayload,
+    WithdrawalPendingPayload,
+    WithdrawalCompletedPayload,
+    WithdrawalFailedPayload,
+} from '../events/types';
 import type { CreateWithdrawalDto } from './dto';
 
 /**
@@ -61,7 +69,8 @@ export class WithdrawalsService {
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(AirtmPayoutClient) private readonly airtmPayout: AirtmPayoutClient,
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
-    ) {}
+        private readonly eventBus: EventBusService,
+    ) { }
 
     /**
      * Creates a new withdrawal for a user.
@@ -171,6 +180,22 @@ export class WithdrawalsService {
 
         this.logger.log(`Withdrawal created: ${withdrawalId} for user ${userId}`);
 
+        // Emit WITHDRAWAL_CREATED event
+        this.eventBus.emit<WithdrawalCreatedPayload>({
+            eventType: EVENT_CATALOG.WITHDRAWAL_CREATED,
+            aggregateId: withdrawalId,
+            aggregateType: 'Withdrawal',
+            payload: {
+                withdrawalId,
+                userId,
+                amount: dto.amount,
+                currency: dto.currency || 'USD',
+                destinationType: dto.destinationType as any,
+                destinationRef: dto.destinationRef,
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
+
         // 6. Create payout in Airtm
         try {
             const payout = await this.airtmPayout.createPayout({
@@ -202,6 +227,38 @@ export class WithdrawalsService {
                 `status=${updatedWithdrawal.status}`,
             );
 
+            // Emit appropriate event based on status
+            const currentStatus = updatedWithdrawal.status as WithdrawalStatus;
+            if (currentStatus === WithdrawalStatus.WITHDRAWAL_COMMITTED) {
+                this.eventBus.emit<WithdrawalCommittedPayload>({
+                    eventType: EVENT_CATALOG.WITHDRAWAL_COMMITTED,
+                    aggregateId: withdrawalId,
+                    aggregateType: 'Withdrawal',
+                    payload: {
+                        withdrawalId,
+                        userId,
+                        amount: updatedWithdrawal.amount,
+                        currency: updatedWithdrawal.currency,
+                        committedBalance: newReserved,
+                        availableBalance: newAvailable,
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            } else if (currentStatus === WithdrawalStatus.WITHDRAWAL_PENDING) {
+                this.eventBus.emit<WithdrawalPendingPayload>({
+                    eventType: EVENT_CATALOG.WITHDRAWAL_PENDING,
+                    aggregateId: withdrawalId,
+                    aggregateType: 'Withdrawal',
+                    payload: {
+                        withdrawalId,
+                        userId,
+                        amount: updatedWithdrawal.amount,
+                        airtmPayoutId: payout.id,
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            }
+
             return {
                 id: updatedWithdrawal.id,
                 amount: updatedWithdrawal.amount,
@@ -227,6 +284,20 @@ export class WithdrawalsService {
                 data: {
                     status: WithdrawalStatus.WITHDRAWAL_FAILED,
                 },
+            });
+
+            // Emit WITHDRAWAL_FAILED event
+            this.eventBus.emit<WithdrawalFailedPayload>({
+                eventType: EVENT_CATALOG.WITHDRAWAL_FAILED,
+                aggregateId: withdrawalId,
+                aggregateType: 'Withdrawal',
+                payload: {
+                    withdrawalId,
+                    userId,
+                    amount: dto.amount,
+                    reason: error instanceof Error ? error.message : 'Unknown error',
+                },
+                metadata: EventBusService.createMetadata({ userId }),
             });
 
             throw error;
@@ -286,6 +357,21 @@ export class WithdrawalsService {
         });
 
         this.logger.log(`Withdrawal ${withdrawalId} committed`);
+
+        this.eventBus.emit<WithdrawalCommittedPayload>({
+            eventType: EVENT_CATALOG.WITHDRAWAL_COMMITTED,
+            aggregateId: withdrawalId,
+            aggregateType: 'Withdrawal',
+            payload: {
+                withdrawalId,
+                userId,
+                amount: withdrawal.amount,
+                currency: withdrawal.currency,
+                committedBalance: 'unknown',
+                availableBalance: 'unknown',
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
 
         return this.getWithdrawal(withdrawalId, userId);
     }
@@ -410,11 +496,53 @@ export class WithdrawalsService {
                 where: { id: withdrawalId },
                 data: {
                     status: newStatus,
-                    // Note: failureReason not in schema
                 },
             });
 
             this.logger.log(`Withdrawal ${withdrawalId} refreshed: ${currentStatus} → ${newStatus}`);
+
+            // Emit generic state change events
+            if (newStatus === WithdrawalStatus.WITHDRAWAL_PENDING) {
+                this.eventBus.emit<WithdrawalPendingPayload>({
+                    eventType: EVENT_CATALOG.WITHDRAWAL_PENDING,
+                    aggregateId: withdrawalId,
+                    aggregateType: 'Withdrawal',
+                    payload: {
+                        withdrawalId,
+                        userId,
+                        amount: withdrawal.amount,
+                        airtmPayoutId: withdrawal.airtmPayoutId!
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            } else if (newStatus === WithdrawalStatus.WITHDRAWAL_COMPLETED) {
+                this.eventBus.emit<WithdrawalCompletedPayload>({
+                    eventType: EVENT_CATALOG.WITHDRAWAL_COMPLETED,
+                    aggregateId: withdrawalId,
+                    aggregateType: 'Withdrawal',
+                    payload: {
+                        withdrawalId,
+                        userId,
+                        amount: withdrawal.amount,
+                        currency: withdrawal.currency,
+                        completedAt: new Date().toISOString()
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            } else if (newStatus === WithdrawalStatus.WITHDRAWAL_FAILED) {
+                this.eventBus.emit<WithdrawalFailedPayload>({
+                    eventType: EVENT_CATALOG.WITHDRAWAL_FAILED,
+                    aggregateId: withdrawalId,
+                    aggregateType: 'Withdrawal',
+                    payload: {
+                        withdrawalId,
+                        userId,
+                        amount: withdrawal.amount,
+                        reason: 'Transaction failed'
+                    },
+                    metadata: EventBusService.createMetadata({ userId }),
+                });
+            }
         }
 
         return this.getWithdrawal(withdrawalId, userId);

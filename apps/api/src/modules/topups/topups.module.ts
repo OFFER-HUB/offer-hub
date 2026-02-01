@@ -5,6 +5,7 @@ import { DatabaseModule } from '../database/database.module';
 import { AirtmModule } from '../../providers/airtm';
 import { AuthModule } from '../auth/auth.module';
 import { BalanceModule } from '../balance/balance.module';
+import { EventsModule } from '../events/events.module';
 
 /**
  * Module for top-up (payin) functionality.
@@ -16,9 +17,9 @@ import { BalanceModule } from '../balance/balance.module';
  * - POST /topups/:id/refresh - Refresh status from Airtm
  */
 @Module({
-    imports: [DatabaseModule, AirtmModule, AuthModule, BalanceModule],
+    imports: [DatabaseModule, AirtmModule, AuthModule, BalanceModule, EventsModule],
     controllers: [TopUpsController],
     providers: [TopUpsService],
     exports: [TopUpsService],
 })
-export class TopUpsModule {}
+export class TopUpsModule { }

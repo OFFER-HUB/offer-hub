@@ -1,5 +1,17 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventBusService, EVENT_CATALOG } from '../events';
+import {
+    OrderReleaseRequestedPayload,
+    OrderReleasedPayload,
+    OrderClosedPayload,
+    OrderRefundRequestedPayload,
+    OrderRefundedPayload
+} from '../events/types/order-events';
+import {
+    DisputeOpenedPayload,
+    DisputeUnderReviewPayload,
+    DisputeResolvedPayload
+} from '../events/types/dispute-events';
 import { Prisma, MilestoneStatus } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { BalanceService } from '../balance/balance.service';
@@ -84,8 +96,8 @@ export class ResolutionService {
         @Inject(BalanceService) private readonly balanceService: BalanceService,
         @Inject(EscrowClient) private readonly escrowClient: EscrowClient,
         @Inject(OrdersService) private readonly ordersService: OrdersService,
-        private readonly eventEmitter: EventEmitter2,
-    ) {}
+        private readonly eventBus: EventBusService,
+    ) { }
 
     /**
      * Request release of funds to seller.
@@ -216,12 +228,16 @@ export class ResolutionService {
         }
 
         // 11. Emit event
-        this.eventEmitter.emit('resolution.release_requested', {
-            orderId,
-            buyerId: order.buyerId,
-            sellerId: order.sellerId,
-            amount: order.amount,
-            reason,
+        this.eventBus.emit<OrderReleaseRequestedPayload>({
+            eventType: EVENT_CATALOG.ORDER_RELEASE_REQUESTED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                requestedBy: order.buyerId, // Usually buyer requests release
+                requestedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Release requested for order ${orderId}`);
@@ -326,17 +342,31 @@ export class ResolutionService {
         );
 
         // 6. Emit events
-        this.eventEmitter.emit('resolution.released', {
-            orderId,
-            buyerId: order.buyerId,
-            sellerId: order.sellerId,
-            amount: order.amount,
+        this.eventBus.emit<OrderReleasedPayload>({
+            eventType: EVENT_CATALOG.ORDER_RELEASED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                sellerId: order.sellerId,
+                amount: order.amount,
+                currency: order.currency,
+                releasedAt: new Date().toISOString(),
+                newSellerBalance: 'unknown',
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
-        this.eventEmitter.emit('order.closed', {
-            orderId,
-            finalStatus: OrderStatus.CLOSED,
-            closedReason: 'RELEASED',
+        this.eventBus.emit<OrderClosedPayload>({
+            eventType: EVENT_CATALOG.ORDER_CLOSED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                finalStatus: OrderStatus.CLOSED,
+                closedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Release confirmed for order ${orderId}`);
@@ -450,11 +480,16 @@ export class ResolutionService {
         }
 
         // 9. Emit event
-        this.eventEmitter.emit('resolution.refund_requested', {
-            orderId,
-            buyerId: order.buyerId,
-            amount: order.amount,
-            reason,
+        this.eventBus.emit<OrderRefundRequestedPayload>({
+            eventType: EVENT_CATALOG.ORDER_REFUND_REQUESTED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                requestedBy: order.buyerId,
+                requestedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Refund requested for order ${orderId}`);
@@ -558,16 +593,31 @@ export class ResolutionService {
         );
 
         // 6. Emit events
-        this.eventEmitter.emit('resolution.refunded', {
-            orderId,
-            buyerId: order.buyerId,
-            amount: order.amount,
+        this.eventBus.emit<OrderRefundedPayload>({
+            eventType: EVENT_CATALOG.ORDER_REFUNDED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                buyerId: order.buyerId,
+                amount: order.amount,
+                currency: order.currency,
+                refundedAt: new Date().toISOString(),
+                newBuyerBalance: 'unknown',
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
-        this.eventEmitter.emit('order.closed', {
-            orderId,
-            finalStatus: OrderStatus.CLOSED,
-            closedReason: 'REFUNDED',
+        this.eventBus.emit<OrderClosedPayload>({
+            eventType: EVENT_CATALOG.ORDER_CLOSED,
+            aggregateId: orderId,
+            aggregateType: 'Order',
+            payload: {
+                orderId,
+                finalStatus: OrderStatus.CLOSED,
+                closedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Refund confirmed for order ${orderId}`);
@@ -665,11 +715,18 @@ export class ResolutionService {
         );
 
         // 6. Emit event
-        this.eventEmitter.emit('dispute.opened', {
-            disputeId: dispute.id,
-            orderId,
-            openedBy: dto.openedBy,
-            reason: dto.reason,
+        this.eventBus.emit<DisputeOpenedPayload>({
+            eventType: EVENT_CATALOG.DISPUTE_OPENED,
+            aggregateId: dispute.id,
+            aggregateType: 'Dispute',
+            payload: {
+                disputeId: dispute.id,
+                orderId,
+                openedBy: dto.openedBy as any,
+                reason: dto.reason,
+                openedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Dispute ${dispute.id} opened for order ${orderId}`);
@@ -759,9 +816,17 @@ export class ResolutionService {
         );
 
         // 5. Emit event
-        this.eventEmitter.emit('dispute.assigned', {
-            disputeId,
-            assignedTo: dto.assignedTo,
+        this.eventBus.emit<DisputeUnderReviewPayload>({
+            eventType: EVENT_CATALOG.DISPUTE_UNDER_REVIEW,
+            aggregateId: disputeId,
+            aggregateType: 'Dispute',
+            payload: {
+                disputeId,
+                orderId: dispute.orderId,
+                reviewedBy: dto.assignedTo,
+                reviewStartedAt: new Date().toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId: dto.assignedTo }),
         });
 
         this.logger.log(`Dispute ${disputeId} assigned to ${dto.assignedTo}`);
@@ -904,12 +969,21 @@ export class ResolutionService {
         );
 
         // 8. Emit event
-        this.eventEmitter.emit('dispute.resolved', {
-            disputeId,
-            orderId: order.id,
-            decision,
-            releaseAmount,
-            refundAmount,
+        this.eventBus.emit<DisputeResolvedPayload>({
+            eventType: EVENT_CATALOG.DISPUTE_RESOLVED,
+            aggregateId: disputeId,
+            aggregateType: 'Dispute',
+            payload: {
+                disputeId,
+                orderId: order.id,
+                decision: decision as any,
+                decisionNote: note,
+                resolvedBy: 'system', // or admin if we have one
+                resolvedAt: new Date().toISOString(),
+                buyerAmount: refundAmount,
+                sellerAmount: releaseAmount,
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(`Dispute ${disputeId} resolved with decision: ${decision}`);
@@ -1059,13 +1133,21 @@ export class ResolutionService {
         );
 
         // Emit event
-        this.eventEmitter.emit('resolution.split_completed', {
-            disputeId: dispute.id,
-            orderId: order.id,
-            releaseAmount,
-            refundAmount,
-            buyerId: order.buyerId,
-            sellerId: order.sellerId,
+        this.eventBus.emit<DisputeResolvedPayload>({
+            eventType: EVENT_CATALOG.DISPUTE_RESOLVED,
+            aggregateId: dispute.id,
+            aggregateType: 'Dispute',
+            payload: {
+                disputeId: dispute.id,
+                orderId: order.id,
+                decision: 'SPLIT',
+                decisionNote: note,
+                resolvedBy: 'system',
+                resolvedAt: new Date().toISOString(),
+                buyerAmount: refundAmount,
+                sellerAmount: releaseAmount,
+            },
+            metadata: EventBusService.createMetadata({ userId: order.buyerId }),
         });
 
         this.logger.log(

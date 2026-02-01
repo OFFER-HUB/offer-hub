@@ -1,6 +1,8 @@
 import { Injectable, Inject, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { AirtmUserClient } from '../../providers/airtm';
+import { EventBusService, EVENT_CATALOG } from '../events';
+import { UserCreatedPayload, UserAirtmLinkedPayload } from '../events/types';
 import { ERROR_CODES, generateUserId } from '@offerhub/shared';
 import { CreateUserDto, LinkAirtmDto } from './dto';
 import type { UserType as PrismaUserType } from '@prisma/client';
@@ -54,7 +56,8 @@ export class UsersService {
     constructor(
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
-    ) {}
+        private readonly eventBus: EventBusService,
+    ) { }
 
     /**
      * Creates a new user with an associated balance record.
@@ -109,6 +112,21 @@ export class UsersService {
         });
 
         this.logger.log(`User created successfully: ${userId}`);
+
+        // Emit USER_CREATED event
+        this.eventBus.emit<UserCreatedPayload>({
+            eventType: EVENT_CATALOG.USER_CREATED,
+            aggregateId: userId,
+            aggregateType: 'User',
+            payload: {
+                userId,
+                externalUserId: dto.externalUserId,
+                email: dto.email,
+                type: dto.type as any,
+                status: 'ACTIVE',
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
 
         return this.formatUserResponse(user);
     }
@@ -178,6 +196,19 @@ export class UsersService {
         });
 
         this.logger.log(`Airtm account linked successfully for user ${userId}`);
+
+        // Emit USER_AIRTM_LINKED event
+        this.eventBus.emit<UserAirtmLinkedPayload>({
+            eventType: EVENT_CATALOG.USER_AIRTM_LINKED,
+            aggregateId: userId,
+            aggregateType: 'User',
+            payload: {
+                userId,
+                airtmUserId: verification.airtmUserId!,
+                linkedAt: updatedUser.airtmLinkedAt!.toISOString(),
+            },
+            metadata: EventBusService.createMetadata({ userId }),
+        });
 
         return {
             userId: updatedUser.id,
