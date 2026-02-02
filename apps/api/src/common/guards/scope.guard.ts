@@ -22,6 +22,11 @@ export class ScopeGuard implements CanActivate {
             throw new ForbiddenException('Insufficient scope');
         }
 
+        // '*' scope allows everything
+        if (apiKey.scopes.includes('*')) {
+            return true;
+        }
+
         const hasScope = requiredScopes.every((scope) =>
             apiKey.scopes.includes(scope),
         );

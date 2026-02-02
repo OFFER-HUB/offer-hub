@@ -14,7 +14,7 @@ export class AuthService {
      * Creates a new API Key.
      * The full key is returned only once.
      */
-    async createApiKey(name: string, scopes: string[]) {
+    async createApiKey(name: string, scopes: string[], marketplaceId?: string) {
         const { key, hashedKey, salt, id } = generateApiKey();
 
         const apiKey = await this.prisma.apiKey.create({
@@ -24,6 +24,7 @@ export class AuthService {
                 hashedKey,
                 salt,
                 scopes,
+                marketplaceId,
             },
         });
 

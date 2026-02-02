@@ -13,6 +13,10 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
         });
     }
 
+    getClient(): Redis {
+        return this.client;
+    }
+
     async get(key: string): Promise<string | null> {
         return await this.client.get(key);
     }
@@ -36,6 +40,23 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     async ttl(key: string): Promise<number> {
         return await this.client.ttl(key);
+    }
+
+    // Sorted Set operations for event log
+    async zadd(key: string, score: number, member: string): Promise<number | string> {
+        return await this.client.zadd(key, score, member);
+    }
+
+    async zrangeByScore(key: string, min: number | string, max: number | string): Promise<string[]> {
+        return await this.client.zrangebyscore(key, min, max);
+    }
+
+    async zremRangeByRank(key: string, start: number, stop: number): Promise<number> {
+        return await this.client.zremrangebyrank(key, start, stop);
+    }
+
+    async zcard(key: string): Promise<number> {
+        return await this.client.zcard(key);
     }
 
     onModuleInit() { }
