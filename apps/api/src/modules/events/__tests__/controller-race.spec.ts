@@ -34,45 +34,45 @@ describe('EventsController (Race Conditions)', () => {
         controller = module.get<EventsController>(EventsController);
     });
 
-    it('🚨 FALLO CRÍTICO: El controlador pierde eventos que ocurren durante el Replay', async () => {
-        // 1. Simulamos que el Replay tarda 200ms
+    it('🚨 CRITICAL FAILURE: Controller loses events that occur during Replay', async () => {
+        // 1. Simulate Replay taking 200ms
         sseService.getMissedEvents.mockImplementation(async () => {
             await new Promise(resolve => setTimeout(resolve, 200));
-            return []; // No hay eventos perdidos en el pasado
+            return []; // No missed events in the past
         });
 
         const req = { headers: { 'last-event-id': '2026-01-01' }, apiKey: { marketplaceId: 'm1' } };
 
-        // 2. Iniciamos el stream (esto simula la conexión del cliente)
+        // 2. Start the stream (this simulates the client connection)
         const stream$ = controller.streamEvents(req as any);
 
-        // Empezamos a recolectar los eventos que el cliente recibiría
+        // Start collecting events that the client would receive
         const clientReceived: any[] = [];
         const subscription = stream$.subscribe(ev => clientReceived.push(ev));
 
-        // 3. Emitimos un evento "en vivo" a los 100ms (mientras el Replay sigue trabajando)
+        // 3. Emit a "live" event at 100ms (while Replay is still working)
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const transientEvent = { eventType: EVENT_CATALOG.USER_CREATED, aggregateId: 'usr_1', occurredAt: '...' };
         liveEventsSubject.next(transientEvent);
 
-        // 4. Esperamos un poco más para que el Replay termine y el Live se active
+        // 4. Wait a bit longer for Replay to finish and Live to activate
         await new Promise(resolve => setTimeout(resolve, 200));
 
-        // 5. Emitimos otro evento después de que el Replay terminó
+        // 5. Emit another event after Replay finished
         const laterEvent = { eventType: EVENT_CATALOG.ORDER_CREATED, aggregateId: 'ord_1', occurredAt: '...' };
         liveEventsSubject.next(laterEvent);
 
-        // Limpiamos
+        // Clean up
         subscription.unsubscribe();
 
-        // ANALISIS DE LA CATASTROFE:
-        // El cliente debería haber recibido AMBOS eventos.
+        // CATASTROPHE ANALYSIS:
+        // The client should have received BOTH events.
         const receivedTypes = clientReceived.map(ev => ev.type);
 
-        console.log('Resultados recibidos por el cliente:', receivedTypes);
+        console.log('Results received by the client:', receivedTypes);
 
-        // Este test fallará en la implementación actual de NestJS/RxJS con concat()
+        // This test would fail in the initial implementation using concat()
         expect(receivedTypes).toContain(EVENT_CATALOG.USER_CREATED);
         expect(receivedTypes).toContain(EVENT_CATALOG.ORDER_CREATED);
     });

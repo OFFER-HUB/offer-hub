@@ -30,18 +30,18 @@ describe('SseService (Race Condition Testing)', () => {
         redisService = module.get(RedisService);
     });
 
-    it('🚨 ALERTA: Detectar pérdida de eventos durante la transición Replay -> Live', async () => {
-        // 1. Configuramos un retraso artificial en la recuperación de eventos históricos
+    it('🚨 ALERT: Detect event loss during Replay -> Live transition', async () => {
+        // 1. Set up an artificial delay in historical event retrieval
         mockRedisService.zrangeByScore.mockImplementation(async () => {
-            await new Promise(resolve => setTimeout(resolve, 100)); // 100ms de retraso
+            await new Promise(resolve => setTimeout(resolve, 100)); // 100ms delay
             return [];
         });
 
-        // 2. Iniciamos el proceso de "Replay" (getMissedEvents)
+        // 2. Start the "Replay" process (getMissedEvents)
         const since = Date.now();
         const missedEventsPromise = service.getMissedEvents(since, {});
 
-        // 3. Mientas se está recuperando el historial, emitimos un evento en vivo
+        // 3. While history is being recovered, emit a live event
         const liveEvent: DomainEvent = {
             eventId: 'evt_lost',
             eventType: EVENT_CATALOG.USER_CREATED,
@@ -52,19 +52,19 @@ describe('SseService (Race Condition Testing)', () => {
             metadata: {},
         };
 
-        // Escuchamos el stream en vivo ANTES de que termine el Replay
+        // Listen to the live stream BEFORE Replay finishes
         const liveStreamItems: DomainEvent[] = [];
         const subscription = service.getEventStream({}).subscribe(ev => liveStreamItems.push(ev));
 
-        // Emitimos el evento
+        // Emit the event
         await service.handleEvent(liveEvent);
 
-        // 4. Esperamos a que todo termine
+        // 4. Wait for everything to finish
         await missedEventsPromise;
 
-        // El evento DEBE estar en liveStreamItems
-        // Si el controlador usa concat(historical, live), este evento se perdería
-        // porque la suscripción al live ocurriría DESPUÉS del handleEvent.
+        // The event MUST be in liveStreamItems
+        // If the controller uses concat(historical, live), this event would be lost
+        // because the subscription to live would occur AFTER the handleEvent.
         expect(liveStreamItems).toContainEqual(liveEvent);
 
         subscription.unsubscribe();

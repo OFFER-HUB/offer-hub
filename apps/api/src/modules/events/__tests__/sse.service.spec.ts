@@ -41,11 +41,11 @@ describe('SseService (Experimental & Edge Cases)', () => {
         jest.clearAllMocks();
     });
 
-    // --- ESCENARIOS EXTRAORDINARIOS ---
+    // --- EXTRAORDINARY SCENARIOS ---
 
-    describe('Casos de Resiliencia y Fallos Críticos', () => {
-        it('✓ Resiliencia: No debe romper el stream SSE si Redis falla (Persistence Failure)', async () => {
-            // Simulamos rror catastrófico en Redis
+    describe('Resilience and Critical Failures', () => {
+        it('✓ Resilience: Should not break the SSE stream if Redis fails (Persistence Failure)', async () => {
+            // Simulate critical Redis error
             mockRedisService.zadd.mockRejectedValueOnce(new Error('Redis Connection Lost'));
 
             const event: DomainEvent = {
@@ -61,16 +61,16 @@ describe('SseService (Experimental & Edge Cases)', () => {
             const streamSpy = jest.fn();
             service.getEventStream({}).subscribe(streamSpy);
 
-            // Intentamos procesar el evento
+            // Try to process the event
             await service.handleEvent(event);
 
-            // El evento DEBE haber llegado al stream aunque Redis fallara
+            // The event MUST have reached the stream even if Redis failed
             expect(streamSpy).toHaveBeenCalledWith(event);
             expect(redisService.zadd).toHaveBeenCalled();
-            // No debe propagar el error hacia arriba para no romper el flujo principal
+            // Should not propagate the error upwards to avoid breaking the main flow
         });
 
-        it('✓ Defensa: Debe manejar eventos con metadatos nulos o corruptos sin crashear', async () => {
+        it('✓ Defense: Should handle events with null or corrupt metadata without crashing', async () => {
             const corruptEvent: any = {
                 eventId: 'evt_corrupt',
                 eventType: EVENT_CATALOG.USER_CREATED,
@@ -78,37 +78,37 @@ describe('SseService (Experimental & Edge Cases)', () => {
                 aggregateType: 'User',
                 occurredAt: new Date().toISOString(),
                 payload: {},
-                // metadata: undefined // Caso de metadatos faltantes
+                // metadata: undefined // Case of missing metadata
             };
 
             const streamSpy = jest.fn();
-            // Filtramos por marketplaceId, lo cual accedería a event.metadata.marketplaceId
+            // Filtering by marketplaceId would access event.metadata.marketplaceId
             service.getEventStream({ marketplaceId: 'mkt_1' }).subscribe(streamSpy);
 
             await service.handleEvent(corruptEvent);
 
-            // El sistema no debe crashear con TypeError y simplemente filtrar el evento
+            // The system should not crash with TypeError and simply filter out the event
             expect(streamSpy).not.toHaveBeenCalled();
         });
     });
 
-    describe('Casos de Replay con Datos Basura (getMissedEvents)', () => {
-        it('✓ Robusticidad: Maneja formatos de fecha inválidos en "since"', async () => {
-            // Simulamos que el header Last-Event-ID trae basura
-            const invalidSince = 'no-es-una-fecha';
+    describe('Replay with Invalid Data (getMissedEvents)', () => {
+        it('✓ Robustness: Handles invalid date formats in "since"', async () => {
+            // Simulate the Last-Event-ID header sending garbage
+            const invalidSince = 'not-a-date';
 
-            // Redis debería recibir un score de NaN si no se valida, 
-            // pero el servicio debe manejar la conversión ISO
+            // Redis should receive a NaN score if not validated, 
+            // but the service must handle the ISO conversion
             await service.getMissedEvents(invalidSince, {});
 
             expect(redisService.zrangeByScore).toHaveBeenCalled();
             const callArgs = redisService.zrangeByScore.mock.calls[0];
-            // Si la fecha es inválida, Date().getTime() es NaN. 
-            // Queremos ver que el sistema lo maneje o use un valor seguro.
+            // If the date is invalid, Date().getTime() is NaN. 
+            // We want to ensure the system handles it or uses a safe value.
             expect(callArgs[1]).toBeDefined();
         });
 
-        it('✓ Integridad: Devuelve lista vacía si Redis devuelve basura o está caído', async () => {
+        it('✓ Integrity: Returns an empty list if Redis returns garbage or is down', async () => {
             mockRedisService.zrangeByScore.mockRejectedValueOnce(new Error('Redis Timeout'));
 
             const results = await service.getMissedEvents(Date.now(), {});
@@ -117,9 +117,9 @@ describe('SseService (Experimental & Edge Cases)', () => {
         });
     });
 
-    describe('Casos de Carga y Límites (Stress)', () => {
-        it('✓ Control: Limpieza masiva cuando el log excede por mucho el límite', async () => {
-            // Simulamos que Redis tiene 5000 eventos (Límite 1000)
+    describe('Load and Limits (Stress)', () => {
+        it('✓ Control: Massive cleanup when the log greatly exceeds the limit', async () => {
+            // Simulate Redis having 5000 events (Limit is 1000)
             mockRedisService.zcard.mockResolvedValueOnce(5000);
 
             const event: DomainEvent = {
@@ -134,7 +134,7 @@ describe('SseService (Experimental & Edge Cases)', () => {
 
             await service.handleEvent(event);
 
-            // Debe limpiar los 4000 eventos excedentes + 1
+            // Should clean the extra 4000 events + 1
             expect(redisService.zremRangeByRank).toHaveBeenCalledWith(
                 'events:log',
                 0,
@@ -143,10 +143,10 @@ describe('SseService (Experimental & Edge Cases)', () => {
         });
     });
 
-    // --- TESTS BASE ---
+    // --- BASE TESTS ---
 
-    describe('Cimientos (Core Functionality)', () => {
-        it('✓ Tracking: Seguimiento de conexiones activas', () => {
+    describe('Foundations (Core Functionality)', () => {
+        it('✓ Tracking: Active connection tracking', () => {
             service.onConnect();
             service.onConnect();
             expect(service.getActiveConnections()).toBe(2);
@@ -154,7 +154,7 @@ describe('SseService (Experimental & Edge Cases)', () => {
             expect(service.getActiveConnections()).toBe(1);
         });
 
-        it('✓ Filtering: Filtro por tipos de recursos', (done) => {
+        it('✓ Filtering: Filter by resource types', (done) => {
             const event: DomainEvent = {
                 eventId: 'evt_1',
                 eventType: EVENT_CATALOG.ORDER_CREATED,
