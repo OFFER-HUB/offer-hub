@@ -8,6 +8,7 @@ module.exports = {
     moduleNameMapper: {
         '^@offerhub/shared$': '<rootDir>/packages/shared/src',
         '^@offerhub/database$': '<rootDir>/packages/database/src',
+        '^@offerhub/sdk$': '<rootDir>/packages/sdk/src',
         // Mock ESM modules
         '^ky$': '<rootDir>/apps/api/src/providers/airtm/__tests__/mocks/ky.mock.js',
         '^nanoid$': '<rootDir>/apps/api/src/providers/airtm/__tests__/mocks/nanoid.mock.js',
