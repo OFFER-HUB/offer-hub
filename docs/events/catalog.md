@@ -30,15 +30,19 @@ interface DomainEvent<T> {
 
 ### SSE Stream Format (External)
 
-```json
-{
-  "id": "evt_...",
-  "type": "order.created",
-  "occurred_at": "2026-01-12T12:00:00Z",
-  "marketplace_id": "mkt_...",
-  "actor": { "type": "user|system|support|webhook", "id": "usr_..." },
-  "resource": { "type": "order|topup|withdrawal|dispute|escrow", "id": "..." },
-  "data": {}
+Standard SSE format where `data` contains the full JSON event object.
+
+```text
+id: 2026-02-02T20:43:52.832Z
+event: user.created
+data: {
+  "eventId": "evt_...",
+  "eventType": "user.created",
+  "occurredAt": "2026-02-02T20:43:52.832Z",
+  "aggregateId": "usr_...",
+  "aggregateType": "User",
+  "payload": { ... },
+  "metadata": { ... }
 }
 ```
 

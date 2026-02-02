@@ -158,15 +158,17 @@ model Balance {
 }
 
 model ApiKey {
-  id        String   @id // Prefixed ID: key_
-  name      String
-  hashedKey String   @unique @map("hashed_key")
-  salt      String
-  scopes    String[] // e.g. ["read", "write"]
+  id            String   @id // Prefixed ID: key_
+  name          String
+  hashedKey     String   @unique @map("hashed_key")
+  salt          String
+  scopes        String[] // e.g. ["read", "write"]
+  marketplaceId String?  @map("marketplace_id") // Optional for now, but used for isolation
   
   lastUsedAt DateTime? @map("last_used_at")
   createdAt  DateTime  @default(now()) @map("created_at")
 
+  @@index([marketplaceId])
   @@map("api_keys")
 }
 
