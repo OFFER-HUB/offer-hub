@@ -66,7 +66,7 @@ export class OrdersService {
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(BalanceService) private readonly balanceService: BalanceService,
         @Inject(EscrowClient) private readonly escrowClient: EscrowClient,
-        private readonly eventBus: EventBusService,
+        @Inject(EventBusService) private readonly eventBus: EventBusService,
     ) { }
 
     /**

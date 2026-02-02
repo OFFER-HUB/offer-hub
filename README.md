@@ -84,6 +84,7 @@ Detailed documentation can be found in the [`/docs`](./docs/) folder:
 - 🧠 [AI.md](./docs/AI.md) - **Development guide for AIs (Read first)**
 - 📐 [Architecture](./docs/architecture/overview.md)
 - 🔌 [API Overview](./docs/api/overview.md)
+- 📡 [Events & SSE](./docs/events/sse.md)
 - ⚙️ [Environment Configuration](./docs/deployment/env-variables.md)
 
 ## 🤝 Contributing

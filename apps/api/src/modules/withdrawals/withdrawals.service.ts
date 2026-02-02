@@ -69,7 +69,7 @@ export class WithdrawalsService {
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(AirtmPayoutClient) private readonly airtmPayout: AirtmPayoutClient,
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
-        private readonly eventBus: EventBusService,
+        @Inject(EventBusService) private readonly eventBus: EventBusService,
     ) { }
 
     /**

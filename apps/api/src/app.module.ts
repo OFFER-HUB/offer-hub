@@ -17,12 +17,13 @@ import { ResolutionModule } from './modules/resolution/resolution.module';
 import { DisputesModule } from './modules/disputes/disputes.module';
 import { AirtmModule } from './providers/airtm/airtm.module';
 import { UsersModule } from './modules/users/users.module';
+import { EventsModule } from './modules/events/events.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
 
 @Module({
   imports: [
-    EventEmitterModule.forRoot(),
+    EventsModule,
     DatabaseModule,
     RedisModule,
     IdempotencyModule,

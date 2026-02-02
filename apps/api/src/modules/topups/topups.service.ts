@@ -64,7 +64,7 @@ export class TopUpsService {
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
         @Inject(BalanceService) private readonly balanceService: BalanceService,
         @Inject(AirtmConfig) private readonly airtmConfig: AirtmConfig,
-        private readonly eventBus: EventBusService,
+        @Inject(EventBusService) private readonly eventBus: EventBusService,
     ) { }
 
     /**

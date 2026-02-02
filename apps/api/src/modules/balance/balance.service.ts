@@ -97,7 +97,7 @@ export class BalanceService {
     constructor(
         @Inject(PrismaService) private readonly prisma: PrismaService,
         @Inject(AirtmUserClient) private readonly airtmUser: AirtmUserClient,
-        private readonly eventBus: EventBusService,
+        @Inject(EventBusService) private readonly eventBus: EventBusService,
     ) { }
 
     /**
