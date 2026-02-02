@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { nanoid } from 'nanoid';
 import { DomainEvent, EventMetadata } from './types/domain-event';
@@ -45,7 +45,7 @@ import { EVENT_CATALOG, EventType, isValidEventType } from './event-catalog';
 export class EventBusService {
     private readonly logger = new Logger(EventBusService.name);
 
-    constructor(private readonly eventEmitter: EventEmitter2) { }
+    constructor(@Inject(EventEmitter2) private readonly eventEmitter: EventEmitter2) { }
 
     /**
      * Emit a domain event

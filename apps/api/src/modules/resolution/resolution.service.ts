@@ -96,7 +96,7 @@ export class ResolutionService {
         @Inject(BalanceService) private readonly balanceService: BalanceService,
         @Inject(EscrowClient) private readonly escrowClient: EscrowClient,
         @Inject(OrdersService) private readonly ordersService: OrdersService,
-        private readonly eventBus: EventBusService,
+        @Inject(EventBusService) private readonly eventBus: EventBusService,
     ) { }
 
     /**
