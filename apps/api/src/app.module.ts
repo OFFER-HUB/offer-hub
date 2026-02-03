@@ -14,6 +14,7 @@ import { BalanceModule } from './modules/balance/balance.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { ResolutionModule } from './modules/resolution/resolution.module';
 import { DisputesModule } from './modules/disputes/disputes.module';
+import { AuditModule } from './modules/audit-logs/audit.module';
 import { AirtmModule } from './providers/airtm/airtm.module';
 import { UsersModule } from './modules/users/users.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
@@ -37,6 +38,7 @@ import { RateLimitGuard } from './common/guards/rate-limit.guard';
     OrdersModule,
     ResolutionModule,
     DisputesModule,
+    AuditModule,
   ],
   providers: [
     {
