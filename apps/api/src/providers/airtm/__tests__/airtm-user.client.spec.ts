@@ -28,6 +28,7 @@ jest.mock('ky', () => {
             response: { status: number };
             constructor(message: string, status: number) {
                 super(message);
+                this.name = 'HTTPError';
                 this.response = { status };
             }
         },

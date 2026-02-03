@@ -144,7 +144,14 @@ export abstract class AirtmBaseClient {
      * Checks if error is a 404 Not Found.
      */
     protected isNotFoundError(error: unknown): boolean {
-        return error instanceof HTTPError && error.response.status === 404;
+        if (error instanceof HTTPError && error.response.status === 404) {
+            return true;
+        }
+        if (error instanceof AirtmProviderException) {
+            const res = error.getResponse() as any;
+            return res?.error?.details?.originalStatus === 404;
+        }
+        return false;
     }
 
     /**

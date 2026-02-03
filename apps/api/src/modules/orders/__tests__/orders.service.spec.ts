@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventBusService } from '../../events';
 import { OrdersService } from '../orders.service';
 import { PrismaService } from '../../database/prisma.service';
 import { BalanceService } from '../../balance/balance.service';
@@ -21,7 +22,7 @@ describe('OrdersService', () => {
     let prisma: PrismaService;
     let balanceService: BalanceService;
     let escrowClient: EscrowClient;
-    let eventEmitter: EventEmitter2;
+    let eventBus: EventBusService;
 
     // Test constants
     const BUYER_ID = 'user-1';
@@ -161,9 +162,10 @@ describe('OrdersService', () => {
                     },
                 },
                 {
-                    provide: EventEmitter2,
+                    provide: EventBusService,
                     useValue: {
                         emit: jest.fn(),
+                        emitMany: jest.fn(),
                     },
                 },
             ],
@@ -173,7 +175,7 @@ describe('OrdersService', () => {
         prisma = module.get<PrismaService>(PrismaService);
         balanceService = module.get<BalanceService>(BalanceService);
         escrowClient = module.get<EscrowClient>(EscrowClient);
-        eventEmitter = module.get<EventEmitter2>(EventEmitter2);
+        eventBus = module.get<EventBusService>(EventBusService);
     });
 
     afterEach(() => {
@@ -215,7 +217,7 @@ describe('OrdersService', () => {
 
             expect(result.id).toBe(ORDER_ID);
             expect(result.status).toBe('ORDER_CREATED');
-            expect(eventEmitter.emit).toHaveBeenCalledWith('order.created', expect.any(Object));
+            expect(eventBus.emit).toHaveBeenCalledWith(expect.objectContaining({ eventType: 'order.created' }));
         });
 
         it('should create order with milestones', async () => {
@@ -329,7 +331,7 @@ describe('OrdersService', () => {
                 amount: '100.00',
                 orderId: ORDER_ID,
             }));
-            expect(eventEmitter.emit).toHaveBeenCalledWith('order.funds_reserved', expect.any(Object));
+            expect(eventBus.emit).toHaveBeenCalledWith(expect.objectContaining({ eventType: 'order.funds_reserved' }));
         });
 
         it('should reject if not in ORDER_CREATED state', async () => {
@@ -382,7 +384,7 @@ describe('OrdersService', () => {
 
             expect(result.status).toBe('CLOSED');
             expect(balanceService.cancelReservation).not.toHaveBeenCalled();
-            expect(eventEmitter.emit).toHaveBeenCalledWith('order.cancelled', expect.any(Object));
+            expect(eventBus.emit).toHaveBeenCalledWith(expect.objectContaining({ eventType: 'order.canceled' }));
         });
 
         it('should cancel from FUNDS_RESERVED with balance refund', async () => {
@@ -501,7 +503,7 @@ describe('OrdersService', () => {
 
             expect(result.status).toBe('ESCROW_CREATING');
             expect(escrowClient.createEscrow).toHaveBeenCalled();
-            expect(eventEmitter.emit).toHaveBeenCalledWith('escrow.creating', expect.any(Object));
+            expect(eventBus.emit).toHaveBeenCalledWith(expect.objectContaining({ eventType: 'order.escrow_creating' }));
         });
 
         it('should reject if not in FUNDS_RESERVED', async () => {
@@ -566,7 +568,7 @@ describe('OrdersService', () => {
                 orderId: ORDER_ID,
             }));
             expect(escrowClient.fundEscrow).toHaveBeenCalledWith(CONTRACT_ID, '100.00', 'multi-release');
-            expect(eventEmitter.emit).toHaveBeenCalledWith('escrow.funding', expect.any(Object));
+            expect(eventBus.emit).toHaveBeenCalledWith(expect.objectContaining({ eventType: 'order.escrow_funding' }));
         });
 
         it('should reject if not in ESCROW_FUNDING', async () => {
@@ -613,8 +615,11 @@ describe('OrdersService', () => {
             const result = await service.completeMilestone(ORDER_ID, 'm1');
 
             expect(result.status).toBe('COMPLETED');
-            expect(eventEmitter.emit).toHaveBeenCalledWith('milestone.completed', expect.objectContaining({
-                completionPercentage: 50,
+            expect(eventBus.emit).toHaveBeenCalledWith(expect.objectContaining({
+                eventType: 'escrow.milestone_completed',
+                payload: expect.objectContaining({
+                    milestoneRef: 'm1',
+                }),
             }));
         });
 
