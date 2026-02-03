@@ -706,7 +706,10 @@ export class OrdersService {
             aggregateType: 'Order',
             payload: {
                 escrowId: order.escrow?.id || 'unknown',
+                orderId,
                 milestoneRef,
+                milestoneTitle: updatedMilestone.title,
+                amount: updatedMilestone.amount,
                 completedAt: new Date().toISOString(),
             },
             metadata: EventBusService.createMetadata({ userId: order.sellerId }),

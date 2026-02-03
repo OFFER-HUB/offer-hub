@@ -121,7 +121,7 @@ describe('AirtmWebhookService', () => {
                     }),
                 );
                 // Should credit balance on success
-                expect(mockPrisma.balance.upsert).toHaveBeenCalled();
+                expect(mockPrisma.balance.update).toHaveBeenCalled();
             });
 
             it('should update TopUp status on payin.failed', async () => {

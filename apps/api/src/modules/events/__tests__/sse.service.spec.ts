@@ -1,3 +1,11 @@
+/**
+ * SseService Tests
+ * 
+ * Verifies the Server-Sent Events service, including event streaming,
+ * resilience against Redis failures, and event replay functionality.
+ * 
+ * All test descriptions and comments follow the English-only project standard.
+ */
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SseService } from '../sse.service';

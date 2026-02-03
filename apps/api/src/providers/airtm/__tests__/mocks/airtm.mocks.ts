@@ -235,6 +235,9 @@ export const mockAirtmConfig = {
         const credentials = `${this.apiKey}:${this.apiSecret}`;
         return `Basic ${Buffer.from(credentials).toString('base64')}`;
     },
+    get isWebhookVerificationEnabled(): boolean {
+        return !!this.webhookSecret && this.webhookSecret.length >= 20;
+    },
 };
 
 /**
@@ -278,6 +281,14 @@ export const createMockPrismaService = () => ({
         update: jest.fn().mockResolvedValue({}),
     },
     balance: {
+        findUnique: jest.fn().mockResolvedValue({
+            id: 'bal_123',
+            userId: 'usr_123',
+            available: '100.00',
+            reserved: '50.00',
+            currency: 'USD',
+        }),
+        create: jest.fn().mockResolvedValue({}),
         upsert: jest.fn().mockResolvedValue({}),
         update: jest.fn().mockResolvedValue({}),
     },

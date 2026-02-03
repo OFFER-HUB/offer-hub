@@ -10,6 +10,18 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@offerhub/shared": [
+        "packages/shared/src/index.ts"
+      ],
+      "@offerhub/database": [
+        "packages/database/src/index.ts"
+      ],
+      "@offerhub/sdk": [
+        "packages/sdk/src/index.ts"
+      ]
+    },
     "outDir": "dist"
   }
 }

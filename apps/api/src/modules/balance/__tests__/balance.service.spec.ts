@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventBusService } from '../../events';
 import { BalanceService } from '../balance.service';
 import { PrismaService } from '../../database/prisma.service';
 import { AirtmUserClient } from '../../../providers/airtm';
@@ -46,24 +47,25 @@ const createMockAirtmUserClient = () => ({
 });
 
 /**
- * Creates a mock event emitter.
+ * Creates a mock event bus service.
  */
-const createMockEventEmitter = () => ({
+const createMockEventBusService = () => ({
     emit: jest.fn(),
+    emitMany: jest.fn(),
 });
 
 describe('BalanceService', () => {
     let service: BalanceService;
     let mockPrisma: ReturnType<typeof createMockPrismaService>;
     let mockAirtmUser: ReturnType<typeof createMockAirtmUserClient>;
-    let mockEventEmitter: ReturnType<typeof createMockEventEmitter>;
+    let mockEventBus: ReturnType<typeof createMockEventBusService>;
 
     beforeEach(async () => {
         jest.clearAllMocks();
 
         mockPrisma = createMockPrismaService();
         mockAirtmUser = createMockAirtmUserClient();
-        mockEventEmitter = createMockEventEmitter();
+        mockEventBus = createMockEventBusService();
 
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -77,8 +79,8 @@ describe('BalanceService', () => {
                     useValue: mockAirtmUser,
                 },
                 {
-                    provide: EventEmitter2,
-                    useValue: mockEventEmitter,
+                    provide: EventBusService,
+                    useValue: mockEventBus,
                 },
             ],
         }).compile();
@@ -155,11 +157,10 @@ describe('BalanceService', () => {
             expect(result.success).toBe(true);
             expect(result.operation).toBe('CREDIT_AVAILABLE');
             expect(result.newBalance.available).toBe('150.00');
-            expect(mockEventEmitter.emit).toHaveBeenCalledWith(
-                'balance.updated',
+            expect(mockEventBus.emit).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    userId: 'usr_123',
-                    operation: 'CREDIT_AVAILABLE',
+                    eventType: 'balance.credited',
+                    aggregateId: 'usr_123',
                 }),
             );
         });
@@ -481,7 +482,7 @@ describe('BalanceService', () => {
             expect(result.success).toBe(true);
             expect(result.operation).toBe('RELEASE');
             expect(result.balance.available).toBe('300.00');
-            expect(mockEventEmitter.emit).toHaveBeenCalledTimes(2);
+            expect(mockEventBus.emit).toHaveBeenCalledTimes(2);
         });
 
         it('should throw InsufficientReservedFundsException when buyer reserved is too low', async () => {
