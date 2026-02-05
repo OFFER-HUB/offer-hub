@@ -2,13 +2,10 @@
   "name": "@offerhub/worker",
   "private": true,
   "version": "0.0.0",
-  "main": "dist/index.js",
+  "description": "DEPRECATED - Worker functionality has been unified into @offerhub/api",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5"
+    "dev": "echo 'DEPRECATED: Worker is now part of the API. Run npm run dev from root.'",
+    "build": "echo 'DEPRECATED: Worker is now part of the API.'",
+    "start": "echo 'DEPRECATED: Worker is now part of the API.'"
   }
 }

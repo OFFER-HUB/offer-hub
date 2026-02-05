@@ -10,9 +10,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:worker\"",
+    "dev": "npm run dev -w @offerhub/api",
     "dev:api": "npm run dev -w @offerhub/api",
-    "dev:worker": "npm run dev -w @offerhub/worker",
     "build": "npm run build -w @offerhub/shared -w @offerhub/database && npm run build -ws",
     "test": "jest",
     "test:watch": "jest --watch",
