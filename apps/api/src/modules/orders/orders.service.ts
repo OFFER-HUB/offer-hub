@@ -745,6 +745,57 @@ export class OrdersService {
     }
 
     /**
+     * Lists orders with cursor-based pagination.
+     * Can filter by buyerId or sellerId.
+     *
+     * @param options - Pagination and filter options
+     * @returns Paginated list of orders
+     */
+    async listOrders(options: {
+        buyerId?: string;
+        sellerId?: string;
+        status?: OrderStatus;
+        limit?: number;
+        cursor?: string;
+    }): Promise<{ data: OrderWithRelations[]; hasMore: boolean; nextCursor?: string }> {
+        const limit = Math.min(options.limit || 20, 100);
+
+        const where: Prisma.OrderWhereInput = {};
+
+        if (options.buyerId && options.sellerId) {
+            where.OR = [{ buyerId: options.buyerId }, { sellerId: options.sellerId }];
+        } else if (options.buyerId) {
+            where.buyerId = options.buyerId;
+        } else if (options.sellerId) {
+            where.sellerId = options.sellerId;
+        }
+
+        if (options.status) {
+            where.status = options.status;
+        }
+
+        const orders = await this.prisma.order.findMany({
+            where,
+            include: {
+                escrow: true,
+                milestones: true,
+            },
+            orderBy: { createdAt: 'desc' },
+            take: limit + 1,
+            ...(options.cursor && {
+                cursor: { id: options.cursor },
+                skip: 1,
+            }),
+        });
+
+        const hasMore = orders.length > limit;
+        const data = hasMore ? orders.slice(0, limit) : orders;
+        const nextCursor = hasMore ? data[data.length - 1]?.id : undefined;
+
+        return { data, hasMore, nextCursor };
+    }
+
+    /**
      * Validates that milestone amounts sum to the total order amount.
      *
      * @param milestones - Array of milestones

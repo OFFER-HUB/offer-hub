@@ -4,11 +4,13 @@ import {
     Post,
     Body,
     Param,
+    Query,
     Inject,
     HttpCode,
     HttpStatus,
 } from '@nestjs/common';
 import type { Milestone } from '@prisma/client';
+import { OrderStatus } from '@offerhub/shared';
 import { OrdersService, OrderWithRelations } from './orders.service';
 import { CreateOrderDto, CancelOrderDto } from './dto';
 
@@ -37,6 +39,31 @@ export class OrdersController {
     async createOrder(@Body() dto: CreateOrderDto): Promise<ApiResponse<OrderWithRelations>> {
         const order = await this.ordersService.createOrder(dto);
         return { success: true, data: order };
+    }
+
+    /**
+     * List orders with pagination.
+     * GET /orders
+     */
+    @Get()
+    async listOrders(
+        @Query('buyer_id') buyerId?: string,
+        @Query('seller_id') sellerId?: string,
+        @Query('status') status?: string,
+        @Query('limit') limit?: string,
+        @Query('cursor') cursor?: string,
+    ): Promise<{ success: boolean; data: OrderWithRelations[]; hasMore: boolean; nextCursor?: string }> {
+        const orderStatus = status && Object.values(OrderStatus).includes(status as OrderStatus)
+            ? (status as OrderStatus)
+            : undefined;
+        const result = await this.ordersService.listOrders({
+            buyerId,
+            sellerId,
+            status: orderStatus,
+            limit: limit ? parseInt(limit, 10) : undefined,
+            cursor,
+        });
+        return { success: true, ...result };
     }
 
     /**
