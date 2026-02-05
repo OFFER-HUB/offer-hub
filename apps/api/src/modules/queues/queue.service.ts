@@ -1,14 +1,49 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue, Job } from 'bullmq';
-import { QUEUE_NAMES, type JobType } from './queue.constants';
+import { QUEUE_NAMES, JOB_TYPES, type JobType } from './queue.constants';
+
+/**
+ * Schedule configuration for reconciliation jobs
+ */
+export interface ScheduleConfig {
+    /** Repeat interval in ms */
+    every?: number;
+    /** Cron pattern (alternative to every) */
+    pattern?: string;
+    /** Job-specific configuration */
+    config?: {
+        batchSize?: number;
+        rateLimitDelay?: number;
+        staleThreshold?: number;
+    };
+}
+
+/**
+ * Default schedules for reconciliation jobs
+ */
+const DEFAULT_SCHEDULES: Record<string, ScheduleConfig> = {
+    [JOB_TYPES.SYNC_TOPUPS]: {
+        every: 5 * 60 * 1000, // Every 5 minutes
+        config: { batchSize: 50, staleThreshold: 5 * 60 * 1000 },
+    },
+    [JOB_TYPES.SYNC_WITHDRAWALS]: {
+        every: 5 * 60 * 1000, // Every 5 minutes
+        config: { batchSize: 50, staleThreshold: 5 * 60 * 1000 },
+    },
+    [JOB_TYPES.SYNC_ESCROWS]: {
+        every: 10 * 60 * 1000, // Every 10 minutes
+        config: { batchSize: 30, staleThreshold: 10 * 60 * 1000 },
+    },
+};
 
 /**
  * Service for enqueuing jobs and managing queues.
  */
 @Injectable()
-export class QueueService {
+export class QueueService implements OnModuleInit {
     private readonly logger = new Logger(QueueService.name);
+    private scheduledJobs: Map<string, string> = new Map(); // jobType -> repeatJobKey
 
     constructor(
         @InjectQueue(QUEUE_NAMES.WEBHOOKS) private readonly webhooksQueue: Queue,
@@ -16,6 +51,111 @@ export class QueueService {
         @InjectQueue(QUEUE_NAMES.NOTIFICATIONS) private readonly notificationsQueue: Queue,
         @InjectQueue(QUEUE_NAMES.DLQ) private readonly dlqQueue: Queue,
     ) {}
+
+    /**
+     * Initialize scheduled jobs on module startup
+     */
+    async onModuleInit(): Promise<void> {
+        // Only schedule in non-test environments
+        if (process.env.NODE_ENV === 'test') {
+            this.logger.debug('Skipping job scheduling in test environment');
+            return;
+        }
+
+        await this.setupReconciliationSchedules();
+    }
+
+    /**
+     * Set up all reconciliation job schedules
+     */
+    private async setupReconciliationSchedules(): Promise<void> {
+        this.logger.log('Setting up reconciliation job schedules...');
+
+        for (const [jobType, schedule] of Object.entries(DEFAULT_SCHEDULES)) {
+            try {
+                await this.scheduleReconciliationJob(jobType as JobType, schedule);
+            } catch (error) {
+                this.logger.error(
+                    `Failed to schedule ${jobType}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                );
+            }
+        }
+
+        this.logger.log('Reconciliation job schedules configured');
+    }
+
+    /**
+     * Schedule a repeatable reconciliation job
+     */
+    async scheduleReconciliationJob(
+        jobType: JobType,
+        schedule: ScheduleConfig = DEFAULT_SCHEDULES[jobType] || {},
+    ): Promise<void> {
+        // Remove existing schedule if any
+        await this.removeScheduledJob(jobType);
+
+        const repeatOpts: { every?: number; pattern?: string } = {};
+        if (schedule.every) {
+            repeatOpts.every = schedule.every;
+        } else if (schedule.pattern) {
+            repeatOpts.pattern = schedule.pattern;
+        } else {
+            // Default to every 5 minutes
+            repeatOpts.every = 5 * 60 * 1000;
+        }
+
+        const job = await this.reconciliationQueue.add(
+            jobType,
+            { config: schedule.config || {} },
+            {
+                repeat: repeatOpts,
+                jobId: `scheduled-${jobType}`,
+                removeOnComplete: { count: 100 },
+                removeOnFail: false,
+            },
+        );
+
+        this.scheduledJobs.set(jobType, job.repeatJobKey || '');
+        this.logger.log(
+            `Scheduled ${jobType}: ${schedule.every ? `every ${schedule.every / 1000}s` : schedule.pattern}`,
+        );
+    }
+
+    /**
+     * Remove a scheduled job
+     */
+    async removeScheduledJob(jobType: JobType): Promise<void> {
+        const repeatJobKey = this.scheduledJobs.get(jobType);
+        if (repeatJobKey) {
+            try {
+                await this.reconciliationQueue.removeRepeatableByKey(repeatJobKey);
+                this.scheduledJobs.delete(jobType);
+                this.logger.debug(`Removed scheduled job: ${jobType}`);
+            } catch {
+                // Job may not exist, ignore
+            }
+        }
+    }
+
+    /**
+     * Get all scheduled job configurations
+     */
+    getScheduledJobs(): Map<string, string> {
+        return new Map(this.scheduledJobs);
+    }
+
+    /**
+     * Trigger a reconciliation job immediately (manual run)
+     */
+    async triggerReconciliationJob(
+        jobType: JobType,
+        config?: { batchSize?: number; rateLimitDelay?: number; staleThreshold?: number },
+    ): Promise<Job> {
+        this.logger.log(`Manually triggering reconciliation job: ${jobType}`);
+        return this.reconciliationQueue.add(jobType, { config: config || {}, manual: true }, {
+            jobId: `manual-${jobType}-${Date.now()}`,
+        });
+    }
 
     /**
      * Add a webhook processing job.
@@ -135,5 +275,19 @@ export class QueueService {
      */
     async getDlqJobs(start = 0, end = 50): Promise<Job[]> {
         return this.dlqQueue.getJobs(['waiting', 'delayed', 'failed'], start, end);
+    }
+
+    /**
+     * Get repeatable jobs info
+     */
+    async getRepeatableJobs(): Promise<Array<{ key: string; name: string; next?: number; pattern?: string; every?: number }>> {
+        const repeatableJobs = await this.reconciliationQueue.getRepeatableJobs();
+        return repeatableJobs.map(job => ({
+            key: job.key,
+            name: job.name,
+            next: job.next,
+            pattern: job.pattern ?? undefined,
+            every: typeof job.every === 'number' ? job.every : undefined,
+        }));
     }
 }

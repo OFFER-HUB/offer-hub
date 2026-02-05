@@ -198,3 +198,35 @@ export function mapTrustlessStatus(status: TrustlessEscrowStatus): EscrowStatus 
     };
     return mapping[status];
 }
+
+/**
+ * Derive escrow status from contract state (flags and balance)
+ * Since TrustlessEscrowContract doesn't have a direct status field,
+ * we derive it from flags and balance.
+ */
+export function deriveEscrowStatusFromContract(contract: TrustlessEscrowContract): EscrowStatus {
+    const flags = contract.flags || {};
+
+    // Check terminal states first
+    if (flags.released) {
+        return EscrowStatus.RELEASED;
+    }
+
+    if (flags.resolved) {
+        // Resolved means dispute was settled - could be released or refunded
+        // Check balance to determine outcome
+        return contract.balance === 0 ? EscrowStatus.REFUNDED : EscrowStatus.RELEASED;
+    }
+
+    if (flags.disputed) {
+        return EscrowStatus.DISPUTED;
+    }
+
+    // Check if funded based on balance
+    if (contract.balance > 0) {
+        return EscrowStatus.FUNDED;
+    }
+
+    // Contract exists but not funded
+    return EscrowStatus.CREATED;
+}
