@@ -1,8 +1,18 @@
-export type OfferHubSdkConfig = {
-  apiUrl: string;
-  apiKey: string;
-};
+/**
+ * OfferHub SDK
+ * Official TypeScript SDK for the OfferHub Orchestrator API
+ *
+ * @packageDocumentation
+ */
 
-export class OfferHub {
-  constructor(private readonly config: OfferHubSdkConfig) {}
-}
+// Export main client
+export { OfferHubSDK, type OfferHubSDKConfig } from './offerhub-sdk';
+
+// Export types
+export * from './types';
+
+// Export errors
+export * from './errors';
+
+// Export HTTP client types
+export type { HttpClientConfig } from './client/http-client';

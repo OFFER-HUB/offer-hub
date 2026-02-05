@@ -152,21 +152,23 @@ This roadmap is the definitive guide to building the Orchestrator. It maps 100% 
 
 ---
 
-## 👷 Phase 7: Background Worker (BullMQ)
+## 👷 Phase 7: Background Worker (BullMQ) (COMPLETED)
 *Goal: Handle asynchronicity, retries, and scheduled health.*
 
-- [ ] **Issue 7.1: Infrastructure**
-    - [ ] 7.1.1: Redis/BullMQ setup in `@offerhub/worker`.
-    - [ ] 7.1.2: Dead Letter Queue (DLQ) for failed jobs.
+- [x] **Issue 7.1: Infrastructure** *(PR #58, #60)*
+    - [x] 7.1.1: Redis/BullMQ setup unified into API (single-deploy architecture).
+    - [x] 7.1.2: Dead Letter Queue (DLQ) for failed jobs.
 
 - [x] **Issue 7.2: Webhook Processing** *(PR #20, #21)*
     - [x] 7.2.1: Airtm webhook processor (Payin/Payout updates).
     - [x] 7.2.2: Trustless Work webhook processor (Escrow status updates).
     - [x] 7.2.3: Deduplication logic using `WebhookEvent` table.
 
-- [ ] **Issue 7.3: Scheduled Jobs**
-    - [ ] 7.3.1: Reconciliation Job: Cross-check every pending TopUp/Withdrawal with Airtm API.
-    - [ ] 7.3.2: Escrow Watcher: Verify Stellar contract state periodic sync.
+- [x] **Issue 7.3: Scheduled Jobs (Reconciliation & Monitoring)** *(PR #61)*
+    - [x] 7.3.1: Reconciliation Job: Cross-check pending TopUps/Withdrawals with Airtm (every 5 min).
+    - [x] 7.3.2: Escrow Watcher: Verify Stellar contract state sync with Trustless Work (every 10 min).
+    - [x] 7.3.3: Distributed locking to prevent concurrent runs.
+    - [x] 7.3.4: Rate limiting and structured metrics logging.
 
 ---
 
