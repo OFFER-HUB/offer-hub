@@ -102,16 +102,16 @@ This roadmap is the definitive guide to building the Orchestrator. It maps 100% 
 ## 📡 Phase 5: API Endpoints (The Surface)
 *Goal: Implement every endpoint documented in /docs/api/endpoints.*
 
-- [ ] **Issue 5.1: Auth & Config Endpoints** *(Partial)*
-    - [x] 5.1.1: `POST /auth/api-keys` *(PR #15)* — `GET /auth/api-keys` pending.
-    - [x] 5.1.2: `POST /auth/api-keys/:id/token` (Short-lived tokens). *(PR #15)*
-    - [ ] 5.1.3: `GET /me` and `GET /config`.
-    - [ ] 5.1.4: `GET /health` (Aggregated health check for DB, Redis, Airtm, TW) — Basic health exists.
+- [x] **Issue 5.1: Auth & Config Endpoints** *(PR #15)*
+    - [x] 5.1.1: `POST /auth/api-keys` and `GET /auth/api-keys` (paginated, masked).
+    - [x] 5.1.2: `POST /auth/api-keys/:id/token` (Short-lived tokens).
+    - [x] 5.1.3: `GET /me` and `GET /config`.
+    - [x] 5.1.4: `GET /health` (Aggregated health check for DB, Redis, Airtm, TW).
 
-- [ ] **Issue 5.2: Users & Balances**
-    - [ ] 5.2.1: `POST /users` (Marketplace registration).
-    - [ ] 5.2.2: `POST /users/{id}/airtm/link`.
-    - [x] 5.2.3: `GET /users/{id}/balance` (Full available/reserved breakdown). *(PR #29)*
+- [x] **Issue 5.2: Users & Balances** *(PR #29)*
+    - [x] 5.2.1: `POST /users` (Marketplace registration).
+    - [x] 5.2.2: `POST /users/{id}/airtm/link`.
+    - [x] 5.2.3: `GET /users/{id}/balance` (Full available/reserved breakdown).
 
 - [x] **Issue 5.3: Top-Ups Endpoints** *(PR #21, #42)*
     - [x] 5.3.1: `POST /topups` (Payin start).
@@ -136,19 +136,19 @@ This roadmap is the definitive guide to building the Orchestrator. It maps 100% 
 ## 📝 Phase 6: Observability (Events & Logs)
 *Goal: Implement 100% traceability for events and audit.*
 
-- [ ] **Issue 6.1: Internal Event System**
-    - [ ] 6.1.1: Event Bus implementation.
-    - [ ] 6.1.2: Event Catalog implementation (mapping every event in `docs/events/catalog.md`).
+- [x] **Issue 6.1: Internal Event System**
+    - [x] 6.1.1: Event Bus implementation.
+    - [x] 6.1.2: Event Catalog implementation (mapping every event in `docs/events/catalog.md`).
 
-- [ ] **Issue 6.2: Real-time SSE**
-    - [ ] 6.2.1: `GET /events` endpoint with user-filtering.
-    - [ ] 6.2.2: SSE Heartbeat (ping) mechanism.
-    - [ ] 6.2.3: Reconnection logic (backlog replay from cursor).
+- [x] **Issue 6.2: Real-time SSE**
+    - [x] 6.2.1: `GET /events` endpoint with user-filtering.
+    - [x] 6.2.2: SSE Heartbeat (ping) mechanism.
+    - [x] 6.2.3: Reconnection logic (backlog replay from cursor).
 
-- [ ] **Issue 6.3: Audit System**
-    - [ ] 6.3.1: `AuditService`: Save `aud_` records for every mutation.
-    - [ ] 6.3.2: Data Redaction logic: mask sensitive fields in audit records.
-    - [ ] 6.3.3: `GET /audit/logs` with resource-type filters.
+- [x] **Issue 6.3: Audit System**
+    - [x] 6.3.1: `AuditService`: Save `aud_` records for every mutation.
+    - [x] 6.3.2: Data Redaction logic: mask sensitive fields in audit records.
+    - [x] 6.3.3: `GET /audit/logs` with resource-type filters.
 
 ---
 
