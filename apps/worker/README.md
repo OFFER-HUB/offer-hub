@@ -1,37 +1,28 @@
-# @offerhub/worker
+# @offerhub/worker (DEPRECATED)
 
-Background job processor for OFFER-HUB Orchestrator built with BullMQ.
+> **Note:** This package is deprecated. Background job processing has been unified into the main API (`@offerhub/api`) for simpler deployment.
 
-## Structure
+## Migration
 
-```
-src/
-├── index.ts                # Entry point
-├── config/                 # Worker configuration
-├── queues/                 # Queue definitions
-├── processors/             # Job processors
-│   ├── webhooks/           # Webhook processing
-│   ├── reconciliation/     # Balance/order reconciliation
-│   └── notifications/      # Event notifications
-└── utils/                  # Worker utilities
-```
+All queue processing is now handled by the API at `apps/api/src/modules/queues/`:
 
-## Responsibilities
+- `queue.module.ts` - BullMQ queue registration
+- `queue.service.ts` - Job management service
+- `queue.constants.ts` - Queue names and job types
+- `processors/webhook.processor.ts` - Webhook job processing
+- `processors/dlq.processor.ts` - Dead letter queue handling
 
-- Process incoming webhooks from Airtm and Trustless Work
-- Run periodic reconciliation jobs
-- Handle retry logic for failed operations
-- Send event notifications
+## Running
 
-## Development
+Simply run the API - it handles both HTTP requests and background jobs:
 
 ```bash
-# From project root
-npm run dev:worker   # Start worker in development mode
-npm run build        # Build for production
+npm run dev          # Starts API with queue processing
 ```
 
-## Documentation
+## Why Unified?
 
-- [Architecture Overview](../../docs/architecture/overview.md)
-- [AI.md](../../docs/AI.md) - Development guidelines
+1. **Simpler deployment** - Single service to deploy and scale
+2. **Shared resources** - Database connections, config, and dependencies are shared
+3. **Easier development** - No need to coordinate two processes
+4. **Future flexibility** - Can easily split out if needed for independent scaling
